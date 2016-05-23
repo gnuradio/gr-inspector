@@ -21,9 +21,9 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks, analog
-import inspector
 import pmt
 import numpy
+import time
 from signal_detector_cc import signal_detector_cc
 
 class qa_signal_detector_cc (gr_unittest.TestCase):
@@ -35,27 +35,30 @@ class qa_signal_detector_cc (gr_unittest.TestCase):
         self.tb = None
 
     def test_001_t (self):
-        # set up fg
         src = analog.sig_source_c(32000, analog.GR_COS_WAVE,
                                           12500, 1)
-        detector = inspector.signal_detector_cc(32000)
+        detector = signal_detector_cc(32000)
         dst = blocks.null_sink(gr.sizeof_gr_complex*1)
         msg_dst = blocks.message_debug()
         self.tb.connect(src, detector)
         self.tb.connect((detector, 0), dst)
-        self.tb.msg_connect((detector, 'map_out'), (msg_dst, 'print'))
-        self.tb.run()
-        msg = msg_dst.get_message(0)
+        self.tb.msg_connect((detector, 'map_out'), (msg_dst, 'store'))
+        self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
-        res_vector = numpy.empty([0,2])
-        for i in pmt.length(msg):
-            row = pmt.vector_ref(msg, i)
-            numpy.vstack((res_vector, numpy.array([
-                pmt.f32vector_ref(row, 0), pmt.f32vector_ref(row, 1)
-            ])))
+        self.tb.wait()
 
-        self.assertFloatTuplesAlmostEqual(12500, res_vector[0,0], 2)
-        self.assertFloatTuplesAlmostEqual(12500, res_vector[0,1], 2)
+        print msg_dst.num_messages()
+        msg = msg_dst.get_message(1)
+        res_vector = numpy.empty([0,2])
+        for i in range(pmt.length(msg)):
+            row = pmt.vector_ref(msg, i)
+            res_vector = numpy.vstack((res_vector, numpy.array(
+                [pmt.f32vector_ref(row, 0), pmt.f32vector_ref(row, 1)]
+            )))
+
+        self.assertFloatTuplesAlmostEqual([12500.0, 12500.0],
+                                          res_vector[0], 4)
 
         # check data
 

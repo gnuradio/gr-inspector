@@ -4,7 +4,7 @@
   <key>inspector_signal_detector_cc</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $window, $threshold)</make>
+  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $window, $threshold, $auto)</make>
   <param>
     <name>Sample Rate</name>
     <key>samp_rate</key>
@@ -32,10 +32,25 @@
     </option>
   </param>
   <param>
+    <name>Auto Threshold</name>
+    <key>auto</key>
+    <value>False</value>
+    <type>bool</type>
+    <option>
+      <name>On</name>
+      <key>True</key>
+    </option>
+    <option>
+      <name>Off</name>
+      <key>False</key>
+    </option>
+  </param>
+  <param>
     <name>Threshold</name>
     <key>threshold</key>
     <value>0.7</value>
     <type>float</type>
+    <hide>#if str($auto) == 'True' then 'all' else 'none'#</hide>
   </param>
   <sink>
     <name>in</name>

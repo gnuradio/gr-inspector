@@ -32,7 +32,7 @@ GR_PYTHON_INSTALL(
     FILES
     __init__.py
     signal_detector_cc.py
-    signal_separator_c.py DESTINATION ${GR_PYTHON_DIR}/inspector
+    DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
 ########################################################################

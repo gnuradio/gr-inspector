@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # 
-# Copyright 2016 <+YOU OR YOUR COMPANY+>.
+# Copyright 2016 GNU Radio.
 # 
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ class signal_detector_cc(gr.sync_block):
     block to detect signals in input spectrum
     """
     def __init__(self, samp_rate, fft_len=1024, window='hamming',
-                 threshold=0.7):
+                 threshold=0.7, auto=False):
         gr.sync_block.__init__(self,
             name="signal_detector_cc",
             in_sig=[numpy.complex64],
@@ -42,6 +42,7 @@ class signal_detector_cc(gr.sync_block):
         # register message port
         self.message_port_register_out(pmt.intern('map_out'))
         self.signal_edges = numpy.empty([0,2])
+        self.auto_threshold = auto
 
 
     def find_signal_edges(self, pos):
@@ -108,9 +109,18 @@ class signal_detector_cc(gr.sync_block):
 
         return msg
 
-    # @property
-    # def signal_edges(self):
-    #     return self.signal_edges;
+    def set_threshold(self, Pxx):
+        """
+        Set automatic threshold. Find lowest frequency bins that have
+        similar absolute value and set threshold to largest
+        """
+        pos = len(Pxx)-1
+        Pxx = numpy.sort(abs(Pxx))
+        for i in range(len(Pxx)-2):
+            if Pxx[i+1] - Pxx[i] > 0.2:
+                pos = i
+
+        self.threshold = max(Pxx[0:pos])
 
 
     def work(self, input_items, output_items):
@@ -123,7 +133,10 @@ class signal_detector_cc(gr.sync_block):
         # freq, Pxx = signal.welch(in0, fself.samp_rate, self.window,
         #                         256, 0, self.fft_len)
         # nomize psd (TODO: remove this)
-        Pxx = Pxx/max(Pxx)
+        Pxx = Pxx/max(abs(Pxx))
+        # use auto threshold finding
+        if(self.auto_threshold):
+            self.set_threshold(Pxx)
         # find bins over threshold
         pos = numpy.where(Pxx > self.threshold)[0]
         # group bins to signal edges
@@ -138,6 +151,7 @@ class signal_detector_cc(gr.sync_block):
         # print "samp rate: " + str(self.samp_rate)
         # print "freq_vec len:" + str(len(freq))
         # print "freq_max: " + str(max(freq))
+        # print "Threshold: " + str(self.threshold)
         # print ""
         # print signal_edges
 
@@ -145,7 +159,7 @@ class signal_detector_cc(gr.sync_block):
         self.message_port_pub(pmt.intern('map_out'),
                               self.pack_message(self.signal_edges))
         # output psd
-        #out[:] = abs(Pxx)
+        # out[:] = abs(Pxx)
         # output unaltered signal
         out[:] = in0
         return len(output_items[0])

@@ -413,6 +413,10 @@
   <block>
     <key>inspector_signal_detector_cc</key>
     <param>
+      <key>auto</key>
+      <value>True</value>
+    </param>
+    <param>
       <key>alias</key>
       <value></value>
     </param>
