@@ -111,7 +111,6 @@ endif(APPLE)
 ########################################################################
 find_package(CppUnit)
 find_package(Doxygen)
-find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
 
 # Search for GNU Radio and its components and versions. Add any
 # components required to the list of GR_REQUIRED_COMPONENTS (in all
@@ -124,8 +123,6 @@ list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 if(NOT CPPUNIT_FOUND)
     message(FATAL_ERROR "CppUnit required to compile inspector")
 endif()
-
-include(GrSetupQt4)
 
 ########################################################################
 # Setup doxygen option
@@ -147,14 +144,12 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${CPPUNIT_INCLUDE_DIRS}
     ${GNURADIO_ALL_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIRS}
 )
 
 link_directories(
     ${Boost_LIBRARY_DIRS}
     ${CPPUNIT_LIBRARY_DIRS}
     ${GNURADIO_RUNTIME_LIBRARY_DIRS}
-    ${QT_LIBRARY_DIRS}
 )
 
 # Set component parameters
