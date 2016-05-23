@@ -9,5 +9,4 @@
 
 %{
 %}
-
-
+GR_SWIG_BLOCK_MAGIC2(inspector, inspector_gui_cc);

@@ -31,7 +31,8 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    DESTINATION ${GR_PYTHON_DIR}/inspector
+    signal_detector_cc.py
+    signal_separator_c.py DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
 ########################################################################
@@ -41,3 +42,4 @@ include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gnuradio-inspector)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+GR_ADD_TEST(qa_signal_detector_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_signal_detector_cc.py)

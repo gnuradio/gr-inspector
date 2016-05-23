@@ -31,4 +31,6 @@ except ImportError:
 	pass
 
 # import any pure python here
+from signal_detector_cc import signal_detector_cc
+from signal_separator_c import signal_separator_c
 #

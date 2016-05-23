@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<block>
+  <name>Signal Detector</name>
+  <key>inspector_signal_detector_cc</key>
+  <category>Inspector</category>
+  <import>import inspector</import>
+  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $window, $threshold)</make>
+  <param>
+    <name>Sample Rate</name>
+    <key>samp_rate</key>
+    <value></value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>FFT Size</name>
+    <key>fft_len</key>
+    <value>1024</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Window</name>
+    <key>window</key>
+    <value>Hamming</value>
+    <type>string</type>
+    <option>
+      <name>Hamming</name>
+      <key>hamming</key>
+    </option>
+    <option>
+      <name>Blackman-Harris</name>
+      <key>blackman</key>
+    </option>
+  </param>
+  <param>
+    <name>Threshold</name>
+    <key>threshold</key>
+    <value>0.7</value>
+    <type>float</type>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+  <source>
+    <name>map_out</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+</block>

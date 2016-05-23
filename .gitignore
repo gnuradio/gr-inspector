@@ -1,0 +1,5 @@
+/.idea
+/examples/*.py
+/build
+/python/.unittests
+*.pyc
