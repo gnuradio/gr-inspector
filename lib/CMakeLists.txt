@@ -25,7 +25,7 @@ include(GrPlatform) #define LIB_SUFFIX
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND inspector_sources
-    )
+    signal_separator_c_impl.cc )
 
 set(inspector_sources "${inspector_sources}" PARENT_SCOPE)
 if(NOT inspector_sources)

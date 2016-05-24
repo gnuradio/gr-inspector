@@ -22,5 +22,5 @@
 ########################################################################
 install(FILES
     api.h
-    DESTINATION include/inspector
+    signal_separator_c.h DESTINATION include/inspector
 )

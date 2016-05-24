@@ -1,0 +1,59 @@
+<block>
+  <name>Signal Separator</name>
+  <key>inspector_signal_separator_c</key>
+  <category>Inspector</category>
+  <import>import inspector</import>
+  <import>from gnuradio import firdes</import>
+  <make>inspector.signal_separator_c($samp_rate, $window)</make>
+  <param>
+    <name>Samp_rate</name>
+    <key>samp_rate</key>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Window</name>
+    <key>window</key>
+    <value>firdes.WIN_BLACKMAN_hARRIS</value>
+    <type>enum</type>
+    <option>
+      <name>Blackman-harris</name>
+      <key>firdes.WIN_BLACKMAN_hARRIS</key>
+    </option>
+    <option>
+      <name>Hamming</name>
+      <key>firdes.WIN_HAMMING</key>
+    </option>
+    <option>
+      <name>Hann</name>
+      <key>firdes.WIN_HANN</key>
+    </option>
+    <option>
+      <name>Blackman</name>
+      <key>firdes.WIN_BLACKMAN</key>
+    </option>
+    <option>
+      <name>Rectangular</name>
+      <key>firdes.WIN_RECTANGULAR</key>
+    </option>
+    <option>
+      <name>Kaiser</name>
+      <key>firdes.WIN_KAISER</key>
+    </option>
+    <option>
+      <name>Flat-top</name>
+      <key>firdes.WIN_FLATTOP</key>
+    </option>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+  <sink>
+    <name>map_in</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>msg_out</name>
+    <type>message</type>
+  </source>
+</block>

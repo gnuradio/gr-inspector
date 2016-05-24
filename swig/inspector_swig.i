@@ -8,5 +8,7 @@
 %include "inspector_swig_doc.i"
 
 %{
+#include "inspector/signal_separator_c.h"
 %}
-GR_SWIG_BLOCK_MAGIC2(inspector, inspector_gui_cc);
+%include "inspector/signal_separator_c.h"
+GR_SWIG_BLOCK_MAGIC2(inspector, signal_separator_c);
