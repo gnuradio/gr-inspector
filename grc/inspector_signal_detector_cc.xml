@@ -34,7 +34,7 @@
   <param>
     <name>Auto Threshold</name>
     <key>auto</key>
-    <value>False</value>
+    <value>True</value>
     <type>bool</type>
     <option>
       <name>On</name>

@@ -31,7 +31,7 @@ class signal_detector_cc(gr.sync_block):
     and the signal edges as messages.
     """
     def __init__(self, samp_rate, fft_len=1024, window='hamming',
-                 threshold=0.7, auto=False):
+                 threshold=0.7, auto=True):
         gr.sync_block.__init__(self,
             name="signal_detector_cc",
             in_sig=[numpy.complex64],
@@ -124,8 +124,9 @@ class signal_detector_cc(gr.sync_block):
         pos = len(Pxx)-1
         Pxx = numpy.sort(abs(Pxx))
         for i in range(len(Pxx)-2):
-            if Pxx[i+1] - Pxx[i] > 0.2:
+            if abs(Pxx[i+1]) - abs(Pxx[i]) > 0.2:
                 pos = i
+                break
 
         self.threshold = max(Pxx[0:pos])
 
