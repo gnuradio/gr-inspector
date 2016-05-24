@@ -26,7 +26,9 @@ import pmt
 
 class signal_detector_cc(gr.sync_block):
     """
-    block to detect signals in input spectrum
+    block to detect signals in input spectrum. Uses enegry detection
+    with manual or auto threshold. Passes the PDF as complex output
+    and the signal edges as messages.
     """
     def __init__(self, samp_rate, fft_len=1024, window='hamming',
                  threshold=0.7, auto=False):
@@ -41,7 +43,6 @@ class signal_detector_cc(gr.sync_block):
         self.threshold = threshold
         # register message port
         self.message_port_register_out(pmt.intern('map_out'))
-        self.signal_edges = numpy.empty([0,2])
         self.auto_threshold = auto
 
 
@@ -77,27 +78,33 @@ class signal_detector_cc(gr.sync_block):
             while i < len(pos):
                 # if array end is reached use last element for
                 # signal flank
-                if i == len(pos) - 1:
-                    curr_signal = numpy.append(curr_signal, pos[i])
-                    flanks = numpy.vstack((flanks, curr_signal))
-                if pos[i] == pos[i - 1] + 1:
-                    if new_signal:
-                        curr_signal = numpy.array([pos[i - 1]])
-                        new_signal = False
+                if new_signal:
+                    curr_signal = numpy.array([pos[i]])
+                    new_signal = False
+                    # if end of position, repeat last edge
+                    if i == len(pos) - 1:
+                        curr_signal = numpy.append(curr_signal, pos[i])
+                        flanks = numpy.vstack((flanks, curr_signal))
                     i += 1
                 else:
-                    curr_signal = numpy.append(curr_signal,
-                                               pos[i - 1])
-                    flanks = numpy.vstack((flanks, curr_signal))
-                    new_signal = True
+                    if i < len(pos)-1:
+                        if pos[i+1] <> pos[i] + 1:
+                            curr_signal = numpy.append(curr_signal,
+                                                   pos[i])
+                            flanks = numpy.vstack((flanks, curr_signal))
+                            new_signal = True
+                    else:
+                        curr_signal = numpy.append(curr_signal,
+                                                   pos[i])
+                        flanks = numpy.vstack((flanks, curr_signal))
                     i += 1
-        return flanks
+
+        return flanks.astype(int)
 
     def pack_message(self, signal_edges):
         """
         generate message compatible pmt out of array
-        :param signal_edges: Nx2 numpy.array with signal edges
-        :return: PMT vector of vectors for each signal
+        result is pmt vector of pmt vectors with float values in it
         """
         signal_cnt = signal_edges.shape[0]
         msg = pmt.make_vector(signal_cnt, pmt.PMT_NIL)
@@ -142,7 +149,7 @@ class signal_detector_cc(gr.sync_block):
         # group bins to signal edges
         pos = self.find_signal_edges(pos)
         # get frequency values
-        self.signal_edges = freq[pos]
+        signal_edges = freq[pos]
 
         # debug values
         #print "\nDebug Info: \n"
@@ -157,7 +164,7 @@ class signal_detector_cc(gr.sync_block):
 
         #TODO: create message here
         self.message_port_pub(pmt.intern('map_out'),
-                              self.pack_message(self.signal_edges))
+                              self.pack_message(signal_edges))
         # output psd
         # out[:] = abs(Pxx)
         # output unaltered signal

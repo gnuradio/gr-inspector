@@ -89,7 +89,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>1500</value>
+      <value>9800</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -97,7 +97,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(624, 48)</value>
+      <value>(176, 8)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -133,7 +133,7 @@
     </param>
     <param>
       <key>stop</key>
-      <value>5000</value>
+      <value>10000</value>
     </param>
     <param>
       <key>rangeType</key>
@@ -156,34 +156,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(176, 12)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>rrc_filter</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>firdes.root_raised_cosine(1, samp_rate, samp_rate/4, 0.35, 45)</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(8, 160)</value>
+      <value>(312, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -218,6 +191,69 @@
     </param>
     <param>
       <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>freq</key>
+      <value>5700</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(56, 376)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>analog_sig_source_x_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>offset</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>waveform</key>
+      <value>analog.GR_COS_WAVE</value>
+    </param>
+  </block>
+  <block>
+    <key>analog_sig_source_x</key>
+    <param>
+      <key>amp</key>
+      <value>10</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
       <value>1</value>
     </param>
     <param>
@@ -226,7 +262,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(56, 296)</value>
+      <value>(56, 224)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -262,6 +298,57 @@
     </param>
   </block>
   <block>
+    <key>blocks_add_xx</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(256, 296)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_add_xx_0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>num_inputs</key>
+      <value>2</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
     <key>blocks_message_debug</key>
     <param>
       <key>alias</key>
@@ -281,7 +368,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(840, 416)</value>
+      <value>(888, 416)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -290,6 +377,53 @@
     <param>
       <key>id</key>
       <value>blocks_message_debug_0</value>
+    </param>
+  </block>
+  <block>
+    <key>blocks_null_sink</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>bus_conns</key>
+      <value>[[0,],]</value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(936, 312)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_null_sink_0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>num_inputs</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
     </param>
   </block>
   <block>
@@ -312,7 +446,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(400, 324)</value>
+      <value>(520, 308)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -379,7 +513,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(232, 296)</value>
+      <value>(344, 280)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -414,7 +548,7 @@
     <key>inspector_signal_detector_cc</key>
     <param>
       <key>auto</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>alias</key>
@@ -438,7 +572,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(584, 312)</value>
+      <value>(688, 288)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -505,7 +639,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(800, 296)</value>
+      <value>(856, 184)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -569,7 +703,19 @@
     </param>
   </block>
   <connection>
+    <source_block_id>analog_sig_source_x_0</source_block_id>
+    <sink_block_id>blocks_add_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>1</sink_key>
+  </connection>
+  <connection>
     <source_block_id>analog_sig_source_x_0_0_0</source_block_id>
+    <sink_block_id>blocks_add_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_add_xx_0</source_block_id>
     <sink_block_id>channels_channel_model_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
@@ -591,6 +737,12 @@
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>map_out</source_key>
     <sink_key>print</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_detector_cc_0</source_block_id>
+    <sink_block_id>blocks_null_sink_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_signal_detector_cc_0</source_block_id>
