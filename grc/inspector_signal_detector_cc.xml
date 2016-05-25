@@ -4,7 +4,7 @@
   <key>inspector_signal_detector_cc</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $window, $threshold, $auto)</make>
+  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto)</make>
   <param>
     <name>Sample Rate</name>
     <key>samp_rate</key>
@@ -51,6 +51,13 @@
     <value>0.7</value>
     <type>float</type>
     <hide>#if str($auto) == 'True' then 'all' else 'none'#</hide>
+  </param>
+  <param>
+    <name>Sensitivity</name>
+    <key>sensitivity</key>
+    <value>0.2</value>
+    <type>float</type>
+    <hide>#if str($auto) == 'False' then 'all' else 'none'#</hide>
   </param>
   <sink>
     <name>in</name>
