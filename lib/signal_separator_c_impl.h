@@ -23,6 +23,8 @@
 
 #include <inspector/signal_separator_c.h>
 #include <gnuradio/filter/firdes.h>
+#include <gnuradio/filter/freq_xlating_fir_filter_ccc.h>
+#include <pmt/pmt.h>
 
 namespace gr {
     namespace inspector {
@@ -36,16 +38,27 @@ namespace gr {
 
             ~signal_separator_c_impl();
 
+            // properties
             double d_samp_rate;
             filter::firdes::win_type d_window;
-            std::vector<float> d_taps;
-
+            std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > d_filterbank;
+            std::vector<std::vector<float> > d_rf_map;
             // setter
             void set_samp_rate(double samp_rate);
             void set_window(int window);
+            void set_filterbank(std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > filterbank);
+            void set_rf_map(std::vector<std::vector<float> > map);
 
-            void build_taps();
+            // getter
+            double samp_rate();
+            int window();
+            std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > filterbank();
 
+            std::vector<float> build_taps(double cutoff, double trans);
+            boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> build_filter(unsigned int signal);
+            void add_filter(boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> filter);
+            void remove_filter(unsigned int signal);
+            void handle_msg(pmt::pmt_t msg);
 
             // Where all the action really happens
             void forecast(int noutput_items,

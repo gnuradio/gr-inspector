@@ -34,6 +34,8 @@ namespace gr {
                     (new signal_separator_c_impl(samp_rate, window));
         }
 
+        //<editor-fold desc="Initalization">
+
         /*
          * The private constructor
          */
@@ -50,6 +52,7 @@ namespace gr {
             // message port
             message_port_register_out(pmt::intern("msg_out"));
             message_port_register_in(pmt::intern("map_in"));
+            boost::bind(&signal_separator_c_impl::handle_msg, this, _1);
         }
 
         /*
@@ -57,6 +60,10 @@ namespace gr {
          */
         signal_separator_c_impl::~signal_separator_c_impl() {
         }
+
+        //</editor-fold>
+
+        //<editor-fold desc="Setter">
 
         void
         signal_separator_c_impl::set_samp_rate(double samp_rate) {
@@ -69,10 +76,99 @@ namespace gr {
         }
 
         void
-        signal_separator_c_impl::build_taps() {
-            d_taps.clear();
-            d_taps = filter::firdes::low_pass(1, d_samp_rate,
-                1000, 100, d_window, 6.76);
+        signal_separator_c_impl::set_filterbank(
+                std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > filterbank) {
+            d_filterbank = filterbank;
+        }
+
+        void
+        signal_separator_c_impl::set_rf_map(
+                std::vector<std::vector<float> > map) {
+            if(map != d_rf_map) {
+                d_rf_map = map;
+            }
+        }
+
+        //</editor-fold>
+
+        //<editor-fold desc="Getter">
+
+        double
+        signal_separator_c_impl::samp_rate() {
+            return d_samp_rate;
+        }
+
+        int
+        signal_separator_c_impl::window() {
+            return d_window;
+        }
+
+        std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> >
+        signal_separator_c_impl::filterbank() {
+            return d_filterbank;
+        }
+
+        //</editor-fold>
+
+        std::vector<float>
+        signal_separator_c_impl::build_taps(double cutoff, double trans) {
+            return filter::firdes::low_pass(1, d_samp_rate,
+                cutoff, trans, d_window, 6.76);
+        }
+
+        boost::shared_ptr<filter::freq_xlating_fir_filter_ccc>
+        signal_separator_c_impl::build_filter(unsigned int signal) {
+            // calculate signal parameters
+            double freq_center = ((d_rf_map.at(signal)).at(1) + (d_rf_map.at(signal)).at(0))/2;
+            double bandwidth = (d_rf_map.at(signal)).at(1) - (d_rf_map.at(signal)).at(0);
+            int decim = (int)(d_samp_rate/bandwidth);
+
+            //TODO: is there a better way to cast?
+            std::vector<float> taps_float = build_taps(bandwidth/2, 0.05*bandwidth/2);
+            std::vector<gr_complex> taps(taps_float.begin(), taps_float.end());
+
+            // build filter here
+            boost::shared_ptr<filter::freq_xlating_fir_filter_ccc>
+            filter = filter::freq_xlating_fir_filter_ccc::make(
+                    decim, taps, freq_center, d_samp_rate
+            );
+
+            return filter;
+        }
+
+        void
+        signal_separator_c_impl::add_filter(
+                boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> filter) {
+            d_filterbank.push_back(filter);
+        }
+
+        void
+        signal_separator_c_impl::remove_filter(
+                unsigned int signal) {
+            d_filterbank.erase(d_filterbank.begin()-1+signal);
+        }
+
+        //<editor-fold desc="GR Stuff">
+
+        void
+        signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
+            // extract rf map out of message
+            std::vector<std::vector<float> > result;
+            for(unsigned int i = 0; i < pmt::length(msg); i++) {
+                pmt::pmt_t row = pmt::vector_ref(msg, i);
+                std::vector<float> temp;
+                temp.push_back(pmt::f32vector_ref(row, 0));
+                temp.push_back(pmt::f32vector_ref(row, 1));
+                result.push_back(temp);
+            }
+            set_rf_map(result);
+
+            // calculate filters
+            // TODO: make this more efficient
+            std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > temp;
+            for(unsigned int i = 0; i < d_rf_map.size(); i++) {
+                temp.push_back(build_filter(i));
+            }
         }
 
         void
@@ -87,16 +183,24 @@ namespace gr {
                                               gr_vector_const_void_star &input_items,
                                               gr_vector_void_star &output_items) {
             const float *in = (const float *) input_items[0];
-            //<+OTYPE + > *out = (<+OTYPE + > *) output_items[0];
 
-            // Do <+signal processing+>
-            // Tell runtime system how many input items we consumed on
-            // each input stream.
+            std::vector<gr_vector_void_star> result_vector;
+
+            // apply all filters on input signal
+            for(unsigned int i = 0; i < d_filterbank.size(); i++) {
+                gr_vector_void_star temp_results;
+                d_filterbank.at(i)->general_work(
+                        (int)(noutput_items/d_filterbank.size()), ninput_items, input_items, temp_results
+                );
+                result_vector.push_back(temp_results);
+            }
             consume_each(noutput_items);
 
             // Tell runtime system how many output items we produced.
             return 0;
         }
+
+        //</editor-fold>
 
     } /* namespace inspector */
 } /* namespace gr */
