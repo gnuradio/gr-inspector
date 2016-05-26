@@ -45,6 +45,7 @@ class signal_detector_cc(gr.sync_block):
         self.message_port_register_out(pmt.intern('map_out'))
         self.auto_threshold = auto
         self.sensitivity = sensitivity
+        self.signal_edges = numpy.empty([0,2])
 
 
     def find_signal_edges(self, pos):
@@ -102,17 +103,17 @@ class signal_detector_cc(gr.sync_block):
 
         return flanks.astype(int)
 
-    def pack_message(self, signal_edges):
+    def pack_message(self):
         """
         generate message compatible pmt out of array
         result is pmt vector of pmt vectors with float values in it
         """
-        signal_cnt = signal_edges.shape[0]
+        signal_cnt = self.signal_edges.shape[0]
         msg = pmt.make_vector(signal_cnt, pmt.PMT_NIL)
         for i in range(signal_cnt):
             curr_edge = pmt.make_f32vector(2, 0.0)
-            pmt.f32vector_set(curr_edge, 0, signal_edges[i,0])
-            pmt.f32vector_set(curr_edge, 1, signal_edges[i,1])
+            pmt.f32vector_set(curr_edge, 0, self.signal_edges[i,0])
+            pmt.f32vector_set(curr_edge, 1, self.signal_edges[i,1])
             pmt.vector_set(msg, i, curr_edge)
 
         return msg
@@ -130,6 +131,25 @@ class signal_detector_cc(gr.sync_block):
                 break
 
         self.threshold = max(Pxx[0:pos])
+
+    def compare_signal_edges(self, edges):
+        """
+        check if rf map changed (within differences of 1 Hz)
+        """
+        change = False
+        if edges.shape[0] == len(self.signal_edges):
+            #print "same length"
+            for i in range(edges.shape[0]):
+                #print "look at sig "+str(i)
+                if abs(edges[i][0] - self.signal_edges[i][0]) > 1:
+                    change = True
+                    #print "starts changed"
+                if abs(edges[i][1] - self.signal_edges[i][1]) > 1:
+                    change = True
+                    #print "stops changed"
+        else:
+            return True
+        return change
 
 
     def work(self, input_items, output_items):
@@ -151,8 +171,13 @@ class signal_detector_cc(gr.sync_block):
         # group bins to signal edges
         pos = self.find_signal_edges(pos)
         # get frequency values
-        signal_edges = freq[pos]
 
+        # only send message if something changed
+        if(self.compare_signal_edges(freq[pos])):
+            self.signal_edges = freq[pos]
+            #TODO: create message here
+            self.message_port_pub(pmt.intern('map_out'),
+                            self.pack_message())
         # debug values
         #print "\nDebug Info: \n"
         #print "input len: " + str(len(in0))
@@ -162,11 +187,10 @@ class signal_detector_cc(gr.sync_block):
         # print "freq_max: " + str(max(freq))
         # print "Threshold: " + str(self.threshold)
         # print ""
-        # print signal_edges
+        #print self.compare_signal_edges(freq[pos])
+        #print freq[pos]
 
-        #TODO: create message here
-        self.message_port_pub(pmt.intern('map_out'),
-                              self.pack_message(signal_edges))
+
         # output psd
         # out[:] = abs(Pxx)
         # output unaltered signal
