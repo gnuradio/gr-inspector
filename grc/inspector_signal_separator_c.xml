@@ -3,7 +3,7 @@
   <key>inspector_signal_separator_c</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <import>from gnuradio import firdes</import>
+  <import>from gnuradio.filter import firdes</import>
   <make>inspector.signal_separator_c($samp_rate, $window)</make>
   <param>
     <name>Samp_rate</name>

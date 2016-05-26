@@ -53,6 +53,7 @@ namespace gr {
             double samp_rate();
             int window();
             std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > filterbank();
+            std::vector<std::vector<float> > rf_map();
 
             std::vector<float> build_taps(double cutoff, double trans);
             boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> build_filter(unsigned int signal);

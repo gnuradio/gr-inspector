@@ -387,7 +387,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>10000</value>
+      <value>100</value>
     </param>
     <param>
       <key>type</key>
@@ -513,7 +513,7 @@
     </param>
     <param>
       <key>sensitivity</key>
-      <value>0.999</value>
+      <value>0.8</value>
     </param>
     <param>
       <key>threshold</key>

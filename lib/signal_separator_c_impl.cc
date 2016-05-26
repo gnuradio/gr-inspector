@@ -52,7 +52,8 @@ namespace gr {
             // message port
             message_port_register_out(pmt::intern("msg_out"));
             message_port_register_in(pmt::intern("map_in"));
-            boost::bind(&signal_separator_c_impl::handle_msg, this, _1);
+            set_msg_handler(pmt::intern("map_in"), boost::bind(
+                    &signal_separator_c_impl::handle_msg, this, _1));
         }
 
         /*
@@ -84,7 +85,7 @@ namespace gr {
         void
         signal_separator_c_impl::set_rf_map(
                 std::vector<std::vector<float> > map) {
-            if(map != d_rf_map) {
+            if (map != d_rf_map) {
                 d_rf_map = map;
             }
         }
@@ -108,28 +109,49 @@ namespace gr {
             return d_filterbank;
         }
 
+        std::vector<std::vector<float> >
+        signal_separator_c_impl::rf_map() {
+            return d_rf_map;
+        }
+
         //</editor-fold>
 
+        //<editor-fold desc="Helpers">
+
         std::vector<float>
-        signal_separator_c_impl::build_taps(double cutoff, double trans) {
+        signal_separator_c_impl::build_taps(double cutoff,
+                                            double trans) {
+            std::cout << "Attempting taps with fc = " << cutoff <<
+            ", trans = " << trans << "\n";
             return filter::firdes::low_pass(1, d_samp_rate,
-                cutoff, trans, d_window, 6.76);
+                                            cutoff, trans, d_window,
+                                            6.76);
         }
 
         boost::shared_ptr<filter::freq_xlating_fir_filter_ccc>
         signal_separator_c_impl::build_filter(unsigned int signal) {
             // calculate signal parameters
-            double freq_center = ((d_rf_map.at(signal)).at(1) + (d_rf_map.at(signal)).at(0))/2;
-            double bandwidth = (d_rf_map.at(signal)).at(1) - (d_rf_map.at(signal)).at(0);
-            int decim = (int)(d_samp_rate/bandwidth);
+            double freq_center = ((d_rf_map.at(signal)).at(1) +
+                                  (d_rf_map.at(signal)).at(0)) / 2;
+            double bandwidth = (d_rf_map.at(signal)).at(1) -
+                               (d_rf_map.at(signal)).at(0);
+            // if only one bin detected, we still need a bandwidth > 0
+            if (bandwidth == 0) {
+                bandwidth = 1;
+            }
+            bandwidth *= 100;
+            int decim = (int) (d_samp_rate / bandwidth);
 
             //TODO: is there a better way to cast?
-            std::vector<float> taps_float = build_taps(bandwidth/2, 0.05*bandwidth/2);
-            std::vector<gr_complex> taps(taps_float.begin(), taps_float.end());
+            std::vector<float> taps_float = build_taps(bandwidth / 2,
+                                                       0.05 *
+                                                       bandwidth);
+            std::vector<gr_complex> taps(taps_float.begin(),
+                                         taps_float.end());
 
             // build filter here
             boost::shared_ptr<filter::freq_xlating_fir_filter_ccc>
-            filter = filter::freq_xlating_fir_filter_ccc::make(
+                    filter = filter::freq_xlating_fir_filter_ccc::make(
                     decim, taps, freq_center, d_samp_rate
             );
 
@@ -145,8 +167,10 @@ namespace gr {
         void
         signal_separator_c_impl::remove_filter(
                 unsigned int signal) {
-            d_filterbank.erase(d_filterbank.begin()-1+signal);
+            d_filterbank.erase(d_filterbank.begin() - 1 + signal);
         }
+
+        //</editor-fold>
 
         //<editor-fold desc="GR Stuff">
 
@@ -154,7 +178,7 @@ namespace gr {
         signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
             // extract rf map out of message
             std::vector<std::vector<float> > result;
-            for(unsigned int i = 0; i < pmt::length(msg); i++) {
+            for (unsigned int i = 0; i < pmt::length(msg); i++) {
                 pmt::pmt_t row = pmt::vector_ref(msg, i);
                 std::vector<float> temp;
                 temp.push_back(pmt::f32vector_ref(row, 0));
@@ -163,18 +187,26 @@ namespace gr {
             }
             set_rf_map(result);
 
+            std::cout << "RF Map: " << d_rf_map.size() << "\n";
+
             // calculate filters
             // TODO: make this more efficient
             std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > temp;
-            for(unsigned int i = 0; i < d_rf_map.size(); i++) {
+            for (unsigned int i = 0; i < d_rf_map.size(); i++) {
                 temp.push_back(build_filter(i));
             }
+
+            set_filterbank(temp);
         }
 
         void
         signal_separator_c_impl::forecast(int noutput_items,
                                           gr_vector_int &ninput_items_required) {
-            ninput_items_required[0] = noutput_items; // is this correct? :/
+
+            ninput_items_required[0] =
+                    noutput_items * d_filterbank.at(0)->decimation()
+                    + 1 - d_filterbank.at(
+                            0)->taps().size(); // is this correct? :/
         }
 
         int
@@ -185,19 +217,35 @@ namespace gr {
             const float *in = (const float *) input_items[0];
 
             std::vector<gr_vector_void_star> result_vector;
-
+            std::cout << "Filters active: " << d_filterbank.size() <<
+            "\n";
             // apply all filters on input signal
-            for(unsigned int i = 0; i < d_filterbank.size(); i++) {
+            for (unsigned int i = 0; i < d_filterbank.size(); i++) {
                 gr_vector_void_star temp_results;
+                std::cout << "ping";
+                consume_each(noutput_items);
                 d_filterbank.at(i)->general_work(
-                        (int)(noutput_items/d_filterbank.size()), ninput_items, input_items, temp_results
+                        (int) (noutput_items / d_filterbank.size()),
+                        ninput_items, input_items, temp_results
                 );
+                std::cout << "ping";
                 result_vector.push_back(temp_results);
+                std::cout << "Pushed results";
             }
-            consume_each(noutput_items);
 
+
+            // pack message
+            pmt::pmt_t msg = pmt::make_vector(result_vector.size(),
+                                              pmt::PMT_NIL);
+            for (unsigned int i = 0; i < result_vector.size(); i++) {
+                pmt::vector_set(msg, i, pmt::from_complex(
+                        *static_cast<std::complex<double> *>(result_vector.at(
+                                0).at(i))));
+            }
+
+            message_port_pub(pmt::intern("msg_out"), msg);
             // Tell runtime system how many output items we produced.
-            return 0;
+            return noutput_items;
         }
 
         //</editor-fold>
