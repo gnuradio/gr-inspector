@@ -1,75 +1,38 @@
 <?xml version="1.0"?>
 <block>
-  <name>Signal Detector</name>
+  <name>signal_detector_cc</name>
   <key>inspector_signal_detector_cc</key>
-  <category>Inspector</category>
+  <category>inspector</category>
   <import>import inspector</import>
   <make>inspector.signal_detector_cc($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
   <param>
-    <name>Sample Rate</name>
-    <key>samp_rate</key>
-    <value></value>
-    <type>int</type>
+    <name>...</name>
+    <key>...</key>
+    <type>...</type>
   </param>
-  <param>
-    <name>FFT Size</name>
-    <key>fft_len</key>
-    <value>1024</value>
-    <type>int</type>
-  </param>
-  <param>
-    <name>Window</name>
-    <key>window</key>
-    <value>Hamming</value>
-    <type>string</type>
-    <option>
-      <name>Hamming</name>
-      <key>hamming</key>
-    </option>
-    <option>
-      <name>Blackman-Harris</name>
-      <key>blackman</key>
-    </option>
-  </param>
-  <param>
-    <name>Auto Threshold</name>
-    <key>auto</key>
-    <value>True</value>
-    <type>bool</type>
-    <option>
-      <name>On</name>
-      <key>True</key>
-    </option>
-    <option>
-      <name>Off</name>
-      <key>False</key>
-    </option>
-  </param>
-  <param>
-    <name>Threshold</name>
-    <key>threshold</key>
-    <value>0.7</value>
-    <type>float</type>
-    <hide>#if str($auto) == 'True' then 'all' else 'none'#</hide>
-  </param>
-  <param>
-    <name>Sensitivity</name>
-    <key>sensitivity</key>
-    <value>0.2</value>
-    <type>float</type>
-    <hide>#if str($auto) == 'False' then 'all' else 'none'#</hide>
-  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
   <sink>
     <name>in</name>
-    <type>complex</type>
+    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
   </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
   <source>
     <name>out</name>
-    <type>complex</type>
-  </source>
-  <source>
-    <name>map_out</name>
-    <type>message</type>
-    <optional>1</optional>
+    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
   </source>
 </block>

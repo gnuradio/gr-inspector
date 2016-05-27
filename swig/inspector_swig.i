@@ -9,6 +9,9 @@
 
 %{
 #include "inspector/signal_separator_c.h"
+#include "inspector/signal_detector_cc.h"
 %}
 %include "inspector/signal_separator_c.h"
 GR_SWIG_BLOCK_MAGIC2(inspector, signal_separator_c);
+%include "inspector/signal_detector_cc.h"
+GR_SWIG_BLOCK_MAGIC2(inspector, signal_detector_cc);
