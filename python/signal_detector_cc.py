@@ -141,10 +141,10 @@ class signal_detector_cc(gr.sync_block):
             #print "same length"
             for i in range(edges.shape[0]):
                 #print "look at sig "+str(i)
-                if abs(edges[i][0] - self.signal_edges[i][0]) > 1:
+                if abs(edges[i][0] - self.signal_edges[i][0]) > 0.01*self.signal_edges[i][0]:
                     change = True
                     #print "starts changed"
-                if abs(edges[i][1] - self.signal_edges[i][1]) > 1:
+                if abs(edges[i][1] - self.signal_edges[i][1]) > 0.01*self.signal_edges[i][1]:
                     change = True
                     #print "stops changed"
         else:

@@ -89,7 +89,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>9800</value>
+      <value>0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -109,7 +109,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>freq_cos</value>
+      <value>gain</value>
     </param>
     <param>
       <key>label</key>
@@ -125,7 +125,7 @@
     </param>
     <param>
       <key>start</key>
-      <value>100</value>
+      <value>0</value>
     </param>
     <param>
       <key>step</key>
@@ -133,7 +133,7 @@
     </param>
     <param>
       <key>stop</key>
-      <value>10000</value>
+      <value>100</value>
     </param>
     <param>
       <key>rangeType</key>
@@ -168,7 +168,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>100000</value>
+      <value>500000</value>
     </param>
   </block>
   <block>
@@ -298,6 +298,10 @@
     <param>
       <key>samp_rate</key>
       <value>samp_rate</value>
+    </param>
+    <param>
+      <key>sensitivity</key>
+      <value>0.2</value>
     </param>
     <param>
       <key>threshold</key>
@@ -439,7 +443,7 @@
     </param>
     <param>
       <key>gain0</key>
-      <value>0</value>
+      <value>gain</value>
     </param>
     <param>
       <key>ant10</key>
@@ -1335,7 +1339,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(312, 284)</value>
+      <value>(320, 292)</value>
     </param>
     <param>
       <key>_rotation</key>
