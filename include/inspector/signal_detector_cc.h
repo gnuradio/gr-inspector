@@ -48,7 +48,7 @@ namespace gr {
        * class. inspector::signal_detector_cc::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0, float threshold = 0.7, float sensitivity = 0.2, bool auto = true);
+      static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0, float threshold = 0.7, float sensitivity = 0.2, bool auto_threshold = true);
     };
 
   } // namespace inspector
