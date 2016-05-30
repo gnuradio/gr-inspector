@@ -38,6 +38,8 @@ namespace gr {
      public:
       typedef boost::shared_ptr<signal_detector_cc> sptr;
 
+
+
       /*!
        * \brief Return a shared_ptr to a new instance of inspector::signal_detector_cc.
        *
@@ -46,7 +48,7 @@ namespace gr {
        * class. inspector::signal_detector_cc::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double samp_rate, int fft_len = 1024, window = 'window', float threshold = 0.7, float sensitivity = 0.2, bool auto = true);
+      static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0, float threshold = 0.7, float sensitivity = 0.2, bool auto = true);
     };
 
   } // namespace inspector

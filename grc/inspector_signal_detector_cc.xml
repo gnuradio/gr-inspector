@@ -1,38 +1,80 @@
-<?xml version="1.0"?>
 <block>
-  <name>signal_detector_cc</name>
+  <name>Signal Detector (C++)</name>
   <key>inspector_signal_detector_cc</key>
-  <category>inspector</category>
+  <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto)</make>
-  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
-       Sub-nodes:
-       * name
-       * key (makes the value accessible as $keyname, e.g. in the make node)
-       * type -->
+  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $, $threshold, $sensitivity, $auto)</make>
   <param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
+    <name>Samp_rate</name>
+    <key>samp_rate</key>
+    <type>real</type>
   </param>
-
-  <!-- Make one 'sink' node per input. Sub-nodes:
-       * name (an identifier for the GUI)
-       * type
-       * vlen
-       * optional (set to 1 for optional inputs) -->
+  <param>
+    <name>Fft_len</name>
+    <key>fft_len</key>
+    <value> 1024</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Window</name>
+    <key>window</key>
+    <value>firdes.WIN_BLACKMAN_hARRIS</value>
+    <type>enum</type>
+    <option>
+      <name>Blackman-harris</name>
+      <key>firdes.WIN_BLACKMAN_hARRIS</key>
+    </option>
+    <option>
+      <name>Hamming</name>
+      <key>firdes.WIN_HAMMING</key>
+    </option>
+    <option>
+      <name>Hann</name>
+      <key>firdes.WIN_HANN</key>
+    </option>
+    <option>
+      <name>Blackman</name>
+      <key>firdes.WIN_BLACKMAN</key>
+    </option>
+    <option>
+      <name>Rectangular</name>
+      <key>firdes.WIN_RECTANGULAR</key>
+    </option>
+    <option>
+      <name>Kaiser</name>
+      <key>firdes.WIN_KAISER</key>
+    </option>
+    <option>
+      <name>Flat-top</name>
+      <key>firdes.WIN_FLATTOP</key>
+    </option>
+  </param>
+  <param>
+    <name>Threshold</name>
+    <key>threshold</key>
+    <value> 0.7</value>
+    <type>float</type>
+    <hide>#if $auto == 'True' then 'all' else 'none'#</hide>
+  </param>
+  <param>
+    <name>Sensitivity</name>
+    <key>sensitivity</key>
+    <value> 0.2</value>
+    <type>float</type>
+    <hide>#if $auto == 'True' then 'none' else 'all'#<</hide>
+  </param>
+  <param>
+    <name>Auto</name>
+    <key>auto</key>
+    <value> true</value>
+    <type>raw</type>
+  </param>
   <sink>
     <name>in</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
   </sink>
-
-  <!-- Make one 'source' node per output. Sub-nodes:
-       * name (an identifier for the GUI)
-       * type
-       * vlen
-       * optional (set to 1 for optional inputs) -->
   <source>
     <name>out</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>float</type>
   </source>
 </block>
