@@ -25,6 +25,7 @@
 #include <gnuradio/io_signature.h>
 #include "signal_detector_cf_impl.h"
 #include <volk/volk.h>
+#include <cmath>
 
 namespace gr {
   namespace inspector {
@@ -153,7 +154,7 @@ namespace gr {
         if((temp[i + 1] - temp[i])/maximum > 1-d_sensitivity) {
           //std::cout << "Found magnitude jump... " << temp[i] << " " << temp[i+1] << "\n";
           d_threshold = temp[i];
-          std::cout << "Setting threshold to " << d_threshold << "\n";
+          //std::cout << "Setting threshold to " << d_threshold << "\n";
 
           break;
         }
@@ -236,8 +237,41 @@ namespace gr {
           }
         }
       }
-      std::cout << "Signals detected = " << flanks.size() << "\n";
+      //std::cout << "Signals detected = " << flanks.size() << "\n";
       return flanks;
+    }
+
+    pmt::pmt_t
+    signal_detector_cf_impl::pack_message(const std::vector<std::vector<float> >* flanks) {
+      unsigned signal_count = flanks->size();
+      pmt::pmt_t msg = pmt::make_vector(signal_count, pmt::PMT_NIL);
+      for(unsigned i = 0; i < signal_count; i++) {
+        pmt::pmt_t curr_edge = pmt::make_f32vector(2, 0.0);
+        pmt::f32vector_set(curr_edge, 0, flanks->at(i).at(0));
+        pmt::f32vector_set(curr_edge, 1, flanks->at(i).at(0));
+        pmt::vector_set(msg, i, curr_edge);
+      }
+      return msg;
+    }
+
+    bool
+    signal_detector_cf_impl::compare_signal_edges(
+            std::vector<std::vector<float> > *edges) {
+      bool change = false;
+      if(edges->size() == d_signal_edges.size()) {
+        for(unsigned i = 0; i < edges->size(); i++) {
+          if(abs(edges->at(i).at(0) - d_signal_edges.at(i).at(0)) > 0.01*d_signal_edges.at(i).at(0)) {
+            change = true;
+          }
+          if(abs(edges->at(i).at(1) - d_signal_edges.at(i).at(1)) > 0.01*d_signal_edges.at(i).at(1)) {
+            change = true;
+          }
+        }
+      }
+      else {
+        change = true;
+      }
+      return change;
     }
 
     //</editor-fold>
@@ -261,7 +295,7 @@ namespace gr {
       const gr_complex *in = (const gr_complex *) input_items[0];
       float *out = (float *) output_items[0];
 
-      std::cout << "Work work work work work!" << "\n";
+      //std::cout << "Work work work work work!" << "\n";
       //std::cout << "Input length = " << ninput_items[0] << "\n";
       if(ninput_items[0] < d_fft_len) {
         return 0;
@@ -275,14 +309,14 @@ namespace gr {
       periodogram(pxx, in);
 
       if(d_auto_threshold) {
-        std::cout << "Setting auto threshold..." << "\n";
+        //std::cout << "Setting auto threshold..." << "\n";
         build_threshold(pxx);
       }
 
       //std::cout << "Finding signal edges" << "\n";
       std::vector<std::vector<unsigned int> > flanks = find_signal_edges(pxx);
       std::vector<std::vector<float> > rf_map;
-      std::cout << "Calculating frequencies..." << "\n";
+      //std::cout << "Calculating frequencies..." << "\n";
       for(unsigned int i = 0; i < flanks.size(); i++) {
         std::vector<float> temp;
         //std::cout << "Processing signal " << i << "\n";
@@ -291,11 +325,13 @@ namespace gr {
         //std::cout << "Stop freq at pos " << flanks[i][1] << "\n";
         temp.push_back(freq[flanks[i][1]]);
         rf_map.push_back(temp);
-        std::cout << rf_map[i][0] << " - " << rf_map[i][1] << "\n";
+        //std::cout << rf_map[i][0] << " - " << rf_map[i][1] << "\n";
       }
 
-      std::cout << "Output periodogram... Requested " << noutput_items << "\n";
-      std::cout << "Input items consumed = " << ninput_items[0] << "\n";
+
+
+      //std::cout << "Output periodogram... Requested " << noutput_items << "\n";
+      //std::cout << "Input items consumed = " << ninput_items[0] << "\n";
       memcpy(out, pxx, d_fft_len*sizeof(float));
 
       float marker[d_fft_len];
@@ -309,6 +345,14 @@ namespace gr {
       memcpy(output_items[1], marker, d_fft_len*sizeof(float));
       // Tell runtime system how many input items we consumed on
       // each input stream.
+
+      // spread the message
+      if(compare_signal_edges(&rf_map)) {
+        std::cout << "Signals changed!";
+        set_signal_edges(rf_map);
+        message_port_pub(pmt::intern("map_out"), pack_message(&d_signal_edges));
+      }
+
       //TODO: is this correct?
       consume_each(d_fft_len);
       // Tell runtime system how many output items we produced.

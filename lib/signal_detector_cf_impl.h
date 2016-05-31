@@ -44,6 +44,8 @@ namespace gr {
       bool d_auto_threshold;
       std::vector<std::vector<float> > d_signal_edges;
       fft::fft_complex *d_fft;
+      pmt::pmt_t pack_message(const std::vector<std::vector<float> >* flanks);
+      bool compare_signal_edges(std::vector<std::vector<float> >* edges);
 
     public:
       signal_detector_cf_impl(double samp_rate, int fft_len,

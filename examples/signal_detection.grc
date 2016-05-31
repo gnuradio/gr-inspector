@@ -482,7 +482,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(792, 512)</value>
+      <value>(856, 504)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -615,7 +615,7 @@
     <key>inspector_signal_detector_cf</key>
     <param>
       <key>auto</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>alias</key>
@@ -663,7 +663,7 @@
     </param>
     <param>
       <key>sensitivity</key>
-      <value>0.8</value>
+      <value>0.7</value>
     </param>
     <param>
       <key>threshold</key>
@@ -671,7 +671,7 @@
     </param>
     <param>
       <key>window</key>
-      <value>firdes.WIN_HAMMING</value>
+      <value>firdes.WIN_BLACKMAN_hARRIS</value>
     </param>
   </block>
   <block>
