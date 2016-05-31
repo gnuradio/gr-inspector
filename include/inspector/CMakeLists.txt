@@ -23,5 +23,5 @@
 install(FILES
     api.h
     signal_separator_c.h
-    signal_detector_cc.h DESTINATION include/inspector
+    signal_detector_cf.h DESTINATION include/inspector
 )

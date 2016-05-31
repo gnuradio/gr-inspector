@@ -1,9 +1,9 @@
 <block>
   <name>Signal Detector (C++)</name>
-  <key>inspector_signal_detector_cc</key>
+  <key>inspector_signal_detector_cf</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cc($samp_rate, $fft_len, $, $threshold, $sensitivity, $auto)</make>
+  <make>inspector.signal_detector_cf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto)</make>
   <param>
     <name>Samp_rate</name>
     <key>samp_rate</key>
@@ -50,24 +50,32 @@
     </option>
   </param>
   <param>
+    <name>Auto</name>
+    <key>auto</key>
+    <value>True</value>
+    <type>bool</type>
+    <option>
+      <name>On</name>
+      <key>True</key>
+    </option>
+    <option>
+      <name>Off</name>
+      <key>False</key>
+    </option>
+  </param>
+  <param>
     <name>Threshold</name>
     <key>threshold</key>
     <value> 0.7</value>
     <type>float</type>
-    <hide>#if $auto == 'True' then 'all' else 'none'#</hide>
+    <hide>#if str($auto) == 'True' then 'all' else 'none'#</hide>
   </param>
   <param>
     <name>Sensitivity</name>
     <key>sensitivity</key>
     <value> 0.2</value>
     <type>float</type>
-    <hide>#if $auto == 'True' then 'none' else 'all'#<</hide>
-  </param>
-  <param>
-    <name>Auto</name>
-    <key>auto</key>
-    <value> true</value>
-    <type>raw</type>
+    <hide>#if str($auto) == 'True' then 'none' else 'all'#</hide>
   </param>
   <sink>
     <name>in</name>
@@ -76,5 +84,15 @@
   <source>
     <name>out</name>
     <type>float</type>
+    <vlen>$fft_len</vlen>
+  </source>
+  <source>
+    <name>mark</name>
+    <type>float</type>
+    <vlen>$fft_len</vlen>
+  </source>
+  <source>
+    <name>map_out</name>
+    <type>message</type>
   </source>
 </block>
