@@ -482,7 +482,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(856, 504)</value>
+      <value>(856, 424)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -537,7 +537,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>32000</value>
+      <value>100000</value>
     </param>
     <param>
       <key>type</key>

@@ -32,8 +32,8 @@ namespace gr {
     private:
       void build_window();
       std::vector<float> build_freq();
-      void build_threshold(float* pxx);
-      std::vector<std::vector<unsigned int> > find_signal_edges(float* pxx);
+      void build_threshold();
+      std::vector<std::vector<unsigned int> > find_signal_edges();
 
       double d_samp_rate;
       int d_fft_len;
@@ -44,6 +44,11 @@ namespace gr {
       bool d_auto_threshold;
       std::vector<std::vector<float> > d_signal_edges;
       fft::fft_complex *d_fft;
+      float* d_tmpbuf;
+      unsigned int d_tmpbuflen;
+      float* d_tmp_pxx;
+      float* d_pxx;
+      std::vector<float> d_freq;
       pmt::pmt_t pack_message(const std::vector<std::vector<float> >* flanks);
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
 
