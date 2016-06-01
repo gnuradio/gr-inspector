@@ -160,6 +160,7 @@ namespace gr {
         for(unsigned j = 0; j < d_result_vector[i].size(); j++) {
           pmt::c32vector_set(curr_signal, j, d_result_vector[i][j]);
         }
+        pmt::vector_set(msg, i, curr_signal);
       }
       return msg;
     }
