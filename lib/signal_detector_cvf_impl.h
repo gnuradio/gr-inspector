@@ -51,7 +51,7 @@ namespace gr {
       float* d_tmp_pxx;
       float* d_pxx;
       std::vector<float> d_freq;
-      pmt::pmt_t pack_message(const std::vector<std::vector<float> >* flanks);
+      pmt::pmt_t pack_message();
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
 
     public:

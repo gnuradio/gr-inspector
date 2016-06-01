@@ -156,6 +156,7 @@ namespace gr {
       // copy array to work with
       memcpy(d_tmp_pxx, d_pxx, sizeof(float) * d_fft_len);
       // sort bins
+      d_threshold = 500;
       std::sort(d_tmp_pxx, d_tmp_pxx + d_fft_len);
       float maximum = d_tmp_pxx[d_fft_len - 1];
       // search specified normized jump
@@ -178,10 +179,13 @@ namespace gr {
           pos.push_back(i);
         }
       }
-
+      std::vector<std::vector<unsigned int> > flanks;
+      if(pos.size() == 0) {
+        return flanks;
+      }
       // check for adjacent bins to group
       std::vector<unsigned int> curr_edges;
-      std::vector<std::vector<unsigned int> > flanks;
+
       curr_edges.push_back(pos[0]); //first position is signal begin
       // check some special cases
       if (pos.size() == 0) {
@@ -237,14 +241,13 @@ namespace gr {
 
     // pack vector in array to send with message
     pmt::pmt_t
-    signal_detector_cvf_impl::pack_message(
-            const std::vector<std::vector<float> > *flanks) {
-      unsigned signal_count = flanks->size();
+    signal_detector_cvf_impl::pack_message() {
+      unsigned signal_count = d_signal_edges.size();
       pmt::pmt_t msg = pmt::make_vector(signal_count, pmt::PMT_NIL);
       for (unsigned i = 0; i < signal_count; i++) {
         pmt::pmt_t curr_edge = pmt::make_f32vector(2, 0.0);
-        pmt::f32vector_set(curr_edge, 0, flanks->at(i).at(0));
-        pmt::f32vector_set(curr_edge, 1, flanks->at(i).at(0));
+        pmt::f32vector_set(curr_edge, 0, d_signal_edges.at(i).at(0));
+        pmt::f32vector_set(curr_edge, 1, d_signal_edges.at(i).at(0));
         pmt::vector_set(msg, i, curr_edge);
       }
       return msg;
@@ -293,6 +296,7 @@ namespace gr {
       }
 
       std::vector<std::vector<unsigned int> > flanks = find_signal_edges();
+
       std::vector<std::vector<float> > rf_map;
       for (unsigned int i = 0; i < flanks.size(); i++) {
         std::vector<float> temp;
@@ -317,7 +321,7 @@ namespace gr {
       if (compare_signal_edges(&rf_map)) {
         set_signal_edges(rf_map);
         message_port_pub(pmt::intern("map_out"),
-                         pack_message(&d_signal_edges));
+                         pack_message());
       }
 
       return 1;

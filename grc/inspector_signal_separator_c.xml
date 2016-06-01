@@ -4,10 +4,15 @@
   <category>Inspector</category>
   <import>import inspector</import>
   <import>from gnuradio.filter import firdes</import>
-  <make>inspector.signal_separator_c($samp_rate, $window)</make>
+  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width)</make>
   <param>
     <name>Samp_rate</name>
     <key>samp_rate</key>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Trans. width (rel.)</name>
+    <key>trans_width</key>
     <type>real</type>
   </param>
   <param>

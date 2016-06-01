@@ -23,58 +23,65 @@
 
 #include <inspector/signal_separator_c.h>
 #include <gnuradio/filter/firdes.h>
-#include <gnuradio/filter/freq_xlating_fir_filter_ccc.h>
-#include <pmt/pmt.h>
+#include <gnuradio/filter/fir_filter.h>
+#include <gnuradio/blocks/rotator.h>
 
 namespace gr {
   namespace inspector {
 
     class signal_separator_c_impl : public signal_separator_c {
     private:
-      // Nothing to declare in this block.
+      double d_samp_rate;
+      filter::firdes::win_type d_window;
+      std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
+      blocks::rotator d_rotator;
+      std::vector<std::vector<float> > d_rf_map;
+      float d_trans_width;
+
+      std::vector<float> d_taps;
+      std::vector<float> build_taps(double cutoff);
+      std::vector<int> d_decimations;
+      gr_complex* d_temp_buffer;
+      std::vector<std::vector<gr_complex> > d_result_vector;
+
 
     public:
-      signal_separator_c_impl(double samp_rate, int window);
+      signal_separator_c_impl(double samp_rate, int window, float trans_width);
 
       ~signal_separator_c_impl();
 
-      // properties
-      double d_samp_rate;
-      filter::firdes::win_type d_window;
-      std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > d_filterbank;
-      std::vector<std::vector<float> > d_rf_map;
 
-      // setter
-      void set_samp_rate(double samp_rate);
+      //<editor-fold desc="Getter and Setter">
 
-      void set_window(int window);
+      double samp_rate() const {
+        return d_samp_rate;
+      }
 
-      void set_filterbank(
-              std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > filterbank);
+      void set_samp_rate(double d_samp_rate) {
+        signal_separator_c_impl::d_samp_rate = d_samp_rate;
+      }
 
-      void set_rf_map(std::vector<std::vector<float> > map);
+      filter::firdes::win_type window() const {
+        return d_window;
+      }
+
+      void set_window(int d_window) {
+        signal_separator_c_impl::d_window =
+                static_cast<filter::firdes::win_type >(d_window);
+      }
+
+      //</editor-fold>
 
 
-      // getter
-      double samp_rate();
+      filter::kernel::fir_filter_ccf* build_filter(unsigned int signal);
 
-      int window();
-
-      std::vector<boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> > filterbank();
-
-      std::vector<std::vector<float> > rf_map();
-
-      std::vector<float> build_taps(double cutoff, double trans);
-
-      boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> build_filter(
-              unsigned int signal);
-
-      void add_filter(
-              boost::shared_ptr<filter::freq_xlating_fir_filter_ccc> filter);
+      void add_filter(filter::kernel::fir_filter_ccf* filter);
 
       void remove_filter(unsigned int signal);
 
       void handle_msg(pmt::pmt_t msg);
+
+      pmt::pmt_t pack_message();
 
       // Where all the action really happens
       void forecast(int noutput_items,

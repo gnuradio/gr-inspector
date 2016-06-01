@@ -482,7 +482,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(856, 424)</value>
+      <value>(1160, 480)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -612,7 +612,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_signal_detector_cf</key>
+    <key>inspector_signal_detector_cvf</key>
     <param>
       <key>auto</key>
       <value>False</value>
@@ -639,7 +639,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(568, 288)</value>
+      <value>(616, 312)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -647,7 +647,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_signal_detector_cf_0</value>
+      <value>inspector_signal_detector_cvf_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -663,11 +663,62 @@
     </param>
     <param>
       <key>sensitivity</key>
-      <value>0.7</value>
+      <value> 0.78</value>
     </param>
     <param>
       <key>threshold</key>
       <value>4</value>
+    </param>
+    <param>
+      <key>window</key>
+      <value>firdes.WIN_BLACKMAN_hARRIS</value>
+    </param>
+  </block>
+  <block>
+    <key>inspector_signal_separator_c</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(816, 124)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>inspector_signal_separator_c_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>trans_width</key>
+      <value>0.1</value>
     </param>
     <param>
       <key>window</key>
@@ -702,7 +753,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(832, 252)</value>
+      <value>(928, 276)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -977,7 +1028,13 @@
   </connection>
   <connection>
     <source_block_id>blocks_throttle_0</source_block_id>
-    <sink_block_id>inspector_signal_detector_cf_0</sink_block_id>
+    <sink_block_id>inspector_signal_detector_cvf_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_throttle_0</source_block_id>
+    <sink_block_id>inspector_signal_separator_c_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -988,21 +1045,33 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_signal_detector_cf_0</source_block_id>
+    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
     <sink_block_id>blocks_message_debug_0_0</sink_block_id>
     <source_key>map_out</source_key>
     <sink_key>print</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_signal_detector_cf_0</source_block_id>
+    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
+    <sink_block_id>inspector_signal_separator_c_0</sink_block_id>
+    <source_key>map_out</source_key>
+    <sink_key>map_in</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
     <sink_block_id>qtgui_vector_sink_f_0</sink_block_id>
     <source_key>1</source_key>
     <sink_key>1</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_signal_detector_cf_0</source_block_id>
+    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
     <sink_block_id>qtgui_vector_sink_f_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_separator_c_0</source_block_id>
+    <sink_block_id>blocks_message_debug_0_0</sink_block_id>
+    <source_key>msg_out</source_key>
+    <sink_key>print</sink_key>
   </connection>
 </flow_graph>
