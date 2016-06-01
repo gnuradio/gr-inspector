@@ -18,5 +18,5 @@
 # Boston, MA 02110-1301, USA.
 install(FILES
     inspector_signal_separator_c.xml
-    inspector_signal_detector_cf.xml DESTINATION share/gnuradio/grc/blocks
+    inspector_signal_detector_cvf.xml DESTINATION share/gnuradio/grc/blocks
 )

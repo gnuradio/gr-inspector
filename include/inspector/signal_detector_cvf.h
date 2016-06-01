@@ -19,8 +19,8 @@
  */
 
 
-#ifndef INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CF_H
-#define INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CF_H
+#ifndef INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_H
+#define INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_H
 
 #include <inspector/api.h>
 #include <gnuradio/sync_decimator.h>
@@ -33,19 +33,19 @@ namespace gr {
      * \ingroup inspector
      *
      */
-    class INSPECTOR_API signal_detector_cf : virtual public sync_decimator
+    class INSPECTOR_API signal_detector_cvf : virtual public sync_decimator
     {
      public:
-      typedef boost::shared_ptr<signal_detector_cf> sptr;
+      typedef boost::shared_ptr<signal_detector_cvf> sptr;
 
 
 
       /*!
-       * \brief Return a shared_ptr to a new instance of inspector::signal_detector_cf.
+       * \brief Return a shared_ptr to a new instance of inspector::signal_detector_cvf.
        *
-       * To avoid accidental use of raw pointers, inspector::signal_detector_cf's
+       * To avoid accidental use of raw pointers, inspector::signal_detector_cvf's
        * constructor is in a private implementation
-       * class. inspector::signal_detector_cf::make is the public interface for
+       * class. inspector::signal_detector_cvf::make is the public interface for
        * creating new instances.
        */
       static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0, float threshold = 0.7, float sensitivity = 0.2, bool auto_threshold = true);
@@ -54,5 +54,5 @@ namespace gr {
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CF_H */
+#endif /* INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_H */
 

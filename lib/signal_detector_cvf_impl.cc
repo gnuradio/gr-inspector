@@ -23,19 +23,19 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "signal_detector_cf_impl.h"
+#include "signal_detector_cvf_impl.h"
 #include <volk/volk.h>
 #include <cmath>
 
 namespace gr {
   namespace inspector {
 
-    signal_detector_cf::sptr
-    signal_detector_cf::make(double samp_rate, int fft_len,
+    signal_detector_cvf::sptr
+    signal_detector_cvf::make(double samp_rate, int fft_len,
                              int window_type, float threshold,
                              float sensitivity, bool auto_threshold) {
       return gnuradio::get_initial_sptr
-              (new signal_detector_cf_impl(samp_rate, fft_len,
+              (new signal_detector_cvf_impl(samp_rate, fft_len,
                                            window_type,
                                            threshold, sensitivity,
                                            auto_threshold));
@@ -46,13 +46,13 @@ namespace gr {
     /*
      * The private constructor
      */
-    signal_detector_cf_impl::signal_detector_cf_impl(double samp_rate,
+    signal_detector_cvf_impl::signal_detector_cvf_impl(double samp_rate,
                                                      int fft_len,
                                                      int window_type,
                                                      float threshold,
                                                      float sensitivity,
                                                      bool auto_threshold)
-            : sync_decimator("signal_detector_cf",
+            : sync_decimator("signal_detector_cvf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
                         gr::io_signature::make(1, 2, sizeof(float) *
@@ -80,7 +80,7 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    signal_detector_cf_impl::~signal_detector_cf_impl() {
+    signal_detector_cvf_impl::~signal_detector_cvf_impl() {
       delete d_fft;
       //TODO: free allocations here
       volk_free(d_tmpbuf);
@@ -94,7 +94,7 @@ namespace gr {
 
     // calculate periodogram and save in specified array
     void
-    signal_detector_cf_impl::periodogram(float *pxx,
+    signal_detector_cvf_impl::periodogram(float *pxx,
                                          const gr_complex *signal) {
       if (d_window.size()) {
         // window signal
@@ -130,7 +130,7 @@ namespace gr {
 
     // builds the frequency vector for periodogram
     std::vector<float>
-    signal_detector_cf_impl::build_freq() {
+    signal_detector_cvf_impl::build_freq() {
       std::vector<float> freq(d_fft_len);
       double point = -d_samp_rate / 2;
       for (unsigned int i = 0; i < d_fft_len; i++) {
@@ -142,7 +142,7 @@ namespace gr {
 
     // use firdes to get window coefficients
     void
-    signal_detector_cf_impl::build_window() {
+    signal_detector_cvf_impl::build_window() {
       d_window.clear();
       if (d_window_type != filter::firdes::WIN_NONE) {
         d_window = filter::firdes::window(d_window_type, d_fft_len,
@@ -152,7 +152,7 @@ namespace gr {
 
     // set auto threshold by searching for jumps between bins
     void
-    signal_detector_cf_impl::build_threshold() {
+    signal_detector_cvf_impl::build_threshold() {
       // copy array to work with
       memcpy(d_tmp_pxx, d_pxx, sizeof(float) * d_fft_len);
       // sort bins
@@ -169,7 +169,7 @@ namespace gr {
 
     // find bins above threshold and adjacent bins for each signal
     std::vector<std::vector<unsigned int> >
-    signal_detector_cf_impl::find_signal_edges() {
+    signal_detector_cvf_impl::find_signal_edges() {
 
       std::vector<unsigned int> pos;
       //find values above threshold
@@ -237,7 +237,7 @@ namespace gr {
 
     // pack vector in array to send with message
     pmt::pmt_t
-    signal_detector_cf_impl::pack_message(
+    signal_detector_cvf_impl::pack_message(
             const std::vector<std::vector<float> > *flanks) {
       unsigned signal_count = flanks->size();
       pmt::pmt_t msg = pmt::make_vector(signal_count, pmt::PMT_NIL);
@@ -252,7 +252,7 @@ namespace gr {
 
     // check if RF Map has changed since last detection
     bool
-    signal_detector_cf_impl::compare_signal_edges(
+    signal_detector_cvf_impl::compare_signal_edges(
             std::vector<std::vector<float> > *edges) {
       bool change = false;
       if (edges->size() == d_signal_edges.size()) {
@@ -279,7 +279,7 @@ namespace gr {
     //<editor-fold desc="GR Stuff">
 
     int
-    signal_detector_cf_impl::work(int noutput_items,
+    signal_detector_cvf_impl::work(int noutput_items,
                                           gr_vector_const_void_star &input_items,
                                           gr_vector_void_star &output_items) {
       const gr_complex *in = (const gr_complex *) input_items[0];

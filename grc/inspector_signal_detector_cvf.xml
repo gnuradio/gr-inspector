@@ -1,9 +1,9 @@
 <block>
   <name>Signal Detector (C++)</name>
-  <key>inspector_signal_detector_cf</key>
+  <key>inspector_signal_detector_cvf</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto)</make>
+  <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto)</make>
   <param>
     <name>Samp_rate</name>
     <key>samp_rate</key>

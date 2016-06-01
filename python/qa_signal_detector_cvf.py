@@ -23,7 +23,7 @@ from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 import inspector_swig as inspector
 
-class qa_signal_detector_cf (gr_unittest.TestCase):
+class qa_signal_detector_cvf (gr_unittest.TestCase):
 
     def setUp (self):
         self.tb = gr.top_block ()
@@ -38,4 +38,4 @@ class qa_signal_detector_cf (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_signal_detector_cf, "qa_signal_detector_cf.xml")
+    gr_unittest.run(qa_signal_detector_cvf, "qa_signal_detector_cvf.xml")
