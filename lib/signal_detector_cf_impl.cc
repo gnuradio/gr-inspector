@@ -52,11 +52,12 @@ namespace gr {
                                                      float threshold,
                                                      float sensitivity,
                                                      bool auto_threshold)
-            : gr::block("signal_detector_cf",
+            : sync_decimator("signal_detector_cf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
                         gr::io_signature::make(1, 2, sizeof(float) *
-                                                     fft_len)) {
+                                                     fft_len),
+                        fft_len) {
       set_samp_rate(samp_rate);
       set_fft_len(fft_len);
       set_window_type(window_type);
@@ -277,25 +278,12 @@ namespace gr {
 
     //<editor-fold desc="GR Stuff">
 
-    void
-    signal_detector_cf_impl::forecast(int noutput_items,
-                                      gr_vector_int &ninput_items_required) {
-      ninput_items_required[0] = d_fft_len * noutput_items;
-      GR_LOG_DEBUG(d_debug_logger, "Checking forecast...");
-    }
-
     int
-    signal_detector_cf_impl::general_work(int noutput_items,
-                                          gr_vector_int &ninput_items,
+    signal_detector_cf_impl::work(int noutput_items,
                                           gr_vector_const_void_star &input_items,
                                           gr_vector_void_star &output_items) {
       const gr_complex *in = (const gr_complex *) input_items[0];
       float *out = (float *) output_items[0];
-
-      if (ninput_items[0] < d_fft_len) {
-        // wait for more items to come
-        return 0;
-      }
 
       d_freq = build_freq();
       periodogram(d_pxx, in);
@@ -331,9 +319,6 @@ namespace gr {
         message_port_pub(pmt::intern("map_out"),
                          pack_message(&d_signal_edges));
       }
-
-      //TODO: is this correct?
-      consume_each(d_fft_len);
 
       return 1;
     }

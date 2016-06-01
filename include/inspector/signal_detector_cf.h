@@ -23,7 +23,7 @@
 #define INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CF_H
 
 #include <inspector/api.h>
-#include <gnuradio/block.h>
+#include <gnuradio/sync_decimator.h>
 
 namespace gr {
   namespace inspector {
@@ -33,7 +33,7 @@ namespace gr {
      * \ingroup inspector
      *
      */
-    class INSPECTOR_API signal_detector_cf : virtual public gr::block
+    class INSPECTOR_API signal_detector_cf : virtual public sync_decimator
     {
      public:
       typedef boost::shared_ptr<signal_detector_cf> sptr;
