@@ -29,9 +29,9 @@ namespace gr {
   namespace inspector {
 
     signal_separator_c::sptr
-    signal_separator_c::make(double samp_rate, int window, float trans_width) {
+    signal_separator_c::make(double samp_rate, int window, float trans_width, int oversampling) {
       return gnuradio::get_initial_sptr
-              (new signal_separator_c_impl(samp_rate, window, trans_width));
+              (new signal_separator_c_impl(samp_rate, window, trans_width, oversampling));
     }
 
     //<editor-fold desc="Initalization">
@@ -40,15 +40,18 @@ namespace gr {
      * The private constructor
      */
     signal_separator_c_impl::signal_separator_c_impl(
-            double samp_rate, int window, float trans_width)
+            double samp_rate, int window, float trans_width, int oversampling)
             : gr::block("signal_separator_c",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
                         gr::io_signature::make(0, 0, 0)) {
       // fill properties
+
+      //TODO: write setter and getter
       set_window(window);
       set_samp_rate(samp_rate);
       d_trans_width = trans_width;
+      d_oversampling = oversampling;
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));
@@ -61,24 +64,35 @@ namespace gr {
      * Our virtual destructor.
      */
     signal_separator_c_impl::~signal_separator_c_impl() {
-      // delete all filters
-      for(std::vector<filter::kernel::fir_filter_ccf*>::iterator it = d_filterbank.begin();
-              it != d_filterbank.end(); ++it) {
-        delete(*it);
-      }
+      free_allocation();
     }
 
     //</editor-fold>
 
     //<editor-fold desc="Helpers">
 
+    void
+    signal_separator_c_impl::free_allocation() {
+      // delete all filters
+      for(std::vector<filter::kernel::fir_filter_ccc*>::iterator it = d_filterbank.begin();
+          it != d_filterbank.end(); ++it) {
+        delete(*it);
+      }
+      for(std::vector<blocks::rotator*>::iterator it = d_rotators.begin();
+          it != d_rotators.end(); ++it) {
+        delete(*it);
+      }
+    }
+
+    // use firdes to generate lowpass taps
     std::vector<float>
     signal_separator_c_impl::build_taps(double cutoff) {
       return filter::firdes::low_pass(1, d_samp_rate, cutoff,
                                       d_trans_width*cutoff, d_window, 6.76);
     }
 
-    filter::kernel::fir_filter_ccf*
+    // build filter and pass pointer and other calculations in vectors
+    void
     signal_separator_c_impl::build_filter(unsigned int signal) {
       // calculate signal parameters
       double freq_center = ((d_rf_map.at(signal)).at(1) +
@@ -89,23 +103,36 @@ namespace gr {
       if (bandwidth == 0) {
         bandwidth = 1;
       }
-      // TODO: remove this and do proper oversampling
-      bandwidth *= 100;
+
+      // do oversampling
+      bandwidth *= d_oversampling;
       int decim = static_cast<int>(d_samp_rate / bandwidth);
 
+      // save decimation for later
+      d_decimations[signal] = decim;
+
       d_taps= build_taps(bandwidth / 2);
+      // copied from xlating fir filter
+      std::vector<gr_complex> ctaps(d_taps.size());
+      float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
+      for(unsigned int i = 0; i < d_taps.size(); i++) {
+        ctaps[i] = d_taps[i] * exp(gr_complex(0, i * fwT0));
+      }
+      // create rotator for current signal
+      blocks::rotator* rotator = new blocks::rotator();
+      rotator->set_phase_incr(exp(gr_complex(0, -fwT0 * decim)));
+      d_rotators[signal] = rotator;
 
       // build filter here
-      filter::kernel::fir_filter_ccf*
-              filter = new filter::kernel::fir_filter_ccf(decim, d_taps);
-      d_decimations[signal] = decim;
-      std::cout << "Decim " << signal << " = " << decim << std::endl;
-      return filter;
+      filter::kernel::fir_filter_ccc*
+              filter = new filter::kernel::fir_filter_ccc(decim, ctaps);
+
+      d_filterbank[signal] = filter;
     }
 
     void
     signal_separator_c_impl::add_filter(
-            filter::kernel::fir_filter_ccf* filter) {
+            filter::kernel::fir_filter_ccc* filter) {
       d_filterbank.push_back(filter);
     }
 
@@ -122,29 +149,36 @@ namespace gr {
     void
     signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
       // extract rf map out of message
+      d_filterbank.clear();
       d_decimations.clear();
-      std::vector<std::vector<float> > result;
+      d_rotators.clear();
+
+      // free allocated space
+      free_allocation();
+
+      unpack_message(msg);
+
+      // calculate filters
+      // TODO: make this more efficient
+      d_decimations.resize(d_rf_map.size());
+      d_rotators.resize(d_rf_map.size());
+      d_filterbank.resize(d_rf_map.size());
+      for (unsigned int i = 0; i < d_rf_map.size(); i++) {
+        build_filter(i);
+      }
+    }
+
+    void
+    signal_separator_c_impl::unpack_message(pmt::pmt_t msg) {
+      d_rf_map.clear();
       std::vector<float> temp;
       for (unsigned int i = 0; i < pmt::length(msg); i++) {
         pmt::pmt_t row = pmt::vector_ref(msg, i);
         temp.clear();
         temp.push_back(pmt::f32vector_ref(row, 0));
         temp.push_back(pmt::f32vector_ref(row, 1));
-        result.push_back(temp);
+        d_rf_map.push_back(temp);
       }
-      d_rf_map = result;
-
-      std::cout << "RF Map: " << d_rf_map.size() << "\n";
-
-      // calculate filters
-      // TODO: make this more efficient
-      std::vector<filter::kernel::fir_filter_ccf*> temp_filter;
-      d_decimations.resize(d_rf_map.size());
-      for (unsigned int i = 0; i < d_rf_map.size(); i++) {
-        temp_filter.push_back(build_filter(i));
-      }
-
-      d_filterbank = temp_filter;
     }
 
     // pack vector in array to send with message
@@ -168,8 +202,11 @@ namespace gr {
     void
     signal_separator_c_impl::forecast(int noutput_items,
                                       gr_vector_int &ninput_items_required) {
-
-      ninput_items_required[0] = noutput_items;
+      //ninput_items_required[0] = noutput_items;
+      ninput_items_required[0] = 0;
+      for(int i = 0; i < d_decimations.size(); i++) {
+        ninput_items_required[0] += noutput_items*d_decimations[i];
+      }
     }
 
     int
@@ -180,20 +217,30 @@ namespace gr {
       const gr_complex *in = (const gr_complex *) input_items[0];
 
       d_result_vector.clear();
-      std::cout << "Filters active: " << d_filterbank.size() <<
-      "\n";
-      // apply all filters on input signal
-      for (unsigned int i = 0; i < d_filterbank.size(); i++) {
-        d_temp_buffer = (gr_complex*)volk_malloc(
-                ninput_items[0]*sizeof(gr_complex),
-                volk_get_alignment());
-        std::cout << "ping " << ninput_items[0]*sizeof(gr_complex)/d_decimations[i] << std::endl;
+      std::cout << "Filters active: " << d_filterbank.size() << "\n";
 
-        d_filterbank.at(i)->filterNdec(d_temp_buffer, in, ninput_items[0]/d_decimations[i], d_decimations[i]);
-        std::cout << "ping" << std::endl;
+      // apply all filters on input signal
+      // iterate over each filter
+      for (unsigned int i = 0; i < d_filterbank.size(); i++) {
+        // size of filter output
+        int size = ninput_items[0]/d_decimations[i];
+        // allocate enough space for result
+        d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
+                volk_get_alignment());
+        std::cout << "ping " << size << std::endl;
+        // copied from xlating fir filter
+        unsigned j = 0;
+        for (int k = 0; k < size; k++){
+          d_temp_buffer[k] = d_rotators[i]->rotate(d_filterbank[i]->filter(&in[j]));
+          j += d_decimations[i];
+        }
+
+        std::cout << "pong" << std::endl;
+        // convert buffer to vector
         std::vector<gr_complex> temp_results(d_temp_buffer, d_temp_buffer+ninput_items[0]/d_decimations[i]);
+        // save results for current filter
         d_result_vector.push_back(temp_results);
-        std::cout << "Pushed results " << d_result_vector.size() << std::endl;
+        std::cout << "Pushed results " << i << std::endl;
         volk_free(d_temp_buffer);
       }
       // pack message

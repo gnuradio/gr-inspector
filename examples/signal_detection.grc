@@ -690,7 +690,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -713,6 +713,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>oversample</key>
+      <value>100</value>
+    </param>
+    <param>
       <key>samp_rate</key>
       <value>samp_rate</value>
     </param>
@@ -729,7 +733,7 @@
     <key>qtgui_vector_sink_f</key>
     <param>
       <key>autoscale</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>average</key>
@@ -1043,12 +1047,6 @@
     <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0_0</sink_block_id>
-    <source_key>map_out</source_key>
-    <sink_key>print</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_signal_detector_cvf_0</source_block_id>

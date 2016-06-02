@@ -94,5 +94,6 @@
   <source>
     <name>map_out</name>
     <type>message</type>
-  </source>
+    <optional>1</optional> 
+ </source>
 </block>

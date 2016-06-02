@@ -33,22 +33,25 @@ namespace gr {
     private:
       double d_samp_rate;
       filter::firdes::win_type d_window;
-      std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
-      blocks::rotator d_rotator;
+      std::vector<filter::kernel::fir_filter_ccc*> d_filterbank;
       std::vector<std::vector<float> > d_rf_map;
       float d_trans_width;
 
       std::vector<float> d_taps;
       std::vector<float> build_taps(double cutoff);
       std::vector<int> d_decimations;
+      std::vector<blocks::rotator*> d_rotators;
       gr_complex* d_temp_buffer;
       std::vector<std::vector<gr_complex> > d_result_vector;
+      int d_oversampling;
 
 
     public:
-      signal_separator_c_impl(double samp_rate, int window, float trans_width);
+      signal_separator_c_impl(double samp_rate, int window, float trans_width, int oversampling);
 
       ~signal_separator_c_impl();
+
+      void free_allocation();
 
 
       //<editor-fold desc="Getter and Setter">
@@ -73,15 +76,16 @@ namespace gr {
       //</editor-fold>
 
 
-      filter::kernel::fir_filter_ccf* build_filter(unsigned int signal);
+      void build_filter(unsigned int signal);
 
-      void add_filter(filter::kernel::fir_filter_ccf* filter);
+      void add_filter(filter::kernel::fir_filter_ccc* filter);
 
       void remove_filter(unsigned int signal);
 
       void handle_msg(pmt::pmt_t msg);
 
       pmt::pmt_t pack_message();
+      void unpack_message(pmt::pmt_t msg);
 
       // Where all the action really happens
       void forecast(int noutput_items,

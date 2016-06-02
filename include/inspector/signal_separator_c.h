@@ -46,7 +46,7 @@ namespace gr {
        * class. inspector::signal_separator_c::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double samp_rate, int window, float trans_width);
+      static sptr make(double samp_rate, int window, float trans_width, int oversampling);
     };
 
   } // namespace inspector

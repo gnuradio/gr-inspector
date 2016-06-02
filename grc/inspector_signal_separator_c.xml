@@ -4,7 +4,7 @@
   <category>Inspector</category>
   <import>import inspector</import>
   <import>from gnuradio.filter import firdes</import>
-  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width)</make>
+  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample)</make>
   <param>
     <name>Samp_rate</name>
     <key>samp_rate</key>
@@ -48,6 +48,11 @@
       <name>Flat-top</name>
       <key>firdes.WIN_FLATTOP</key>
     </option>
+  </param>
+  <param>
+    <name>Oversampling</name>
+    <key>oversample</key>
+    <type>int</type>
   </param>
   <sink>
     <name>in</name>
