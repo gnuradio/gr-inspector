@@ -10,8 +10,11 @@
 %{
 #include "inspector/signal_separator_c.h"
 #include "inspector/signal_detector_cvf.h"
+#include "inspector/qtgui_inspector_sink_vf.h"
 %}
 %include "inspector/signal_separator_c.h"
 GR_SWIG_BLOCK_MAGIC2(inspector, signal_separator_c);
 %include "inspector/signal_detector_cvf.h"
 GR_SWIG_BLOCK_MAGIC2(inspector, signal_detector_cvf);
+%include "inspector/qtgui_inspector_sink_vf.h"
+GR_SWIG_BLOCK_MAGIC2(inspector, qtgui_inspector_sink_vf);
