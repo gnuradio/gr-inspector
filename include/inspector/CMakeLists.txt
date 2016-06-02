@@ -24,5 +24,6 @@ install(FILES
     api.h
     signal_separator_c.h
     signal_detector_cvf.h
-    signal_extractor_c.h DESTINATION include/inspector
+    signal_extractor_c.h
+    qtgui_inspector_sink_vf.h DESTINATION include/inspector
 )

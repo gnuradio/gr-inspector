@@ -27,7 +27,8 @@ link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND inspector_sources
     signal_separator_c_impl.cc
     signal_detector_cvf_impl.cc
-    signal_extractor_c_impl.cc )
+    signal_extractor_c_impl.cc
+    qtgui_inspector_sink_vf_impl.cc )
 
 set(inspector_sources "${inspector_sources}" PARENT_SCOPE)
 if(NOT inspector_sources)
