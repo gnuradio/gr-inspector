@@ -1,0 +1,20 @@
+<block>
+  <name>Signal Extractor</name>
+  <key>inspector_signal_extractor_c</key>
+  <category>Inspector</category>
+  <import>import inspector</import>
+  <make>inspector.signal_extractor_c($signal)</make>
+  <param>
+    <name>Signal</name>
+    <key>signal</key>
+    <type>int</type>
+  </param>
+  <sink>
+    <name>sig_in</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>
