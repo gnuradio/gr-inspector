@@ -86,7 +86,7 @@ namespace gr {
     {
       //const <+ITYPE+> *in = (const <+ITYPE+> *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
-      std::cout << d_ready << "\n";
+      //std::cout << d_ready << "\n";
       // Do <+signal processing+>
       if(d_ready) {
         memcpy(out, d_msg_buffer, d_length*sizeof(gr_complex));
