@@ -1,5 +1,5 @@
 <block>
-  <name>Signal Detector (C++)</name>
+  <name>Signal Detector</name>
   <key>inspector_signal_detector_cvf</key>
   <category>Inspector</category>
   <import>import inspector</import>
