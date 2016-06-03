@@ -50,8 +50,8 @@ namespace gr {
       //TODO: write setter and getter
       set_window(window);
       set_samp_rate(samp_rate);
-      d_trans_width = trans_width;
-      d_oversampling = oversampling;
+      set_trans_width(trans_width);
+      set_oversampling(oversampling);
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));
@@ -217,7 +217,6 @@ namespace gr {
       const gr_complex *in = (const gr_complex *) input_items[0];
 
       d_result_vector.clear();
-      std::cout << "Filters active: " << d_filterbank.size() << "\n";
 
       // apply all filters on input signal
       // iterate over each filter
@@ -227,7 +226,6 @@ namespace gr {
         // allocate enough space for result
         d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
                 volk_get_alignment());
-        std::cout << "ping " << size << std::endl;
         // copied from xlating fir filter
         unsigned j = 0;
         for (int k = 0; k < size; k++){
@@ -235,12 +233,10 @@ namespace gr {
           j += d_decimations[i];
         }
 
-        std::cout << "pong" << std::endl;
         // convert buffer to vector
         std::vector<gr_complex> temp_results(d_temp_buffer, d_temp_buffer+ninput_items[0]/d_decimations[i]);
         // save results for current filter
         d_result_vector.push_back(temp_results);
-        std::cout << "Pushed results " << i << std::endl;
         volk_free(d_temp_buffer);
       }
       // pack message

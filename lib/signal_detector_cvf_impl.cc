@@ -67,11 +67,11 @@ namespace gr {
       set_sensitivity(sensitivity);
       set_auto_threshold(auto_threshold);
       message_port_register_out(pmt::intern("map_out"));
-      d_average = average;
+      set_average(average);
 
       //fill properties
       build_window();
-      set_fft(new fft::fft_complex(fft_len, true));
+      d_fft = new fft::fft_complex(fft_len, true);
       d_tmpbuf = static_cast<float *>(volk_malloc(
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_tmp_pxx = static_cast<float *>(volk_malloc(
@@ -96,7 +96,6 @@ namespace gr {
      */
     signal_detector_cvf_impl::~signal_detector_cvf_impl() {
       delete d_fft;
-      //TODO: free allocations here
       volk_free(d_tmpbuf);
       volk_free(d_tmp_pxx);
       volk_free(d_pxx);
@@ -350,7 +349,7 @@ namespace gr {
 
       // spread the message
       if (compare_signal_edges(&rf_map)) {
-        set_signal_edges(rf_map);
+        d_signal_edges = rf_map;
         message_port_pub(pmt::intern("map_out"),
                          pack_message());
       }

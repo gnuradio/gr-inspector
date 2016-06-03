@@ -73,8 +73,23 @@ namespace gr {
                 static_cast<filter::firdes::win_type >(d_window);
       }
 
-      //</editor-fold>
+      float trans_width() const {
+        return d_trans_width;
+      }
 
+      void set_trans_width(float d_trans_width) {
+        signal_separator_c_impl::d_trans_width = d_trans_width;
+      }
+
+      int oversampling() const {
+        return d_oversampling;
+      }
+
+      void set_oversampling(int d_oversampling) {
+        signal_separator_c_impl::d_oversampling = d_oversampling;
+      }
+
+      //</editor-fold>
 
       void build_filter(unsigned int signal);
 

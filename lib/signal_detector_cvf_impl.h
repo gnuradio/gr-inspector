@@ -117,61 +117,12 @@ namespace gr {
         signal_detector_cvf_impl::d_auto_threshold = d_auto_threshold;
       }
 
-      const std::vector<std::vector<float> > &signal_edges() const {
-        return d_signal_edges;
+      int average() const {
+        return d_average;
       }
 
-      void set_signal_edges(
-              const std::vector<std::vector<float> > &d_signal_edges) {
-        signal_detector_cvf_impl::d_signal_edges = d_signal_edges;
-      }
-
-      fft::fft_complex *fft() const {
-        return d_fft;
-      }
-
-      void set_fft(fft::fft_complex *d_fft) {
-        signal_detector_cvf_impl::d_fft = d_fft;
-      }
-
-      float *tmpbuf() const {
-        return d_tmpbuf;
-      }
-
-      void set_tmpbuf(float *d_tmpbuf) {
-        signal_detector_cvf_impl::d_tmpbuf = d_tmpbuf;
-      }
-
-      unsigned int tmpbuflen() const {
-        return d_tmpbuflen;
-      }
-
-      void set_tmpbuflen(unsigned int d_tmpbuflen) {
-        signal_detector_cvf_impl::d_tmpbuflen = d_tmpbuflen;
-      }
-
-      float *tmp_pxx() const {
-        return d_tmp_pxx;
-      }
-
-      void set_tmp_pxx(float *d_tmp_pxx) {
-        signal_detector_cvf_impl::d_tmp_pxx = d_tmp_pxx;
-      }
-
-      float *pxx() const {
-        return d_pxx;
-      }
-
-      void set_pxx(float *d_pxx) {
-        signal_detector_cvf_impl::d_pxx = d_pxx;
-      }
-
-      const std::vector<float> &freq() const {
-        return d_freq;
-      }
-
-      void set_freq(const std::vector<float> &d_freq) {
-        signal_detector_cvf_impl::d_freq = d_freq;
+      void set_average(int d_average) {
+        signal_detector_cvf_impl::d_average = d_average;
       }
 
       //</editor-fold>
