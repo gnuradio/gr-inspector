@@ -1,17 +1,17 @@
 /* -*- c++ -*- */
-/* 
+/*
  * Copyright 2016 <+YOU OR YOUR COMPANY+>.
- * 
+ *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
@@ -33,12 +33,13 @@ namespace gr {
     signal_detector_cvf::sptr
     signal_detector_cvf::make(double samp_rate, int fft_len,
                              int window_type, float threshold,
-                             float sensitivity, bool auto_threshold) {
+                             float sensitivity, bool auto_threshold,
+                             int average) {
       return gnuradio::get_initial_sptr
               (new signal_detector_cvf_impl(samp_rate, fft_len,
                                            window_type,
                                            threshold, sensitivity,
-                                           auto_threshold));
+                                           auto_threshold, average));
     }
 
     //<editor-fold desc="Initalization">
@@ -51,7 +52,8 @@ namespace gr {
                                                      int window_type,
                                                      float threshold,
                                                      float sensitivity,
-                                                     bool auto_threshold)
+                                                     bool auto_threshold,
+                                                     int average)
             : sync_decimator("signal_detector_cvf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
@@ -65,6 +67,7 @@ namespace gr {
       set_sensitivity(sensitivity);
       set_auto_threshold(auto_threshold);
       message_port_register_out(pmt::intern("map_out"));
+      d_average = average;
 
       //fill properties
       build_window();
@@ -75,6 +78,17 @@ namespace gr {
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_pxx = static_cast<float *>(volk_malloc(
               sizeof(float) * d_fft_len, volk_get_alignment()));
+      d_pxx_out = (float*)volk_malloc(sizeof(float)*d_fft_len,
+                                      volk_get_alignment());
+
+
+      d_avg_vector.resize(d_fft_len);
+
+      for(std::vector<boost::circular_buffer<float> >::iterator it = d_avg_vector.begin();
+              it != d_avg_vector.end(); ++it) {
+        it->resize(d_average);
+      }
+
     }
 
     /*
@@ -86,6 +100,7 @@ namespace gr {
       volk_free(d_tmpbuf);
       volk_free(d_tmp_pxx);
       volk_free(d_pxx);
+      volk_free(d_pxx_out);
     }
 
     //</editor-fold>
@@ -110,15 +125,15 @@ namespace gr {
       d_fft->execute(); // fft
 
       // calc fft to periodogram
-      volk_32fc_s32f_x2_power_spectral_density_32f(pxx, d_fft->get_outbuf(),
-      d_fft_len, 1.0, d_fft_len);
-      //volk_32fc_magnitude_squared_32f(pxx, d_fft->get_outbuf(),
-                                      //d_fft_len);
-      //volk_32f_s32f_normalize(pxx, d_fft_len, d_fft_len);
+      //volk_32fc_s32f_x2_power_spectral_density_32f(pxx, d_fft->get_outbuf(),
+      //d_fft_len, 1.0, d_fft_len);
+      volk_32fc_magnitude_squared_32f(pxx, d_fft->get_outbuf(),
+                                      d_fft_len);
+      volk_32f_s32f_normalize(pxx, d_fft_len, d_fft_len);
 
       // calculate in dB
-      //volk_32f_log2_32f(pxx, pxx, d_fft_len);
-      //volk_32f_s32f_normalize(pxx, 10 / log2(10), d_fft_len);
+      volk_32f_log2_32f(pxx, pxx, d_fft_len);
+      volk_32f_s32f_normalize(pxx, log2(10)/10, d_fft_len);
 
       // do fftshift
 
@@ -177,7 +192,7 @@ namespace gr {
       std::vector<unsigned int> pos;
       //find values above threshold
       for (unsigned int i = 0; i < d_fft_len; i++) {
-        if (d_pxx[i] > d_threshold) {
+        if (d_pxx_out[i] > d_threshold) {
           pos.push_back(i);
         }
       }
@@ -293,6 +308,19 @@ namespace gr {
       d_freq = build_freq();
       periodogram(d_pxx, in);
 
+      for(int i = 0; i < d_fft_len; i++) {
+        d_avg_vector[i].push_back(d_pxx[i]);
+      }
+
+     for(int i = 0; i < d_fft_len; i++) {
+        float val = 0;
+        for(boost::circular_buffer<float>::iterator it = d_avg_vector[i].begin();
+                it != d_avg_vector[i].end(); ++it) {
+          val += *it;
+        }
+        val = val/d_avg_vector[i].size();
+        d_pxx_out[i] = val;
+      }
       if (d_auto_threshold) {
         build_threshold();
       }
@@ -307,14 +335,15 @@ namespace gr {
         rf_map.push_back(temp);
       }
 
-      memcpy(out, d_pxx, d_fft_len * sizeof(float));
+      memcpy(out, d_pxx_out, d_fft_len * sizeof(float));
 
       //TODO: Remove this (just debug output)
       float marker[d_fft_len];
-      for (int a = 0; a < d_fft_len; a++) marker[a] = 0;
+      for (int a = 0; a < d_fft_len; a++) marker[a] =
+               *std::min_element(d_pxx_out, d_pxx_out+d_fft_len);
       for (int i = 0; i < flanks.size(); i++) {
         for (int j = flanks[i][0]; j <= flanks[i][1]; j++) {
-          marker[j] = 10;
+          marker[j] = *std::max_element(d_pxx_out, d_pxx_out+d_fft_len);
         }
       }
       memcpy(output_items[1], marker, d_fft_len * sizeof(float));
@@ -333,4 +362,3 @@ namespace gr {
 
   } /* namespace inspector */
 } /* namespace gr */
-

@@ -482,7 +482,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1160, 480)</value>
+      <value>(1048, 152)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -615,7 +615,11 @@
     <key>inspector_signal_detector_cvf</key>
     <param>
       <key>auto</key>
-      <value>False</value>
+      <value>True</value>
+    </param>
+    <param>
+      <key>avg</key>
+      <value>10</value>
     </param>
     <param>
       <key>alias</key>
@@ -663,7 +667,7 @@
     </param>
     <param>
       <key>sensitivity</key>
-      <value> 0.78</value>
+      <value> 0.8</value>
     </param>
     <param>
       <key>threshold</key>

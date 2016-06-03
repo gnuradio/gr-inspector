@@ -3,7 +3,7 @@
   <key>inspector_signal_detector_cvf</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto)</make>
+  <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto, $avg)</make>
   <param>
     <name>Samp_rate</name>
     <key>samp_rate</key>
@@ -76,6 +76,12 @@
     <value> 0.2</value>
     <type>float</type>
     <hide>#if str($auto) == 'True' then 'none' else 'all'#</hide>
+  </param>
+  <param>
+    <name>Average</name>
+    <key>avg</key>
+    <value>10</value>
+    <type>int</type>
   </param>
   <sink>
     <name>in</name>

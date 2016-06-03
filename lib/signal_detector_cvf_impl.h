@@ -24,6 +24,7 @@
 #include <inspector/signal_detector_cvf.h>
 #include <gnuradio/filter/firdes.h>
 #include <gnuradio/fft/fft.h>
+#include <boost/circular_buffer.hpp>
 
 namespace gr {
   namespace inspector {
@@ -50,14 +51,19 @@ namespace gr {
       unsigned int d_tmpbuflen;
       float* d_tmp_pxx;
       float* d_pxx;
+      float* d_pxx_out;
+      int d_average;
       std::vector<float> d_freq;
       pmt::pmt_t pack_message();
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
 
+      std::vector<boost::circular_buffer<float> > d_avg_vector;
+
     public:
       signal_detector_cvf_impl(double samp_rate, int fft_len,
                               int window_type, float threshold,
-                              float sensitivity, bool auto_threshold);
+                              float sensitivity, bool auto_threshold,
+                              int average);
 
       ~signal_detector_cvf_impl();
 
