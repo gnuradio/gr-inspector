@@ -25,19 +25,29 @@
 #include <gnuradio/filter/firdes.h>
 #include <gnuradio/fft/fft.h>
 #include <boost/circular_buffer.hpp>
+#include <gnuradio/filter/single_pole_iir.h>
 
 namespace gr {
   namespace inspector {
 
     class signal_detector_cvf_impl : public signal_detector_cvf {
     private:
+
+
+    public:
+      signal_detector_cvf_impl(double samp_rate, int fft_len,
+                              int window_type, float threshold,
+                              float sensitivity, bool auto_threshold,
+                              float average);
+
+      ~signal_detector_cvf_impl();
+
       void build_window();
       std::vector<float> build_freq();
-      
-    private:
       void build_threshold();
       std::vector<std::vector<unsigned int> > find_signal_edges();
 
+      std::vector<filter::single_pole_iir<float,float,double> > d_avg_filter;
       double d_samp_rate;
       int d_fft_len;
       filter::firdes::win_type d_window_type;
@@ -56,16 +66,6 @@ namespace gr {
       std::vector<float> d_freq;
       pmt::pmt_t pack_message();
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
-
-      std::vector<boost::circular_buffer<float> > d_avg_vector;
-
-    public:
-      signal_detector_cvf_impl(double samp_rate, int fft_len,
-                              int window_type, float threshold,
-                              float sensitivity, bool auto_threshold,
-                              int average);
-
-      ~signal_detector_cvf_impl();
 
       //<editor-fold desc="Getter and Setter">
 

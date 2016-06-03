@@ -78,10 +78,10 @@
     <hide>#if str($auto) == 'True' then 'none' else 'all'#</hide>
   </param>
   <param>
-    <name>Average</name>
+    <name>Average alpha</name>
     <key>avg</key>
-    <value>10</value>
-    <type>int</type>
+    <value>0.8</value>
+    <type>real</type>
   </param>
   <sink>
     <name>in</name>

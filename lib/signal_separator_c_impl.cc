@@ -148,7 +148,7 @@ namespace gr {
 
     void
     signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
-      // extract rf map out of message
+      // clear all vectors for recalculation
       d_filterbank.clear();
       d_decimations.clear();
       d_rotators.clear();

@@ -34,7 +34,7 @@ namespace gr {
     signal_detector_cvf::make(double samp_rate, int fft_len,
                              int window_type, float threshold,
                              float sensitivity, bool auto_threshold,
-                             int average) {
+                             float average) {
       return gnuradio::get_initial_sptr
               (new signal_detector_cvf_impl(samp_rate, fft_len,
                                            window_type,
@@ -53,21 +53,23 @@ namespace gr {
                                                      float threshold,
                                                      float sensitivity,
                                                      bool auto_threshold,
-                                                     int average)
+                                                     float average)
             : sync_decimator("signal_detector_cvf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
                         gr::io_signature::make(1, 2, sizeof(float) *
                                                      fft_len),
                         fft_len) {
+
+      // set properties
       set_samp_rate(samp_rate);
       set_fft_len(fft_len);
       set_window_type(window_type);
       set_threshold(threshold);
       set_sensitivity(sensitivity);
       set_auto_threshold(auto_threshold);
-      message_port_register_out(pmt::intern("map_out"));
       set_average(average);
+      message_port_register_out(pmt::intern("map_out"));
 
       //fill properties
       build_window();
@@ -80,13 +82,10 @@ namespace gr {
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_pxx_out = (float*)volk_malloc(sizeof(float)*d_fft_len,
                                       volk_get_alignment());
+      d_avg_filter.resize(d_fft_len);
 
-
-      d_avg_vector.resize(d_fft_len);
-
-      for(std::vector<boost::circular_buffer<float> >::iterator it = d_avg_vector.begin();
-              it != d_avg_vector.end(); ++it) {
-        it->resize(d_average);
+      for(unsigned int i = 0; i < d_fft_len; i++) {
+        d_avg_filter[i].set_taps(average);
       }
 
     }
@@ -124,15 +123,15 @@ namespace gr {
       d_fft->execute(); // fft
 
       // calc fft to periodogram
-      //volk_32fc_s32f_x2_power_spectral_density_32f(pxx, d_fft->get_outbuf(),
-      //d_fft_len, 1.0, d_fft_len);
-      volk_32fc_magnitude_squared_32f(pxx, d_fft->get_outbuf(),
-                                      d_fft_len);
-      volk_32f_s32f_normalize(pxx, d_fft_len, d_fft_len);
+      volk_32fc_s32f_x2_power_spectral_density_32f(pxx, d_fft->get_outbuf(),
+      d_fft_len, 1.0, d_fft_len);
+      //volk_32fc_magnitude_squared_32f(pxx, d_fft->get_outbuf(),
+                                      //d_fft_len);
+      //volk_32f_s32f_normalize(pxx, d_fft_len, d_fft_len);
 
       // calculate in dB
-      volk_32f_log2_32f(pxx, pxx, d_fft_len);
-      volk_32f_s32f_normalize(pxx, log2(10)/10, d_fft_len);
+      //volk_32f_log2_32f(pxx, pxx, d_fft_len);
+      //volk_32f_s32f_normalize(pxx, log2(10)/10, d_fft_len);
 
       // do fftshift
 
@@ -170,7 +169,7 @@ namespace gr {
     void
     signal_detector_cvf_impl::build_threshold() {
       // copy array to work with
-      memcpy(d_tmp_pxx, d_pxx, sizeof(float) * d_fft_len);
+      memcpy(d_tmp_pxx, d_pxx_out, sizeof(float) * d_fft_len);
       // sort bins
       d_threshold = 500;
       std::sort(d_tmp_pxx, d_tmp_pxx + d_fft_len);
@@ -307,19 +306,11 @@ namespace gr {
       d_freq = build_freq();
       periodogram(d_pxx, in);
 
+      // averaging
       for(int i = 0; i < d_fft_len; i++) {
-        d_avg_vector[i].push_back(d_pxx[i]);
+        d_pxx_out[i] = d_avg_filter[i].filter(d_pxx[i]);
       }
 
-     for(int i = 0; i < d_fft_len; i++) {
-        float val = 0;
-        for(boost::circular_buffer<float>::iterator it = d_avg_vector[i].begin();
-                it != d_avg_vector[i].end(); ++it) {
-          val += *it;
-        }
-        val = val/d_avg_vector[i].size();
-        d_pxx_out[i] = val;
-      }
       if (d_auto_threshold) {
         build_threshold();
       }
