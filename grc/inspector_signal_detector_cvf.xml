@@ -5,12 +5,12 @@
   <import>import inspector</import>
   <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto, $avg)</make>
   <param>
-    <name>Samp_rate</name>
+    <name>Samp rate</name>
     <key>samp_rate</key>
     <type>real</type>
   </param>
   <param>
-    <name>Fft_len</name>
+    <name>FFT length</name>
     <key>fft_len</key>
     <value> 1024</value>
     <type>int</type>
@@ -50,7 +50,7 @@
     </option>
   </param>
   <param>
-    <name>Auto</name>
+    <name>Auto threshold</name>
     <key>auto</key>
     <value>True</value>
     <type>bool</type>
@@ -64,7 +64,7 @@
     </option>
   </param>
   <param>
-    <name>Threshold</name>
+    <name>Threshold (dB)</name>
     <key>threshold</key>
     <value> 0.7</value>
     <type>float</type>
