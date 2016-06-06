@@ -24,6 +24,7 @@ from gnuradio import blocks, analog, filter
 import inspector_swig as inspector_test
 import inspector
 import pmt
+import time
 from gnuradio.filter import firdes
 
 class qa_signal_separator_c (gr_unittest.TestCase):
@@ -41,8 +42,8 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         # pack message
         msg = pmt.make_vector(1, pmt.PMT_NIL)
         flanks = pmt.make_f32vector(2, 0.0)
-        pmt.f32vector_set(flanks, 0, 12490)
-        pmt.f32vector_set(flanks, 1, 12510)
+        pmt.f32vector_set(flanks, 0, 12500)
+        pmt.f32vector_set(flanks, 1, 20)
         pmt.vector_set(msg, 0, flanks)
 
         msg_src = blocks.message_strobe(msg, 2000)
@@ -66,7 +67,9 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         self.tb.connect(stv1, snk1)
         self.tb.connect(stv2, snk2)
 
-        self.tb.run ()
+        self.tb.start ()
+        time.sleep(0.1)
+        self.tb.stop()
         # check data
         data1 = snk1.data()
         data2 = snk2.data()

@@ -90,10 +90,15 @@ namespace gr {
       // Do <+signal processing+>
       if(d_ready) {
         //std::cout << "Work work work work work" << std::endl;
-        memcpy(out, d_msg_buffer, d_length*sizeof(gr_complex));
-        return d_length;
-        std::cout << d_length << std::endl;
         d_ready = false;
+        if(noutput_items >= d_length) {
+          memcpy(out, d_msg_buffer, d_length*sizeof(gr_complex));
+          return d_length;
+        }
+        else {
+          memcpy(out, d_msg_buffer, noutput_items*sizeof(gr_complex));
+          return noutput_items;
+        }
       }
       else {
         return 0;
