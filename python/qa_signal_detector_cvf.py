@@ -20,7 +20,11 @@
 # 
 
 from gnuradio import gr, gr_unittest
-from gnuradio import blocks
+from gnuradio import blocks, analog
+from gnuradio.filter import firdes
+import time
+import numpy
+import pmt
 import inspector_swig as inspector
 
 class qa_signal_detector_cvf (gr_unittest.TestCase):
@@ -32,9 +36,33 @@ class qa_signal_detector_cvf (gr_unittest.TestCase):
         self.tb = None
 
     def test_001_t (self):
-        # set up fg
-        self.tb.run ()
-        # check data
+        src = analog.sig_source_c(32000, analog.GR_COS_WAVE,
+                                  12500, 1)
+
+        detector = inspector.signal_detector_cvf(32000,  1024,
+                    firdes.WIN_BLACKMAN_hARRIS, -80, 0.6, False, 0.8)
+        dst1 = blocks.null_sink(gr.sizeof_float*1024)
+        dst2 = blocks.null_sink(gr.sizeof_float*1024)
+        msg_dst = blocks.message_debug()
+        self.tb.connect(src, detector)
+        self.tb.connect((detector, 0), dst1)
+        self.tb.connect((detector, 1), dst2)
+        self.tb.msg_connect((detector, 'map_out'), (msg_dst, 'store'))
+        self.tb.start()
+        time.sleep(0.1)
+        self.tb.stop()
+        self.tb.wait()
+
+        msg = msg_dst.get_message(0)
+        res_vector = numpy.empty([0, 2])
+        for i in range(pmt.length(msg)):
+            row = pmt.vector_ref(msg, i)
+            res_vector = numpy.vstack((res_vector, numpy.array(
+                [pmt.f32vector_ref(row, 0), pmt.f32vector_ref(row, 1)]
+            )))
+
+        self.assertAlmostEqual(12500.0, res_vector[0][0], delta=100)
+        self.assertAlmostEqual(12500.0, res_vector[0][1], delta=100)
 
 
 if __name__ == '__main__':
