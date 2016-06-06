@@ -71,14 +71,14 @@
     <hide>#if str($auto) == 'True' then 'all' else 'none'#</hide>
   </param>
   <param>
-    <name>Sensitivity</name>
+    <name>Sensitivity (0-1)</name>
     <key>sensitivity</key>
     <value> 0.2</value>
     <type>float</type>
     <hide>#if str($auto) == 'True' then 'none' else 'all'#</hide>
   </param>
   <param>
-    <name>Average alpha</name>
+    <name>Average IIR alpha</name>
     <key>avg</key>
     <value>0.8</value>
     <type>real</type>

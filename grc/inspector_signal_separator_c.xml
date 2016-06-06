@@ -11,7 +11,7 @@
     <type>real</type>
   </param>
   <param>
-    <name>Trans. width (rel.)</name>
+    <name>Trans. width/cutoff</name>
     <key>trans_width</key>
     <type>real</type>
   </param>
