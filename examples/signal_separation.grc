@@ -718,7 +718,7 @@
     </param>
     <param>
       <key>oversample</key>
-      <value>100</value>
+      <value>500</value>
     </param>
     <param>
       <key>samp_rate</key>

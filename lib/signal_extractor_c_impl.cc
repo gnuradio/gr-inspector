@@ -49,6 +49,7 @@ namespace gr {
               &signal_extractor_c_impl::handle_msg, this, _1));
 
       d_signal = signal;
+      d_ready = false;
 
     }
 
@@ -68,14 +69,17 @@ namespace gr {
         GR_LOG_WARN(d_logger, "Specified signal does not exist.");
         return;
       }
-      //std::cout << "Msg len = " << pmt::length(msg) << std::endl;
-      pmt::pmt_t pmt_samples = pmt::vector_ref(msg, d_signal);
-      d_length = pmt::length(pmt_samples);
-      for(int i = 0; i < d_length; i++) {
-        d_samples.push_back(pmt::c32vector_ref(pmt_samples, i));
+      else {
+        //std::cout << "Msg len = " << pmt::length(msg) << std::endl;
+        pmt::pmt_t pmt_samples = pmt::vector_ref(msg, d_signal);
+        d_length = pmt::length(pmt_samples);
+        for(int i = 0; i < d_length; i++) {
+          d_samples.push_back(pmt::c32vector_ref(pmt_samples, i));
+        }
+        d_msg_buffer = &d_samples[0];
+        d_ready = true;
+        //std::cout << "Buffered samples... " << d_length << std::endl;
       }
-      d_msg_buffer = &d_samples[0];
-      d_ready = true;
     }
 
 
@@ -93,10 +97,12 @@ namespace gr {
         d_ready = false;
         if(noutput_items >= d_length) {
           memcpy(out, d_msg_buffer, d_length*sizeof(gr_complex));
+          //std::cout << d_length << std::endl;
           return d_length;
         }
         else {
           memcpy(out, d_msg_buffer, noutput_items*sizeof(gr_complex));
+          //std::cout << noutput_items << std::endl;
           return noutput_items;
         }
       }

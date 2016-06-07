@@ -42,13 +42,13 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         # pack message
         msg = pmt.make_vector(1, pmt.PMT_NIL)
         flanks = pmt.make_f32vector(2, 0.0)
-        pmt.f32vector_set(flanks, 0, 12500)
-        pmt.f32vector_set(flanks, 1, 20)
+        pmt.f32vector_set(flanks, 0, 12490)
+        pmt.f32vector_set(flanks, 1, 12510)
         pmt.vector_set(msg, 0, flanks)
 
-        msg_src = blocks.message_strobe(msg, 2000)
+        msg_src = blocks.message_strobe(msg, 1)
 
-        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100)
+        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 1000)
         extractor = inspector.signal_extractor_c(0)
         taps = firdes.low_pass(1, 32000, 10, 0.1*10)
         xlator = filter.freq_xlating_fir_filter_ccf(16, taps, 12500, 32000)
@@ -67,8 +67,8 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         self.tb.connect(stv1, snk1)
         self.tb.connect(stv2, snk2)
 
-        self.tb.start ()
-        time.sleep(0.1)
+        self.tb.start()
+        time.sleep(1)
         self.tb.stop()
         # check data
         data1 = snk1.data()
