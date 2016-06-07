@@ -33,7 +33,7 @@ namespace gr {
       // Nothing to declare in this block.
 
      public:
-      qtgui_inspector_sink_vf_impl(int fft_len);
+      qtgui_inspector_sink_vf_impl(int fft_len, QWidget *parent);
       ~qtgui_inspector_sink_vf_impl();
 
       int d_argc;
@@ -41,6 +41,7 @@ namespace gr {
       QWidget *d_parent;
       int d_fft_len;
       VectorDisplayForm *d_main_gui;
+      QApplication *d_qApplication;
 
       void handle_msg(pmt::pmt_t msg);
 

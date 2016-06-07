@@ -129,6 +129,7 @@ endif(APPLE)
 find_package(CppUnit)
 find_package(Doxygen)
 find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
+find_package(Qwt)
 
 # Search for GNU Radio and its components and versions. Add any
 # components required to the list of GR_REQUIRED_COMPONENTS (in all
@@ -164,6 +165,7 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${CPPUNIT_INCLUDE_DIRS}
     ${GNURADIO_ALL_INCLUDE_DIRS}
+    ${QWT_INCLUDE_DIRS}
     ${QT_INCLUDE_DIRS}
 )
 
@@ -173,6 +175,7 @@ link_directories(
     ${GNURADIO_RUNTIME_LIBRARY_DIRS}
     ${GNURADIO_FILTER_LIBRARY_DIRS}
     ${QT_LIBRARY_DIRS}
+    ${QWT_LIBRARY_DIRS}
 )
 
 # Set component parameters
