@@ -49,6 +49,14 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0, float threshold = 0.7, float sensitivity = 0.2, bool auto_threshold = true, float average = 0.8);
+
+      virtual void set_samp_rate(double d_samp_rate) = 0;
+      virtual void set_fft_len(int fft_len) = 0;
+      virtual void set_window_type(int d_window) = 0;
+      virtual void set_threshold(float d_threshold) = 0;
+      virtual void set_sensitivity(float d_sensitivity) = 0;
+      virtual void set_auto_threshold(bool d_auto_threshold) = 0;
+      virtual void set_average(float d_average) = 0;
     };
 
   } // namespace inspector

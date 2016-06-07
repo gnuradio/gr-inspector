@@ -62,7 +62,7 @@ namespace gr {
       float* d_tmp_pxx;
       float* d_pxx;
       float* d_pxx_out;
-      int d_average;
+      float d_average;
       std::vector<float> d_freq;
       pmt::pmt_t pack_message();
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
@@ -79,19 +79,16 @@ namespace gr {
 
       int fft_len() const {
         return d_fft_len;
+
       }
 
-      void set_fft_len(int d_fft_len) {
-        signal_detector_cvf_impl::d_fft_len = d_fft_len;
-      }
+      void set_fft_len(int fft_len);
 
       int window_type() const {
         return static_cast<int>(d_window_type);
       }
 
-      void set_window_type(int d_window) {
-        signal_detector_cvf_impl::d_window_type = static_cast<filter::firdes::win_type>(d_window);
-      }
+      void set_window_type(int d_window);
 
       float threshold() const {
         return d_threshold;
@@ -117,11 +114,11 @@ namespace gr {
         signal_detector_cvf_impl::d_auto_threshold = d_auto_threshold;
       }
 
-      int average() const {
+      float average() const {
         return d_average;
       }
 
-      void set_average(int d_average) {
+      void set_average(float d_average) {
         signal_detector_cvf_impl::d_average = d_average;
       }
 

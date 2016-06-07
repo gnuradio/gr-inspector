@@ -62,18 +62,14 @@ namespace gr {
                         fft_len) {
 
       // set properties
-      set_samp_rate(samp_rate);
-      set_fft_len(fft_len);
-      set_window_type(window_type);
-      set_threshold(threshold);
-      set_sensitivity(sensitivity);
-      set_auto_threshold(auto_threshold);
-      set_average(average);
-      message_port_register_out(pmt::intern("map_out"));
+      d_samp_rate = samp_rate;
+      d_fft_len = fft_len;
+      d_window_type = (filter::firdes::win_type)window_type;
+      d_threshold = threshold;
+      d_sensitivity = sensitivity;
+      d_auto_threshold = auto_threshold;
+      d_average = average;
 
-      //fill properties
-      build_window();
-      d_fft = new fft::fft_complex(fft_len, true);
       d_tmpbuf = static_cast<float *>(volk_malloc(
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_tmp_pxx = static_cast<float *>(volk_malloc(
@@ -82,11 +78,14 @@ namespace gr {
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_pxx_out = (float*)volk_malloc(sizeof(float)*d_fft_len,
                                       volk_get_alignment());
-      d_avg_filter.resize(d_fft_len);
+      d_fft = new fft::fft_complex(fft_len, true);
 
+      d_avg_filter.resize(d_fft_len);
+      build_window();
       for(unsigned int i = 0; i < d_fft_len; i++) {
-        d_avg_filter[i].set_taps(average);
+        d_avg_filter[i].set_taps(d_average);
       }
+      message_port_register_out(pmt::intern("map_out"));
 
     }
 
@@ -99,6 +98,37 @@ namespace gr {
       volk_free(d_tmp_pxx);
       volk_free(d_pxx);
       volk_free(d_pxx_out);
+    }
+
+    void
+    signal_detector_cvf_impl::set_fft_len(int fft_len)  {
+      signal_detector_cvf_impl::d_fft_len = fft_len;
+      delete d_fft;
+      volk_free(d_tmpbuf);
+      volk_free(d_tmp_pxx);
+      volk_free(d_pxx);
+      volk_free(d_pxx_out);
+      d_fft = new fft::fft_complex(fft_len, true);
+      d_tmpbuf = static_cast<float *>(volk_malloc(
+              sizeof(float) * d_fft_len, volk_get_alignment()));
+      d_tmp_pxx = static_cast<float *>(volk_malloc(
+              sizeof(float) * d_fft_len, volk_get_alignment()));
+      d_pxx = static_cast<float *>(volk_malloc(
+              sizeof(float) * d_fft_len, volk_get_alignment()));
+      d_pxx_out = (float*)volk_malloc(sizeof(float)*d_fft_len,
+                                      volk_get_alignment());
+      d_avg_filter.resize(d_fft_len);
+      build_window();
+      for(unsigned int i = 0; i < d_fft_len; i++) {
+        d_avg_filter[i].set_taps(d_average);
+      }
+      set_decimation(fft_len);
+    }
+
+    void
+    signal_detector_cvf_impl::set_window_type(int window)  {
+      signal_detector_cvf_impl::d_window_type = static_cast<filter::firdes::win_type>(window);
+      build_window();
     }
 
     //</editor-fold>

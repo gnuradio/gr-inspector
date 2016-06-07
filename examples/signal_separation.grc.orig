@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>signal_detection</value>
+      <value>signal_separation</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -145,6 +145,69 @@
     </param>
   </block>
   <block>
+    <key>variable_qtgui_range</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>100</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(416, 8)</value>
+    </param>
+    <param>
+      <key>gui_hint</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>osf</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value></value>
+    </param>
+    <param>
+      <key>min_len</key>
+      <value>200</value>
+    </param>
+    <param>
+      <key>orient</key>
+      <value>Qt.Horizontal</value>
+    </param>
+    <param>
+      <key>start</key>
+      <value>100</value>
+    </param>
+    <param>
+      <key>step</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>stop</key>
+      <value>1000</value>
+    </param>
+    <param>
+      <key>rangeType</key>
+      <value>int</value>
+    </param>
+    <param>
+      <key>widget</key>
+      <value>counter_slider</value>
+    </param>
+  </block>
+  <block>
     <key>variable</key>
     <param>
       <key>comment</key>
@@ -169,69 +232,6 @@
     <param>
       <key>value</key>
       <value>32768</value>
-    </param>
-  </block>
-  <block>
-    <key>variable_qtgui_range</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(424, 8)</value>
-    </param>
-    <param>
-      <key>gui_hint</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>threshold</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>min_len</key>
-      <value>200</value>
-    </param>
-    <param>
-      <key>orient</key>
-      <value>Qt.Horizontal</value>
-    </param>
-    <param>
-      <key>start</key>
-      <value>-120</value>
-    </param>
-    <param>
-      <key>step</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>stop</key>
-      <value>120</value>
-    </param>
-    <param>
-      <key>rangeType</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>widget</key>
-      <value>counter_slider</value>
     </param>
   </block>
   <block>
@@ -545,7 +545,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 216)</value>
+      <value>(816, 80)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -576,7 +576,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(456, 124)</value>
+      <value>(328, 124)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -678,7 +678,7 @@
     <key>inspector_signal_detector_cvf</key>
     <param>
       <key>auto</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>avg</key>
@@ -706,7 +706,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(648, 88)</value>
+      <value>(560, 224)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -734,7 +734,66 @@
     </param>
     <param>
       <key>threshold</key>
-      <value>threshold</value>
+      <value>4</value>
+    </param>
+    <param>
+      <key>window</key>
+      <value>firdes.WIN_BLACKMAN_hARRIS</value>
+    </param>
+  </block>
+  <block>
+    <key>inspector_signal_separator_c</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(640, 56)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>inspector_signal_separator_c_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>oversample</key>
+<<<<<<< 1427677c3c9b1b18ae4dd55a5879e8c340b61525
+      <value>500</value>
+=======
+      <value>osf</value>
+>>>>>>> Added callback methods for detector and separator
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>trans_width</key>
+      <value>0.1</value>
     </param>
     <param>
       <key>window</key>
@@ -769,7 +828,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 60)</value>
+      <value>(832, 196)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1049,6 +1108,12 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>blocks_throttle_0</source_block_id>
+    <sink_block_id>inspector_signal_separator_c_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>channels_channel_model_0</source_block_id>
     <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
@@ -1056,9 +1121,9 @@
   </connection>
   <connection>
     <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0_0</sink_block_id>
+    <sink_block_id>inspector_signal_separator_c_0</sink_block_id>
     <source_key>map_out</source_key>
-    <sink_key>print</sink_key>
+    <sink_key>map_in</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
@@ -1071,5 +1136,11 @@
     <sink_block_id>qtgui_vector_sink_f_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_separator_c_0</source_block_id>
+    <sink_block_id>blocks_message_debug_0_0</sink_block_id>
+    <source_key>msg_out</source_key>
+    <sink_key>print</sink_key>
   </connection>
 </flow_graph>

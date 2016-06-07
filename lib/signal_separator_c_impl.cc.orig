@@ -47,11 +47,18 @@ namespace gr {
                         gr::io_signature::make(0, 0, 0)) {
       // fill properties
 
-      d_window = (filter::firdes::win_type )window;
+<<<<<<< 1427677c3c9b1b18ae4dd55a5879e8c340b61525
+      set_window(window);
       d_samp_rate = samp_rate;
       d_trans_width = trans_width;
       d_oversampling = oversampling;
       d_buffer_stage = 0;
+=======
+      d_window = (filter::firdes::win_type )window;
+      d_samp_rate = samp_rate;
+      d_trans_width = trans_width;
+      d_oversampling = oversampling;
+>>>>>>> Added callback methods for detector and separator
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));

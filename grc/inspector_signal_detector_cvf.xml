@@ -4,6 +4,13 @@
   <category>Inspector</category>
   <import>import inspector</import>
   <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto, $avg)</make>
+  <callback>set_fft_len($fft_len)</callback>
+  <callback>set_window_type($window)</callback>
+  <callback>set_samp_rate($samp_rate)</callback>
+  <callback>set_threshold($threshold)</callback>
+  <callback>set_sensitivity($sensitivity)</callback>
+  <callback>set_auto_threshold($auto)</callback>
+  <callback>set_average($avg)</callback>
   <param>
     <name>Samp rate</name>
     <key>samp_rate</key>

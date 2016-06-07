@@ -5,6 +5,10 @@
   <import>import inspector</import>
   <import>from gnuradio.filter import firdes</import>
   <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample)</make>
+  <callback>set_samp_rate($samp_rate)</callback>
+  <callback>set_window($window)</callback>
+  <callback>set_trans_width($trans_width)</callback>
+  <callback>set_oversampling($oversample)</callback>
   <param>
     <name>Samp_rate</name>
     <key>samp_rate</key>

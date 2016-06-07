@@ -100,8 +100,15 @@ namespace gr {
 
       void build_filter(unsigned int signal);
 
+<<<<<<< 1427677c3c9b1b18ae4dd55a5879e8c340b61525
+=======
       void rebuild_all_filters();
 
+      void add_filter(filter::kernel::fir_filter_ccc* filter);
+
+      void remove_filter(unsigned int signal);
+
+>>>>>>> Added callback methods for detector and separator
       void handle_msg(pmt::pmt_t msg);
 
       pmt::pmt_t pack_message();
