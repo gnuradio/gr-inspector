@@ -29,21 +29,23 @@ namespace gr {
   namespace inspector {
 
     qtgui_inspector_sink_vf::sptr
-    qtgui_inspector_sink_vf::make(int fft_len)
+    qtgui_inspector_sink_vf::make(int fft_len, QWidget *parent)
     {
       return gnuradio::get_initial_sptr
-        (new qtgui_inspector_sink_vf_impl(fft_len));
+        (new qtgui_inspector_sink_vf_impl(fft_len, parent));
     }
 
     /*
      * The private constructor
      */
-    qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(int fft_len)
+    qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(int fft_len,
+                                                               QWidget *parent)
       : gr::sync_block("qtgui_inspector_sink_vf",
               gr::io_signature::make(1, 1, sizeof(float)*fft_len),
               gr::io_signature::make(0, 0, 0))
     {
       d_fft_len = fft_len;
+      message_port_register_out(pmt::intern("map_out"));
       message_port_register_in(pmt::intern("map_in"));
       set_msg_handler(pmt::intern("map_in"), boost::bind(
               &qtgui_inspector_sink_vf_impl::handle_msg, this, _1));
@@ -52,6 +54,7 @@ namespace gr {
       d_argv = new char;
       d_argv[0] = '\0';
       d_main_gui = NULL;
+      d_parent = parent;
     }
 
     /*
@@ -72,12 +75,13 @@ namespace gr {
       }
       else {
         d_qApplication = new QApplication(d_argc, &d_argv);
+        d_main_gui = new VectorDisplayForm(1, d_parent);
       }
     }
 
     void
     qtgui_inspector_sink_vf_impl::handle_msg(pmt::pmt_t msg) {
-
+      return;
     }
 
     int

@@ -1,0 +1,33 @@
+<block>
+  <name>Qtgui sink vf</name>
+  <key>QT GUI Inspector Sink</key>
+  <category>Inspector</category>
+  <import>import inspector</import>
+  <make>#set $win = 'self._%s_win'%$id
+    inspector.qtgui_sink_vf($fft_len, $(gui_hint()($win)))</make>
+  <param>
+    <name>Fft_len</name>
+    <key>fft_len</key>
+    <type>int</type>
+  </param>
+  <param>
+    <name>GUI Hint</name>
+    <key>gui_hint</key>
+    <value></value>
+    <type>gui_hint</type>
+    <hide>part</hide>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>float</type>
+    <vlen>$fft_len</vlen>
+  </sink>
+  <sink>
+    <name>map_in</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>map_out</name>
+    <type>message</type>
+  </source>
+</block>

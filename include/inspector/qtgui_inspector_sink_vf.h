@@ -47,10 +47,7 @@ namespace gr {
        * class. inspector::qtgui_inspector_sink_vf::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int fft_len);
-
-      virtual QWidget* qwidget() = 0;
-      QApplication *d_qApplication;
+      static sptr make(int fft_len, QWidget *parent = NULL);
     };
 
   } // namespace inspector
