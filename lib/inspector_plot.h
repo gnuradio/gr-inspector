@@ -41,7 +41,7 @@ namespace gr {
 		Q_OBJECT
 
 		public:
-      inspector_plot(int fft_len, QWidget* parent = NULL);
+      inspector_plot(int fft_len, std::vector<float> *buffer, QWidget* parent = NULL);
 			~inspector_plot();
 
 		private:

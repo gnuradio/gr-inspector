@@ -42,7 +42,7 @@ namespace gr {
       int d_fft_len;
       inspector_plot *d_main_gui;
       QApplication *d_qApplication;
-
+      std::vector<float> d_buffer;
       void handle_msg(pmt::pmt_t msg);
 
       void initialize();
