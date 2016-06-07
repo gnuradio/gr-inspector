@@ -25,11 +25,13 @@
 namespace gr {
   namespace inspector {
 
-    inspector_plot::inspector_plot(int fft_len, QWidget* parent) : QWidget(parent)
+    inspector_plot::inspector_plot(int fft_len, std::vector<float> *buffer, QWidget* parent) : QWidget(parent)
     {
       d_vlen = fft_len;
       // Setup GUI
       resize(QSize(600,600));
+
+      d_buffer = buffer;
 
       d_plot = new QwtPlot(this); // make main plot
       d_curve = new QwtPlotCurve(); // make spectrogram
@@ -44,6 +46,7 @@ namespace gr {
 
       // Do replot
       d_plot->replot();
+
     }
 
     inspector_plot::~inspector_plot(){

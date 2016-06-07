@@ -73,8 +73,9 @@ namespace gr {
       }
       else {
         d_qApplication = new QApplication(d_argc, &d_argv);
-        d_main_gui = new inspector_plot(d_fft_len, d_parent);
       }
+      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, d_parent);
+      d_main_gui->show();
     }
 
     void
@@ -88,11 +89,13 @@ namespace gr {
         gr_vector_void_star &output_items)
     {
       const float *in = (const float*) input_items[0];
-
+      if(d_buffer.size()!=noutput_items*d_fft_len){ // resize buffer if needed
+        d_buffer.resize(noutput_items*d_fft_len);
+      }
       // Do <+signal processing+>
-
+      memcpy(&d_buffer[0], in, noutput_items*sizeof(float)*d_fft_len);
       // Tell runtime system how many output items we produced.
-      return noutput_items;
+      return 0;
     }
 
   } /* namespace inspector */
