@@ -18,6 +18,13 @@
 # Boston, MA 02110-1301, USA.
 
 ########################################################################
+# QT GUI file generation stuff (Q_OBJECT)
+########################################################################
+set(QTGUI_MOC_HEADERS
+		inspector_plot.h)
+QT4_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
+
+########################################################################
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
@@ -25,6 +32,7 @@ include(GrPlatform) #define LIB_SUFFIX
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND inspector_sources
+		${QTGUI_MOC_OUTFILES}
     signal_separator_c_impl.cc
     signal_detector_cvf_impl.cc
     signal_extractor_c_impl.cc

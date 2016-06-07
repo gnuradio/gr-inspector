@@ -62,9 +62,7 @@ namespace gr {
      */
     qtgui_inspector_sink_vf_impl::~qtgui_inspector_sink_vf_impl()
     {
-      if (!d_main_gui->isClosed()) {
-        d_main_gui->close();
-      }
+      d_main_gui->close();
       delete d_argv;
     }
 
@@ -75,7 +73,7 @@ namespace gr {
       }
       else {
         d_qApplication = new QApplication(d_argc, &d_argv);
-        d_main_gui = new VectorDisplayForm(1, d_parent);
+        d_main_gui = new inspector_plot(d_fft_len, d_parent);
       }
     }
 
