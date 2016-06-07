@@ -22,7 +22,7 @@
 #define INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_IMPL_H
 
 #include <inspector/qtgui_inspector_sink_vf.h>
-#include <gnuradio/qtgui/vectordisplayform.h>
+#include "inspector_plot.h"
 
 namespace gr {
   namespace inspector {
@@ -40,7 +40,7 @@ namespace gr {
       char *d_argv;
       QWidget *d_parent;
       int d_fft_len;
-      VectorDisplayForm *d_main_gui;
+      inspector_plot *d_main_gui;
       QApplication *d_qApplication;
 
       void handle_msg(pmt::pmt_t msg);

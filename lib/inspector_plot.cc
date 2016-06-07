@@ -25,58 +25,28 @@
 namespace gr {
   namespace inspector {
 
-    inspector_plot::inspector_plot(int interval, int vlen, std::vector<float> *buffer, std::string label_x, std::string label_y, std::string label, std::vector<float> axis_x, std::vector<float> axis_y, std::vector<float> axis_z, bool autoscale_z,
-                                       QWidget* parent) : QWidget(parent)
+    inspector_plot::inspector_plot(int fft_len, QWidget* parent) : QWidget(parent)
     {
-      d_interval = interval;
-      d_vlen = vlen;
-      d_buffer = buffer;
-      d_axis_x = axis_x;
-      d_axis_y = axis_y;
-      d_axis_z = axis_z;
-      d_autoscale_z = autoscale_z;
-
+      d_vlen = fft_len;
       // Setup GUI
       resize(QSize(600,600));
 
       d_plot = new QwtPlot(this); // make main plot
-      d_spectrogram = new QwtPlotSpectrogram(); // make spectrogram
-      d_spectrogram->attach(d_plot); // attach spectrogram to plot
-
-      d_data = new QwtMatrixRasterData(); // make data structure
-
-      // Setup colormap
-      d_colormap = new QwtLinearColorMap(Qt::darkCyan, Qt::red);
-      d_colormap->addColorStop(0.25, Qt::cyan);
-      d_colormap->addColorStop(0.5, Qt::green);
-      d_colormap->addColorStop(0.75, Qt::yellow);
-
-      d_spectrogram->setColorMap(d_colormap);
+      d_curve = new QwtPlotCurve(); // make spectrogram
+      d_curve->attach(d_plot); // attach spectrogram to plot
 
       // Plot axis and title
-      std::string label_title = "Spectrogram Plot: ";
-      label_title.append(label_x);
-      label_title.append("/");
-      label_title.append(label_y);
-      if(label!=""){
-        label_title.append(" (");
-        label_title.append(label);
-        label_title.append(")");
-      }
+      std::string label_title = "Inspector GUI";
+
       d_plot->setTitle(QwtText(label_title.c_str()));
-      d_plot->setAxisTitle(QwtPlot::xBottom, label_x.c_str());
-      d_plot->setAxisTitle(QwtPlot::yLeft, label_y.c_str());
+      d_plot->setAxisTitle(QwtPlot::xBottom, "Frequency [Hz]");
+      d_plot->setAxisTitle(QwtPlot::yLeft, "dB");
 
       // Do replot
       d_plot->replot();
-
-      // Setup timer and connect refreshing plot
-      d_timer = new QTimer(this);
-      connect(d_timer, SIGNAL(timeout()), this, SLOT(refresh()));
-      d_timer->start(d_interval);
     }
 
-    inspector_plot::~spectrogram_plot(){
+    inspector_plot::~inspector_plot(){
     }
 
     void
@@ -103,37 +73,14 @@ namespace gr {
       }
       if(std::isnan(minimum)||std::isnan(maximum)) throw std::runtime_error("minimum or maximum for z axis is NaN");
 
-      // Get rows and columns
-      int columns, rows;
-      columns = d_vlen;
-      rows = d_buffer->size()/d_vlen;
-
-      // Fill data in spectrogram
-      d_data->setValueMatrix(d_plot_data, columns);
-      d_data->setInterval(Qt::XAxis,QwtInterval(d_axis_x[0], d_axis_x[1]));
-      d_data->setInterval(Qt::YAxis,QwtInterval(d_axis_y[0], d_axis_y[1]));
       if(d_autoscale_z){
-        d_data->setInterval(Qt::ZAxis,QwtInterval(minimum, maximum));
+        d_plot->setAxisAutoScale(0, true);
+        d_plot->setAxisAutoScale(1, true);
       }
       else{
-        d_data->setInterval(Qt::ZAxis,QwtInterval(d_axis_z[0], d_axis_z[1]));
+        d_plot->setAxisAutoScale(0, false);
+        d_plot->setAxisAutoScale(1, false);
       }
-
-      d_spectrogram->setData(d_data);
-
-      // Set colorbar
-      d_scale = d_plot->axisWidget(QwtPlot::yRight);
-      d_scale->setColorBarEnabled(true);
-      d_scale->setColorBarWidth(20);
-      if(d_autoscale_z){
-        d_scale->setColorMap(QwtInterval(minimum, maximum), d_colormap);
-        d_plot->setAxisScale(QwtPlot::yRight,minimum,maximum);
-      }
-      else{
-        d_scale->setColorMap(QwtInterval(d_axis_z[0], d_axis_z[1]), d_colormap);
-        d_plot->setAxisScale(QwtPlot::yRight,d_axis_z[0],d_axis_z[1]);
-      }
-      d_plot->enableAxis(QwtPlot::yRight);
 
       // Do replot
       d_plot->replot();
