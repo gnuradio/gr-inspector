@@ -25,6 +25,7 @@
 #include <gnuradio/filter/firdes.h>
 #include <gnuradio/filter/fir_filter.h>
 #include <gnuradio/blocks/rotator.h>
+#include <gnuradio/fft/window.h>
 
 namespace gr {
   namespace inspector {
@@ -33,7 +34,7 @@ namespace gr {
     private:
       double d_samp_rate;
       filter::firdes::win_type d_window;
-      std::vector<filter::kernel::fir_filter_ccc*> d_filterbank;
+      std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
       std::vector<std::vector<float> > d_rf_map;
       float d_trans_width;
 
@@ -42,6 +43,7 @@ namespace gr {
       std::vector<int> d_decimations;
       std::vector<blocks::rotator*> d_rotators;
       gr_complex* d_temp_buffer;
+      gr_complex* rot_signal;
       std::vector<std::vector<gr_complex> > d_result_vector;
       int d_oversampling;
 
@@ -53,6 +55,10 @@ namespace gr {
 
       void free_allocation();
 
+      unsigned int compute_ntaps(double sampling_freq,
+                        double transition_width,
+                        filter::firdes::win_type window_type,
+                        double beta);
 
       //<editor-fold desc="Getter and Setter">
 
@@ -93,7 +99,7 @@ namespace gr {
 
       void build_filter(unsigned int signal);
 
-      void add_filter(filter::kernel::fir_filter_ccc* filter);
+      void add_filter(filter::kernel::fir_filter_ccf* filter);
 
       void remove_filter(unsigned int signal);
 
