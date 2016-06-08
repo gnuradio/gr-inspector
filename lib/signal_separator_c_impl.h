@@ -34,16 +34,18 @@ namespace gr {
     private:
       double d_samp_rate;
       filter::firdes::win_type d_window;
-      std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
+      std::vector<filter::kernel::fir_filter_ccc*> d_filterbank;
       std::vector<std::vector<float> > d_rf_map;
       float d_trans_width;
+      bool d_buffer_set;
+      int d_buffer_len;
 
       std::vector<float> d_taps;
       std::vector<float> build_taps(double cutoff);
       std::vector<int> d_decimations;
       std::vector<blocks::rotator*> d_rotators;
       gr_complex* d_temp_buffer;
-      gr_complex* rot_signal;
+      std::vector<gr_complex*> d_history_buffer;
       std::vector<std::vector<gr_complex> > d_result_vector;
       int d_oversampling;
 
@@ -54,11 +56,6 @@ namespace gr {
       ~signal_separator_c_impl();
 
       void free_allocation();
-
-      unsigned int compute_ntaps(double sampling_freq,
-                        double transition_width,
-                        filter::firdes::win_type window_type,
-                        double beta);
 
       //<editor-fold desc="Getter and Setter">
 
@@ -99,7 +96,7 @@ namespace gr {
 
       void build_filter(unsigned int signal);
 
-      void add_filter(filter::kernel::fir_filter_ccf* filter);
+      void add_filter(filter::kernel::fir_filter_ccc* filter);
 
       void remove_filter(unsigned int signal);
 
