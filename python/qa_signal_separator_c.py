@@ -46,21 +46,22 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         pmt.f32vector_set(flanks, 1, 12510)
         pmt.vector_set(msg, 0, flanks)
 
-        msg_src = blocks.message_strobe(msg, 1)
+        msg_src = blocks.message_strobe(msg, 100)
 
-        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 1000)
+        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100)
         extractor = inspector.signal_extractor_c(0)
-        taps = firdes.low_pass(1, 32000, 10, 0.1*10)
+        taps = firdes.low_pass(1, 32000, 10, 0.1*10, firdes.WIN_HAMMING, 6.76)
         xlator = filter.freq_xlating_fir_filter_ccf(16, taps, 12500, 32000)
         stv1 = blocks.stream_to_vector(gr.sizeof_gr_complex, 1024)
         stv2 = blocks.stream_to_vector(gr.sizeof_gr_complex, 1024)
         snk1 = blocks.vector_sink_c(1024)
         snk2 = blocks.vector_sink_c(1024)
-
+        null1 = blocks.null_sink(gr.sizeof_gr_complex)
         # connect this
         self.tb.connect(src, separator)
         self.tb.msg_connect((msg_src, 'strobe'), (separator, 'map_in'))
         self.tb.connect(src, xlator)
+        #self.tb.connect(xlator, null1)
         self.tb.msg_connect((separator, 'msg_out'), (extractor, 'sig_in'))
         self.tb.connect(extractor, stv1)
         self.tb.connect(xlator, stv2)
@@ -68,12 +69,18 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         self.tb.connect(stv2, snk2)
 
         self.tb.start()
-        time.sleep(1)
+        time.sleep(0.5)
         self.tb.stop()
         # check data
         data1 = snk1.data()
         data2 = snk2.data()
-        self.assertAlmostEqual(data1[0], data2[0], 4)
+        check = False
+        for sample1 in data1:
+            for sample2 in data2:
+                if sample1 == sample2:
+                    check = True
+
+        self.assertEqual(check, True)
 
 if __name__ == '__main__':
     gr_unittest.run(qa_signal_separator_c, "qa_signal_separator_c.xml")
