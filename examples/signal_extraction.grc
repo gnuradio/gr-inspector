@@ -463,6 +463,37 @@
     </param>
   </block>
   <block>
+    <key>blocks_message_debug</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(944, 384)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_message_debug_0</value>
+    </param>
+  </block>
+  <block>
     <key>blocks_null_sink</key>
     <param>
       <key>alias</key>
@@ -682,7 +713,7 @@
     </param>
     <param>
       <key>center_freq</key>
-      <value>9800</value>
+      <value>3184</value>
     </param>
     <param>
       <key>comment</key>
@@ -726,7 +757,7 @@
     </param>
     <param>
       <key>taps</key>
-      <value>firdes.low_pass(1, samp_rate, 10, 1)</value>
+      <value>firdes.low_pass(1, samp_rate, 250, 25)</value>
     </param>
     <param>
       <key>type</key>
@@ -816,7 +847,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -840,7 +871,7 @@
     </param>
     <param>
       <key>signal</key>
-      <value>1</value>
+      <value>0</value>
     </param>
   </block>
   <block>
@@ -895,7 +926,7 @@
     </param>
     <param>
       <key>window</key>
-      <value>firdes.WIN_BLACKMAN_hARRIS</value>
+      <value>firdes.WIN_HAMMING</value>
     </param>
   </block>
   <block>
@@ -914,7 +945,7 @@
     </param>
     <param>
       <key>bw</key>
-      <value>samp_rate</value>
+      <value>samp_rate/32</value>
     </param>
     <param>
       <key>alias</key>
@@ -1256,6 +1287,12 @@
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
+    <sink_block_id>blocks_message_debug_0</sink_block_id>
+    <source_key>map_out</source_key>
+    <sink_key>print</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_signal_detector_cvf_0</source_block_id>

@@ -64,7 +64,7 @@ namespace gr {
     signal_extractor_c_impl::handle_msg(pmt::pmt_t msg) {
       // error handling
 
-      d_samples.clear();
+      //d_samples.clear();
       if(d_signal+1 > pmt::length(msg)) {
         GR_LOG_WARN(d_logger, "Specified signal does not exist.");
         return;
@@ -98,12 +98,22 @@ namespace gr {
         if(noutput_items >= d_length) {
           memcpy(out, d_msg_buffer, d_length*sizeof(gr_complex));
           //std::cout << d_length << std::endl;
+          for(int i = 0; i < d_length; i++) {
+            d_samples.erase(d_samples.begin()+i);
+          }
+          d_msg_buffer = &d_samples[0];
           return d_length;
+
         }
         else {
           memcpy(out, d_msg_buffer, noutput_items*sizeof(gr_complex));
           //std::cout << noutput_items << std::endl;
+          for(int i = 0; i < noutput_items; i++) {
+            d_samples.erase(d_samples.begin()+i);
+          }
+          d_msg_buffer = &d_samples[0];
           return noutput_items;
+
         }
       }
       else {

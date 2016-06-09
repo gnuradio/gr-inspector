@@ -34,12 +34,12 @@ namespace gr {
     private:
       double d_samp_rate;
       filter::firdes::win_type d_window;
-      std::vector<filter::kernel::fir_filter_ccc*> d_filterbank;
+      std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
       std::vector<std::vector<float> > d_rf_map;
       float d_trans_width;
-      bool d_buffer_set;
+      unsigned int d_buffer_stage;
       int d_buffer_len;
-
+      int d_ntaps;
       std::vector<float> d_taps;
       std::vector<float> build_taps(double cutoff);
       std::vector<int> d_decimations;
@@ -96,7 +96,7 @@ namespace gr {
 
       void build_filter(unsigned int signal);
 
-      void add_filter(filter::kernel::fir_filter_ccc* filter);
+      void add_filter(filter::kernel::fir_filter_ccf* filter);
 
       void remove_filter(unsigned int signal);
 
