@@ -39,6 +39,14 @@ list(APPEND inspector_sources
     qtgui_inspector_sink_vf_impl.cc
 		inspector_plot.cc)
 
+include(GrPython)
+if(ENABLE_PYTHON)
+	add_definitions(-DENABLE_PYTHON)
+	list(APPEND qtgui_libs
+			${PYTHON_LIBRARIES}
+			)
+endif(ENABLE_PYTHON)
+
 set(inspector_sources "${inspector_sources}" PARENT_SCOPE)
 if(NOT inspector_sources)
 	MESSAGE(STATUS "No C++ sources... skipping lib/")
@@ -46,7 +54,7 @@ if(NOT inspector_sources)
 endif(NOT inspector_sources)
 
 add_library(gnuradio-inspector SHARED ${inspector_sources})
-target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${QT_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${PYTHON_LIBRARIES} ${QT_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 set_target_properties(gnuradio-inspector PROPERTIES DEFINE_SYMBOL "gnuradio_inspector_EXPORTS")
 
 if(APPLE)

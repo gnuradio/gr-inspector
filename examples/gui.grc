@@ -654,13 +654,10 @@
       <value>(904, 176)</value>
     </param>
     <param>
-<<<<<<< 39eab30fb5ad9454ad601fefe9f2113ad51ca41e
       <key>gui_hint</key>
       <value></value>
     </param>
     <param>
-=======
->>>>>>> GUI improvements
       <key>_rotation</key>
       <value>0</value>
     </param>
