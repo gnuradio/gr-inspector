@@ -38,7 +38,7 @@ namespace gr {
       signal_detector_cvf_impl(double samp_rate, int fft_len,
                               int window_type, float threshold,
                               float sensitivity, bool auto_threshold,
-                              float average);
+                              float average, float quantization);
 
       ~signal_detector_cvf_impl();
 
@@ -63,6 +63,7 @@ namespace gr {
       float* d_pxx;
       float* d_pxx_out;
       float d_average;
+      float d_quantization;
       std::vector<float> d_freq;
       pmt::pmt_t pack_message();
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
@@ -120,6 +121,14 @@ namespace gr {
 
       void set_average(float d_average) {
         signal_detector_cvf_impl::d_average = d_average;
+      }
+
+      float quantization() const {
+        return d_quantization;
+      }
+
+      void set_quantization(float d_quantization){
+        signal_detector_cvf_impl::d_quantization = d_quantization;
       }
 
       //</editor-fold>

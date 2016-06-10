@@ -678,7 +678,7 @@
     <key>inspector_signal_detector_cvf</key>
     <param>
       <key>auto</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>avg</key>
@@ -723,6 +723,10 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>quant</key>
+      <value>0.01</value>
     </param>
     <param>
       <key>samp_rate</key>

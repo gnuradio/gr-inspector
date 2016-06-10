@@ -3,7 +3,7 @@
   <key>inspector_signal_detector_cvf</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto, $avg)</make>
+  <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto, $avg, $quant)</make>
   <callback>set_fft_len($fft_len)</callback>
   <callback>set_window_type($window)</callback>
   <callback>set_samp_rate($samp_rate)</callback>
@@ -11,6 +11,7 @@
   <callback>set_sensitivity($sensitivity)</callback>
   <callback>set_auto_threshold($auto)</callback>
   <callback>set_average($avg)</callback>
+  <callback>set_quantization($quant)</callback>
   <param>
     <name>Samp rate</name>
     <key>samp_rate</key>
@@ -88,6 +89,12 @@
     <name>Average IIR alpha</name>
     <key>avg</key>
     <value>0.8</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Rel. quantization</name>
+    <key>quant</key>
+    <value>0.0001</value>
     <type>real</type>
   </param>
   <sink>

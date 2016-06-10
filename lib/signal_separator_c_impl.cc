@@ -101,10 +101,8 @@ namespace gr {
     void
     signal_separator_c_impl::build_filter(unsigned int signal) {
       // calculate signal parameters
-      double freq_center = ((d_rf_map.at(signal)).at(1) +
-                            (d_rf_map.at(signal)).at(0)) / 2;
-      double bandwidth = (d_rf_map.at(signal)).at(1) -
-                         (d_rf_map.at(signal)).at(0);
+      double freq_center = d_rf_map.at(signal).at(0);
+      double bandwidth = d_rf_map.at(signal).at(1);
       // if only one bin detected, we still need a bandwidth > 0
       if (bandwidth == 0) {
         bandwidth = 1;
@@ -117,7 +115,7 @@ namespace gr {
       // save decimation for later
       d_decimations[signal] = decim;
 
-      d_taps = build_taps(bandwidth /4);
+      d_taps = build_taps(bandwidth / 4);
       // copied from xlating fir filter
       //std::vector<gr_complex> ctaps(d_taps.size());
       float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
