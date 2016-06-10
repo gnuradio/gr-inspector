@@ -36,11 +36,11 @@ namespace gr {
       qtgui_inspector_sink_vf_impl(int fft_len, QWidget *parent);
       ~qtgui_inspector_sink_vf_impl();
 
-//#ifdef ENABLE_PYTHON
+#ifdef ENABLE_PYTHON
       PyObject* pyqwidget();
-//#else
+#else
       void* pyqwidget();
-//#endif
+#endif
 
       int d_argc;
       char *d_argv;
