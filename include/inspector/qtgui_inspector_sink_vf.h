@@ -24,7 +24,7 @@
 
 #ifdef ENABLE_PYTHON
   #include <Python.h>
-#else
+#endif
 
 #include <inspector/api.h>
 #include <gnuradio/sync_block.h>

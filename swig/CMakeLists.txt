@@ -35,6 +35,8 @@ if(NOT SWIG_FOUND OR NOT PYTHONLIBS_FOUND)
 endif()
 include(GrSwig)
 include(GrPython)
+add_definitions(-DENABLE_PYTHON)
+list(APPEND GR_SWIG_FLAGS "-DENABLE_PYTHON")
 
 ########################################################################
 # Setup swig generation
