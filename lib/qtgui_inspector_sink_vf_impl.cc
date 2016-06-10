@@ -55,6 +55,8 @@ namespace gr {
       d_argv[0] = '\0';
       d_main_gui = NULL;
       d_parent = parent;
+
+      initialize();
     }
 
     /*
@@ -83,6 +85,22 @@ namespace gr {
       return;
     }
 
+#ifdef ENABLE_PYTHON
+    PyObject*
+    qtgui_inspector_sink_vf_impl::pyqwidget()
+    {
+      PyObject *w = PyLong_FromVoidPtr((void*)d_main_gui);
+      PyObject *retarg = Py_BuildValue("N", w);
+      return retarg;
+    }
+#else
+    void *
+    qtgui_inspector_sink_vf_impl::pyqwidget()
+    {
+      return NULL;
+    }
+#endif
+
     int
     qtgui_inspector_sink_vf_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -95,7 +113,7 @@ namespace gr {
       // Do <+signal processing+>
       memcpy(&d_buffer[0], in, noutput_items*sizeof(float)*d_fft_len);
       // Tell runtime system how many output items we produced.
-      return 0;
+      return noutput_items;
     }
 
   } /* namespace inspector */

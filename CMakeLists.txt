@@ -82,6 +82,10 @@ set(Boost_ADDITIONAL_VERSIONS
 )
 find_package(Boost "1.35" COMPONENTS filesystem system)
 
+find_package(PythonLibs 2)
+include(GrPython)
+GR_PYTHON_CHECK_MODULE("PyQt4" PyQt4 True PYQT4_FOUND)
+
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost required to compile inspector")
 endif()
@@ -167,6 +171,7 @@ include_directories(
     ${GNURADIO_ALL_INCLUDE_DIRS}
     ${QWT_INCLUDE_DIRS}
     ${QT_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS}
 )
 
 link_directories(

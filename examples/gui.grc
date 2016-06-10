@@ -654,6 +654,10 @@
       <value>(904, 176)</value>
     </param>
     <param>
+      <key>gui_hint</key>
+      <value></value>
+    </param>
+    <param>
       <key>_rotation</key>
       <value>0</value>
     </param>

@@ -48,6 +48,12 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(int fft_len, QWidget *parent = NULL);
+
+#ifdef ENABLE_PYTHON
+      virtual PyObject* pyqwidget() = 0;
+#else
+      virtual void* pyqwidget() = 0;
+#endif
     };
 
   } // namespace inspector
