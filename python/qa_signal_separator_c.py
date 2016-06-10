@@ -35,7 +35,25 @@ class qa_signal_separator_c (gr_unittest.TestCase):
     def tearDown (self):
         self.tb = None
 
-    def test_001_t (self):
+    def test_sebastian (self):
+        src = blocks.vector_source_c(range(100), False, 1, [])
+        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100)
+
+        # pack message
+        msg = pmt.make_vector(1, pmt.PMT_NIL)
+        flanks = pmt.make_f32vector(2, 0.0)
+        pmt.f32vector_set(flanks, 0, 12490)
+        pmt.f32vector_set(flanks, 1, 12510)
+        pmt.vector_set(msg, 0, flanks)
+
+        msg_src = blocks.message_strobe(msg, 100)
+
+        self.tb.connect(src, separator)
+        self.tb.msg_connect((msg_src, 'strobe'), (separator, 'map_in'))
+
+        self.tb.run()
+
+    def no_test_001_t (self):
         # set up fg
         src = analog.sig_source_c(32000, analog.GR_COS_WAVE,
                                   12500, 1)

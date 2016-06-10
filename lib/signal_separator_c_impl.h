@@ -43,7 +43,7 @@ namespace gr {
       std::vector<float> d_taps;
       std::vector<float> build_taps(double cutoff);
       std::vector<int> d_decimations;
-      std::vector<blocks::rotator*> d_rotators;
+      std::vector<blocks::rotator> d_rotators;
       gr_complex* d_temp_buffer;
       std::vector<gr_complex*> d_history_buffer;
       std::vector<std::vector<gr_complex> > d_result_vector;

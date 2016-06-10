@@ -78,10 +78,6 @@ namespace gr {
           it != d_filterbank.end(); ++it) {
         delete(*it);
       }
-      for(std::vector<blocks::rotator*>::iterator it = d_rotators.begin();
-          it != d_rotators.end(); ++it) {
-        delete(*it);
-      }
       //volk_free(d_temp_buffer);
       for(std::vector<gr_complex*>::iterator it = d_history_buffer.begin();
               it != d_history_buffer.end(); ++it) {
@@ -131,8 +127,8 @@ namespace gr {
       float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
 
       // create rotator for current signal
-      blocks::rotator* rotator = new blocks::rotator();
-      rotator->set_phase_incr(exp(gr_complex(0, -fwT0)));
+      blocks::rotator rotator;
+      rotator.set_phase_incr(exp(gr_complex(0, -fwT0)));
       d_rotators[signal] = rotator;
 
       // build filter here
@@ -234,6 +230,8 @@ namespace gr {
       }
       else if(d_buffer_stage == 1) {
         d_buffer_len = ninput_items[0];
+        //d_buffer_len = 10;
+        //d_ntaps = 3;
         for(int i = 0; i < d_history_buffer.size(); i++) {
           std::cout << "Trying to allocate " << d_ntaps-1 << "+" << d_buffer_len <<" = "<< d_ntaps+d_buffer_len-1 << std::endl;
           d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps+d_buffer_len-1)*sizeof(gr_complex),
@@ -245,6 +243,7 @@ namespace gr {
         d_buffer_stage = 2;
       }
 
+
       if(ninput_items[0] < d_buffer_len) {
         return 0;
       }
@@ -255,7 +254,7 @@ namespace gr {
       // rotate and buffer input samples
       for(int i = 0; i < d_rotators.size(); i++){
         for(int j = 0; j < d_buffer_len; j++) {
-          d_history_buffer[i][j+d_ntaps-1] = d_rotators[i]->rotate(in[j]);
+          d_history_buffer[i][j+d_ntaps-1] = d_rotators[i].rotate(in[j]);
         }
       }
 
@@ -264,6 +263,7 @@ namespace gr {
       for (unsigned int i = 0; i < d_filterbank.size(); i++) {
         // size of filter output
         int size = (int)ceil((float)(d_buffer_len)/(float)d_decimations[i]);
+        //std::cout << "Size = " << size << std::endl;
         // allocate enough space for result
         d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
                 volk_get_alignment());
@@ -271,7 +271,7 @@ namespace gr {
         // copied from xlating fir filter
         unsigned j = 0;
         for (int k = 0; k < size; k++) {
-          //d_temp_buffer[k] = d_history_buffer[i][j];
+          //d_temp_buffer[k] = d_history_buffer[i][j+d_ntaps-1];
           d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
           j += d_decimations[i];
 
@@ -284,17 +284,19 @@ namespace gr {
         volk_free(d_temp_buffer);
       }
 
+
       // put current items in history
       for(int i = 0; i < d_history_buffer.size(); i++) {
         memcpy(d_history_buffer[i], &d_history_buffer[i][d_buffer_len],
-               d_ntaps-1);
+               (d_ntaps-1)*sizeof(gr_complex));
       }
+
       // pack message
       pmt::pmt_t msg = pack_message();
 
       message_port_pub(pmt::intern("msg_out"), msg);
       // Tell runtime system how many output items we produced.
-      consume_each(ninput_items[0]);
+      consume_each(d_buffer_len);
       return d_buffer_len;
     }
 
