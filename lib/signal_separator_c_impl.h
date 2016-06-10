@@ -96,10 +96,6 @@ namespace gr {
 
       void build_filter(unsigned int signal);
 
-      void add_filter(filter::kernel::fir_filter_ccf* filter);
-
-      void remove_filter(unsigned int signal);
-
       void handle_msg(pmt::pmt_t msg);
 
       pmt::pmt_t pack_message();

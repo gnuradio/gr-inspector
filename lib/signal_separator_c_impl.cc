@@ -94,10 +94,6 @@ namespace gr {
       if(d_buffer_stage == 0) {
         d_ntaps = taps.size();
       }
-      //for(int i = 0; i < taps.size(); i++) {
-      //  std::cout << taps[i] << ", ";
-      //}
-      std::cout << std::endl;
       return taps;
     }
 
@@ -134,21 +130,8 @@ namespace gr {
       // build filter here
       filter::kernel::fir_filter_ccf*
               filter = new filter::kernel::fir_filter_ccf(decim, d_taps);
-      filter->set_taps(d_taps);
 
       d_filterbank[signal] = filter;
-    }
-
-    void
-    signal_separator_c_impl::add_filter(
-            filter::kernel::fir_filter_ccf* filter) {
-      d_filterbank.push_back(filter);
-    }
-
-    void
-    signal_separator_c_impl::remove_filter(
-            unsigned int signal) {
-      d_filterbank.erase(d_filterbank.begin() - 1 + signal);
     }
 
     //</editor-fold>
@@ -224,26 +207,26 @@ namespace gr {
                                           gr_vector_void_star &output_items) {
       const gr_complex *in = (const gr_complex *) input_items[0];
 
-      // allocate space
+      // no message received -> nothing to do
       if(d_buffer_stage == 0) {
         return 0;
       }
+      // message received, so let's allocate all the needed memory
       else if(d_buffer_stage == 1) {
         d_buffer_len = ninput_items[0];
-        //d_buffer_len = 10;
-        //d_ntaps = 3;
         for(int i = 0; i < d_history_buffer.size(); i++) {
-          std::cout << "Trying to allocate " << d_ntaps-1 << "+" << d_buffer_len <<" = "<< d_ntaps+d_buffer_len-1 << std::endl;
+          //std::cout << "Trying to allocate " << d_ntaps-1 << "+" << d_buffer_len <<" = "<< d_ntaps+d_buffer_len-1 << std::endl;
           d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps+d_buffer_len-1)*sizeof(gr_complex),
                                                          volk_get_alignment());
+          // write zeros in buffers
           for(int j = 0; j < d_ntaps+d_buffer_len-1; j++) {
             d_history_buffer[i][j] = 0.0;
           }
         }
-        d_buffer_stage = 2;
+        d_buffer_stage = 2; // everything set up, no need to repeat any stuff in this block
       }
 
-
+      // if too frew items, wait for more
       if(ninput_items[0] < d_buffer_len) {
         return 0;
       }
@@ -274,7 +257,6 @@ namespace gr {
           //d_temp_buffer[k] = d_history_buffer[i][j+d_ntaps-1];
           d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
           j += d_decimations[i];
-
         }
 
         // convert buffer to vector
