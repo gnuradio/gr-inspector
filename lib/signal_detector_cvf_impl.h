@@ -121,6 +121,9 @@ namespace gr {
 
       void set_average(float d_average) {
         signal_detector_cvf_impl::d_average = d_average;
+        for(unsigned int i = 0; i < d_fft_len; i++) {
+          d_avg_filter[i].set_taps(d_average);
+        }
       }
 
       float quantization() const {
