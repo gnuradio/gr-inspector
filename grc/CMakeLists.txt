@@ -19,5 +19,5 @@
 install(FILES
     inspector_signal_separator_c.xml
     inspector_signal_detector_cvf.xml
-    DESTINATION share/gnuradio/grc/blocks
+    inspector_scf.xml DESTINATION share/gnuradio/grc/blocks
 )

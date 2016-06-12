@@ -31,6 +31,7 @@ except ImportError:
 	pass
 
 # import any pure python here
+from scf import scf
 
 
 
