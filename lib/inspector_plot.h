@@ -26,10 +26,13 @@
 #include <QApplication>
 #include <QTimer>
 #include <QWidget>
+#include <QtGui/QtGui>
 
 #include <qwt_plot.h>
+#include <qwt_symbol.h>
 #include <qwt_color_map.h>
 #include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
 #include <qwt_matrix_raster_data.h>
 #include <qwt_scale_widget.h>
 
@@ -41,18 +44,25 @@ namespace gr {
 		Q_OBJECT
 
 		public:
-      inspector_plot(int fft_len, std::vector<float> *buffer, QWidget* parent = NULL);
+      inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<float> axis_x, QWidget* parent = NULL);
 			~inspector_plot();
+
+
 
 		private:
 			int d_interval, d_vlen;
-			std::vector<float> d_axis_x, d_axis_y, d_axis_z;
-			std::vector<float> *d_buffer;
+			std::vector<float> d_axis_x, d_axis_y;
+			std::vector<double> *d_buffer;
 			bool d_autoscale_z;
+      double d_samp_rate, d_update_time;
+      double* d_freq;
+      QwtSymbol *d_symbol;
+			QGridLayout *d_layout;
 
 			QwtPlot *d_plot;
 			QwtScaleWidget *d_scale;
 			QwtPlotCurve *d_curve;
+			QwtPlotGrid* d_grid;
 
 			QVector<double> d_plot_data;
 
@@ -61,6 +71,8 @@ namespace gr {
 
 		public slots:
 			void refresh();
+
+			void set_axis_x(float start, float step);
 
 		};
 	}

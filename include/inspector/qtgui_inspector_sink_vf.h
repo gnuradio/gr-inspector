@@ -51,7 +51,7 @@ namespace gr {
        * class. inspector::qtgui_inspector_sink_vf::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int fft_len, QWidget *parent = NULL);
+      static sptr make(double samp_rate, int fft_len, QWidget *parent = NULL);
 
 #ifdef ENABLE_PYTHON
       virtual PyObject* pyqwidget() = 0;

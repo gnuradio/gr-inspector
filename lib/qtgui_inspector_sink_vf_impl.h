@@ -23,6 +23,7 @@
 
 #include <inspector/qtgui_inspector_sink_vf.h>
 #include "inspector_plot.h"
+#include <QString>
 
 namespace gr {
   namespace inspector {
@@ -33,7 +34,7 @@ namespace gr {
       // Nothing to declare in this block.
 
      public:
-      qtgui_inspector_sink_vf_impl(int fft_len, QWidget *parent);
+      qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len, QWidget *parent);
       ~qtgui_inspector_sink_vf_impl();
 
 #ifdef ENABLE_PYTHON
@@ -43,13 +44,18 @@ namespace gr {
 #endif
 
       int d_argc;
+      bool d_initialized;
       char *d_argv;
       QWidget *d_parent;
       int d_fft_len;
+      double d_samp_rate;
       inspector_plot *d_main_gui;
       QApplication *d_qApplication;
-      std::vector<float> d_buffer;
+      std::vector<double> d_buffer;
+      std::vector<float> d_axis_x;
       void handle_msg(pmt::pmt_t msg);
+      void build_axis_x();
+      QString get_qt_style_sheet(QString filename);
 
       void initialize();
 

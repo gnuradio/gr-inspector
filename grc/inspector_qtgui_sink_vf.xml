@@ -7,11 +7,16 @@
   <import>from gnuradio import qtgui</import>
   <import>import sip</import>
   <make>#set $win = 'self._%s_win'%$id
-inspector.qtgui_inspector_sink_vf($fft_len)
+inspector.qtgui_inspector_sink_vf($samp_rate, $fft_len)
 self._$(id)_win = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget)
 $(gui_hint()($win))</make>
   <param>
-    <name>Fft_len</name>
+    <name>Samp Rate</name>
+    <key>samp_rate</key>
+    <type>real</type>
+  </param>
+  <param>
+    <name>FFT len</name>
     <key>fft_len</key>
     <type>int</type>
   </param>

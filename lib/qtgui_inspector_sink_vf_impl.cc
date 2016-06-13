@@ -24,21 +24,23 @@
 
 #include <gnuradio/io_signature.h>
 #include "qtgui_inspector_sink_vf_impl.h"
+#include <gnuradio/prefs.h>
+#include <QFile>
 
 namespace gr {
   namespace inspector {
 
     qtgui_inspector_sink_vf::sptr
-    qtgui_inspector_sink_vf::make(int fft_len, QWidget *parent)
+    qtgui_inspector_sink_vf::make(double samp_rate, int fft_len, QWidget *parent)
     {
       return gnuradio::get_initial_sptr
-        (new qtgui_inspector_sink_vf_impl(fft_len, parent));
+        (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, parent));
     }
 
     /*
      * The private constructor
      */
-    qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(int fft_len,
+    qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
                                                                QWidget *parent)
       : gr::sync_block("qtgui_inspector_sink_vf",
               gr::io_signature::make(1, 1, sizeof(float)*fft_len),
@@ -55,8 +57,10 @@ namespace gr {
       d_argv[0] = '\0';
       d_main_gui = NULL;
       d_parent = parent;
+      d_samp_rate = samp_rate;
+      d_initialized = false;
+      build_axis_x();
 
-      initialize();
     }
 
     /*
@@ -74,15 +78,34 @@ namespace gr {
         d_qApplication = qApp;
       }
       else {
+#if QT_VERSION >= 0x040500
+        std::string style = prefs::singleton()->get_string("qtgui", "style", "raster");
+        QApplication::setGraphicsSystem(QString(style.c_str()));
+#endif
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
-      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, d_parent);
-      d_main_gui->show();
+
+      std::string qssfile = prefs::singleton()->get_string("qtgui","qss","");
+      if(qssfile.size() > 0) {
+        QString sstext = get_qt_style_sheet(QString(qssfile.c_str()));
+        d_qApplication->setStyleSheet(sstext);
+      }
+
+      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, d_axis_x, d_parent);
+
+      d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/d_fft_len);
     }
 
     void
     qtgui_inspector_sink_vf_impl::handle_msg(pmt::pmt_t msg) {
       return;
+    }
+
+    void
+    qtgui_inspector_sink_vf_impl::build_axis_x() {
+      d_axis_x.clear();
+      d_axis_x.push_back(-d_samp_rate/d_fft_len);
+      d_axis_x.push_back(d_samp_rate/d_fft_len - 1);
     }
 
 #ifdef ENABLE_PYTHON
@@ -101,6 +124,24 @@ namespace gr {
     }
 #endif
 
+    QString
+    qtgui_inspector_sink_vf_impl::get_qt_style_sheet(QString filename)
+    {
+      QString sstext;
+      QFile ss(filename);
+      if(!ss.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return sstext;
+      }
+
+      QTextStream sstream(&ss);
+      while(!sstream.atEnd()) {
+        sstext += sstream.readLine();
+      }
+      ss.close();
+
+      return sstext;
+    }
+
     int
     qtgui_inspector_sink_vf_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -111,7 +152,11 @@ namespace gr {
         d_buffer.resize(noutput_items*d_fft_len);
       }
       // Do <+signal processing+>
-      memcpy(&d_buffer[0], in, noutput_items*sizeof(float)*d_fft_len);
+      memcpy(&d_buffer[0], in, noutput_items*sizeof(double)*d_fft_len);
+      if(!d_initialized) {
+        initialize();
+        d_initialized = true;
+      }
       // Tell runtime system how many output items we produced.
       return noutput_items;
     }
