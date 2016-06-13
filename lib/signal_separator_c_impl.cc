@@ -1,17 +1,17 @@
 /* -*- c++ -*- */
-/* 
+/*
  * Copyright 2016 <+YOU OR YOUR COMPANY+>.
- * 
+ *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
@@ -196,6 +196,31 @@ namespace gr {
     }
 
     void
+    signal_separator_c_impl::apply_filter(int i) {
+      //std::cout << "Appling filter " << i << std::endl;
+      // size of filter output
+      int size = (int)ceil((float)(d_buffer_len)/(float)d_decimations[i]);
+      //std::cout << "Size = " << size << std::endl;
+      // allocate enough space for result
+      d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
+              volk_get_alignment());
+
+      // copied from xlating fir filter
+      unsigned j = 0;
+      for (int k = 0; k < size; k++) {
+        //d_temp_buffer[k] = d_history_buffer[i][j+d_ntaps-1];
+        d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
+        j += d_decimations[i];
+      }
+
+      // convert buffer to vector
+      std::vector<gr_complex> temp_results(d_temp_buffer, d_temp_buffer+size);
+      // save results for current filter
+      d_result_vector.push_back(temp_results);
+      volk_free(d_temp_buffer);
+    }
+
+    void
     signal_separator_c_impl::forecast(int noutput_items,
                                       gr_vector_int &ninput_items_required) {
       ninput_items_required[0] = 4*noutput_items;
@@ -245,27 +270,7 @@ namespace gr {
       // apply all filters on input signal
       // iterate over each filter
       for (unsigned int i = 0; i < d_filterbank.size(); i++) {
-        //std::cout << "Appling filter " << i << std::endl;
-        // size of filter output
-        int size = (int)ceil((float)(d_buffer_len)/(float)d_decimations[i]);
-        //std::cout << "Size = " << size << std::endl;
-        // allocate enough space for result
-        d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
-                volk_get_alignment());
-
-        // copied from xlating fir filter
-        unsigned j = 0;
-        for (int k = 0; k < size; k++) {
-          //d_temp_buffer[k] = d_history_buffer[i][j+d_ntaps-1];
-          d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
-          j += d_decimations[i];
-        }
-
-        // convert buffer to vector
-        std::vector<gr_complex> temp_results(d_temp_buffer, d_temp_buffer+size);
-        // save results for current filter
-        d_result_vector.push_back(temp_results);
-        volk_free(d_temp_buffer);
+        apply_filter(i);
       }
 
 
@@ -288,4 +293,3 @@ namespace gr {
 
   } /* namespace inspector */
 } /* namespace gr */
-
