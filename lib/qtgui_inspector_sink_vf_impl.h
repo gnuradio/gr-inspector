@@ -23,7 +23,6 @@
 
 #include <inspector/qtgui_inspector_sink_vf.h>
 #include "inspector_plot.h"
-#include <QString>
 
 namespace gr {
   namespace inspector {
@@ -52,10 +51,9 @@ namespace gr {
       inspector_plot *d_main_gui;
       QApplication *d_qApplication;
       std::vector<double> d_buffer;
-      std::vector<float> d_axis_x;
+      std::vector<std::vector<float> > d_rf_map;
       void handle_msg(pmt::pmt_t msg);
-      void build_axis_x();
-      QString get_qt_style_sheet(QString filename);
+      void unpack_message(pmt::pmt_t msg);
 
       void initialize();
 

@@ -46,7 +46,7 @@ namespace gr {
               gr::io_signature::make(1, 1, sizeof(float)*fft_len),
               gr::io_signature::make(0, 0, 0))
     {
-      d_fft_len = fft_len;
+
       message_port_register_out(pmt::intern("map_out"));
       message_port_register_in(pmt::intern("map_in"));
       set_msg_handler(pmt::intern("map_in"), boost::bind(
@@ -57,9 +57,9 @@ namespace gr {
       d_argv[0] = '\0';
       d_main_gui = NULL;
       d_parent = parent;
+      d_fft_len = fft_len;
       d_samp_rate = samp_rate;
       d_ready = false;
-      build_axis_x();
       initialize();
     }
 
@@ -84,29 +84,30 @@ namespace gr {
 #endif
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
-
-      std::string qssfile = prefs::singleton()->get_string("qtgui","qss","");
-      if(qssfile.size() > 0) {
-        QString sstext = get_qt_style_sheet(QString(qssfile.c_str()));
-        d_qApplication->setStyleSheet(sstext);
-      }
-
-      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, d_axis_x, &d_ready, d_parent);
+      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_ready, d_parent);
       d_main_gui->show();
-      d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/d_fft_len);
+      d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
     }
 
     void
     qtgui_inspector_sink_vf_impl::handle_msg(pmt::pmt_t msg) {
-      return;
+      unpack_message(msg);
+      d_main_gui->plot_markers();
     }
 
     void
-    qtgui_inspector_sink_vf_impl::build_axis_x() {
-      d_axis_x.clear();
-      d_axis_x.push_back(-d_samp_rate/d_fft_len);
-      d_axis_x.push_back(d_samp_rate/d_fft_len - 1);
+    qtgui_inspector_sink_vf_impl::unpack_message(pmt::pmt_t msg) {
+      d_rf_map.clear();
+      std::vector<float> temp;
+      for (unsigned int i = 0; i < pmt::length(msg); i++) {
+        pmt::pmt_t row = pmt::vector_ref(msg, i);
+        temp.clear();
+        temp.push_back(pmt::f32vector_ref(row, 0));
+        temp.push_back(pmt::f32vector_ref(row, 1));
+        d_rf_map.push_back(temp);
+      }
     }
+
 
 #ifdef ENABLE_PYTHON
     PyObject*
@@ -124,24 +125,6 @@ namespace gr {
     }
 #endif
 
-    QString
-    qtgui_inspector_sink_vf_impl::get_qt_style_sheet(QString filename)
-    {
-      QString sstext;
-      QFile ss(filename);
-      if(!ss.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return sstext;
-      }
-
-      QTextStream sstream(&ss);
-      while(!sstream.atEnd()) {
-        sstext += sstream.readLine();
-      }
-      ss.close();
-
-      return sstext;
-    }
-
     int
     qtgui_inspector_sink_vf_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -152,15 +135,18 @@ namespace gr {
        // d_buffer.resize(noutput_items*d_fft_len);
       //}
       // Do <+signal processing+>
+      d_ready = false;
+
       d_buffer.clear();
-      for(int i = 0; i < noutput_items; i++) {
+      for(int i = 0; i < d_fft_len; i++) {
         d_buffer.push_back(in[i]);
       }
+
       //memcpy(&d_buffer[0], in, noutput_items*sizeof(double)*d_fft_len);
 
       // Tell runtime system how many output items we produced.
       d_ready = true;
-      return noutput_items;
+      return 1;
     }
 
   } /* namespace inspector */

@@ -109,11 +109,11 @@
     </param>
     <param>
       <key>id</key>
-      <value>freq_cos</value>
+      <value>freq</value>
     </param>
     <param>
       <key>label</key>
-      <value></value>
+      <value>Frequency</value>
     </param>
     <param>
       <key>min_len</key>
@@ -125,15 +125,15 @@
     </param>
     <param>
       <key>start</key>
-      <value>100</value>
+      <value>3200</value>
     </param>
     <param>
       <key>step</key>
-      <value>1</value>
+      <value>10</value>
     </param>
     <param>
       <key>stop</key>
-      <value>10000</value>
+      <value>12700</value>
     </param>
     <param>
       <key>rangeType</key>
@@ -678,7 +678,7 @@
     </param>
     <param>
       <key>avg</key>
-      <value>0.1</value>
+      <value>0.2</value>
     </param>
     <param>
       <key>alias</key>

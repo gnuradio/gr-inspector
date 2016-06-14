@@ -31,8 +31,9 @@
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
 #include <qwt_plot_curve.h>
+#include <qwt_painter.h>
 #include <qwt_plot_grid.h>
-#include <qwt_scale_widget.h>
+#include <qwt_plot_marker.h>
 
 namespace gr {
 	namespace inspector {
@@ -42,27 +43,29 @@ namespace gr {
 		Q_OBJECT
 
 		public:
-      inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<float> axis_x, bool* ready, QWidget* parent = NULL);
+      inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,bool* ready, QWidget* parent = NULL);
 			~inspector_plot();
 
 		private:
-			int d_interval, d_vlen;
+			int d_interval, d_fft_len;
 			bool* d_ready;
 			std::vector<float> d_axis_x, d_axis_y;
 			std::vector<double> *d_buffer;
-			bool d_autoscale_z;
-      double d_samp_rate, d_update_time;
+			float d_max, d_min;
       double* d_freq;
+      std::vector<std::vector<float> >* d_rf_map;
+
       QwtSymbol *d_symbol;
 			QGridLayout *d_layout;
-
 			QwtPlot *d_plot;
 			QwtScaleWidget *d_scale;
 			QwtPlotCurve *d_curve;
-			QwtPlotGrid* d_grid;
 			QTimer *d_timer;
-
-			QVector<double> d_plot_data;
+      QwtPlotGrid* d_grid;
+			QPainter* d_painter;
+			std::vector<QwtPlotMarker*> d_labels;
+			std::vector<QwtPlotMarker*> d_left_lines;
+			std::vector<QwtPlotMarker*> d_right_lines;
 
 		protected:
 			void resizeEvent(QResizeEvent * event);
@@ -70,7 +73,10 @@ namespace gr {
 		public slots:
 			void refresh();
 
-			void set_axis_x(float start, float step);
+			void set_axis_x(float start, float stop);
+			void delete_markers();
+
+			void plot_markers();
 
 		};
 	}
