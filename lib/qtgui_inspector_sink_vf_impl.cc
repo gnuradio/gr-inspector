@@ -58,9 +58,9 @@ namespace gr {
       d_main_gui = NULL;
       d_parent = parent;
       d_samp_rate = samp_rate;
-      d_initialized = false;
+      d_ready = false;
       build_axis_x();
-
+      initialize();
     }
 
     /*
@@ -91,8 +91,8 @@ namespace gr {
         d_qApplication->setStyleSheet(sstext);
       }
 
-      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, d_axis_x, d_parent);
-
+      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, d_axis_x, &d_ready, d_parent);
+      d_main_gui->show();
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/d_fft_len);
     }
 
@@ -148,16 +148,18 @@ namespace gr {
         gr_vector_void_star &output_items)
     {
       const float *in = (const float*) input_items[0];
-      if(d_buffer.size()!=noutput_items*d_fft_len){ // resize buffer if needed
-        d_buffer.resize(noutput_items*d_fft_len);
-      }
+      //if(d_buffer.size()!=noutput_items*d_fft_len){ // resize buffer if needed
+       // d_buffer.resize(noutput_items*d_fft_len);
+      //}
       // Do <+signal processing+>
-      memcpy(&d_buffer[0], in, noutput_items*sizeof(double)*d_fft_len);
-      if(!d_initialized) {
-        initialize();
-        d_initialized = true;
+      d_buffer.clear();
+      for(int i = 0; i < noutput_items; i++) {
+        d_buffer.push_back(in[i]);
       }
+      //memcpy(&d_buffer[0], in, noutput_items*sizeof(double)*d_fft_len);
+
       // Tell runtime system how many output items we produced.
+      d_ready = true;
       return noutput_items;
     }
 

@@ -30,10 +30,8 @@
 
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
-#include <qwt_color_map.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
-#include <qwt_matrix_raster_data.h>
 #include <qwt_scale_widget.h>
 
 namespace gr {
@@ -44,13 +42,12 @@ namespace gr {
 		Q_OBJECT
 
 		public:
-      inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<float> axis_x, QWidget* parent = NULL);
+      inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<float> axis_x, bool* ready, QWidget* parent = NULL);
 			~inspector_plot();
-
-
 
 		private:
 			int d_interval, d_vlen;
+			bool* d_ready;
 			std::vector<float> d_axis_x, d_axis_y;
 			std::vector<double> *d_buffer;
 			bool d_autoscale_z;
@@ -63,6 +60,7 @@ namespace gr {
 			QwtScaleWidget *d_scale;
 			QwtPlotCurve *d_curve;
 			QwtPlotGrid* d_grid;
+			QTimer *d_timer;
 
 			QVector<double> d_plot_data;
 
