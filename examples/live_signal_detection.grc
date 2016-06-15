@@ -222,6 +222,14 @@
       <value>0</value>
     </param>
     <param>
+      <key>min_bw</key>
+      <value>100</value>
+    </param>
+    <param>
+      <key>quant</key>
+      <value>0.001</value>
+    </param>
+    <param>
       <key>samp_rate</key>
       <value>samp_rate</value>
     </param>

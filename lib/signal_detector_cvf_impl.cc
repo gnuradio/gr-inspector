@@ -34,12 +34,13 @@ namespace gr {
     signal_detector_cvf::make(double samp_rate, int fft_len,
                              int window_type, float threshold,
                              float sensitivity, bool auto_threshold,
-                             float average, float quantization) {
+                             float average, float quantization, float min_bw) {
       return gnuradio::get_initial_sptr
               (new signal_detector_cvf_impl(samp_rate, fft_len,
                                            window_type,
                                            threshold, sensitivity,
-                                           auto_threshold, average, quantization));
+                                           auto_threshold, average,
+                                           quantization, min_bw));
     }
 
     //<editor-fold desc="Initalization">
@@ -54,7 +55,8 @@ namespace gr {
                                                      float sensitivity,
                                                      bool auto_threshold,
                                                      float average,
-                                                     float quantization)
+                                                     float quantization,
+                                                     float min_bw)
             : sync_decimator("signal_detector_cvf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
@@ -71,6 +73,7 @@ namespace gr {
       d_auto_threshold = auto_threshold;
       d_average = average;
       d_quantization = quantization;
+      d_min_bw = min_bw;
 
       d_tmpbuf = static_cast<float *>(volk_malloc(
               sizeof(float) * d_fft_len, volk_get_alignment()));
@@ -357,6 +360,9 @@ namespace gr {
         std::vector<float> temp;
         bandwidth = d_freq[flanks[i][1]] - d_freq[flanks[i][0]];
         freq_c = (d_freq[flanks[i][0]] + d_freq[flanks[i][1]])/2;
+        if(bandwidth < d_min_bw) {
+          break;
+        }
         //quantize bandwidth
         bandwidth = quantization*round(bandwidth/quantization);
         temp.push_back(freq_c);

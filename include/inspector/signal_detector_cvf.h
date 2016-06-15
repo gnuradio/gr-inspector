@@ -48,7 +48,10 @@ namespace gr {
        * class. inspector::signal_detector_cvf::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0, float threshold = 0.7, float sensitivity = 0.2, bool auto_threshold = true, float average = 0.8, float quantization = 0.01);
+      static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0,
+                       float threshold = 0.7, float sensitivity = 0.2,
+                       bool auto_threshold = true, float average = 0.8,
+                       float quantization = 0.01, float min_bw = 0.0);
 
       virtual void set_samp_rate(double d_samp_rate) = 0;
       virtual void set_fft_len(int fft_len) = 0;

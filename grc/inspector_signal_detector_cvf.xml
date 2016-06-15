@@ -3,7 +3,8 @@
   <key>inspector_signal_detector_cvf</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window, $threshold, $sensitivity, $auto, $avg, $quant)</make>
+  <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window,
+    $threshold, $sensitivity, $auto, $avg, $quant, $min_bw)</make>
   <callback>set_fft_len($fft_len)</callback>
   <callback>set_window_type($window)</callback>
   <callback>set_samp_rate($samp_rate)</callback>
@@ -96,6 +97,14 @@
     <key>quant</key>
     <value>0.0001</value>
     <type>real</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>Min Sig BW</name>
+    <key>min_bw</key>
+    <value>0</value>
+    <type>real</type>
+    <hide>part</hide>
   </param>
   <sink>
     <name>in</name>

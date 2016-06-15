@@ -38,7 +38,8 @@ namespace gr {
       signal_detector_cvf_impl(double samp_rate, int fft_len,
                               int window_type, float threshold,
                               float sensitivity, bool auto_threshold,
-                              float average, float quantization);
+                              float average, float quantization,
+                              float min_bw);
 
       ~signal_detector_cvf_impl();
 
@@ -46,7 +47,6 @@ namespace gr {
       std::vector<float> build_freq();
       void build_threshold();
       std::vector<std::vector<unsigned int> > find_signal_edges();
-
       std::vector<filter::single_pole_iir<float,float,double> > d_avg_filter;
       double d_samp_rate;
       int d_fft_len;
@@ -62,8 +62,7 @@ namespace gr {
       float* d_tmp_pxx;
       float* d_pxx;
       float* d_pxx_out;
-      float d_average;
-      float d_quantization;
+      float d_average, d_quantization, d_min_bw;
       std::vector<float> d_freq;
       pmt::pmt_t pack_message();
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
