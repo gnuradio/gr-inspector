@@ -34,6 +34,7 @@
 #include <qwt_painter.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_marker.h>
+#include <qwt_plot_zoomer.h>
 
 namespace gr {
 	namespace inspector {
@@ -56,7 +57,7 @@ namespace gr {
       std::vector<std::vector<float> >* d_rf_map;
 
       QwtSymbol *d_symbol;
-			QGridLayout *d_layout;
+			QwtPlotZoomer* d_zoomer;
 			QwtPlot *d_plot;
 			QwtScaleWidget *d_scale;
 			QwtPlotCurve *d_curve;

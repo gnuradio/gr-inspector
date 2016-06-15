@@ -36,4 +36,9 @@ $(gui_hint()($win))</make>
     <name>map_in</name>
     <type>message</type>
   </sink>
+  <source>
+    <name>map_out</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
 </block>

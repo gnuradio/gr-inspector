@@ -60,6 +60,7 @@ namespace gr {
       d_fft_len = fft_len;
       d_samp_rate = samp_rate;
       d_ready = false;
+      d_manual = false;
       initialize();
     }
 
@@ -87,12 +88,18 @@ namespace gr {
       d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_ready, d_parent);
       d_main_gui->show();
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
+      QCheckBox* box = new QCheckBox("Manual", d_parent);
     }
 
     void
     qtgui_inspector_sink_vf_impl::handle_msg(pmt::pmt_t msg) {
       unpack_message(msg);
       d_main_gui->plot_markers();
+
+      // bypass block if no manual signal selection
+      if(!d_manual){
+        message_port_pub(pmt::intern("map_out"), msg);
+      }
     }
 
     void

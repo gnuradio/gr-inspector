@@ -51,6 +51,7 @@ namespace gr {
       d_grid->setPen(QPen(QColor(60,60,60),0.5, Qt::DashLine));
       d_grid->attach(d_plot);
       //d_curve->setRenderHint(QwtPlotItem::RenderAntialiased, true);
+      //d_zoomer = new QwtPlotZoomer(d_plot);
 
       // Plot axis and title
       std::string label_title = "Inspector GUI";
@@ -75,7 +76,7 @@ namespace gr {
 
     inspector_plot::~inspector_plot(){
       delete d_timer;
-      delete d_layout;
+      delete d_zoomer;
       delete d_plot;
       delete d_curve;
       delete[] d_freq;
