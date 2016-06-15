@@ -117,12 +117,6 @@
     <optional>1</optional>
   </source>
   <source>
-    <name>mark</name>
-    <type>float</type>
-    <vlen>$fft_len</vlen>
-    <optional>1</optional>
-  </source>
-  <source>
     <name>map_out</name>
     <type>message</type>
     <optional>1</optional> 

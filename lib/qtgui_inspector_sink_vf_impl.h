@@ -33,7 +33,8 @@ namespace gr {
       // Nothing to declare in this block.
 
      public:
-      qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len, QWidget *parent);
+      qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
+                                   float cfreq, QWidget *parent);
       ~qtgui_inspector_sink_vf_impl();
 
 #ifdef ENABLE_PYTHON
@@ -48,6 +49,7 @@ namespace gr {
       QWidget *d_parent;
       int d_fft_len;
       double d_samp_rate;
+      float d_cfreq;
       inspector_plot *d_main_gui;
       QApplication *d_qApplication;
       std::vector<double> d_buffer;

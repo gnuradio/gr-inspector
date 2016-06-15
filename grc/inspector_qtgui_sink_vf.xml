@@ -7,7 +7,7 @@
   <import>from gnuradio import qtgui</import>
   <import>import sip</import>
   <make>#set $win = 'self._%s_win'%$id
-inspector.qtgui_inspector_sink_vf($samp_rate, $fft_len)
+inspector.qtgui_inspector_sink_vf($samp_rate, $fft_len, $cfreq)
 self._$(id)_win = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget)
 $(gui_hint()($win))</make>
   <param>
@@ -19,6 +19,12 @@ $(gui_hint()($win))</make>
     <name>FFT len</name>
     <key>fft_len</key>
     <type>int</type>
+  </param>
+  <param>
+    <name>Center freq</name>
+    <key>cfreq</key>
+    <value>0</value>
+    <type>real</type>
   </param>
   <param>
     <name>GUI Hint</name>

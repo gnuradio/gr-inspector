@@ -30,6 +30,7 @@
 
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
+#include <qwt_plot_layout.h>
 #include <qwt_plot_curve.h>
 #include <qwt_painter.h>
 #include <qwt_plot_grid.h>
@@ -52,7 +53,7 @@ namespace gr {
 			bool* d_ready;
 			std::vector<float> d_axis_x, d_axis_y;
 			std::vector<double> *d_buffer;
-			float d_max, d_min;
+			float d_max, d_min, d_cfreq;
       double* d_freq;
       std::vector<std::vector<float> >* d_rf_map;
 
@@ -63,6 +64,7 @@ namespace gr {
 			QwtPlotCurve *d_curve;
 			QTimer *d_timer;
       QwtPlotGrid* d_grid;
+			QGridLayout *d_layout;
 			QPainter* d_painter;
 			std::vector<QwtPlotMarker*> d_labels;
 			std::vector<QwtPlotMarker*> d_left_lines;
@@ -75,6 +77,7 @@ namespace gr {
 			void refresh();
 
 			void set_axis_x(float start, float stop);
+			void set_cfreq(float freq);
 			void delete_markers();
 
 			void plot_markers();

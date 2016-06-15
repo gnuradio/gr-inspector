@@ -31,17 +31,18 @@ namespace gr {
   namespace inspector {
 
     qtgui_inspector_sink_vf::sptr
-    qtgui_inspector_sink_vf::make(double samp_rate, int fft_len, QWidget *parent)
+    qtgui_inspector_sink_vf::make(double samp_rate, int fft_len,
+                                  float cfreq, QWidget *parent)
     {
       return gnuradio::get_initial_sptr
-        (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, parent));
+        (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, parent));
     }
 
     /*
      * The private constructor
      */
     qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
-                                                               QWidget *parent)
+                                                               float cfreq, QWidget *parent)
       : gr::sync_block("qtgui_inspector_sink_vf",
               gr::io_signature::make(1, 1, sizeof(float)*fft_len),
               gr::io_signature::make(0, 0, 0))
@@ -61,6 +62,7 @@ namespace gr {
       d_samp_rate = samp_rate;
       d_ready = false;
       d_manual = false;
+      d_cfreq = cfreq;
       initialize();
     }
 
@@ -87,6 +89,7 @@ namespace gr {
       }
       d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_ready, d_parent);
       d_main_gui->show();
+      d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
       QCheckBox* box = new QCheckBox("Manual", d_parent);
     }

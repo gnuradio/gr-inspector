@@ -60,7 +60,7 @@ namespace gr {
             : sync_decimator("signal_detector_cvf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
-                        gr::io_signature::make(1, 2, sizeof(float) *
+                        gr::io_signature::make(1, 1, sizeof(float) *
                                                      fft_len),
                         fft_len) {
 
@@ -360,28 +360,16 @@ namespace gr {
         std::vector<float> temp;
         bandwidth = d_freq[flanks[i][1]] - d_freq[flanks[i][0]];
         freq_c = (d_freq[flanks[i][0]] + d_freq[flanks[i][1]])/2;
-        if(bandwidth < d_min_bw) {
-          break;
+        if(bandwidth >= d_min_bw) {
+          //quantize bandwidth
+          bandwidth = quantization*round(bandwidth/quantization);
+          temp.push_back(freq_c);
+          temp.push_back(bandwidth);
+          rf_map.push_back(temp);
         }
-        //quantize bandwidth
-        bandwidth = quantization*round(bandwidth/quantization);
-        temp.push_back(freq_c);
-        temp.push_back(bandwidth);
-        rf_map.push_back(temp);
       }
 
       memcpy(out, d_pxx_out, d_fft_len * sizeof(float));
-
-      //TODO: Remove this (just debug output)
-      float marker[d_fft_len];
-      for (int a = 0; a < d_fft_len; a++) marker[a] =
-               *std::min_element(d_pxx_out, d_pxx_out+d_fft_len);
-      for (int i = 0; i < flanks.size(); i++) {
-        for (int j = flanks[i][0]; j <= flanks[i][1]; j++) {
-          marker[j] = *std::max_element(d_pxx_out, d_pxx_out+d_fft_len);
-        }
-      }
-      memcpy(output_items[1], marker, d_fft_len * sizeof(float));
 
       // spread the message
       if (compare_signal_edges(&rf_map)) {

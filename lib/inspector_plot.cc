@@ -39,6 +39,7 @@ namespace gr {
       d_rf_map = rf_map;
 
       // spawn all QT stuff
+      d_layout = new QGridLayout(this);
       d_plot = new QwtPlot(this); // make main plot
       d_painter = new QPainter(); // painter for text and markers
       d_curve = new QwtPlotCurve(); // make curve plot
@@ -53,10 +54,13 @@ namespace gr {
       //d_curve->setRenderHint(QwtPlotItem::RenderAntialiased, true);
       //d_zoomer = new QwtPlotZoomer(d_plot);
 
+      d_layout->addWidget(d_plot, 0, 0);
+      d_layout->setColumnStretch(0, 1);
+      setLayout(d_layout);
       // Plot axis and title
       std::string label_title = "Inspector GUI";
       d_plot->setTitle(QwtText(label_title.c_str()));
-      d_plot->setAxisTitle(QwtPlot::xBottom, "Frequency [Hz]");
+      d_plot->setAxisTitle(QwtPlot::xBottom, "Frequency [MHz]");
       d_plot->setAxisTitle(QwtPlot::yLeft, "dB");
       d_plot->setAxisScale(QwtPlot::yLeft, -120, 30);
       d_plot->setCanvasBackground(QColor(30,30,30));
@@ -102,9 +106,9 @@ namespace gr {
     void
     inspector_plot::set_axis_x(float start, float stop) {
       d_axis_x.clear();
-      d_axis_x.push_back(start);
-      d_axis_x.push_back((stop-start)/d_fft_len);
-      d_axis_x.push_back(stop);
+      d_axis_x.push_back((d_cfreq + start)/1000000);
+      d_axis_x.push_back((stop-start)/d_fft_len/1000000);
+      d_axis_x.push_back((d_cfreq + stop)/1000000);
 
       d_plot->setAxisScale(QwtPlot::xBottom, d_axis_x[0], d_axis_x[2]);
 
@@ -113,6 +117,11 @@ namespace gr {
       }
 
       refresh();
+    }
+
+    void
+    inspector_plot::set_cfreq(float freq) {
+      d_cfreq = freq;
     }
 
     void
@@ -132,14 +141,14 @@ namespace gr {
         QString qstring;
         qstring.push_back("Signal "+QString::number(i+1));
         qstring.append("\n");
-        qstring.append("f = "+QString::number(d_rf_map->at(i)[0]));
+        qstring.append("f = "+QString::number((d_cfreq + d_rf_map->at(i)[0])/1000000)+" M");
         qstring.append("\n");
-        qstring.append("B = "+QString::number(d_rf_map->at(i)[1]));
+        qstring.append("B = "+QString::number(d_rf_map->at(i)[1]/1000)+" k");
         text.setText(qstring);
         text.setColor(Qt::red);
         label->setLabelAlignment(Qt::AlignLeft);
         label->setLabel(text);
-        label->setXValue(d_rf_map->at(i)[0]-300);
+        label->setXValue((d_cfreq + d_rf_map->at(i)[0]-300)/1000000);
         label->setYValue(13);
         label->attach(d_plot);
         d_labels.push_back(label);
@@ -147,14 +156,14 @@ namespace gr {
         QwtPlotMarker* left_line = new QwtPlotMarker();
         left_line->setLinePen(Qt::red, 0.5);
         left_line->setLineStyle(QwtPlotMarker::VLine);
-        left_line->setXValue(d_rf_map->at(i)[0]-d_rf_map->at(i)[1]/2);
+        left_line->setXValue((d_cfreq + d_rf_map->at(i)[0])/1000000-d_rf_map->at(i)[1]/2000000);
         left_line->attach(d_plot);
         d_left_lines.push_back(left_line);
 
         QwtPlotMarker* right_line = new QwtPlotMarker();
         right_line->setLinePen(Qt::red, 0.5);
         right_line->setLineStyle(QwtPlotMarker::VLine);
-        right_line->setXValue(d_rf_map->at(i)[0]+d_rf_map->at(i)[1]/2);
+        right_line->setXValue((d_cfreq + d_rf_map->at(i)[0])/1000000+d_rf_map->at(i)[1]/2000000);
         right_line->attach(d_plot);
         d_right_lines.push_back(right_line);
       }
