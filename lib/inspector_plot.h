@@ -66,9 +66,9 @@ namespace gr {
       QwtPlotGrid* d_grid;
 			QGridLayout *d_layout;
 			QPainter* d_painter;
-			std::vector<QwtPlotMarker*> d_labels;
-			std::vector<QwtPlotMarker*> d_left_lines;
-			std::vector<QwtPlotMarker*> d_right_lines;
+			QList<QwtPlotMarker*> d_labels;
+			QList<QwtPlotMarker*> d_left_lines;
+			QList<QwtPlotMarker*> d_right_lines;
 
 		protected:
 			void resizeEvent(QResizeEvent * event);

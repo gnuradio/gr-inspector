@@ -32,7 +32,7 @@ namespace gr {
      * \brief Signal Separator takes input signal and RF map as input and passes samples of each filtered and decimated signal as output
      * \ingroup inspector
      *
-     * \detail
+     * \details
      * Signal Separator block takes input signal and RF map with signal center
      * frequencies and bandwidths and filters the input spectrum for each signal.
      * Internally, FIR filters get calculated according to the RF map's specs.
@@ -61,7 +61,7 @@ namespace gr {
        *  Takes integers and does internal cast to firdes::win_type
        */
       virtual void set_window(int d_window) = 0;
-      
+
       virtual void set_trans_width(float d_trans_width) = 0;
       virtual void set_oversampling(int d_oversampling) = 0;
     };

@@ -79,6 +79,7 @@ namespace gr {
     }
 
     inspector_plot::~inspector_plot(){
+      delete_markers();
       delete d_timer;
       delete d_zoomer;
       delete d_plot;
@@ -86,17 +87,21 @@ namespace gr {
       delete[] d_freq;
       delete d_symbol;
       delete d_grid;
-      delete_markers();
     }
 
     void
     inspector_plot::delete_markers() {
       for(int i = 0; i < d_labels.size(); i++) {
         delete d_labels[i];
-        delete d_left_lines[i];
+      }
+      for(int i = 0; i < d_right_lines.size(); i++) {
         delete d_right_lines[i];
       }
+      for(int i = 0; i < d_left_lines.size(); i++) {
+        delete d_left_lines[i];
+      }
     }
+
 
     void
     inspector_plot::resizeEvent( QResizeEvent * event ){
@@ -167,7 +172,7 @@ namespace gr {
         right_line->attach(d_plot);
         d_right_lines.push_back(right_line);
       }
-
+      std::cout << "Markers ready" << std::endl;
 
     }
 

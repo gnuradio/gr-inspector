@@ -73,7 +73,7 @@ namespace gr {
        * \param threshold Threshold in dB for energy detection when automatic signal detection is disabled
        * \param sensitivity Sensitivity value between 0 and 1 if automatic signal detection is enabled
        * \param auto_threshold Bool to set automatic threshold calculation
-       * \param average Averaging factor \in (0,1] (equal to alpha in IIR equation)
+       * \param average Averaging factor in (0,1] (equal to alpha in IIR equation)
        * \param quantization Bandwidth quantization yields quantization*samp_rate [Hz]
        * \param min_bw Minimum signal bandwidth. Don't pass any narrower signals.
        */
@@ -89,7 +89,7 @@ namespace gr {
        *  Takes integers and does internal cast to firdes::win_type
        */
       virtual void set_window_type(int d_window) = 0;
-      
+
       virtual void set_threshold(float d_threshold) = 0;
       virtual void set_sensitivity(float d_sensitivity) = 0;
       virtual void set_auto_threshold(bool d_auto_threshold) = 0;
