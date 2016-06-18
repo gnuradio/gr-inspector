@@ -22,13 +22,15 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <cmath>
+#include <qwt_transform.h>
 
 namespace gr {
   namespace inspector {
 
     inspector_plot::inspector_plot(int fft_len, std::vector<double> *buffer,
                                    std::vector<std::vector<float> >* rf_map,
-                                   bool* ready, QWidget* parent) : QWidget(parent)
+                                   bool* ready, bool* manual, QWidget* parent) : QWidget(parent)
     {
       d_fft_len = fft_len;
       // Setup GUI
@@ -37,6 +39,7 @@ namespace gr {
       d_buffer = buffer;
       d_interval = 250;
       d_rf_map = rf_map;
+      d_manual = manual;
 
       // spawn all QT stuff
       d_layout = new QGridLayout(this);
@@ -70,6 +73,7 @@ namespace gr {
 
       // frequency vector for plot
       d_freq = new double[fft_len];
+      d_clicked_marker = NULL;
 
       // Setup timer and connect refreshing plot
       d_timer = new QTimer(this);
@@ -129,12 +133,51 @@ namespace gr {
       d_cfreq = freq;
     }
 
+    // TODO: compare mouse with marker position and select clicked
+    // marker
+    void
+    inspector_plot::mousePressEvent(QMouseEvent *eventPress) {
+      if(eventPress->button() == Qt::LeftButton) {
+        for(int i = 0; i < d_left_lines.size(); i++) {
+          double xVal = d_plot->transform(QwtPlot::xBottom, d_left_lines[i]->xValue()) +70;
+          std::cout << "mouse = " << eventPress->x() << ", Marker = " << xVal << std::endl;
+          if(std::abs(xVal - eventPress->x()) < 10) {
+            d_clicked_marker = d_left_lines[i];
+            std::cout << "Selected marker " << i+1 << std::endl;
+            break;
+          }
+        }
+      }
+    }
+
+
+    // TODO: mouse release event to set new marker position
+    void
+    inspector_plot::mouseReleaseEvent(QMouseEvent *eventRelease) {
+      if(eventRelease->button() == Qt::LeftButton) {
+        if(d_clicked_marker != NULL) {
+          double xVal = d_plot->invTransform(QwtPlot::xBottom, eventRelease->x());
+          d_clicked_marker->setXValue(eventRelease->globalX());
+
+          d_clicked_marker = NULL;
+        }
+      }
+    }
+
+    void
+    inspector_plot::msg_received() {
+      if(!*d_manual) {
+        plot_markers();
+      }
+    }
+
     void
     inspector_plot::plot_markers() {
       for(int i = 0; i < d_labels.size(); i++) {
         d_labels[i]->detach();
         d_left_lines[i]->detach();
         d_right_lines[i]->detach();
+        //d_plot->detachItems();
       }
       delete_markers();
       d_labels.clear();
@@ -172,8 +215,6 @@ namespace gr {
         right_line->attach(d_plot);
         d_right_lines.push_back(right_line);
       }
-      std::cout << "Markers ready" << std::endl;
-
     }
 
     void
