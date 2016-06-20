@@ -36,9 +36,24 @@
 #include <qwt_plot_grid.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_zoomer.h>
+#include <qwt_plot_zoneitem.h>
 
 namespace gr {
 	namespace inspector {
+
+    class senseBox: public QwtPlotZoneItem
+    {
+    public:
+      senseBox() {
+        setOrientation(Qt::Vertical);
+        QColor c = Qt::red;
+        c.setAlpha(100);
+        setPen(c);
+        c.setAlpha(20);
+        setBrush(c);
+        setXAxis(QwtPlot::xBottom);
+      }
+    };
 
 		class inspector_plot : public QWidget
 		{
@@ -52,6 +67,7 @@ namespace gr {
 		private:
 			int d_interval, d_fft_len;
 			bool* d_ready, *d_manual;
+			bool d_marker_ready;
 			std::vector<float> d_axis_x, d_axis_y;
 			std::vector<double> *d_buffer;
 			float d_max, d_min, d_cfreq;
@@ -67,10 +83,8 @@ namespace gr {
 			QTimer *d_timer;
       QwtPlotGrid* d_grid;
 			QGridLayout *d_layout;
-			QPainter* d_painter;
 			QList<QwtPlotMarker*> d_labels;
-			QList<QwtPlotMarker*> d_left_lines;
-			QList<QwtPlotMarker*> d_right_lines;
+			QList<senseBox*> d_zones;
 
 		protected:
 			void resizeEvent(QResizeEvent * event);
@@ -85,9 +99,12 @@ namespace gr {
       void mousePressEvent (QMouseEvent * eventPress);
 			void mouseReleaseEvent(QMouseEvent *eventRelease);
 
-			void plot_markers();
+
+			void drawOverlay();
 
 		};
+
+
 	}
 }
 

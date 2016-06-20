@@ -24,6 +24,7 @@
 #include <string>
 #include <cmath>
 #include <qwt_transform.h>
+#include <Qt>
 
 namespace gr {
   namespace inspector {
@@ -40,11 +41,11 @@ namespace gr {
       d_interval = 250;
       d_rf_map = rf_map;
       d_manual = manual;
+      d_marker_ready = true;
 
       // spawn all QT stuff
       d_layout = new QGridLayout(this);
       d_plot = new QwtPlot(this); // make main plot
-      d_painter = new QPainter(); // painter for text and markers
       d_curve = new QwtPlotCurve(); // make curve plot
       d_curve->attach(d_plot); // attach curve to plot
       d_curve->setPen(Qt::cyan, 1); // curve color
@@ -56,7 +57,6 @@ namespace gr {
       d_grid->attach(d_plot);
       //d_curve->setRenderHint(QwtPlotItem::RenderAntialiased, true);
       //d_zoomer = new QwtPlotZoomer(d_plot);
-
       d_layout->addWidget(d_plot, 0, 0);
       d_layout->setColumnStretch(0, 1);
       setLayout(d_layout);
@@ -93,16 +93,12 @@ namespace gr {
       delete d_grid;
     }
 
+
     void
     inspector_plot::delete_markers() {
       for(int i = 0; i < d_labels.size(); i++) {
         delete d_labels[i];
-      }
-      for(int i = 0; i < d_right_lines.size(); i++) {
-        delete d_right_lines[i];
-      }
-      for(int i = 0; i < d_left_lines.size(); i++) {
-        delete d_left_lines[i];
+        delete d_zones[i];
       }
     }
 
@@ -138,15 +134,7 @@ namespace gr {
     void
     inspector_plot::mousePressEvent(QMouseEvent *eventPress) {
       if(eventPress->button() == Qt::LeftButton) {
-        for(int i = 0; i < d_left_lines.size(); i++) {
-          double xVal = d_plot->transform(QwtPlot::xBottom, d_left_lines[i]->xValue()) +70;
-          std::cout << "mouse = " << eventPress->x() << ", Marker = " << xVal << std::endl;
-          if(std::abs(xVal - eventPress->x()) < 10) {
-            d_clicked_marker = d_left_lines[i];
-            std::cout << "Selected marker " << i+1 << std::endl;
-            break;
-          }
-        }
+
       }
     }
 
@@ -167,22 +155,24 @@ namespace gr {
     void
     inspector_plot::msg_received() {
       if(!*d_manual) {
-        plot_markers();
+        drawOverlay();
       }
     }
 
     void
-    inspector_plot::plot_markers() {
+    inspector_plot::drawOverlay() {
+      if(!d_marker_ready) {
+        return;
+      }
+      d_marker_ready = false;
       for(int i = 0; i < d_labels.size(); i++) {
         d_labels[i]->detach();
-        d_left_lines[i]->detach();
-        d_right_lines[i]->detach();
+        d_zones[i]->detach();
         //d_plot->detachItems();
       }
       delete_markers();
       d_labels.clear();
-      d_left_lines.clear();
-      d_right_lines.clear();
+      d_zones.clear();
       for(int i = 0; i < d_rf_map->size(); i++) {
         QwtPlotMarker* label = new QwtPlotMarker();
         QwtText text;
@@ -201,26 +191,19 @@ namespace gr {
         label->attach(d_plot);
         d_labels.push_back(label);
 
-        QwtPlotMarker* left_line = new QwtPlotMarker();
-        left_line->setLinePen(Qt::red, 0.5);
-        left_line->setLineStyle(QwtPlotMarker::VLine);
-        left_line->setXValue((d_cfreq + d_rf_map->at(i)[0])/1000000-d_rf_map->at(i)[1]/2000000);
-        left_line->attach(d_plot);
-        d_left_lines.push_back(left_line);
+        senseBox* zone = new senseBox();
+        zone->setInterval((d_cfreq + d_rf_map->at(i)[0]-d_rf_map->at(i)[1]/2)/1000000, (d_cfreq + d_rf_map->at(i)[0]+d_rf_map->at(i)[1]/2)/1000000);
+        zone->attach(d_plot);
+        d_zones.push_back(zone);
 
-        QwtPlotMarker* right_line = new QwtPlotMarker();
-        right_line->setLinePen(Qt::red, 0.5);
-        right_line->setLineStyle(QwtPlotMarker::VLine);
-        right_line->setXValue((d_cfreq + d_rf_map->at(i)[0])/1000000+d_rf_map->at(i)[1]/2000000);
-        right_line->attach(d_plot);
-        d_right_lines.push_back(right_line);
       }
+      d_marker_ready = true;
     }
 
     void
     inspector_plot::refresh(){
       // write process, dont touch array!
-      if(!*d_ready) {
+      if(!*d_ready or !d_marker_ready) {
         return;
       }
       // Fetch new data and push to matrix
