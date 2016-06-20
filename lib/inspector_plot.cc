@@ -25,6 +25,7 @@
 #include <cmath>
 #include <qwt_transform.h>
 
+
 namespace gr {
   namespace inspector {
 
@@ -96,7 +97,11 @@ namespace gr {
     void
     inspector_plot::delete_markers() {
       for(int i = 0; i < d_markers.size(); i++) {
-        delete d_markers[i];
+        //TODO: No objects are deleted now!!
+        //delete d_markers[i];
+        d_markers[i]->d_center->detach();
+        d_markers[i]->d_label->detach();
+        d_markers[i]->d_zone->detach();
       }
     }
 
@@ -159,6 +164,7 @@ namespace gr {
 
     void
     inspector_plot::drawOverlay() {
+      gr::thread::scoped_lock guard(d_mutex);
       if(!d_marker_ready) {
         return;
       }
@@ -174,6 +180,7 @@ namespace gr {
 
     void
     inspector_plot::refresh(){
+      gr::thread::scoped_lock guard(d_mutex);
       // write process, dont touch array!
       if(!*d_ready or !d_marker_ready) {
         return;

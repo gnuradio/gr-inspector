@@ -21,6 +21,8 @@
 #ifndef GR_INSPECTOR_INSPECTOR_SINK_H
 #define GR_INSPECTOR_INSPECTOR_SINK_H
 
+#include <gnuradio/thread/thread.h>
+
 #include <complex>
 
 #include <QApplication>
@@ -90,9 +92,9 @@ namespace gr {
         d_center->detach();
         d_label->detach();
         d_zone->detach();
-        delete d_center;
-        delete d_label;
-        delete d_zone;
+        //delete d_center;
+        //delete d_label;
+        //delete d_zone;
       }
 
       QwtPlotMarker* d_center;
@@ -132,6 +134,8 @@ namespace gr {
       QwtPlotGrid* d_grid;
 			QGridLayout *d_layout;
       QList<signalMarker*> d_markers;
+
+      gr::thread::mutex d_mutex;
 
 		protected:
 			void resizeEvent(QResizeEvent * event);
