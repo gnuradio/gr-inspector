@@ -208,10 +208,10 @@ namespace gr {
       // sort bins
       d_threshold = 500;
       std::sort(d_tmp_pxx, d_tmp_pxx + d_fft_len);
-      float maximum = d_tmp_pxx[d_fft_len - 1];
+      float range = d_tmp_pxx[d_fft_len - 1] - d_tmp_pxx[0];
       // search specified normized jump
       for (unsigned int i = 0; i < d_fft_len; i++) {
-        if ((d_tmp_pxx[i + 1] - d_tmp_pxx[i]) / maximum > 1 - d_sensitivity) {
+        if ((d_tmp_pxx[i + 1] - d_tmp_pxx[i]) / range > 1 - d_sensitivity) {
           d_threshold = d_tmp_pxx[i];
           break;
         }

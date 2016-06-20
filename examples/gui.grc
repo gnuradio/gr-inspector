@@ -722,7 +722,7 @@
     </param>
     <param>
       <key>quant</key>
-      <value>0.0001</value>
+      <value>0.001</value>
     </param>
     <param>
       <key>samp_rate</key>
@@ -730,11 +730,11 @@
     </param>
     <param>
       <key>sensitivity</key>
-      <value>0.5</value>
+      <value>0.9</value>
     </param>
     <param>
       <key>threshold</key>
-      <value>4</value>
+      <value>-10</value>
     </param>
     <param>
       <key>window</key>

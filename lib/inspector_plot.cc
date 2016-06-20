@@ -24,7 +24,6 @@
 #include <string>
 #include <cmath>
 #include <qwt_transform.h>
-#include <Qt>
 
 namespace gr {
   namespace inspector {
@@ -96,10 +95,8 @@ namespace gr {
 
     void
     inspector_plot::delete_markers() {
-      for(int i = 0; i < d_labels.size(); i++) {
-        delete d_labels[i];
-        delete d_zones[i];
-        delete d_center_markers[i];
+      for(int i = 0; i < d_markers.size(); i++) {
+        delete d_markers[i];
       }
     }
 
@@ -166,48 +163,11 @@ namespace gr {
         return;
       }
       d_marker_ready = false;
-      for(int i = 0; i < d_labels.size(); i++) {
-        d_labels[i]->detach();
-        d_zones[i]->detach();
-        d_center_markers[i]->detach();
-        //d_plot->detachItems();
-      }
       delete_markers();
-      d_labels.clear();
-      d_zones.clear();
-      d_center_markers.clear();
+      d_markers.clear();
       for(int i = 0; i < d_rf_map->size(); i++) {
-        QwtPlotMarker* label = new QwtPlotMarker();
-        QwtText text;
-        QString qstring;
-        qstring.push_back("Signal "+QString::number(i+1));
-        qstring.append("\n");
-        qstring.append("f = "+QString::number((d_cfreq + d_rf_map->at(i)[0])/1000000)+" M");
-        qstring.append("\n");
-        qstring.append("B = "+QString::number(d_rf_map->at(i)[1]/1000)+" k");
-        text.setText(qstring);
-        text.setColor(Qt::red);
-        label->setLabelAlignment(Qt::AlignLeft);
-        label->setLabel(text);
-        label->setXValue((d_cfreq + d_rf_map->at(i)[0]-300)/1000000);
-        label->setYValue(13);
-        label->attach(d_plot);
-        d_labels.push_back(label);
-
-        senseBox* zone = new senseBox();
-        zone->setInterval((d_cfreq + d_rf_map->at(i)[0]-d_rf_map->at(i)[1]/2)/1000000, (d_cfreq + d_rf_map->at(i)[0]+d_rf_map->at(i)[1]/2)/1000000);
-        zone->attach(d_plot);
-        d_zones.push_back(zone);
-
-        QwtPlotMarker* center = new QwtPlotMarker();
-        center->setLineStyle(QwtPlotMarker::VLine);
-        QColor c = Qt::white;
-        c.setAlpha(70);
-        center->setLinePen(c);
-        center->setXValue((d_cfreq + d_rf_map->at(i)[0])/1000000);
-        center->attach(d_plot);
-        d_center_markers.push_back(center);
-
+        signalMarker* marker = new signalMarker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
+        d_markers.push_back(marker);
       }
       d_marker_ready = true;
     }
@@ -220,9 +180,9 @@ namespace gr {
       }
       // Fetch new data and push to matrix
 
-      d_curve->detach();
+      //d_curve->detach();
       d_curve->setRawSamples(d_freq, &d_buffer->at(0), d_fft_len);
-      d_curve->attach(d_plot);
+
 
       // Do replot
       d_plot->replot();
