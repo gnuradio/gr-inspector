@@ -99,6 +99,7 @@ namespace gr {
       for(int i = 0; i < d_labels.size(); i++) {
         delete d_labels[i];
         delete d_zones[i];
+        delete d_center_markers[i];
       }
     }
 
@@ -168,11 +169,13 @@ namespace gr {
       for(int i = 0; i < d_labels.size(); i++) {
         d_labels[i]->detach();
         d_zones[i]->detach();
+        d_center_markers[i]->detach();
         //d_plot->detachItems();
       }
       delete_markers();
       d_labels.clear();
       d_zones.clear();
+      d_center_markers.clear();
       for(int i = 0; i < d_rf_map->size(); i++) {
         QwtPlotMarker* label = new QwtPlotMarker();
         QwtText text;
@@ -195,6 +198,15 @@ namespace gr {
         zone->setInterval((d_cfreq + d_rf_map->at(i)[0]-d_rf_map->at(i)[1]/2)/1000000, (d_cfreq + d_rf_map->at(i)[0]+d_rf_map->at(i)[1]/2)/1000000);
         zone->attach(d_plot);
         d_zones.push_back(zone);
+
+        QwtPlotMarker* center = new QwtPlotMarker();
+        center->setLineStyle(QwtPlotMarker::VLine);
+        QColor c = Qt::white;
+        c.setAlpha(70);
+        center->setLinePen(c);
+        center->setXValue((d_cfreq + d_rf_map->at(i)[0])/1000000);
+        center->attach(d_plot);
+        d_center_markers.push_back(center);
 
       }
       d_marker_ready = true;

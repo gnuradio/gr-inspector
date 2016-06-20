@@ -85,6 +85,7 @@ namespace gr {
 			QGridLayout *d_layout;
 			QList<QwtPlotMarker*> d_labels;
 			QList<senseBox*> d_zones;
+      QList<QwtPlotMarker*> d_center_markers;
 
 		protected:
 			void resizeEvent(QResizeEvent * event);
