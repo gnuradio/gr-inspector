@@ -88,16 +88,19 @@ namespace gr {
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
       d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_ready, &d_manual, d_parent);
-      d_main_gui->show();
+
       d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
-      QCheckBox* box = new QCheckBox("Manual", d_parent);
+
+      d_main_gui->show();
     }
 
     void
     qtgui_inspector_sink_vf_impl::handle_msg(pmt::pmt_t msg) {
       unpack_message(msg);
-      d_main_gui->msg_received();
+      if(!d_manual) {
+        d_main_gui->msg_received();
+      }
 
       // bypass block if no manual signal selection
       if(!d_manual){

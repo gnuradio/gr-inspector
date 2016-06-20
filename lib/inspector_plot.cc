@@ -42,6 +42,7 @@ namespace gr {
       d_rf_map = rf_map;
       d_manual = manual;
       d_marker_ready = true;
+      d_plot_ready = true;
 
       // spawn all QT stuff
       d_layout = new QGridLayout(this);
@@ -67,17 +68,26 @@ namespace gr {
       d_plot->setAxisTitle(QwtPlot::yLeft, "dB");
       d_plot->setAxisScale(QwtPlot::yLeft, -120, 30);
       d_plot->setCanvasBackground(QColor(30,30,30));
+      setMouseTracking(true);
+
       //d_plot->show();
       // Do replot
       d_plot->replot();
 
       // frequency vector for plot
       d_freq = new double[fft_len];
-      d_clicked_marker = NULL;
+      d_clicked_marker = -1;
+
+      if(*d_manual) {
+        spawnSignalSelector();
+      }
 
       // Setup timer and connect refreshing plot
       d_timer = new QTimer(this);
       connect(d_timer, SIGNAL(timeout()), this, SLOT(refresh()));
+      QCheckBox* box = new QCheckBox("Manual", this);
+      box->setGeometry(QRect(10, 10, 85, 20));
+      connect(box, SIGNAL(stateChanged(int)), this, SLOT(manual_cb_clicked(int)));
       d_timer->start(d_interval);
 
     }
@@ -93,18 +103,28 @@ namespace gr {
       delete d_grid;
     }
 
+    void
+    inspector_plot::spawnSignalSelector() {
+      delete_markers();
+      d_markers.clear();
+      signalMarker* marker = new signalMarker(0, d_cfreq, 10000, d_plot);
+      d_markers.push_back(marker);
+    }
 
     void
-    inspector_plot::delete_markers() {
-      for(int i = 0; i < d_markers.size(); i++) {
-        //TODO: No objects are deleted now!!
-        //delete d_markers[i];
-        d_markers[i]->d_center->detach();
-        d_markers[i]->d_label->detach();
-        d_markers[i]->d_zone->detach();
+    inspector_plot::manual_cb_clicked(int state) {
+      *d_manual = static_cast<bool>(state);
+      if(*d_manual) {
+        spawnSignalSelector();
       }
     }
 
+    void
+    inspector_plot::delete_markers() {
+      for (int i = 0; i < d_markers.size(); i++) {
+        delete d_markers[i];
+      }
+    }
 
     void
     inspector_plot::resizeEvent( QResizeEvent * event ){
@@ -136,8 +156,15 @@ namespace gr {
     // marker
     void
     inspector_plot::mousePressEvent(QMouseEvent *eventPress) {
-      if(eventPress->button() == Qt::LeftButton) {
-
+      if(*d_manual && eventPress->button() == Qt::LeftButton) {
+        for(int i = 0; i < d_markers.size(); i++) {
+          //std::cout << d_plot->transform(QwtPlot::xBottom, d_markers[i]->d_center->xValue()) << ", " << eventPress->x() << std::endl;
+          if(std::abs(d_plot->transform(QwtPlot::xBottom, d_markers[i]->d_center->xValue()) - eventPress->x() + 67) < 3) {
+            //std::cout << "Center Marker " << i << std::endl;
+            d_clicked_marker = i;
+            break;
+          }
+        }
       }
     }
 
@@ -145,14 +172,26 @@ namespace gr {
     // TODO: mouse release event to set new marker position
     void
     inspector_plot::mouseReleaseEvent(QMouseEvent *eventRelease) {
-      if(eventRelease->button() == Qt::LeftButton) {
-        if(d_clicked_marker != NULL) {
-          double xVal = d_plot->invTransform(QwtPlot::xBottom, eventRelease->x());
-          d_clicked_marker->setXValue(eventRelease->globalX());
-
-          d_clicked_marker = NULL;
+      if(*d_manual && eventRelease->button() == Qt::LeftButton) {
+        if(d_clicked_marker != -1) {
+          // only one marker present
+          d_markers[0]->d_freq = 1000000*d_plot->invTransform(QwtPlot::xBottom, eventRelease->x()-67);
+          d_markers[0]->refresh();
+          d_clicked_marker = -1;
         }
       }
+    }
+
+    //TODO: This does not work
+    void
+    inspector_plot::mouseMoveEvent(QMouseEvent *event) {
+        if(*d_manual && event->button() == Qt::LeftButton) {
+          if(d_clicked_marker != -1) {
+            d_markers[0]->d_freq = 1000000*d_plot->invTransform(QwtPlot::xBottom, event->x()-67);
+            d_markers[0]->refresh();
+            d_clicked_marker = -1;
+          }
+        }
     }
 
     void
@@ -165,7 +204,7 @@ namespace gr {
     void
     inspector_plot::drawOverlay() {
       gr::thread::scoped_lock guard(d_mutex);
-      if(!d_marker_ready) {
+      if(!d_marker_ready or !d_plot_ready) {
         return;
       }
       d_marker_ready = false;
@@ -181,10 +220,12 @@ namespace gr {
     void
     inspector_plot::refresh(){
       gr::thread::scoped_lock guard(d_mutex);
-      // write process, dont touch array!
-      if(!*d_ready or !d_marker_ready) {
+      if(!*d_ready or !d_marker_ready or !d_plot_ready) {
         return;
       }
+      d_plot_ready = false;
+      // write process, dont touch array!
+
       // Fetch new data and push to matrix
 
       //d_curve->detach();
@@ -193,6 +234,7 @@ namespace gr {
 
       // Do replot
       d_plot->replot();
+      d_plot_ready = true;
     }
 
   }
