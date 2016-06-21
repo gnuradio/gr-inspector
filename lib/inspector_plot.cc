@@ -219,6 +219,7 @@ namespace gr {
 
       // Do replot
       d_plot->replot();
+      d_plot->repaint();
     }
 
   }
