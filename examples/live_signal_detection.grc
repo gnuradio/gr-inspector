@@ -116,7 +116,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>-65</value>
+      <value>0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -187,11 +187,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(880, 384)</value>
+      <value>(808, 200)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -230,7 +230,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(840, 200)</value>
+      <value>(568, 180)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -265,7 +265,7 @@
     </param>
     <param>
       <key>avg</key>
-      <value>0.05</value>
+      <value>0.2</value>
     </param>
     <param>
       <key>alias</key>
@@ -289,7 +289,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(536, 192)</value>
+      <value>(336, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1636,7 +1636,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(168, 196)</value>
+      <value>(24, 140)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1740,7 +1740,7 @@
     </param>
   </block>
   <connection>
-    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
+    <source_block_id>inspector_qtgui_sink_vf_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>map_out</source_key>
     <sink_key>print</sink_key>

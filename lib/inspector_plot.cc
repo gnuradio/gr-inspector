@@ -111,7 +111,7 @@ namespace gr {
     void
     inspector_plot::spawn_signal_selector() {
       detach_markers();
-      d_markers[0]->set_marker(0, d_cfreq, -d_axis_x[0]/2*1000000);
+      d_markers[0]->set_marker(0, d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
     }
 
     void
@@ -119,6 +119,9 @@ namespace gr {
       *d_manual = static_cast<bool>(state);
       if(*d_manual) {
         spawn_signal_selector();
+      }
+      else {
+        detach_markers();
       }
     }
 

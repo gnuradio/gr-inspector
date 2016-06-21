@@ -96,11 +96,9 @@ namespace gr {
 
     void
     qtgui_inspector_sink_vf_impl::handle_msg(pmt::pmt_t msg) {
-      if(pmt::length(msg))
-      {
-        unpack_message(msg);
-        d_main_gui->msg_received();
-      }
+      unpack_message(msg);
+      d_main_gui->msg_received();
+
 
       // bypass block if no manual signal selection
       if(!d_manual){

@@ -109,11 +109,11 @@
     </param>
     <param>
       <key>id</key>
-      <value>freq_cos</value>
+      <value>freq</value>
     </param>
     <param>
       <key>label</key>
-      <value></value>
+      <value>Frequency</value>
     </param>
     <param>
       <key>min_len</key>
@@ -125,15 +125,15 @@
     </param>
     <param>
       <key>start</key>
-      <value>100</value>
+      <value>3200</value>
     </param>
     <param>
       <key>step</key>
-      <value>1</value>
+      <value>10</value>
     </param>
     <param>
       <key>stop</key>
-      <value>10000</value>
+      <value>12700</value>
     </param>
     <param>
       <key>rangeType</key>
@@ -195,7 +195,7 @@
     </param>
     <param>
       <key>freq</key>
-      <value>freq_cos</value>
+      <value>freq</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -482,7 +482,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 216)</value>
+      <value>(816, 264)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -490,7 +490,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>blocks_message_debug_0_0</value>
+      <value>blocks_message_debug_0</value>
     </param>
   </block>
   <block>
@@ -513,7 +513,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(456, 124)</value>
+      <value>(328, 124)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -537,7 +537,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>100000</value>
+      <value>10000000</value>
     </param>
     <param>
       <key>type</key>
@@ -631,7 +631,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>fft_len</key>
@@ -639,7 +639,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(936, 108)</value>
+      <value>(800, 108)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -674,7 +674,7 @@
     </param>
     <param>
       <key>avg</key>
-      <value>0.3</value>
+      <value>0.2</value>
     </param>
     <param>
       <key>alias</key>
@@ -690,7 +690,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>fft_len</key>
@@ -698,7 +698,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(648, 88)</value>
+      <value>(536, 88)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -718,7 +718,7 @@
     </param>
     <param>
       <key>min_bw</key>
-      <value>0</value>
+      <value>10</value>
     </param>
     <param>
       <key>quant</key>
@@ -734,7 +734,7 @@
     </param>
     <param>
       <key>threshold</key>
-      <value>1</value>
+      <value>-10</value>
     </param>
     <param>
       <key>window</key>
@@ -784,8 +784,8 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0_0</sink_block_id>
+    <source_block_id>inspector_qtgui_sink_vf_0</source_block_id>
+    <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>map_out</source_key>
     <sink_key>print</sink_key>
   </connection>
