@@ -31,17 +31,16 @@ namespace gr {
 
     inspector_plot::inspector_plot(int fft_len, std::vector<double> *buffer,
                                    std::vector<std::vector<float> >* rf_map,
-                                   bool* ready, bool* manual, QWidget* parent) : QWidget(parent)
+                                   bool* manual, QWidget* parent) : QWidget(parent)
     {
       d_fft_len = fft_len;
       // Setup GUI
       //resize(QSize(600,600));
-      d_ready = ready;
       d_buffer = buffer;
       d_interval = 250;
       d_rf_map = rf_map;
       d_manual = manual;
-      d_marker_ready = true;
+      d_marker_count = 30;
 
       // spawn all QT stuff
       d_layout = new QGridLayout(this);
@@ -81,15 +80,18 @@ namespace gr {
       d_timer->start(d_interval);
       qRegisterMetaType<QList<QwtLegendData> >("QList<QwtLegendData>");
 
-      for(int i = 0; i < 20; i++)
+      for(int i = 0; i < d_marker_count; i++)
       {
         signal_marker* marker = new signal_marker(i, 0, 0, d_plot);
         d_markers.push_back(marker);
       }
+
+
+      QCheckBox* box = new QCheckBox("Manual", d_plot);
     }
 
     inspector_plot::~inspector_plot(){
-      delete_markers();
+      detach_markers();
       delete d_timer;
       delete d_zoomer;
       delete d_plot;
@@ -97,16 +99,17 @@ namespace gr {
       delete[] d_freq;
       delete d_symbol;
       delete d_grid;
+      while(!d_markers.empty()) {
+        delete d_markers.back();
+        d_markers.pop_back();
+      }
     }
 
 
     void
-    inspector_plot::delete_markers() {
+    inspector_plot::detach_markers() {
       d_plot->detachItems( QwtPlotItem::Rtti_PlotMarker, false);
       d_plot->detachItems( QwtPlotItem::Rtti_PlotZone, false);
-      //for(int i = 0; i < d_markers.size(); i++) {
-      //delete d_markers[i];
-      //}
     }
 
 
@@ -169,36 +172,31 @@ namespace gr {
     void
     inspector_plot::drawOverlay() {
       gr::thread::scoped_lock guard(d_mutex);
-      if(!d_marker_ready) {
-        return;
-      }
-      d_marker_ready = false;
-      delete_markers();
-      for(int i = 0; i < d_rf_map->size(); i++) {
-        /*
-        if (d_rf_map->at(i)[1] <100)
-        {
-            signal_marker* marker = new signal_marker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
-        d_markers.push_back(marker);
+
+      detach_markers();
+      if(d_rf_map->size() <= d_marker_count) {
+        for (int i = 0; i < d_rf_map->size(); i++) {
+          d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0],
+                                   d_rf_map->at(i)[1], d_plot);
         }
-        */
-        d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
       }
-      d_marker_ready = true;
+      else {
+        for (int i = 0; i < d_marker_count; i++) {
+          d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0],
+                                   d_rf_map->at(i)[1], d_plot);
+        }
+      }
     }
 
     void
     inspector_plot::refresh(){
       gr::thread::scoped_lock guard(d_mutex);
-      // write process, dont touch array!
-      if(!*d_ready or !d_marker_ready) {
+
+      if(d_buffer->size() < d_fft_len) {
         return;
       }
-      // Fetch new data and push to matrix
 
-      //d_curve->detach();
       d_curve->setRawSamples(d_freq, &d_buffer->at(0), d_fft_len);
-
 
       // Do replot
       d_plot->replot();

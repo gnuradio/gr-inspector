@@ -61,7 +61,6 @@ namespace gr {
       d_parent = parent;
       d_fft_len = fft_len;
       d_samp_rate = samp_rate;
-      d_ready = false;
       d_manual = false;
       d_cfreq = cfreq;
       initialize();
@@ -74,6 +73,7 @@ namespace gr {
     {
       d_main_gui->close();
       delete d_argv;
+      delete d_main_gui;
     }
 
     void
@@ -88,11 +88,10 @@ namespace gr {
 #endif
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
-      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_ready, &d_manual, d_parent);
+      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_manual, d_parent);
       d_main_gui->show();
       d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
-      QCheckBox* box = new QCheckBox("Manual", d_parent);
     }
 
     void
@@ -145,21 +144,12 @@ namespace gr {
                                        gr_vector_void_star &output_items)
     {
       const float *in = (const float*) input_items[0];
-      //if(d_buffer.size()!=noutput_items*d_fft_len){ // resize buffer if needed
-      // d_buffer.resize(noutput_items*d_fft_len);
-      //}
       // Do <+signal processing+>
-      d_ready = false;
-
       d_buffer.clear();
       for(int i = 0; i < d_fft_len; i++) {
         d_buffer.push_back(in[i]);
       }
-
-      //memcpy(&d_buffer[0], in, noutput_items*sizeof(double)*d_fft_len);
-
       // Tell runtime system how many output items we produced.
-      d_ready = true;
       return 1;
     }
 

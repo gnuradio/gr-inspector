@@ -49,13 +49,12 @@ namespace gr {
 
     public:
       inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
-                     bool* ready, bool* manual, QWidget* parent = NULL);
+                     bool* manual, QWidget* parent = NULL);
       ~inspector_plot();
 
     private:
-      int d_interval, d_fft_len;
-      bool* d_ready, *d_manual;
-      bool d_marker_ready;
+      int d_interval, d_fft_len, d_marker_count;
+      bool *d_manual;
       std::vector<float> d_axis_x, d_axis_y;
       std::vector<double> *d_buffer;
       float d_max, d_min, d_cfreq;
@@ -84,7 +83,7 @@ namespace gr {
       void set_axis_x(float start, float stop);
       void msg_received();
       void set_cfreq(float freq);
-      void delete_markers();
+      void detach_markers();
       void mousePressEvent (QMouseEvent * eventPress);
       void mouseReleaseEvent(QMouseEvent *eventRelease);
 

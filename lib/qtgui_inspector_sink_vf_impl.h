@@ -44,7 +44,7 @@ namespace gr {
 #endif
 
       int d_argc;
-      bool d_ready, d_manual;
+      bool d_manual;
       char *d_argv;
       QWidget *d_parent;
       int d_fft_len;
