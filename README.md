@@ -1,6 +1,6 @@
 # gr-inspector
 <center>
-![gr-inspector logo](docs/logo_body.png "The Inspector")
+![gr-inspector logo](docs/doxygen/images/logo_body.png "The Inspector")
 </center>
 ## Introduction
 This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:
