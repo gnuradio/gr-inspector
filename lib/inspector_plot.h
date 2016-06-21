@@ -41,7 +41,7 @@
 #include <qwt_plot_zoneitem.h>
 
 namespace gr {
-	namespace inspector {
+  namespace inspector {
 
     class signalMarker
     {
@@ -89,28 +89,6 @@ namespace gr {
       }
 
       ~signalMarker() {
-       /* d_center->detach();
-        d_label->detach();
-        d_zone->detach();
-        delete d_center;
-        delete d_label;
-        delete d_zone; */
-      }
-
-      void refresh() {
-        d_center->setXValue(d_freq/1000000);
-        d_zone->setInterval((d_freq-d_bw/2)/1000000, (d_freq+d_bw/2)/1000000);
-        d_label->setXValue(((d_freq-d_bw/2)-300)/1000000);
-        QwtText text;
-        QString qstring;
-        qstring.push_back("Signal "+QString::number(1));
-        qstring.append("\n");
-        qstring.append("f = "+QString::number(d_freq/1000000)+" M");
-        qstring.append("\n");
-        qstring.append("B = "+QString::number(d_bw/1000)+" k");
-        text.setText(qstring);
-        text.setColor(Qt::red);
-        d_label->setLabel(text);
       }
 
       QwtPlotMarker* d_center;
@@ -121,60 +99,58 @@ namespace gr {
       int d_number;
     };
 
-		class inspector_plot : public QWidget
-		{
-		Q_OBJECT
+    class inspector_plot : public QWidget
+    {
+    Q_OBJECT
 
-		public:
+    public:
       inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
                      bool* ready, bool* manual, QWidget* parent = NULL);
-			~inspector_plot();
+      ~inspector_plot();
 
-		private:
-			int d_interval, d_fft_len;
-			bool* d_ready, *d_manual;
-			bool d_marker_ready, d_plot_ready;
-			std::vector<float> d_axis_x, d_axis_y;
-			std::vector<double> *d_buffer;
-			float d_max, d_min, d_cfreq;
+    private:
+      int d_interval, d_fft_len;
+      bool* d_ready, *d_manual;
+      bool d_marker_ready;
+      std::vector<float> d_axis_x, d_axis_y;
+      std::vector<double> *d_buffer;
+      float d_max, d_min, d_cfreq;
       double* d_freq;
       std::vector<std::vector<float> >* d_rf_map;
-      int d_clicked_marker;
+      QwtPlotMarker* d_clicked_marker;
 
       QwtSymbol *d_symbol;
-			QwtPlotZoomer* d_zoomer;
-			QwtPlot *d_plot;
-			QwtScaleWidget *d_scale;
-			QwtPlotCurve *d_curve;
-			QTimer *d_timer;
+      QwtPlotZoomer* d_zoomer;
+      QwtPlot *d_plot;
+      QwtScaleWidget *d_scale;
+      QwtPlotCurve *d_curve;
+      QTimer *d_timer;
       QwtPlotGrid* d_grid;
-			QGridLayout *d_layout;
+      QGridLayout *d_layout;
       QList<signalMarker*> d_markers;
 
       gr::thread::mutex d_mutex;
 
-		protected:
-			void resizeEvent(QResizeEvent * event);
+    protected:
+      void resizeEvent(QResizeEvent * event);
 
-		public slots:
-			void refresh();
+    public slots:
+      void refresh();
 
-			void set_axis_x(float start, float stop);
-			void msg_received();
-			void set_cfreq(float freq);
-			void delete_markers();
+      void set_axis_x(float start, float stop);
+      void msg_received();
+      void set_cfreq(float freq);
+      void delete_markers();
       void mousePressEvent (QMouseEvent * eventPress);
-			void mouseReleaseEvent(QMouseEvent *eventRelease);
-      void mouseMoveEvent(QMouseEvent* event);
-      void spawnSignalSelector();
-      void manual_cb_clicked(int state);
-
-			void drawOverlay();
-
-		};
+      void mouseReleaseEvent(QMouseEvent *eventRelease);
 
 
-	}
+      void drawOverlay();
+
+    };
+
+
+  }
 }
 
 #endif //GR_INSPECTOR_INSPECTOR_SINK_H

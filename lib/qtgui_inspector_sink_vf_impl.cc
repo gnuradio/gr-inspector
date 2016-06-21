@@ -26,6 +26,7 @@
 #include "qtgui_inspector_sink_vf_impl.h"
 #include <gnuradio/prefs.h>
 #include <QFile>
+#include <iostream>
 
 namespace gr {
   namespace inspector {
@@ -35,7 +36,7 @@ namespace gr {
                                   float cfreq, QWidget *parent)
     {
       return gnuradio::get_initial_sptr
-        (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, parent));
+              (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, parent));
     }
 
     /*
@@ -43,9 +44,9 @@ namespace gr {
      */
     qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
                                                                float cfreq, QWidget *parent)
-      : gr::sync_block("qtgui_inspector_sink_vf",
-              gr::io_signature::make(1, 1, sizeof(float)*fft_len),
-              gr::io_signature::make(0, 0, 0))
+            : gr::sync_block("qtgui_inspector_sink_vf",
+                             gr::io_signature::make(1, 1, sizeof(float)*fft_len),
+                             gr::io_signature::make(0, 0, 0))
     {
 
       message_port_register_out(pmt::intern("map_out"));
@@ -88,21 +89,20 @@ namespace gr {
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
       d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_ready, &d_manual, d_parent);
-
+      d_main_gui->show();
       d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
-
-      d_main_gui->show();
+      QCheckBox* box = new QCheckBox("Manual", d_parent);
     }
 
     void
     qtgui_inspector_sink_vf_impl::handle_msg(pmt::pmt_t msg) {
-      if(pmt::length(msg)){
+      if(pmt::length(msg))
+      {
         unpack_message(msg);
-        if(!d_manual) {
-          d_main_gui->msg_received();
-        }
+        d_main_gui->msg_received();
       }
+
       // bypass block if no manual signal selection
       if(!d_manual){
         message_port_pub(pmt::intern("map_out"), msg);
@@ -141,12 +141,12 @@ namespace gr {
 
     int
     qtgui_inspector_sink_vf_impl::work(int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items)
+                                       gr_vector_const_void_star &input_items,
+                                       gr_vector_void_star &output_items)
     {
       const float *in = (const float*) input_items[0];
       //if(d_buffer.size()!=noutput_items*d_fft_len){ // resize buffer if needed
-       // d_buffer.resize(noutput_items*d_fft_len);
+      // d_buffer.resize(noutput_items*d_fft_len);
       //}
       // Do <+signal processing+>
       d_ready = false;
@@ -165,4 +165,3 @@ namespace gr {
 
   } /* namespace inspector */
 } /* namespace gr */
-
