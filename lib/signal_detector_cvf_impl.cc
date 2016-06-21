@@ -233,6 +233,7 @@ namespace gr {
       if(pos.size() == 0) {
         return flanks;
       }
+
       // check for adjacent bins to group
       std::vector<unsigned int> curr_edges;
 
@@ -276,11 +277,11 @@ namespace gr {
               flanks.push_back(curr_edges);
             }
             else {
-              if (pos[i + 1] != pos[i] + 1) {
-                curr_edges.push_back(pos[i]);
+              if(pos[i-1] + 1 != pos[i]) {
+                curr_edges.push_back(pos[i - 1]);
                 flanks.push_back(curr_edges);
                 curr_edges.clear();
-                new_signal = true;
+                curr_edges.push_back(pos[i]);
               }
             }
           }

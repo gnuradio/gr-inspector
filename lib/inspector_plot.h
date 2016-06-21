@@ -87,6 +87,8 @@ namespace gr {
       void detach_markers();
       void mousePressEvent (QMouseEvent * eventPress);
       void mouseReleaseEvent(QMouseEvent *eventRelease);
+      void manual_cb_clicked(int state);
+      void spawn_signal_selector();
 
 
       void drawOverlay();

@@ -31,12 +31,11 @@ namespace gr {
     class signal_marker
     {
     public:
-      signal_marker(int i, float center, float bw, QwtPlot* plot);
+      signal_marker(int i, QwtPlot *plot);
 
-      ~signal_marker() {
-      }
+      ~signal_marker();
 
-      void set_marker(int i, float center, float bw, QwtPlot* plot);
+      void set_marker(int i, float center, float bw);
 
       QwtPlotMarker* d_center;
       QwtPlotMarker* d_label;

@@ -82,12 +82,14 @@ namespace gr {
 
       for(int i = 0; i < d_marker_count; i++)
       {
-        signal_marker* marker = new signal_marker(i, 0, 0, d_plot);
+        signal_marker* marker = new signal_marker(i, d_plot);
         d_markers.push_back(marker);
       }
 
 
       d_manual_cb = new QCheckBox("Manual", d_plot);
+      d_manual_cb->setGeometry(QRect(10,10,85,20)),
+      connect(d_manual_cb, SIGNAL(stateChanged(int)), this, SLOT(manual_cb_clicked(int)));
     }
 
     inspector_plot::~inspector_plot(){
@@ -106,6 +108,19 @@ namespace gr {
       }
     }
 
+    void
+    inspector_plot::spawn_signal_selector() {
+      detach_markers();
+      d_markers[0]->set_marker(0, d_cfreq, -d_axis_x[0]/2*1000000);
+    }
+
+    void
+    inspector_plot::manual_cb_clicked(int state) {
+      *d_manual = static_cast<bool>(state);
+      if(*d_manual) {
+        spawn_signal_selector();
+      }
+    }
 
     void
     inspector_plot::detach_markers() {
@@ -178,13 +193,13 @@ namespace gr {
       if(d_rf_map->size() <= d_marker_count) {
         for (int i = 0; i < d_rf_map->size(); i++) {
           d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0],
-                                   d_rf_map->at(i)[1], d_plot);
+                                   d_rf_map->at(i)[1]);
         }
       }
       else {
         for (int i = 0; i < d_marker_count; i++) {
           d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0],
-                                   d_rf_map->at(i)[1], d_plot);
+                                   d_rf_map->at(i)[1]);
         }
       }
     }
