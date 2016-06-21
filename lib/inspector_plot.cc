@@ -87,7 +87,7 @@ namespace gr {
       }
 
 
-      QCheckBox* box = new QCheckBox("Manual", d_plot);
+      d_manual_cb = new QCheckBox("Manual", d_plot);
     }
 
     inspector_plot::~inspector_plot(){
@@ -99,6 +99,7 @@ namespace gr {
       delete[] d_freq;
       delete d_symbol;
       delete d_grid;
+      delete d_manual_cb;
       while(!d_markers.empty()) {
         delete d_markers.back();
         d_markers.pop_back();

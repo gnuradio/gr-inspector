@@ -71,6 +71,7 @@ namespace gr {
       QwtPlotGrid* d_grid;
       QGridLayout *d_layout;
       QList<signal_marker*> d_markers;
+      QCheckBox* d_manual_cb;
 
       gr::thread::mutex d_mutex;
 
