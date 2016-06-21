@@ -22,7 +22,7 @@ Install by the following shell commands:
 
 <code>mkdir build\n
 cd build\n
-cmake .. -DENABLE_PYTHON=\n
+cmake .. -DENABLE_PYTHON=ON\n
 make -j4\n
 sudo make install</code>
 
