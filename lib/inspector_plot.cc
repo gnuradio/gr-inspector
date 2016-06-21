@@ -121,9 +121,11 @@ namespace gr {
 
     void
     inspector_plot::delete_markers() {
-      for (int i = 0; i < d_markers.size(); i++) {
+      /* for (int i = 0; i < d_markers.size(); i++) {
         delete d_markers[i];
-      }
+      } */
+      d_plot->detachItems( QwtPlotItem::Rtti_PlotMarker, true);
+      d_plot->detachItems( QwtPlotItem::Rtti_PlotZone, true);
     }
 
     void

@@ -89,12 +89,12 @@ namespace gr {
       }
 
       ~signalMarker() {
-        d_center->detach();
+       /* d_center->detach();
         d_label->detach();
         d_zone->detach();
         delete d_center;
         delete d_label;
-        delete d_zone;
+        delete d_zone; */
       }
 
       void refresh() {
