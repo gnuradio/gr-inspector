@@ -81,6 +81,11 @@ namespace gr {
       d_timer->start(d_interval);
       qRegisterMetaType<QList<QwtLegendData> >("QList<QwtLegendData>");
 
+      for(int i = 0; i < 50; i++)
+      {
+        signalMarker* marker = new signalMarker(i, 0, 0, d_plot);
+        d_markers.push_back(marker);
+      }
     }
 
     inspector_plot::~inspector_plot(){
@@ -97,12 +102,11 @@ namespace gr {
 
     void
     inspector_plot::delete_markers() {
-      d_plot->detachItems( QwtPlotItem::Rtti_PlotMarker, true);
-      d_plot->detachItems( QwtPlotItem::Rtti_PlotZone, true);
-      while(!d_markers.empty()) {
-        delete d_markers.back();
-        d_markers.pop_back();
-      }
+      d_plot->detachItems( QwtPlotItem::Rtti_PlotMarker, false);
+      d_plot->detachItems( QwtPlotItem::Rtti_PlotZone, false);
+      //for(int i = 0; i < d_markers.size(); i++) {
+      //delete d_markers[i];
+      //}
     }
 
 
@@ -171,10 +175,14 @@ namespace gr {
       d_marker_ready = false;
       delete_markers();
       for(int i = 0; i < d_rf_map->size(); i++) {
+        /*
         if (d_rf_map->at(i)[1] <100)
         {
-          signalMarker* marker = new signalMarker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
+            signalMarker* marker = new signalMarker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
+        d_markers.push_back(marker);
         }
+        */
+        d_markers[i]->setMarker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
       }
       d_marker_ready = true;
     }
