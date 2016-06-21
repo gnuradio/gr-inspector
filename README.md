@@ -18,6 +18,27 @@ Additional functionality for the post-GSoC period can be:
 
 Read the full proposal [here](https://github.com/sbmueller/gsoc-proposal/blob/master/sigint-proposal.pdf).
 
+## Installation
+
+To install the Inspector, the following dependencies are required:
+
+- GNU Radio runtime
+- gr-filter
+- QT4
+- QWT
+
+Install by the following shell commands:
+
+```
+mkdir build
+cd build
+cmake .. -DENABLE_PYTHON=ON
+make -j4
+sudo make install
+```
+
+This module is still under development. Please let me know if you run into any issues on the master branch.
+
 ## Contact
 Maintainer of this module:
 
