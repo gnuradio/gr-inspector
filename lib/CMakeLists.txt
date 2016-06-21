@@ -37,7 +37,8 @@ list(APPEND inspector_sources
     signal_detector_cvf_impl.cc
     signal_extractor_c_impl.cc
     qtgui_inspector_sink_vf_impl.cc
-		inspector_plot.cc)
+		inspector_plot.cc
+		signal_marker.cc)
 
 include(GrPython)
 if(ENABLE_PYTHON)

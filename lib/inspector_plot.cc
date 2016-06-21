@@ -81,9 +81,9 @@ namespace gr {
       d_timer->start(d_interval);
       qRegisterMetaType<QList<QwtLegendData> >("QList<QwtLegendData>");
 
-      for(int i = 0; i < 50; i++)
+      for(int i = 0; i < 20; i++)
       {
-        signalMarker* marker = new signalMarker(i, 0, 0, d_plot);
+        signal_marker* marker = new signal_marker(i, 0, 0, d_plot);
         d_markers.push_back(marker);
       }
     }
@@ -178,11 +178,11 @@ namespace gr {
         /*
         if (d_rf_map->at(i)[1] <100)
         {
-            signalMarker* marker = new signalMarker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
+            signal_marker* marker = new signal_marker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
         d_markers.push_back(marker);
         }
         */
-        d_markers[i]->setMarker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
+        d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0], d_rf_map->at(i)[1], d_plot);
       }
       d_marker_ready = true;
     }

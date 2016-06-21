@@ -36,108 +36,12 @@
 #include <qwt_plot_curve.h>
 #include <qwt_painter.h>
 #include <qwt_plot_grid.h>
-#include <qwt_plot_marker.h>
 #include <qwt_plot_zoomer.h>
-#include <qwt_plot_zoneitem.h>
+
+#include <signal_marker.h>
 
 namespace gr {
   namespace inspector {
-
-    class signalMarker
-    {
-    public:
-      signalMarker(int i, float center, float bw, QwtPlot* plot) {
-        d_plot = plot;
-        d_number = i;
-        d_freq = center;
-        d_bw = bw;
-        d_center = new QwtPlotMarker();
-        d_center->setLineStyle(QwtPlotMarker::VLine);
-        QColor c = Qt::white;
-        c.setAlpha(70);
-        d_center->setLinePen(c);
-        d_center->setXValue(center/1000000);
-
-        d_label = new QwtPlotMarker();
-        QwtText text;
-        QString qstring;
-        qstring.push_back("Signal "+QString::number(i+1));
-        qstring.append("\n");
-        qstring.append("f = "+QString::number(center/1000000)+" M");
-        qstring.append("\n");
-        qstring.append("B = "+QString::number(bw/1000)+" k");
-        text.setText(qstring);
-        text.setColor(Qt::red);
-        d_label->setLabelAlignment(Qt::AlignLeft);
-        d_label->setLabel(text);
-        d_label->setXValue((center-bw/2-300)/1000000);
-        d_label->setYValue(13);
-
-        d_zone = new QwtPlotZoneItem();
-        d_zone->setOrientation(Qt::Vertical);
-        c = Qt::red;
-        c.setAlpha(100);
-        d_zone->setPen(c);
-        c.setAlpha(20);
-        d_zone->setBrush(c);
-        d_zone->setInterval((center-bw/2)/1000000, (center+bw/2)/1000000);
-        d_zone->setXAxis(QwtPlot::xBottom);
-
-        d_label->attach(plot);
-        d_zone->attach(plot);
-        d_center->attach(plot);
-      }
-
-      ~signalMarker() {
-      }
-
-      void setMarker(int i, float center, float bw, QwtPlot* plot)
-      {
-        d_plot = plot;
-        d_number = i;
-        d_freq = center;
-        d_bw = bw;
-        d_center->setLineStyle(QwtPlotMarker::VLine);
-        QColor c = Qt::white;
-        c.setAlpha(70);
-        d_center->setLinePen(c);
-        d_center->setXValue(center/1000000);
-
-        QwtText text;
-        QString qstring;
-        qstring.push_back("Signal "+QString::number(i+1));
-        qstring.append("\n");
-        qstring.append("f = "+QString::number(center/1000000)+" M");
-        qstring.append("\n");
-        qstring.append("B = "+QString::number(bw/1000)+" k");
-        text.setText(qstring);
-        text.setColor(Qt::red);
-        d_label->setLabelAlignment(Qt::AlignLeft);
-        d_label->setLabel(text);
-        d_label->setXValue((center-bw/2-300)/1000000);
-        d_label->setYValue(13);
-
-        d_zone->setOrientation(Qt::Vertical);
-        c = Qt::red;
-        c.setAlpha(100);
-        d_zone->setPen(c);
-        c.setAlpha(20);
-        d_zone->setBrush(c);
-        d_zone->setInterval((center-bw/2)/1000000, (center+bw/2)/1000000);
-        d_zone->setXAxis(QwtPlot::xBottom);
-
-        d_label->attach(plot);
-        d_zone->attach(plot);
-        d_center->attach(plot);
-      }
-
-      QwtPlotMarker* d_center;
-      QwtPlotMarker* d_label;
-      QwtPlotZoneItem* d_zone;
-      QwtPlot* d_plot;
-      float d_freq, d_bw;
-      int d_number;
-    };
 
     class inspector_plot : public QWidget
     {
@@ -167,7 +71,7 @@ namespace gr {
       QTimer *d_timer;
       QwtPlotGrid* d_grid;
       QGridLayout *d_layout;
-      QList<signalMarker*> d_markers;
+      QList<signal_marker*> d_markers;
 
       gr::thread::mutex d_mutex;
 
