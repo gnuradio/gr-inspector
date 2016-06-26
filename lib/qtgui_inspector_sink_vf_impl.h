@@ -56,6 +56,8 @@ namespace gr {
       std::vector<std::vector<float> > d_rf_map;
       void handle_msg(pmt::pmt_t msg);
       void unpack_message(pmt::pmt_t msg);
+      void send_manual_message(float center, float bw);
+
 
       void initialize();
 

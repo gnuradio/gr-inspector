@@ -49,10 +49,17 @@ namespace gr {
 
     public:
       inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
-                     bool* manual, QWidget* parent = NULL);
+                     bool* manual, QWidget *parent);
       ~inspector_plot();
 
     private:
+
+      enum markerType {
+        NONE,
+        LEFT,
+        CENTER,
+        RIGHT
+      };
       int d_interval, d_fft_len, d_marker_count;
       bool *d_manual;
       std::vector<float> d_axis_x, d_axis_y;
@@ -60,7 +67,7 @@ namespace gr {
       float d_max, d_min, d_cfreq;
       double* d_freq;
       std::vector<std::vector<float> >* d_rf_map;
-      QwtPlotMarker* d_clicked_marker;
+      markerType d_clicked_marker;
 
       QwtSymbol *d_symbol;
       QwtPlotZoomer* d_zoomer;
@@ -87,6 +94,7 @@ namespace gr {
       void detach_markers();
       void mousePressEvent (QMouseEvent * eventPress);
       void mouseReleaseEvent(QMouseEvent *eventRelease);
+      void mouseMoveEvent(QMouseEvent *eventMove);
       void manual_cb_clicked(int state);
       void spawn_signal_selector();
 

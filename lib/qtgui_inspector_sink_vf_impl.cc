@@ -107,6 +107,19 @@ namespace gr {
     }
 
     void
+    qtgui_inspector_sink_vf_impl::send_manual_message(float center, float bw) {
+      if(d_manual) {
+        pmt::pmt_t msg = pmt::make_vector(1, pmt::PMT_NIL);
+        pmt::pmt_t curr_edge = pmt::make_f32vector(2, 0.0);
+        pmt::f32vector_set(curr_edge, 0, center);
+        pmt::f32vector_set(curr_edge, 1, bw);
+        pmt::vector_set(msg, 0, curr_edge);
+        message_port_pub(pmt::intern("map_out"), msg);
+      }
+    }
+
+
+    void
     qtgui_inspector_sink_vf_impl::unpack_message(pmt::pmt_t msg) {
       d_rf_map.clear();
       std::vector<float> temp;
