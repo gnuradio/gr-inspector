@@ -24,6 +24,7 @@
 #include <string>
 #include <cmath>
 #include <qwt_transform.h>
+#include <pmt/pmt.h>
 
 
 namespace gr {
@@ -31,7 +32,7 @@ namespace gr {
 
     inspector_plot::inspector_plot(int fft_len, std::vector<double> *buffer,
                                    std::vector<std::vector<float> >* rf_map,
-                                   bool* manual, QWidget *parent) : QWidget(parent)
+                                   bool* manual, gr::msg_queue* msg_queue, QWidget *parent) : QWidget(parent)
     {
       d_fft_len = fft_len;
       // Setup GUI
@@ -41,6 +42,7 @@ namespace gr {
       d_rf_map = rf_map;
       d_manual = manual;
       d_marker_count = 30;
+      d_msg_queue = msg_queue;
 
       setMouseTracking(true);
 
@@ -54,6 +56,7 @@ namespace gr {
                                QPen(QColor(Qt::blue)), QSize(7,7));
       d_curve->setSymbol(d_symbol);
       d_grid = new QwtPlotGrid();
+      d_zoomer = new Zoomer(QwtPlot::xBottom, QwtPlot::yLeft, d_plot->canvas());
       d_grid->setPen(QPen(QColor(60,60,60),0.5, Qt::DashLine));
       d_grid->attach(d_plot);
       //d_curve->setRenderHint(QwtPlotItem::RenderAntialiased, true);
@@ -114,6 +117,7 @@ namespace gr {
     inspector_plot::spawn_signal_selector() {
       detach_markers();
       d_markers[0]->set_marker(0, d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
+      add_msg_queue(d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
     }
 
     void
@@ -151,8 +155,12 @@ namespace gr {
       for(int i = 0; i < d_fft_len; i++) {
         d_freq[i] = d_axis_x[0] + i*d_axis_x[1];
       }
-
       refresh();
+      QRectF zbase = d_zoomer->zoomBase();
+      d_zoomer->zoom(zbase);
+      d_zoomer->setZoomBase(zbase);
+      d_zoomer->setZoomBase(true);
+      d_zoomer->zoom(0);
     }
 
     void
@@ -196,8 +204,16 @@ namespace gr {
           d_markers[0]->set_marker(0, cfreq, 2*std::abs(cfreq-xVal*1000000));
         }
         d_clicked_marker = NONE;
-        // TODO: send message here
+        add_msg_queue(cfreq, bandwidth);
       }
+    }
+
+    void
+    inspector_plot::add_msg_queue(float cfreq, float bandwidth) {
+      // TODO: send message here
+      gr::message::sptr msg = gr::message::make(0, cfreq, bandwidth, 1);
+      d_msg_queue->flush();
+      d_msg_queue->insert_tail(msg);
     }
 
     void

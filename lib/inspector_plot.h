@@ -29,6 +29,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QtGui/QtGui>
+#include <gnuradio/msg_queue.h>
 
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
@@ -37,11 +38,40 @@
 #include <qwt_painter.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_zoomer.h>
+#include <qwt_plot_canvas.h>
 
 #include <signal_marker.h>
 
 namespace gr {
   namespace inspector {
+
+    class Zoomer: public QwtPlotZoomer
+    {
+    public:
+      Zoomer(int xAxis, int yAxis, QWidget *canvas):
+              QwtPlotZoomer(xAxis, yAxis, canvas)
+      {
+        //setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
+        setTrackerMode(QwtPicker::AlwaysOn);
+        setRubberBand(QwtPicker::RectRubberBand);
+        QPen pen = QPen(QColor(100, 100, 100), 1, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin);
+        setTrackerPen(pen);
+        setRubberBandPen(pen);
+
+        // RightButton: zoom out by 1
+        // Ctrl+RightButton: zoom out to full size
+
+#if QT_VERSION < 0x040000
+        setMousePattern(QwtEventPattern::MouseSelect2,
+            Qt::RightButton, Qt::ControlButton);
+#else
+        setMousePattern(QwtEventPattern::MouseSelect2,
+                        Qt::RightButton, Qt::ControlModifier);
+#endif
+        setMousePattern(QwtEventPattern::MouseSelect3,
+                        Qt::RightButton);
+      }
+    };
 
     class inspector_plot : public QWidget
     {
@@ -49,7 +79,7 @@ namespace gr {
 
     public:
       inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
-                     bool* manual, QWidget *parent);
+                     bool* manual, gr::msg_queue* msg_queue, QWidget *parent);
       ~inspector_plot();
 
     private:
@@ -70,7 +100,7 @@ namespace gr {
       markerType d_clicked_marker;
 
       QwtSymbol *d_symbol;
-      QwtPlotZoomer* d_zoomer;
+      Zoomer* d_zoomer;
       QwtPlot *d_plot;
       QwtScaleWidget *d_scale;
       QwtPlotCurve *d_curve;
@@ -79,6 +109,7 @@ namespace gr {
       QGridLayout *d_layout;
       QList<signal_marker*> d_markers;
       QCheckBox* d_manual_cb;
+      gr::msg_queue* d_msg_queue;
 
       gr::thread::mutex d_mutex;
 
@@ -97,7 +128,7 @@ namespace gr {
       void mouseMoveEvent(QMouseEvent *eventMove);
       void manual_cb_clicked(int state);
       void spawn_signal_selector();
-
+      void add_msg_queue(float cfreq, float bandwidth);
 
       void drawOverlay();
 

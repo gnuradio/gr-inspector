@@ -63,6 +63,7 @@ namespace gr {
       d_samp_rate = samp_rate;
       d_manual = false;
       d_cfreq = cfreq;
+      d_msg_queue = new gr::msg_queue(10);
       initialize();
     }
 
@@ -88,7 +89,7 @@ namespace gr {
 #endif
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
-      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_manual, d_parent);
+      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_manual, d_msg_queue, d_parent);
       d_main_gui->show();
       d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
@@ -108,14 +109,12 @@ namespace gr {
 
     void
     qtgui_inspector_sink_vf_impl::send_manual_message(float center, float bw) {
-      if(d_manual) {
-        pmt::pmt_t msg = pmt::make_vector(1, pmt::PMT_NIL);
-        pmt::pmt_t curr_edge = pmt::make_f32vector(2, 0.0);
-        pmt::f32vector_set(curr_edge, 0, center);
-        pmt::f32vector_set(curr_edge, 1, bw);
-        pmt::vector_set(msg, 0, curr_edge);
-        message_port_pub(pmt::intern("map_out"), msg);
-      }
+      pmt::pmt_t msg = pmt::make_vector(1, pmt::PMT_NIL);
+      pmt::pmt_t curr_edge = pmt::make_f32vector(2, 0.0);
+      pmt::f32vector_set(curr_edge, 0, center);
+      pmt::f32vector_set(curr_edge, 1, bw);
+      pmt::vector_set(msg, 0, curr_edge);
+      message_port_pub(pmt::intern("msg_out"), msg);
     }
 
 
@@ -161,6 +160,12 @@ namespace gr {
         d_buffer.push_back(in[i]);
       }
       // Tell runtime system how many output items we produced.
+      if(d_manual && !d_msg_queue->empty_p()) {
+        gr::message::sptr msg = d_msg_queue->delete_head();
+        float center = msg->arg1();
+        float bw = msg->arg2();
+        send_manual_message(center, bw);
+      }
       return 1;
     }
 

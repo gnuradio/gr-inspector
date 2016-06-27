@@ -147,7 +147,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -210,7 +210,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -273,7 +273,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -390,7 +390,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -583,7 +583,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 0)</value>
+      <value>(216, 0)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -886,7 +886,7 @@
     </param>
     <param>
       <key>freq</key>
-      <value>freq1*1e3</value>
+      <value>200*1e3</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -949,7 +949,7 @@
     </param>
     <param>
       <key>freq</key>
-      <value>freq2*1e3</value>
+      <value>400*1e3</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1012,7 +1012,7 @@
     </param>
     <param>
       <key>freq</key>
-      <value>freq3*1e3</value>
+      <value>-200*1e3</value>
     </param>
     <param>
       <key>_coordinate</key>

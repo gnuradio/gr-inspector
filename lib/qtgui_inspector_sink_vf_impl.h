@@ -54,6 +54,7 @@ namespace gr {
       QApplication *d_qApplication;
       std::vector<double> d_buffer;
       std::vector<std::vector<float> > d_rf_map;
+      gr::msg_queue* d_msg_queue;
       void handle_msg(pmt::pmt_t msg);
       void unpack_message(pmt::pmt_t msg);
       void send_manual_message(float center, float bw);
