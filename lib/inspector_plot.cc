@@ -172,14 +172,17 @@ namespace gr {
     // marker
     void
     inspector_plot::mousePressEvent(QMouseEvent *eventPress) {
-      if(*d_manual && eventPress->button() == Qt::LeftButton) {
+      if(*d_manual && eventPress->button() == Qt::LeftButton && eventPress->modifiers() != Qt::ControlModifier) {
         if(std::abs(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_center->xValue()) - eventPress->x() + 67) < 3) {
+          d_zoomer->setEnabled(false);
           d_clicked_marker = CENTER;
         }
         else if(std::abs(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue()) - eventPress->x() + 67) < 3) {
+          d_zoomer->setEnabled(false);
           d_clicked_marker = LEFT;
         }
         else if(std::abs(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().maxValue()) - eventPress->x() + 67) < 3) {
+          d_zoomer->setEnabled(false);
           d_clicked_marker = RIGHT;
         }
         else {
@@ -204,6 +207,7 @@ namespace gr {
           d_markers[0]->set_marker(0, cfreq, 2*std::abs(cfreq-xVal*1000000));
         }
         d_clicked_marker = NONE;
+        d_zoomer->setEnabled(true);
         add_msg_queue(cfreq, bandwidth);
       }
     }

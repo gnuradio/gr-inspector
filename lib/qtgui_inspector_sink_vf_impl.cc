@@ -114,7 +114,7 @@ namespace gr {
       pmt::f32vector_set(curr_edge, 0, center);
       pmt::f32vector_set(curr_edge, 1, bw);
       pmt::vector_set(msg, 0, curr_edge);
-      message_port_pub(pmt::intern("msg_out"), msg);
+      message_port_pub(pmt::intern("map_out"), msg);
     }
 
 

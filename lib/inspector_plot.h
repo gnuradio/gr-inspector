@@ -70,6 +70,8 @@ namespace gr {
 #endif
         setMousePattern(QwtEventPattern::MouseSelect3,
                         Qt::RightButton);
+        setMousePattern(QwtEventPattern::MouseSelect1,
+                        Qt::LeftButton, Qt::ControlModifier);
       }
     };
 
