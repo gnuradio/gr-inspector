@@ -45,6 +45,10 @@ namespace gr {
      * with signal markers and informations. Manual signal selection can be done
      * within the GUI created by this block.
      *
+     * Controls: Use CTRL+LeftMouse to zoom, RightMouse to zoom out.
+     * This prevents confusion when in manual selection mode, where the
+     * signals are selected with LeftMouse.
+     *
      * Message ports:
      * - map in: takes RF map from Signal Detector block and visualizes the included
      * information in the plot
