@@ -39,14 +39,12 @@ class qa_signal_detector_cvf (gr_unittest.TestCase):
         src = analog.sig_source_c(32000, analog.GR_COS_WAVE,
                                   12500, 1)
 
-        detector = inspector.signal_detector_cvf(32000,  1024,
+        detector = inspector.signal_detector_cvf(32000,  4096,
                     firdes.WIN_BLACKMAN_hARRIS, -80, 0.6, False, 0.5, 0.0001)
-        dst1 = blocks.null_sink(gr.sizeof_float*1024)
-        dst2 = blocks.null_sink(gr.sizeof_float*1024)
+        dst1 = blocks.null_sink(gr.sizeof_float*4096)
         msg_dst = blocks.message_debug()
         self.tb.connect(src, detector)
         self.tb.connect((detector, 0), dst1)
-        self.tb.connect((detector, 1), dst2)
         self.tb.msg_connect((detector, 'map_out'), (msg_dst, 'store'))
         self.tb.start()
         time.sleep(0.5)
@@ -60,9 +58,8 @@ class qa_signal_detector_cvf (gr_unittest.TestCase):
             res_vector = numpy.vstack((res_vector, numpy.array(
                 [pmt.f32vector_ref(row, 0), pmt.f32vector_ref(row, 1)]
             )))
-
         self.assertAlmostEqual(12500.0, res_vector[0][0], delta=100)
-        self.assertAlmostEqual(0.0, res_vector[0][1], delta=200)
+        self.assertAlmostEqual(0.0, res_vector[0][1], delta=100)
 
 
 if __name__ == '__main__':
