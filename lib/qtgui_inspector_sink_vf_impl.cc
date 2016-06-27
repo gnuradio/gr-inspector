@@ -63,7 +63,7 @@ namespace gr {
       d_samp_rate = samp_rate;
       d_manual = false;
       d_cfreq = cfreq;
-      d_msg_queue = new gr::msg_queue(10);
+      d_msg_queue = new gr::msg_queue(1);
       initialize();
     }
 
@@ -75,6 +75,7 @@ namespace gr {
       d_main_gui->close();
       delete d_argv;
       delete d_main_gui;
+      delete d_msg_queue;
     }
 
     void

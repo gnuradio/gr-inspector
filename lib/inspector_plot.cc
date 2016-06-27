@@ -59,8 +59,6 @@ namespace gr {
       d_zoomer = new Zoomer(QwtPlot::xBottom, QwtPlot::yLeft, d_plot->canvas());
       d_grid->setPen(QPen(QColor(60,60,60),0.5, Qt::DashLine));
       d_grid->attach(d_plot);
-      //d_curve->setRenderHint(QwtPlotItem::RenderAntialiased, true);
-      //d_zoomer = new QwtPlotZoomer(d_plot);
       d_layout->addWidget(d_plot, 0, 0);
       d_layout->setColumnStretch(0, 1);
       setLayout(d_layout);
@@ -168,8 +166,6 @@ namespace gr {
       d_cfreq = freq;
     }
 
-    // TODO: compare mouse with marker position and select clicked
-    // marker
     void
     inspector_plot::mousePressEvent(QMouseEvent *eventPress) {
       if(*d_manual && eventPress->button() == Qt::LeftButton && eventPress->modifiers() != Qt::ControlModifier) {
@@ -191,8 +187,26 @@ namespace gr {
       }
     }
 
+    void
+    inspector_plot::mouseMoveEvent(QMouseEvent *eventMove) {
+      if (d_clicked_marker != NONE &&
+          eventMove->buttons() == Qt::LeftButton) {
+        double xVal = d_plot->invTransform(QwtPlot::xBottom,
+                                           eventMove->x() - 67);
+        float cfreq = d_markers[0]->d_freq;
+        float bandwidth = d_markers[0]->d_bw;
+        detach_markers();
+        if (d_clicked_marker == CENTER) {
+          d_markers[0]->set_marker(0, xVal * 1000000, bandwidth);
+        }
+        else if (d_clicked_marker == LEFT or
+                 d_clicked_marker == RIGHT) {
+          d_markers[0]->set_marker(0, cfreq, 2 * std::abs(
+                  cfreq - xVal * 1000000));
+        }
+      }
+    }
 
-    // TODO: mouse release event to set new marker position
     void
     inspector_plot::mouseReleaseEvent(QMouseEvent *eventRelease) {
       if(d_clicked_marker != NONE && eventRelease->button() == Qt::LeftButton) {
@@ -214,30 +228,9 @@ namespace gr {
 
     void
     inspector_plot::add_msg_queue(float cfreq, float bandwidth) {
-      // TODO: send message here
       gr::message::sptr msg = gr::message::make(0, cfreq, bandwidth, 1);
       d_msg_queue->flush();
       d_msg_queue->insert_tail(msg);
-    }
-
-    void
-    inspector_plot::mouseMoveEvent(QMouseEvent *eventMove) {
-      if (d_clicked_marker != NONE &&
-          eventMove->buttons() == Qt::LeftButton) {
-        double xVal = d_plot->invTransform(QwtPlot::xBottom,
-                                           eventMove->x() - 67);
-        float cfreq = d_markers[0]->d_freq;
-        float bandwidth = d_markers[0]->d_bw;
-        detach_markers();
-        if (d_clicked_marker == CENTER) {
-          d_markers[0]->set_marker(0, xVal * 1000000, bandwidth);
-        }
-        else if (d_clicked_marker == LEFT or
-                 d_clicked_marker == RIGHT) {
-          d_markers[0]->set_marker(0, cfreq, 2 * std::abs(
-                  cfreq - xVal * 1000000));
-        }
-      }
     }
 
     void

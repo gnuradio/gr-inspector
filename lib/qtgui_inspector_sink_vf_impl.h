@@ -59,7 +59,6 @@ namespace gr {
       void unpack_message(pmt::pmt_t msg);
       void send_manual_message(float center, float bw);
 
-
       void initialize();
 
       // Where all the action really happens
