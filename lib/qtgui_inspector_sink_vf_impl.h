@@ -22,7 +22,7 @@
 #define INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_IMPL_H
 
 #include <inspector/qtgui_inspector_sink_vf.h>
-#include "inspector_plot.h"
+#include "inspector_form.h"
 
 namespace gr {
   namespace inspector {
@@ -50,7 +50,7 @@ namespace gr {
       int d_fft_len;
       double d_samp_rate;
       float d_cfreq;
-      inspector_plot *d_main_gui;
+      inspector_form *d_main_gui;
       QApplication *d_qApplication;
       std::vector<double> d_buffer;
       std::vector<std::vector<float> > d_rf_map;

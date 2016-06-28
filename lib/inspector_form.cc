@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "inspector_plot.h"
+#include "inspector_form.h"
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -30,7 +30,7 @@
 namespace gr {
   namespace inspector {
 
-    inspector_plot::inspector_plot(int fft_len, std::vector<double> *buffer,
+    inspector_form::inspector_form(int fft_len, std::vector<double> *buffer,
                                    std::vector<std::vector<float> >* rf_map,
                                    bool* manual, gr::msg_queue* msg_queue, QWidget *parent) : QWidget(parent)
     {
@@ -95,7 +95,7 @@ namespace gr {
       connect(d_manual_cb, SIGNAL(stateChanged(int)), this, SLOT(manual_cb_clicked(int)));
     }
 
-    inspector_plot::~inspector_plot(){
+    inspector_form::~inspector_form(){
       detach_markers();
       delete d_timer;
       delete d_zoomer;
@@ -112,14 +112,14 @@ namespace gr {
     }
 
     void
-    inspector_plot::spawn_signal_selector() {
+    inspector_form::spawn_signal_selector() {
       detach_markers();
       d_markers[0]->set_marker(0, d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
       add_msg_queue(d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
     }
 
     void
-    inspector_plot::manual_cb_clicked(int state) {
+    inspector_form::manual_cb_clicked(int state) {
       *d_manual = static_cast<bool>(state);
       if(*d_manual) {
         spawn_signal_selector();
@@ -130,19 +130,19 @@ namespace gr {
     }
 
     void
-    inspector_plot::detach_markers() {
+    inspector_form::detach_markers() {
       d_plot->detachItems( QwtPlotItem::Rtti_PlotMarker, false);
       d_plot->detachItems( QwtPlotItem::Rtti_PlotZone, false);
     }
 
 
     void
-    inspector_plot::resizeEvent( QResizeEvent * event ){
+    inspector_form::resizeEvent( QResizeEvent * event ){
       d_plot->setGeometry(0,0,this->width(),this->height());
     }
 
     void
-    inspector_plot::set_axis_x(float start, float stop) {
+    inspector_form::set_axis_x(float start, float stop) {
       d_axis_x.clear();
       d_axis_x.push_back((d_cfreq + start)/1000000);
       d_axis_x.push_back((stop-start)/d_fft_len/1000000);
@@ -162,14 +162,17 @@ namespace gr {
     }
 
     void
-    inspector_plot::set_cfreq(float freq) {
+    inspector_form::set_cfreq(float freq) {
       d_cfreq = freq;
     }
 
     void
-    inspector_plot::mousePressEvent(QMouseEvent *eventPress) {
+    inspector_form::mousePressEvent(QMouseEvent *eventPress) {
       if(*d_manual && eventPress->button() == Qt::LeftButton && eventPress->modifiers() != Qt::ControlModifier) {
-        if(std::abs(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_center->xValue()) - eventPress->x() + 67) < 3) {
+        std::cout << d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue())+60 << ", " <<
+          eventPress->x() << std::endl;
+        if(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue())+67 <= eventPress->x() &&
+                d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().maxValue())+67 >= eventPress->x()) {
           d_zoomer->setEnabled(false);
           d_clicked_marker = CENTER;
         }
@@ -188,7 +191,7 @@ namespace gr {
     }
 
     void
-    inspector_plot::mouseMoveEvent(QMouseEvent *eventMove) {
+    inspector_form::mouseMoveEvent(QMouseEvent *eventMove) {
       if (d_clicked_marker != NONE &&
           eventMove->buttons() == Qt::LeftButton) {
         double xVal = d_plot->invTransform(QwtPlot::xBottom,
@@ -204,11 +207,18 @@ namespace gr {
           d_markers[0]->set_marker(0, cfreq, 2 * std::abs(
                   cfreq - xVal * 1000000));
         }
+        if(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue())+67 <= eventMove->x() &&
+           d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().maxValue())+67 >= eventMove->x() && *d_manual) {
+          //d_plot->canvas()->setCursor(Qt::SizeHorCursor);
+        }
+        else {
+          d_plot->canvas()->setCursor(Qt::CrossCursor);
+        }
       }
     }
 
     void
-    inspector_plot::mouseReleaseEvent(QMouseEvent *eventRelease) {
+    inspector_form::mouseReleaseEvent(QMouseEvent *eventRelease) {
       if(d_clicked_marker != NONE && eventRelease->button() == Qt::LeftButton) {
         double xVal = d_plot->invTransform(QwtPlot::xBottom, eventRelease->x()-67);
         float cfreq = d_markers[0]->d_freq;
@@ -227,21 +237,21 @@ namespace gr {
     }
 
     void
-    inspector_plot::add_msg_queue(float cfreq, float bandwidth) {
+    inspector_form::add_msg_queue(float cfreq, float bandwidth) {
       gr::message::sptr msg = gr::message::make(0, cfreq, bandwidth, 1);
       d_msg_queue->flush();
       d_msg_queue->insert_tail(msg);
     }
 
     void
-    inspector_plot::msg_received() {
+    inspector_form::msg_received() {
       if(!*d_manual) {
         drawOverlay();
       }
     }
 
     void
-    inspector_plot::drawOverlay() {
+    inspector_form::drawOverlay() {
       gr::thread::scoped_lock guard(d_mutex);
 
       detach_markers();
@@ -260,7 +270,7 @@ namespace gr {
     }
 
     void
-    inspector_plot::refresh(){
+    inspector_form::refresh(){
       gr::thread::scoped_lock guard(d_mutex);
 
       if(d_buffer->size() < d_fft_len) {

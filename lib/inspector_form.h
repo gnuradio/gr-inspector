@@ -75,14 +75,14 @@ namespace gr {
       }
     };
 
-    class inspector_plot : public QWidget
+    class inspector_form : public QWidget
     {
     Q_OBJECT
 
     public:
-      inspector_plot(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
+      inspector_form(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
                      bool* manual, gr::msg_queue* msg_queue, QWidget *parent);
-      ~inspector_plot();
+      ~inspector_form();
 
     private:
 

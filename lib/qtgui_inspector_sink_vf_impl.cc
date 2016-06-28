@@ -90,7 +90,7 @@ namespace gr {
 #endif
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
-      d_main_gui = new inspector_plot(d_fft_len, &d_buffer, &d_rf_map, &d_manual, d_msg_queue, d_parent);
+      d_main_gui = new inspector_form(d_fft_len, &d_buffer, &d_rf_map, &d_manual, d_msg_queue, d_parent);
       d_main_gui->show();
       d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
