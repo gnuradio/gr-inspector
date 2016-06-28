@@ -30,13 +30,15 @@
 namespace gr {
   namespace inspector {
 
-    inspector_form::inspector_form(int fft_len, std::vector<double> *buffer,
+    inspector_form::inspector_form(int fft_len,
+                                   std::vector<double> *buffer,
                                    std::vector<std::vector<float> >* rf_map,
-                                   bool* manual, gr::msg_queue* msg_queue, QWidget *parent) : QWidget(parent)
+                                   bool* manual,
+                                   gr::msg_queue* msg_queue,
+                                   QWidget *parent) : QWidget(parent)
     {
       d_fft_len = fft_len;
       // Setup GUI
-      //resize(QSize(600,600));
       d_buffer = buffer;
       d_interval = 250;
       d_rf_map = rf_map;
@@ -49,6 +51,7 @@ namespace gr {
       // spawn all QT stuff
       d_layout = new QGridLayout(this);
       d_plot = new QwtPlot(this); // make main plot
+      d_plot->setMouseTracking(true);
       d_curve = new QwtPlotCurve(); // make curve plot
       d_curve->attach(d_plot); // attach curve to plot
       d_curve->setPen(Qt::cyan, 1); // curve color
@@ -89,7 +92,6 @@ namespace gr {
         d_markers.push_back(marker);
       }
 
-
       d_manual_cb = new QCheckBox("Manual", d_plot);
       d_manual_cb->setGeometry(QRect(10,10,85,20)),
       connect(d_manual_cb, SIGNAL(stateChanged(int)), this, SLOT(manual_cb_clicked(int)));
@@ -114,7 +116,8 @@ namespace gr {
     void
     inspector_form::spawn_signal_selector() {
       detach_markers();
-      d_markers[0]->set_marker(0, d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
+      d_markers[0]->set_marker(0, 1000000*(d_zoomer->zoomRect().x()+d_zoomer->zoomRect().width()/2)
+              , 1000000*d_zoomer->zoomRect().width()/2);
       add_msg_queue(d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
     }
 
@@ -168,21 +171,29 @@ namespace gr {
 
     void
     inspector_form::mousePressEvent(QMouseEvent *eventPress) {
-      if(*d_manual && eventPress->button() == Qt::LeftButton && eventPress->modifiers() != Qt::ControlModifier) {
-        std::cout << d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue())+60 << ", " <<
-          eventPress->x() << std::endl;
-        if(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue())+67 <= eventPress->x() &&
-                d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().maxValue())+67 >= eventPress->x()) {
-          d_zoomer->setEnabled(false);
-          d_clicked_marker = CENTER;
-        }
-        else if(std::abs(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue()) - eventPress->x() + 67) < 3) {
+      // check if mouse clicked in manual mode withoud CTRL key
+      if(*d_manual && eventPress->button() == Qt::LeftButton &&
+              eventPress->modifiers() != Qt::ControlModifier) {
+        // check left boundry
+        if(std::abs(freq_to_x(d_markers[0]->d_zone->interval().minValue())
+                    - eventPress->x()) < 3) {
           d_zoomer->setEnabled(false);
           d_clicked_marker = LEFT;
+          d_mouse_offset = 0;
         }
-        else if(std::abs(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().maxValue()) - eventPress->x() + 67) < 3) {
+        // check right boundry
+        else if(std::abs(freq_to_x(d_markers[0]->d_zone->interval().maxValue())
+                         - eventPress->x()) < 3) {
           d_zoomer->setEnabled(false);
           d_clicked_marker = RIGHT;
+          d_mouse_offset = 0;
+        }
+        // check center
+        else if(d_markers[0]->d_zone->boundingRect().contains(
+                x_to_freq(eventPress->x()), 0)) {
+          d_zoomer->setEnabled(false);
+          d_clicked_marker = CENTER;
+          d_mouse_offset = eventPress->x() - freq_to_x(d_markers[0]->d_freq/1000000);
         }
         else {
           d_clicked_marker = NONE;
@@ -192,10 +203,10 @@ namespace gr {
 
     void
     inspector_form::mouseMoveEvent(QMouseEvent *eventMove) {
+      // check if marker was selected with left button
       if (d_clicked_marker != NONE &&
           eventMove->buttons() == Qt::LeftButton) {
-        double xVal = d_plot->invTransform(QwtPlot::xBottom,
-                                           eventMove->x() - 67);
+        double xVal = x_to_freq(eventMove->x()-d_mouse_offset);
         float cfreq = d_markers[0]->d_freq;
         float bandwidth = d_markers[0]->d_bw;
         detach_markers();
@@ -207,20 +218,21 @@ namespace gr {
           d_markers[0]->set_marker(0, cfreq, 2 * std::abs(
                   cfreq - xVal * 1000000));
         }
-        if(d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().minValue())+67 <= eventMove->x() &&
-           d_plot->transform(QwtPlot::xBottom, d_markers[0]->d_zone->interval().maxValue())+67 >= eventMove->x() && *d_manual) {
-          //d_plot->canvas()->setCursor(Qt::SizeHorCursor);
-        }
-        else {
-          d_plot->canvas()->setCursor(Qt::CrossCursor);
-        }
+      }
+      // mouse over
+      if(d_markers[0]->d_zone->interval().minValue() <= x_to_freq(eventMove->x()) &&
+              d_markers[0]->d_zone->interval().maxValue() >= x_to_freq(eventMove->x())) {
+        d_plot->canvas()->setCursor(Qt::SizeHorCursor);
+      }
+      else {
+        d_plot->canvas()->setCursor(Qt::CrossCursor);
       }
     }
 
     void
     inspector_form::mouseReleaseEvent(QMouseEvent *eventRelease) {
       if(d_clicked_marker != NONE && eventRelease->button() == Qt::LeftButton) {
-        double xVal = d_plot->invTransform(QwtPlot::xBottom, eventRelease->x()-67);
+        double xVal = x_to_freq(eventRelease->x()-d_mouse_offset);
         float cfreq = d_markers[0]->d_freq;
         float bandwidth = d_markers[0]->d_bw;
         detach_markers();
@@ -231,9 +243,22 @@ namespace gr {
           d_markers[0]->set_marker(0, cfreq, 2*std::abs(cfreq-xVal*1000000));
         }
         d_clicked_marker = NONE;
+        d_mouse_offset = 0.0;
         d_zoomer->setEnabled(true);
-        add_msg_queue(cfreq, bandwidth);
+        add_msg_queue(cfreq-d_cfreq, bandwidth);
       }
+    }
+
+    float
+    inspector_form::freq_to_x(float freq) {
+      float offset = this->width()-d_plot->canvas()->width();
+      return d_plot->transform(QwtPlot::xBottom, freq)+offset;
+    }
+
+    float
+    inspector_form::x_to_freq(float x) {
+      float offset = this->width()-d_plot->canvas()->width();
+      return d_plot->invTransform(QwtPlot::xBottom, x-offset);
     }
 
     void

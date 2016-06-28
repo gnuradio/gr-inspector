@@ -23,9 +23,6 @@
 
 #include <gnuradio/thread/thread.h>
 
-#include <complex>
-
-#include <QApplication>
 #include <QTimer>
 #include <QWidget>
 #include <QtGui/QtGui>
@@ -35,12 +32,10 @@
 #include <qwt_symbol.h>
 #include <qwt_plot_layout.h>
 #include <qwt_plot_curve.h>
-#include <qwt_painter.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_zoomer.h>
-#include <qwt_plot_canvas.h>
 
-#include <signal_marker.h>
+#include "signal_marker.h"
 
 namespace gr {
   namespace inspector {
@@ -72,6 +67,7 @@ namespace gr {
                         Qt::RightButton);
         setMousePattern(QwtEventPattern::MouseSelect1,
                         Qt::LeftButton, Qt::ControlModifier);
+
       }
     };
 
@@ -96,7 +92,7 @@ namespace gr {
       bool *d_manual;
       std::vector<float> d_axis_x, d_axis_y;
       std::vector<double> *d_buffer;
-      float d_max, d_min, d_cfreq;
+      float d_max, d_min, d_cfreq, d_mouse_offset;
       double* d_freq;
       std::vector<std::vector<float> >* d_rf_map;
       markerType d_clicked_marker;
@@ -131,6 +127,8 @@ namespace gr {
       void manual_cb_clicked(int state);
       void spawn_signal_selector();
       void add_msg_queue(float cfreq, float bandwidth);
+      float freq_to_x(float freq);
+      float x_to_freq(float x);
 
       void drawOverlay();
 

@@ -42,8 +42,10 @@ namespace gr {
     /*
      * The private constructor
      */
-    qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
-                                                               float cfreq, QWidget *parent)
+    qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(double samp_rate,
+                                                               int fft_len,
+                                                               float cfreq,
+                                                               QWidget *parent)
             : gr::sync_block("qtgui_inspector_sink_vf",
                              gr::io_signature::make(1, 1, sizeof(float)*fft_len),
                              gr::io_signature::make(0, 0, 0))
@@ -90,7 +92,8 @@ namespace gr {
 #endif
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
-      d_main_gui = new inspector_form(d_fft_len, &d_buffer, &d_rf_map, &d_manual, d_msg_queue, d_parent);
+      d_main_gui = new inspector_form(d_fft_len, &d_buffer, &d_rf_map,
+                                      &d_manual, d_msg_queue, d_parent);
       d_main_gui->show();
       d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
