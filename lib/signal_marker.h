@@ -35,7 +35,7 @@ namespace gr {
 
       ~signal_marker();
 
-      void set_marker(int i, float center, float bw);
+      void set_marker(int i, float center, float bw, int unit);
 
       QwtPlotMarker* d_center;
       QwtPlotMarker* d_label;

@@ -33,10 +33,10 @@ namespace gr {
 
     qtgui_inspector_sink_vf::sptr
     qtgui_inspector_sink_vf::make(double samp_rate, int fft_len,
-                                  float cfreq, QWidget *parent)
+                                  float cfreq, int rf_unit, QWidget *parent)
     {
       return gnuradio::get_initial_sptr
-              (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, parent));
+              (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, rf_unit, parent));
     }
 
     /*
@@ -45,6 +45,7 @@ namespace gr {
     qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(double samp_rate,
                                                                int fft_len,
                                                                float cfreq,
+                                                               int rf_unit,
                                                                QWidget *parent)
             : gr::sync_block("qtgui_inspector_sink_vf",
                              gr::io_signature::make(1, 1, sizeof(float)*fft_len),
@@ -65,6 +66,7 @@ namespace gr {
       d_samp_rate = samp_rate;
       d_manual = false;
       d_cfreq = cfreq;
+      d_rf_unit = rf_unit;
       d_msg_queue = new gr::msg_queue(1);
       initialize();
     }
@@ -81,6 +83,12 @@ namespace gr {
     }
 
     void
+    qtgui_inspector_sink_vf_impl::set_rf_unit(int unit) {
+      d_rf_unit = unit;
+      d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
+    }
+
+    void
     qtgui_inspector_sink_vf_impl::initialize() {
       if(qApp != NULL) {
         d_qApplication = qApp;
@@ -93,7 +101,7 @@ namespace gr {
         d_qApplication = new QApplication(d_argc, &d_argv);
       }
       d_main_gui = new inspector_form(d_fft_len, &d_buffer, &d_rf_map,
-                                      &d_manual, d_msg_queue, d_parent);
+                                      &d_manual, d_msg_queue, &d_rf_unit, d_parent);
       d_main_gui->show();
       d_main_gui->set_cfreq(d_cfreq);
       d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);

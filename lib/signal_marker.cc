@@ -42,7 +42,7 @@ namespace gr {
     }
 
     void
-    signal_marker::set_marker(int i, float center, float bw) {
+    signal_marker::set_marker(int i, float center, float bw, int unit) {
       d_number = i;
       d_freq = center;
       d_bw = bw;
@@ -50,20 +50,37 @@ namespace gr {
       QColor c = Qt::white;
       c.setAlpha(70);
       d_center->setLinePen(c);
-      d_center->setXValue(center/1000000);
+      d_center->setXValue(center/unit);
 
       QwtText text;
       QString qstring;
+      QString unittxt = "Hz";
+      switch(unit) {
+        case 1:
+          unittxt = "Hz";
+          break;
+        case 1000:
+          unittxt = "kHz";
+          break;
+        case 1000000:
+          unittxt = "MHz";
+          break;
+        case 1000000000:
+          unittxt = "GHz";
+          break;
+        default:
+          unittxt = "Hz";
+      }
       qstring.push_back("Signal "+QString::number(i+1));
       qstring.append("\n");
-      qstring.append("f = "+QString::number(center/1000000)+" M");
+      qstring.append("f = "+QString::number(center/unit)+" "+unittxt);
       qstring.append("\n");
-      qstring.append("B = "+QString::number(bw/1000)+" k");
+      qstring.append("B = "+QString::number(bw/unit)+" "+unittxt);
       text.setText(qstring);
       text.setColor(Qt::red);
       d_label->setLabelAlignment(Qt::AlignLeft);
       d_label->setLabel(text);
-      d_label->setXValue((center-bw/2-300)/1000000);
+      d_label->setXValue((center-bw/2-300)/unit);
       d_label->setYValue(13);
 
       d_zone->setOrientation(Qt::Vertical);
@@ -72,7 +89,7 @@ namespace gr {
       d_zone->setPen(c);
       c.setAlpha(20);
       d_zone->setBrush(c);
-      d_zone->setInterval((center-bw/2)/1000000, (center+bw/2)/1000000);
+      d_zone->setInterval((center-bw/2)/unit, (center+bw/2)/unit);
       d_zone->setXAxis(QwtPlot::xBottom);
 
       d_label->attach(d_plot);

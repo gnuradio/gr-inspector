@@ -43,6 +43,7 @@ namespace gr {
     class Zoomer: public QwtPlotZoomer
     {
     public:
+
       Zoomer(int xAxis, int yAxis, QWidget *canvas):
               QwtPlotZoomer(xAxis, yAxis, canvas)
       {
@@ -77,7 +78,7 @@ namespace gr {
 
     public:
       inspector_form(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
-                     bool* manual, gr::msg_queue* msg_queue, QWidget *parent);
+                     bool* manual, gr::msg_queue* msg_queue, int *rf_unit, QWidget *parent);
       ~inspector_form();
 
     private:
@@ -88,7 +89,11 @@ namespace gr {
         CENTER,
         RIGHT
       };
+
+
+
       int d_interval, d_fft_len, d_marker_count;
+      int *d_rf_unit;
       bool *d_manual;
       std::vector<float> d_axis_x, d_axis_y;
       std::vector<double> *d_buffer;

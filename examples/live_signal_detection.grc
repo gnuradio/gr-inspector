@@ -191,7 +191,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(808, 200)</value>
+      <value>(888, 200)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -230,7 +230,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(568, 180)</value>
+      <value>(608, 176)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -251,6 +251,10 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>rf_unit</key>
+      <value>1000000</value>
     </param>
     <param>
       <key>samp_rate</key>

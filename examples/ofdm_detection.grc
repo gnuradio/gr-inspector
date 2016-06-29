@@ -1762,6 +1762,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>rf_unit</key>
+      <value>1000</value>
+    </param>
+    <param>
       <key>samp_rate</key>
       <value>samp_rate</value>
     </param>

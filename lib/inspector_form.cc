@@ -35,6 +35,7 @@ namespace gr {
                                    std::vector<std::vector<float> >* rf_map,
                                    bool* manual,
                                    gr::msg_queue* msg_queue,
+                                   int* rf_unit,
                                    QWidget *parent) : QWidget(parent)
     {
       d_fft_len = fft_len;
@@ -45,6 +46,7 @@ namespace gr {
       d_manual = manual;
       d_marker_count = 30;
       d_msg_queue = msg_queue;
+      d_rf_unit = rf_unit;
 
       setMouseTracking(true);
 
@@ -68,7 +70,7 @@ namespace gr {
       // Plot axis and title
       std::string label_title = "Inspector GUI";
       d_plot->setTitle(QwtText(label_title.c_str()));
-      d_plot->setAxisTitle(QwtPlot::xBottom, "Frequency [MHz]");
+
       d_plot->setAxisTitle(QwtPlot::yLeft, "dB");
       d_plot->setAxisScale(QwtPlot::yLeft, -120, 30);
       d_plot->setCanvasBackground(QColor(30,30,30));
@@ -116,8 +118,8 @@ namespace gr {
     void
     inspector_form::spawn_signal_selector() {
       detach_markers();
-      d_markers[0]->set_marker(0, 1000000*(d_zoomer->zoomRect().x()+d_zoomer->zoomRect().width()/2)
-              , 1000000*d_zoomer->zoomRect().width()/2);
+      d_markers[0]->set_marker(0, *d_rf_unit*(d_zoomer->zoomRect().x()+d_zoomer->zoomRect().width()/2)
+              , *d_rf_unit*d_zoomer->zoomRect().width()/2, *d_rf_unit);
       add_msg_queue(d_markers[0]->d_freq-d_cfreq, d_markers[0]->d_bw);
     }
 
@@ -147,9 +149,9 @@ namespace gr {
     void
     inspector_form::set_axis_x(float start, float stop) {
       d_axis_x.clear();
-      d_axis_x.push_back((d_cfreq + start)/1000000);
-      d_axis_x.push_back((stop-start)/d_fft_len/1000000);
-      d_axis_x.push_back((d_cfreq + stop)/1000000);
+      d_axis_x.push_back((d_cfreq + start)/ *d_rf_unit);
+      d_axis_x.push_back((stop-start)/d_fft_len/ *d_rf_unit);
+      d_axis_x.push_back((d_cfreq + stop)/ *d_rf_unit);
 
       d_plot->setAxisScale(QwtPlot::xBottom, d_axis_x[0], d_axis_x[2]);
 
@@ -162,6 +164,26 @@ namespace gr {
       d_zoomer->setZoomBase(zbase);
       d_zoomer->setZoomBase(true);
       d_zoomer->zoom(0);
+
+      QString unit = "Hz";
+      switch(*d_rf_unit) {
+        case 1:
+          unit = "Hz";
+          break;
+        case 1000:
+          unit = "kHz";
+          break;
+        case 1000000:
+          unit = "MHz";
+          break;
+        case 1000000000:
+          unit = "GHz";
+          break;
+        default:
+          unit = "Hz";
+      }
+
+      d_plot->setAxisTitle(QwtPlot::xBottom, "Frequency ["+unit+"]");
     }
 
     void
@@ -193,7 +215,7 @@ namespace gr {
                 x_to_freq(eventPress->x()), 0)) {
           d_zoomer->setEnabled(false);
           d_clicked_marker = CENTER;
-          d_mouse_offset = eventPress->x() - freq_to_x(d_markers[0]->d_freq/1000000);
+          d_mouse_offset = eventPress->x() - freq_to_x(d_markers[0]->d_freq/ *d_rf_unit);
         }
         else {
           d_clicked_marker = NONE;
@@ -211,12 +233,12 @@ namespace gr {
         float bandwidth = d_markers[0]->d_bw;
         detach_markers();
         if (d_clicked_marker == CENTER) {
-          d_markers[0]->set_marker(0, xVal * 1000000, bandwidth);
+          d_markers[0]->set_marker(0, xVal * *d_rf_unit, bandwidth, *d_rf_unit);
         }
         else if (d_clicked_marker == LEFT or
                  d_clicked_marker == RIGHT) {
           d_markers[0]->set_marker(0, cfreq, 2 * std::abs(
-                  cfreq - xVal * 1000000));
+                  cfreq - xVal * *d_rf_unit), *d_rf_unit);
         }
       }
       // mouse over
@@ -237,10 +259,10 @@ namespace gr {
         float bandwidth = d_markers[0]->d_bw;
         detach_markers();
         if(d_clicked_marker == CENTER) {
-          d_markers[0]->set_marker(0, xVal*1000000, bandwidth);
+          d_markers[0]->set_marker(0, xVal**d_rf_unit, bandwidth, *d_rf_unit);
         }
         else if (d_clicked_marker == LEFT or d_clicked_marker == RIGHT) {
-          d_markers[0]->set_marker(0, cfreq, 2*std::abs(cfreq-xVal*1000000));
+          d_markers[0]->set_marker(0, cfreq, 2*std::abs(cfreq-xVal* *d_rf_unit), *d_rf_unit);
         }
         d_clicked_marker = NONE;
         d_mouse_offset = 0.0;
@@ -283,13 +305,13 @@ namespace gr {
       if(d_rf_map->size() <= d_marker_count) {
         for (int i = 0; i < d_rf_map->size(); i++) {
           d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0],
-                                   d_rf_map->at(i)[1]);
+                                   d_rf_map->at(i)[1], *d_rf_unit);
         }
       }
       else {
         for (int i = 0; i < d_marker_count; i++) {
           d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0],
-                                   d_rf_map->at(i)[1]);
+                                   d_rf_map->at(i)[1], *d_rf_unit);
         }
       }
     }

@@ -67,7 +67,7 @@ namespace gr {
        * \param fft_len Vector input size and number of PSD sample points
        * \param cfreq Center frequency of source. Set to 0 if only relative frequencies are desired downstream.
        */
-      static sptr make(double samp_rate, int fft_len, float cfreq = 0, QWidget *parent = NULL);
+      static sptr make(double samp_rate, int fft_len, float cfreq = 0, int rf_unit = 1000000, QWidget *parent = NULL);
 
 #ifdef ENABLE_PYTHON
       virtual PyObject* pyqwidget() = 0;
