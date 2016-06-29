@@ -118,7 +118,7 @@ namespace gr {
       detach_markers();
       d_markers[0]->set_marker(0, 1000000*(d_zoomer->zoomRect().x()+d_zoomer->zoomRect().width()/2)
               , 1000000*d_zoomer->zoomRect().width()/2);
-      add_msg_queue(d_cfreq, d_axis_x[1]/4*d_fft_len*1000000);
+      add_msg_queue(d_markers[0]->d_freq-d_cfreq, d_markers[0]->d_bw);
     }
 
     void

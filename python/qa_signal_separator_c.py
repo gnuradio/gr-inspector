@@ -36,10 +36,22 @@ class qa_signal_separator_c (gr_unittest.TestCase):
     def tearDown (self):
         self.tb = None
 
-    def test_001_t (self):
+    def notest_debug(self):
         src = blocks.vector_source_c(range(100), False, 1, [])
         separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100)
-        vec_sink = blocks.vector_sink_c(100)
+        msg = pmt.make_vector(1, pmt.PMT_NIL)
+        flanks = pmt.make_f32vector(2, 0.0)
+        pmt.f32vector_set(flanks, 0, 12500)
+        pmt.f32vector_set(flanks, 1, 20)
+        pmt.vector_set(msg, 0, flanks)
+        msg_src = blocks.message_strobe(msg, 100)
+
+    def test_001_t (self):
+        src = blocks.vector_source_c(range(10000), False, 1, [])
+        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100)
+        vec_sink = blocks.vector_sink_c(1)
+        ext = inspector.signal_extractor_c(0)
+        snk = blocks.vector_sink_c(1)
         # pack message
         msg = pmt.make_vector(1, pmt.PMT_NIL)
         flanks = pmt.make_f32vector(2, 0.0)
@@ -52,16 +64,34 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         taps = filter.firdes.low_pass(1, 32000, 500, 50, firdes.WIN_HAMMING, 6.76)
 
         self.tb.connect(src, separator)
+        self.tb.connect(src, vec_sink)
         self.tb.msg_connect((msg_src, 'strobe'), (separator, 'map_in'))
+        self.tb.msg_connect((separator, 'msg_out'), (ext, 'sig_in'))
+        self.tb.connect(ext, snk)
 
         self.tb.start()
-        time.sleep(0.1)
+        time.sleep(0.3)
         self.tb.stop()
         self.tb.wait()
 
-        taps = filter.firdes.low_pass(1, 32000, 500, 50, firdes.WIN_HAMMING, 6.76)
-        sig = numpy.convolve(vec_sink.data(), taps, 'same')
+        data = vec_sink.data()
 
+        sig = numpy.zeros(len(vec_sink.data()), dtype=complex)
+        for i in range(len(vec_sink.data())):
+            sig[i] = data[i]*numpy.exp(-1j*2*numpy.pi*12500*i*1/32000)
+
+        taps = filter.firdes.low_pass(1, 32000, 500, 50, firdes.WIN_HAMMING, 6.76)
+        sig = numpy.convolve(sig, taps, 'full')
+        out = numpy.empty([0])
+        decim = 32000/20/100
+        j = 0
+        for i in range(len(sig)/decim):
+            out = numpy.append(out, sig[j])
+            j += decim
+
+        data = snk.data()
+        for i in range(min(len(out), len(data))):
+            self.assertComplexAlmostEqual2(out[i], data[i], abs_eps=0.01)
 
 if __name__ == '__main__':
     gr_unittest.run(qa_signal_separator_c, "qa_signal_separator_c.xml")

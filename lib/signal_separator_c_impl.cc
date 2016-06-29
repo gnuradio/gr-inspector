@@ -239,7 +239,8 @@ namespace gr {
       }
       // message received, so let's allocate all the needed memory
       else if(d_buffer_stage == 1) {
-        d_buffer_len = ninput_items[0];
+        //d_buffer_len = ninput_items[0];
+        d_buffer_len = 6400;
         for(int i = 0; i < d_history_buffer.size(); i++) {
           //std::cout << "Trying to allocate " << d_ntaps-1 << "+" << d_buffer_len <<" = "<< d_ntaps+d_buffer_len-1 << std::endl;
           d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps+d_buffer_len-1)*sizeof(gr_complex),
