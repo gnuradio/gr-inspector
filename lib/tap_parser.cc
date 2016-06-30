@@ -27,6 +27,7 @@ namespace gr {
 
     tap_parser::tap_parser(std::string filepath) {
       d_filepath = filepath;
+      json = new jsonxx::Object();
 
       try {
         std::ifstream file(filepath);
@@ -36,12 +37,14 @@ namespace gr {
         std::cout << "Taps JSON file not found!" << std::endl;
         return;
       }
-      std::string err;
-      json = json11::Json::parse(filebuffer.str(), err);
-      std::cout << json["0.01"].dump() << std::endl;
+      //std::cout << filebuffer.str() << std::endl;
+      assert(json->parse(filebuffer.str()));
+      assert(json->has<jsonxx::Array>("0.01"));
     }
 
-    tap_parser::~tap_parser() { }
+    tap_parser::~tap_parser() {
+      delete json;
+    }
 
   }
 }

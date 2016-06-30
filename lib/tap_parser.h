@@ -21,7 +21,7 @@
 #ifndef GR_INSPECTOR_TAPS_H_H
 #define GR_INSPECTOR_TAPS_H_H
 
-#include "json11.h"
+#include "jsonxx.h"
 #include <sstream>
 
 namespace gr {
@@ -31,7 +31,7 @@ namespace gr {
 
       std::string d_filepath;
       std::stringstream filebuffer;
-      json11::Json json;
+      jsonxx::Object *json;
 
       tap_parser(std::string filepath);
 

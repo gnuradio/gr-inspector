@@ -24,7 +24,6 @@
 
 #include <gnuradio/io_signature.h>
 #include "signal_separator_c_impl.h"
-#include "json11.h"
 
 namespace gr {
   namespace inspector {
@@ -100,11 +99,9 @@ namespace gr {
       if(d_buffer_stage == 0) {
         d_ntaps = taps.size();
       }
-      taps.clear();
-      for(auto &k : d_parser->json["0.01"].array_items()) {
-        taps.push_back(k.number_value());
-      }
-      std::cout << "Read " << taps.size() << " taps" << std::endl;
+
+      std::cout << d_parser->json->get<jsonxx::Array>("0.01").json() << std::endl;
+
       return taps;
     }
 

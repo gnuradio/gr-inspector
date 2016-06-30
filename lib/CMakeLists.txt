@@ -39,7 +39,7 @@ list(APPEND inspector_sources
     qtgui_inspector_sink_vf_impl.cc
 		inspector_form.cc
 		signal_marker.cc
-		json11.cc
+		jsonxx.cc
     tap_parser.cc)
 
 include(GrPython)
