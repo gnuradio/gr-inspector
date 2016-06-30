@@ -38,7 +38,9 @@ list(APPEND inspector_sources
     signal_extractor_c_impl.cc
     qtgui_inspector_sink_vf_impl.cc
 		inspector_form.cc
-		signal_marker.cc)
+		signal_marker.cc
+		json11.cc
+    tap_parser.cc)
 
 include(GrPython)
 if(ENABLE_PYTHON)
@@ -53,6 +55,7 @@ if(NOT inspector_sources)
 	MESSAGE(STATUS "No C++ sources... skipping lib/")
 	return()
 endif(NOT inspector_sources)
+
 
 add_library(gnuradio-inspector SHARED ${inspector_sources})
 target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${PYTHON_LIBRARIES} ${QT_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})

@@ -24,6 +24,7 @@ cmake_minimum_required(VERSION 2.6)
 project(gr-inspector CXX C)
 enable_testing()
 
+
 #install to PyBOMBS target prefix if defined
 if(DEFINED ENV{PYBOMBS_PREFIX})
     set(CMAKE_INSTALL_PREFIX $ENV{PYBOMBS_PREFIX})
@@ -56,6 +57,8 @@ endif()
 if(POLICY CMP0046)
     cmake_policy(SET CMP0046 OLD)
 endif()
+
+set(CMAKE_CXX_STANDARD 11)
 
 ########################################################################
 # Compiler specific setup

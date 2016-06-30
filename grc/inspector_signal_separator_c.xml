@@ -4,7 +4,7 @@
   <category>Inspector</category>
   <import>import inspector</import>
   <import>from gnuradio.filter import firdes</import>
-  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample)</make>
+  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $taps_file)</make>
   <callback>set_samp_rate($samp_rate)</callback>
   <callback>set_window($window)</callback>
   <callback>set_trans_width($trans_width)</callback>
@@ -57,6 +57,12 @@
     <name>Oversampling</name>
     <key>oversample</key>
     <type>int</type>
+  </param>
+  <param>
+    <name>Taps file</name>
+    <key>taps_file</key>
+    <value></value>
+    <type>string</type>
   </param>
   <sink>
     <name>in</name>

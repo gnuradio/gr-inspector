@@ -53,7 +53,8 @@ namespace gr {
        * \param trans_width Transition width for each signal relative to center frequency (w = trans_width*center_freq)
        * \param oversampling Oversampling factor (OSF) to ensure the whole signal gets passed
        */
-      static sptr make(double samp_rate, int window, float trans_width, int oversampling);
+      static sptr make(double samp_rate, int window, float trans_width,
+                       int oversampling, std::string file_path);
 
       virtual void set_samp_rate(double d_samp_rate) = 0;
 

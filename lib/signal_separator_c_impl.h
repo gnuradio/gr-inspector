@@ -26,6 +26,7 @@
 #include <gnuradio/filter/fir_filter.h>
 #include <gnuradio/blocks/rotator.h>
 #include <gnuradio/fft/window.h>
+#include "tap_parser.h"
 
 namespace gr {
   namespace inspector {
@@ -48,10 +49,12 @@ namespace gr {
       std::vector<gr_complex*> d_history_buffer;
       std::vector<std::vector<gr_complex> > d_result_vector;
       int d_oversampling;
+      tap_parser *d_parser;
 
 
     public:
-      signal_separator_c_impl(double samp_rate, int window, float trans_width, int oversampling);
+      signal_separator_c_impl(double samp_rate, int window, float trans_width,
+                              int oversampling, std::string file_path);
 
       ~signal_separator_c_impl();
 

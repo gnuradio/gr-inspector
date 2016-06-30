@@ -24,14 +24,17 @@
 
 #include <gnuradio/io_signature.h>
 #include "signal_separator_c_impl.h"
+#include "json11.h"
 
 namespace gr {
   namespace inspector {
 
     signal_separator_c::sptr
-    signal_separator_c::make(double samp_rate, int window, float trans_width, int oversampling) {
+    signal_separator_c::make(double samp_rate, int window, float trans_width,
+                             int oversampling, std::string file_path) {
       return gnuradio::get_initial_sptr
-              (new signal_separator_c_impl(samp_rate, window, trans_width, oversampling));
+              (new signal_separator_c_impl(samp_rate, window, trans_width,
+                                           oversampling, file_path));
     }
 
     //<editor-fold desc="Initalization">
@@ -40,7 +43,8 @@ namespace gr {
      * The private constructor
      */
     signal_separator_c_impl::signal_separator_c_impl(
-            double samp_rate, int window, float trans_width, int oversampling)
+            double samp_rate, int window, float trans_width, int oversampling,
+            std::string file_path)
             : gr::block("signal_separator_c",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
@@ -52,6 +56,7 @@ namespace gr {
       d_trans_width = trans_width;
       d_oversampling = oversampling;
       d_buffer_stage = 0;
+      d_parser = new tap_parser(file_path);
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));
@@ -73,6 +78,7 @@ namespace gr {
 
     void
     signal_separator_c_impl::free_allocation() {
+      delete d_parser;
       // delete all filters
       for(std::vector<filter::kernel::fir_filter_ccf*>::iterator it = d_filterbank.begin();
           it != d_filterbank.end(); ++it) {
@@ -94,6 +100,11 @@ namespace gr {
       if(d_buffer_stage == 0) {
         d_ntaps = taps.size();
       }
+      taps.clear();
+      for(auto &k : d_parser->json["0.01"].array_items()) {
+        taps.push_back(k.number_value());
+      }
+      std::cout << "Read " << taps.size() << " taps" << std::endl;
       return taps;
     }
 
