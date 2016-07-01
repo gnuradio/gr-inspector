@@ -7,6 +7,12 @@
 //load generated python docstrings
 %include "inspector_swig_doc.i"
 
+%include "std_map.i"
+
+namespace std {
+  %template(map_float_vector) map<float, vector<float> >;
+};
+
 %{
 #include "inspector/signal_separator_c.h"
 #include "inspector/signal_detector_cvf.h"
@@ -21,3 +27,4 @@ GR_SWIG_BLOCK_MAGIC2(inspector, signal_detector_cvf);
 GR_SWIG_BLOCK_MAGIC2(inspector, signal_extractor_c);
 %include "inspector/qtgui_inspector_sink_vf.h"
 GR_SWIG_BLOCK_MAGIC2(inspector, qtgui_inspector_sink_vf);
+

@@ -930,7 +930,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>window</key>

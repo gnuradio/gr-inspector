@@ -55,7 +55,7 @@ namespace gr {
 
     public:
       signal_separator_c_impl(double samp_rate, int window, float trans_width,
-                              int oversampling, bool taps_file, std::map<char, std::vector<float> > file_path);
+                              int oversampling, bool taps_file, std::map<float, std::vector<float> > &file_path);
 
       ~signal_separator_c_impl();
 

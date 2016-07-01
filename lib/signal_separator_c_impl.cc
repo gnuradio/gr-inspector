@@ -30,7 +30,7 @@ namespace gr {
 
     signal_separator_c::sptr
     signal_separator_c::make(double samp_rate, int window, float trans_width,
-                             int oversampling, bool taps_file, std::map<char, std::vector<float> > file_path) {
+                             int oversampling, bool taps_file, std::map<float, std::vector<float> > &file_path) {
       return gnuradio::get_initial_sptr
               (new signal_separator_c_impl(samp_rate, window, trans_width,
                                            oversampling, taps_file, file_path));
@@ -43,7 +43,7 @@ namespace gr {
      */
     signal_separator_c_impl::signal_separator_c_impl(
             double samp_rate, int window, float trans_width, int oversampling,
-            bool taps_file, std::map<char, std::vector<float> > file_path)
+            bool taps_file, std::map<float, std::vector<float> > &file_path)
             : gr::block("signal_separator_c",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),

@@ -5,7 +5,7 @@
   <import>import inspector</import>
   <import>from gnuradio.filter import firdes</import>
   <import>import json</import>
-  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $file, json.load(open($taps_file))) if $file else inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $file, "")
+  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $file, inspector.map_float_vector({float(k):v for k,v in json.load(open($taps_file)).items()})) if $file else inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $file, inspector.map_float_vector({0.0:[0.0]}))
   </make>
   <callback>set_samp_rate($samp_rate)</callback>
   <callback>set_window($window)</callback>
