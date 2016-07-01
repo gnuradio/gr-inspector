@@ -133,7 +133,8 @@ namespace gr {
       // save decimation for later
       d_decimations[signal] = decim;
 
-      d_taps = build_taps(bandwidth / 4);
+      // let stopband begin at nyquist border
+      d_taps = build_taps((1-d_trans_width)*bandwidth/2);
       // copied from xlating fir filter
       //std::vector<gr_complex> ctaps(d_taps.size());
       float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
