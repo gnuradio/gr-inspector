@@ -32,7 +32,9 @@ except ImportError:
 
 # import any pure python here
 from scf import scf
-
+from TensorFlow import TensorFlow
+from AMC import AMC
+from AMC_f import AMC_f
 
 
 #
