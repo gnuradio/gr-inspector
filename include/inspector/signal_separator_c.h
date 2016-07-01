@@ -54,7 +54,7 @@ namespace gr {
        * \param oversampling Oversampling factor (OSF) to ensure the whole signal gets passed
        */
       static sptr make(double samp_rate, int window, float trans_width,
-                       int oversampling, std::string file_path);
+                       int oversampling, bool taps_file, std::map<char, std::vector<float> > file_path);
 
       virtual void set_samp_rate(double d_samp_rate) = 0;
 

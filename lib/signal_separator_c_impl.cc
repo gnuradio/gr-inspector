@@ -30,10 +30,10 @@ namespace gr {
 
     signal_separator_c::sptr
     signal_separator_c::make(double samp_rate, int window, float trans_width,
-                             int oversampling, std::string file_path) {
+                             int oversampling, bool taps_file, std::map<char, std::vector<float> > file_path) {
       return gnuradio::get_initial_sptr
               (new signal_separator_c_impl(samp_rate, window, trans_width,
-                                           oversampling, file_path));
+                                           oversampling, taps_file, file_path));
     }
 
     //<editor-fold desc="Initalization">
@@ -43,7 +43,7 @@ namespace gr {
      */
     signal_separator_c_impl::signal_separator_c_impl(
             double samp_rate, int window, float trans_width, int oversampling,
-            std::string file_path)
+            bool taps_file, std::map<char, std::vector<float> > file_path)
             : gr::block("signal_separator_c",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
@@ -55,6 +55,7 @@ namespace gr {
       d_trans_width = trans_width;
       d_oversampling = oversampling;
       d_buffer_stage = 0;
+      d_use_file = taps_file;
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));
@@ -94,18 +95,23 @@ namespace gr {
     std::vector<float>
     signal_separator_c_impl::build_taps(double cutoff) {
       std::vector<float> taps;
-      if(0 < cutoff && cutoff <= d_samp_rate/2) {
-        taps = filter::firdes::low_pass(1, d_samp_rate, cutoff,
-                                        d_trans_width * cutoff,
-                                        d_window, 6.76);
+      if(!d_use_file) {
+        if (0 < cutoff && cutoff <= d_samp_rate / 2) {
+          taps = filter::firdes::low_pass(1, d_samp_rate, cutoff,
+                                          d_trans_width * cutoff,
+                                          d_window, 6.76);
+        }
+        else {
+          taps = std::vector<float>(d_ntaps, 0.0);
+          GR_LOG_WARN(d_logger,
+                      "Firdes check failed: 0 < cutoff <= samp_rate/2");
+        }
+        if (d_buffer_stage == 0) {
+          d_ntaps = taps.size();
+        }
       }
-      else {
-        taps = std::vector<float>(d_ntaps, 0.0);
-        GR_LOG_WARN(d_logger, "Firdes check failed: 0 < cutoff <= samp_rate/2");
-      }
-      if(d_buffer_stage == 0) {
-        d_ntaps = taps.size();
-      }
+
+      //TODO: read taps from file here
 
       return taps;
     }

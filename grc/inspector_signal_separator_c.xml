@@ -4,7 +4,9 @@
   <category>Inspector</category>
   <import>import inspector</import>
   <import>from gnuradio.filter import firdes</import>
-  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $taps_file)</make>
+  <import>import json</import>
+  <make>inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $file, json.load(open($taps_file))) if $file else inspector.signal_separator_c($samp_rate, $window, $trans_width, $oversample, $file, "")
+  </make>
   <callback>set_samp_rate($samp_rate)</callback>
   <callback>set_window($window)</callback>
   <callback>set_trans_width($trans_width)</callback>
@@ -59,10 +61,25 @@
     <type>int</type>
   </param>
   <param>
+    <name>Use Taps file</name>
+    <key>file</key>
+    <value>True</value>
+    <type>bool</type>
+    <option>
+      <name>On</name>
+      <key>True</key>
+    </option>
+    <option>
+      <name>Off</name>
+      <key>False</key>
+    </option>
+  </param>
+  <param>
     <name>Taps file</name>
     <key>taps_file</key>
     <value></value>
     <type>string</type>
+    <hide>#if str($file) == 'True' then 'none' else 'all'#</hide>
   </param>
   <sink>
     <name>in</name>

@@ -50,11 +50,12 @@ namespace gr {
       std::vector<std::vector<gr_complex> > d_result_vector;
       int d_oversampling;
       gr::thread::mutex d_mutex;
+      bool d_use_file;
 
 
     public:
       signal_separator_c_impl(double samp_rate, int window, float trans_width,
-                              int oversampling, std::string file_path);
+                              int oversampling, bool taps_file, std::map<char, std::vector<float> > file_path);
 
       ~signal_separator_c_impl();
 
