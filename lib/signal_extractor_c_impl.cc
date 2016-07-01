@@ -78,7 +78,6 @@ namespace gr {
         }
         d_msg_buffer = &d_samples[0];
         d_ready = true;
-        //std::cout << "Buffered samples... " << d_length << std::endl;
       }
     }
 
@@ -88,32 +87,21 @@ namespace gr {
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
-      //const <+ITYPE+> *in = (const <+ITYPE+> *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
-      //std::cout << d_ready << "\n";
+
       // Do <+signal processing+>
-      if(d_ready) {
-        //std::cout << "Work work work work work" << std::endl;
-        d_ready = false;
-        if(noutput_items >= d_length) {
-          memcpy(out, d_msg_buffer, d_length*sizeof(gr_complex));
-          //std::cout << d_length << std::endl;
-          for(int i = 0; i < d_length; i++) {
-            d_samples.erase(d_samples.begin()+i);
-          }
+      if(d_samples.size() > 0) {
+        if(noutput_items >= d_samples.size()) {
+          memcpy(out, d_msg_buffer, d_samples.size()*sizeof(gr_complex));
+          d_samples.clear();
           d_msg_buffer = &d_samples[0];
           return d_length;
-
         }
         else {
           memcpy(out, d_msg_buffer, noutput_items*sizeof(gr_complex));
-          //std::cout << noutput_items << std::endl;
-          for(int i = 0; i < noutput_items; i++) {
-            d_samples.erase(d_samples.begin()+i);
-          }
+          d_samples.clear();
           d_msg_buffer = &d_samples[0];
           return noutput_items;
-
         }
       }
       else {

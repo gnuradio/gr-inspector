@@ -914,7 +914,7 @@
     </param>
     <param>
       <key>oversample</key>
-      <value>10</value>
+      <value>5</value>
     </param>
     <param>
       <key>samp_rate</key>
@@ -949,7 +949,7 @@
     </param>
     <param>
       <key>bw</key>
-      <value>samp_rate/320</value>
+      <value>160</value>
     </param>
     <param>
       <key>alias</key>
