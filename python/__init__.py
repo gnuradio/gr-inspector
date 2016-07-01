@@ -33,4 +33,6 @@ except ImportError:
 # import any pure python here
 from sync_prototype_cc import sync_prototype_cc
 from scf import scf
-#
+from TensorFlow import TensorFlow
+from AMC import AMC
+from AMC_f import AMC_f

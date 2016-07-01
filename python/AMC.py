@@ -22,15 +22,15 @@
 import numpy
 from gnuradio import gr
 
-class scf(gr.sync_block):
+class AMC(gr.sync_block):
     """
-    docstring for block scf
+    docstring for block AMC
     """
     def __init__(self):
         gr.sync_block.__init__(self,
-            name="scf",
-            in_sig=[<+numpy.float+>],
-            out_sig=[<+numpy.float+>])
+            name="AMC",
+            in_sig=[(numpy.float32,vlen)],
+            out_sig=[(numpy.float32,vlen)])
 
 
     def work(self, input_items, output_items):
