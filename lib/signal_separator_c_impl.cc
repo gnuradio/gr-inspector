@@ -55,7 +55,6 @@ namespace gr {
       d_trans_width = trans_width;
       d_oversampling = oversampling;
       d_buffer_stage = 0;
-      d_parser = new tap_parser(file_path);
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));
@@ -77,16 +76,16 @@ namespace gr {
 
     void
     signal_separator_c_impl::free_allocation() {
-      delete d_parser;
+      gr::thread::scoped_lock guard(d_mutex);
       // delete all filters
       for(std::vector<filter::kernel::fir_filter_ccf*>::iterator it = d_filterbank.begin();
           it != d_filterbank.end(); ++it) {
         delete(*it);
       }
       //volk_free(d_temp_buffer);
-      for(std::vector<gr_complex*>::iterator it = d_history_buffer.begin();
-              it != d_history_buffer.end(); ++it) {
-        volk_free(*it);
+      while(!d_history_buffer.empty()) {
+        volk_free(d_history_buffer.back());
+        d_history_buffer.pop_back();
       }
 
     }
@@ -94,13 +93,19 @@ namespace gr {
     // use firdes to generate lowpass taps
     std::vector<float>
     signal_separator_c_impl::build_taps(double cutoff) {
-      std::vector<float> taps = filter::firdes::low_pass(1, d_samp_rate, cutoff,
-                                      d_trans_width*cutoff, d_window, 6.76);
+      std::vector<float> taps;
+      if(0 < cutoff && cutoff <= d_samp_rate/2) {
+        taps = filter::firdes::low_pass(1, d_samp_rate, cutoff,
+                                        d_trans_width * cutoff,
+                                        d_window, 6.76);
+      }
+      else {
+        taps = std::vector<float>(d_ntaps, 0.0);
+        GR_LOG_WARN(d_logger, "Firdes check failed: 0 < cutoff <= samp_rate/2");
+      }
       if(d_buffer_stage == 0) {
         d_ntaps = taps.size();
       }
-
-      std::cout << d_parser->json->get<jsonxx::Array>("0.01").json() << std::endl;
 
       return taps;
     }
@@ -108,6 +113,7 @@ namespace gr {
     // build filter and pass pointer and other calculations in vectors
     void
     signal_separator_c_impl::build_filter(unsigned int signal) {
+      gr::thread::scoped_lock guard(d_mutex);
       // calculate signal parameters
       double freq_center = d_rf_map.at(signal).at(0);
       double bandwidth = d_rf_map.at(signal).at(1);
@@ -118,7 +124,11 @@ namespace gr {
 
       // do oversampling
       bandwidth *= d_oversampling;
+      if (bandwidth > d_samp_rate) {
+        bandwidth = d_samp_rate;
+      }
       int decim = static_cast<int>(d_samp_rate / bandwidth);
+      //std::cout << "Decim = " << decim << std::endl;
 
       // save decimation for later
       d_decimations[signal] = decim;
@@ -161,6 +171,7 @@ namespace gr {
       d_filterbank.clear();
       d_decimations.clear();
       d_rotators.clear();
+      //d_history_buffer.clear();
       d_decimations.resize(d_rf_map.size());
       d_rotators.resize(d_rf_map.size());
       d_filterbank.resize(d_rf_map.size());
@@ -193,6 +204,7 @@ namespace gr {
       zero.imag(0);
       unsigned signal_count = d_result_vector.size();
       pmt::pmt_t msg = pmt::make_vector(signal_count, pmt::PMT_NIL);
+      //std::cout << "Signal 1 has size " << d_result_vector[0].size() << std::endl;
       for (unsigned i = 0; i < signal_count; i++) {
         pmt::pmt_t curr_signal = pmt::make_c32vector(d_result_vector[i].size(), zero);
         for(unsigned j = 0; j < d_result_vector[i].size(); j++) {
@@ -231,7 +243,7 @@ namespace gr {
     void
     signal_separator_c_impl::forecast(int noutput_items,
                                       gr_vector_int &ninput_items_required) {
-      ninput_items_required[0] = 4*noutput_items;
+      ninput_items_required[0] = noutput_items;
     }
 
     int
@@ -239,6 +251,7 @@ namespace gr {
                                           gr_vector_int &ninput_items,
                                           gr_vector_const_void_star &input_items,
                                           gr_vector_void_star &output_items) {
+      gr::thread::scoped_lock guard(d_mutex);
       const gr_complex *in = (const gr_complex *) input_items[0];
 
       // no message received -> nothing to do

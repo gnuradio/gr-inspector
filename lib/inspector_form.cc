@@ -131,6 +131,7 @@ namespace gr {
       }
       else {
         detach_markers();
+        drawOverlay();
       }
     }
 

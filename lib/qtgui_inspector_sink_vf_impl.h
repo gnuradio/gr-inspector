@@ -44,13 +44,14 @@ namespace gr {
 #endif
 
       int d_argc;
-      bool d_manual;
+      bool d_manual, d_auto_sent;
       char *d_argv;
       QWidget *d_parent;
       int d_fft_len;
       double d_samp_rate;
       float d_cfreq;
       int d_rf_unit;
+      pmt::pmt_t d_tmp_msg;
       inspector_form *d_main_gui;
       QApplication *d_qApplication;
       std::vector<double> d_buffer;

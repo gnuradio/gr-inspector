@@ -117,6 +117,7 @@ namespace gr {
       if(!d_manual){
         message_port_pub(pmt::intern("map_out"), msg);
       }
+      d_tmp_msg = msg;
     }
 
     void
@@ -177,6 +178,12 @@ namespace gr {
         float center = msg->arg1();
         float bw = msg->arg2();
         send_manual_message(center, bw);
+        d_auto_sent = false;
+      }
+      // resend last auto detection when manual just disabled
+      if(!d_manual && !d_auto_sent) {
+        message_port_pub(pmt::intern("map_out"), d_tmp_msg);
+        d_auto_sent = true;
       }
       return 1;
     }

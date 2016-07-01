@@ -38,9 +38,7 @@ list(APPEND inspector_sources
     signal_extractor_c_impl.cc
     qtgui_inspector_sink_vf_impl.cc
 		inspector_form.cc
-		signal_marker.cc
-		jsonxx.cc
-    tap_parser.cc)
+		signal_marker.cc)
 
 include(GrPython)
 if(ENABLE_PYTHON)
