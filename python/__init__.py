@@ -36,3 +36,7 @@ from scf import scf
 from TensorFlow import TensorFlow
 from AMC import AMC
 from AMC_f import AMC_f
+from AMC_i import AMC_i
+from AMC_s import AMC_s
+from AMC_b import AMC_b
+
