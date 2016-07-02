@@ -19,24 +19,22 @@
 # Boston, MA 02110-1301, USA.
 # 
 
+import tensorflow as tf
 import numpy
 from gnuradio import gr
 
-class AMC(gr.sync_block):
-    """
-    docstring for block AMC
-    """
-    def __init__(self):
-        gr.sync_block.__init__(self,
-            name="AMC",
-            in_sig=[(numpy.float32,vlen)],
-            out_sig=[(numpy.float32,vlen)])
+class AMC:
 
+    @staticmethod
+    def load_graph(graph_path):
+        print("Loading graph...")
 
-    def work(self, input_items, output_items):
-        in0 = input_items[0]
-        out = output_items[0]
-        # <+signal processing here+>
-        out[:] = in0
-        return len(output_items[0])
+        with tf.Graph().as_default():
+            output_graph_def = tf.GraphDef()
+            with open(graph_path,"rb") as f:
+                output_graph_def.ParseFromString(f.read())
+                _ = tf.import_graph_def(output_graph_def, name="")
+
+                
+
 
