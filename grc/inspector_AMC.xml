@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<block>
+	<name>AMC</name>
+	<key>inspector_AMC</key>
+	<category>inspector</category>
+	<import>import inspector</import>
+	<make>inspector.AMC_$(type.typ)($vlen,$graphfile)</make>
+
+	<param>
+		<name>Input Type</name>
+		<key>type</key>
+		<type>enum</type>
+		<!--<option>
+			<name>Complex</name>
+			<key>complex</key>
+			<opt>size:gr.sizeof_gr_complex</opt>
+			<opt>typ:c</opt>
+		</option>-->
+		<option>
+			<name>Float</name>
+			<key>float</key>
+			<opt>size:gr.sizeof_float</opt>
+			<opt>typ:f</opt>
+		</option>
+		<option>
+			<name>Int</name>
+			<key>int</key>
+			<opt>size:gr.sizeof_int</opt>
+			<opt>typ:i</opt>
+		</option>
+		<option>
+			<name>Short</name>
+			<key>short</key>
+			<opt>size:gr.sizeof_short</opt>
+			<opt>typ:s</opt>
+		</option>
+		<option>
+			<name>Byte</name>
+			<key>byte</key>
+			<opt>size:gr.sizeof_char</opt>
+			<opt>typ:b</opt>
+		</option>
+	</param>
+	<param>
+		<name>Vec Length</name>
+		<key>vlen</key>
+		<value>1</value>
+		<type>int</type>
+	</param>
+	<param>
+                <name>Graph file</name>
+                <key>graphfile</key>
+                <value></value>
+                <type>string</type>
+	</param>
+	<sink>
+    		<name>in</name>
+		<type>$type</type>
+		<vlen>$vlen</vlen>  
+	</sink>
+ 	<source>
+    		<name>classification</name>
+ 		<type>message</type>
+  	</source>
+</block>
