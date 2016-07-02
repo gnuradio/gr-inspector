@@ -34,6 +34,8 @@ GR_PYTHON_INSTALL(
     scf.py
     sync_prototype_cc.py 
     AMC_f.py
+    freezegraph.py 
+    tensor.py
     AMC.py DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
