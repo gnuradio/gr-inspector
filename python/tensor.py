@@ -4,31 +4,24 @@ import freezegraph
 import os
 import tensorflow as tf
 
-def save_graph(sess):
+def save_graph(sess,output_path,checkpoint,checkpoint_state_name,input_graph_name,output_graph_name):
 
-    temp = "/tmp/"
-
-    checkpoint_prefix = os.path.join(temp, "saved_checkpoint")
-    checkpoint_state_name = "checkpoint_state"
-    input_graph_name = "input_graph.pb"
-    output_graph_name = "output_graph.pb"
-
+    checkpoint_prefix = os.path.join(output_path,checkpoint)
     saver = tf.train.Saver()
     saver.save(sess, checkpoint_prefix, global_step=0,latest_filename=checkpoint_state_name)
-
-    tf.train.write_graph(sess.graph.as_graph_def(),temp,
+    tf.train.write_graph(sess.graph.as_graph_def(),output_path,
                            input_graph_name)
 
     # We save out the graph to disk, and then call the const conversion
     # routine.
-    input_graph_path = os.path.join(temp, input_graph_name)
+    input_graph_path = os.path.join(output_path, input_graph_name)
     input_saver_def_path = ""
     input_binary = False
     input_checkpoint_path = checkpoint_prefix + "-0"
     output_node_names = "out"
     restore_op_name = "save/restore_all"
     filename_tensor_name = "save/Const:0"
-    output_graph_path = os.path.join(temp, output_graph_name)
+    output_graph_path = os.path.join(output_path, output_graph_name)
     clear_devices = False
 
     freezegraph.freeze_graph(input_graph_path, input_saver_def_path,
