@@ -21,31 +21,39 @@
 import pmt
 import numpy
 from gnuradio import gr
+from AMC import * 
+import tensorflow as tf
+from tensor import *
 
 class AMC_f(gr.sync_block):
     """
     docstring for block AMC
     """
-    def __init__(self,vlen):
+    def __init__(self,vlen,graphfile):
+
         gr.sync_block.__init__(self,
             name="AMC",
             in_sig=[(numpy.float32,vlen)],
             out_sig=[])
+
+        sess,inp,out = load_graph(graphfile)        
+        self.sess = sess
+        self.inp = inp
+        self.out = out        
+
         self.message_port_register_out(pmt.intern('classification'))
 
-
-
     def work(self, input_items, output_items):
-        in0 = input_items[0]
-        #out = output_items[0]
-        # <+signal processing here+>
-        #out[:] = in0
-
-
-        a = pmt.make_dict()
-        a = pmt.dict_add(a, pmt.intern("psk"), pmt.from_double(0.34))
-        self.message_port_pub(pmt.intern("classification"),a)
-        
+        for i in input_items:
+            for v in i:
+                a = pmt.make_dict()
+                outp = self.sess.run(self.out,feed_dict={self.inp: [v]})[0]
+                c=0
+                for o in outp:
+                    print(type(o))
+                    o = o.astype(float)               
+                    a = pmt.dict_add(a, pmt.intern("out"+str(c)), pmt.from_double(o))
+                    c=c+1 
+                self.message_port_pub(pmt.intern("classification"),a)
         return 0
-        #return len(output_items[0])
 
