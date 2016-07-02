@@ -32,6 +32,9 @@ GR_PYTHON_INSTALL(
     FILES
     __init__.py
     AMC_f.py
+    AMC_i.py
+    AMC_s.py
+    AMC_b.py
     freezegraph.py 
     tensor.py
     AMC.py DESTINATION ${GR_PYTHON_DIR}/inspector

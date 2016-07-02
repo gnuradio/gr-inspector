@@ -25,7 +25,7 @@ from AMC import *
 import tensorflow as tf
 from tensor import *
 
-class AMC_f(gr.sync_block):
+class AMC_s(gr.sync_block):
     """
     docstring for block AMC
     """
@@ -33,7 +33,7 @@ class AMC_f(gr.sync_block):
 
         gr.sync_block.__init__(self,
             name="AMC",
-            in_sig=[(numpy.float32,vlen)],
+            in_sig=[(numpy.int16,vlen)],
             out_sig=[])
 
         sess,inp,out = load_graph(graphfile)        
