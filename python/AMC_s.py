@@ -21,7 +21,6 @@
 import pmt
 import numpy
 from gnuradio import gr
-from AMC import * 
 import tensorflow as tf
 from tensor import *
 
