@@ -44,16 +44,24 @@ class AMC_f(gr.sync_block):
         self.message_port_register_out(pmt.intern('classification'))
 
     def work(self, input_items, output_items):
+
         for i in input_items:
             for v in i:
                 a = pmt.make_dict()
-                outp = self.sess.run(self.out,feed_dict={self.inp: [v]})[0]
+                
+                try:
+                    outp = self.sess.run(self.out,feed_dict={self.inp: [v]})[0]
+                except tf.errors.InvalidArgumentError:
+                    print("Invalid size of input vector to TensorFlow model")
+                    quit()
+
                 c=0
                 for o in outp:
-                    print(type(o))
                     o = o.astype(float)               
                     a = pmt.dict_add(a, pmt.intern("out"+str(c)), pmt.from_double(o))
-                    c=c+1 
+                    c=c+1
+ 
                 self.message_port_pub(pmt.intern("classification"),a)
+
         return 0
 
