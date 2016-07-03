@@ -56,6 +56,7 @@ namespace gr {
       d_oversampling = oversampling;
       d_buffer_stage = 0;
       d_use_file = taps_file;
+      d_precalc = file_path;
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));
@@ -110,8 +111,16 @@ namespace gr {
           d_ntaps = taps.size();
         }
       }
-
-      //TODO: read taps from file here
+      else {
+        cutoff = cutoff/d_samp_rate; // normize cutoff
+        if(d_precalc.upper_bound(cutoff) == d_precalc.end()) {
+          taps = d_precalc.rbegin()->second;
+        }
+        else {
+          taps = d_precalc.upper_bound(cutoff)->second;
+        }
+        d_ntaps = taps.size();
+      }
 
       return taps;
     }

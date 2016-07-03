@@ -51,6 +51,7 @@ namespace gr {
       int d_oversampling;
       gr::thread::mutex d_mutex;
       bool d_use_file;
+      std::map<float, std::vector<float> > d_precalc;
 
 
     public:

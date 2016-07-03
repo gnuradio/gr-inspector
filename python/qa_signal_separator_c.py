@@ -48,7 +48,7 @@ class qa_signal_separator_c (gr_unittest.TestCase):
 
     def test_001_t (self):
         src = blocks.vector_source_c(range(10000), False, 1, [])
-        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100, "")
+        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100, False, inspector.map_float_vector({0.0:[0.0]}))
         vec_sink = blocks.vector_sink_c(1)
         ext = inspector.signal_extractor_c(0)
         snk = blocks.vector_sink_c(1)
@@ -80,7 +80,7 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         for i in range(len(vec_sink.data())):
             sig[i] = data[i]*numpy.exp(-1j*2*numpy.pi*12500*i*1/32000)
 
-        taps = filter.firdes.low_pass(1, 32000, 500, 50, firdes.WIN_HAMMING, 6.76)
+        taps = filter.firdes.low_pass(1, 32000, 900, 90, firdes.WIN_HAMMING, 6.76)
         sig = numpy.convolve(sig, taps, 'full')
         out = numpy.empty([0])
         decim = 32000/20/100
