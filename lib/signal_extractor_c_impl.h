@@ -29,25 +29,27 @@ namespace gr {
     class signal_extractor_c_impl : public signal_extractor_c
     {
      private:
-      // Nothing to declare in this block.
+      int d_signal, d_length;
+      bool d_ready;
+      std::vector<gr_complex> d_samples;
+      gr_complex* d_msg_buffer;
 
      public:
       signal_extractor_c_impl(int signal);
       ~signal_extractor_c_impl();
 
-      int d_signal;
-      int d_length;
-      bool d_ready;
-
-      std::vector<gr_complex> d_samples;
-
+      // write samples from message in buffer
       void handle_msg(pmt::pmt_t msg);
-      gr_complex* d_msg_buffer;
 
       // Where all the action really happens
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
+      // callback
+      void set_signal(int d_signal) {
+        signal_extractor_c_impl::d_signal = d_signal;
+      }
     };
 
   } // namespace inspector

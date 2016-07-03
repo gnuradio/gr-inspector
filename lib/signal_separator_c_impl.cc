@@ -30,7 +30,8 @@ namespace gr {
 
     signal_separator_c::sptr
     signal_separator_c::make(double samp_rate, int window, float trans_width,
-                             int oversampling, bool taps_file, std::map<float, std::vector<float> > &file_path) {
+                             int oversampling, bool taps_file,
+                             std::map<float, std::vector<float> > &file_path) {
       return gnuradio::get_initial_sptr
               (new signal_separator_c_impl(samp_rate, window, trans_width,
                                            oversampling, taps_file, file_path));
@@ -49,7 +50,6 @@ namespace gr {
                                                sizeof(gr_complex)),
                         gr::io_signature::make(0, 0, 0)) {
       // fill properties
-
       d_window = (filter::firdes::win_type )window;
       d_samp_rate = samp_rate;
       d_trans_width = trans_width;
@@ -84,7 +84,7 @@ namespace gr {
           it != d_filterbank.end(); ++it) {
         delete(*it);
       }
-      //volk_free(d_temp_buffer);
+      // delete histroy buffers
       while(!d_history_buffer.empty()) {
         volk_free(d_history_buffer.back());
         d_history_buffer.pop_back();
@@ -92,7 +92,8 @@ namespace gr {
 
     }
 
-    // use firdes to generate lowpass taps
+    // use firdes to generate lowpass taps or find suitable taps
+    // in specified JSON file
     std::vector<float>
     signal_separator_c_impl::build_taps(double cutoff) {
       std::vector<float> taps;
@@ -132,28 +133,26 @@ namespace gr {
       // calculate signal parameters
       double freq_center = d_rf_map.at(signal).at(0);
       double bandwidth = d_rf_map.at(signal).at(1);
-      // if only one bin detected, we still need a bandwidth > 0
+
+      // ERROR HANDLING: if only one bin detected, we still need a bandwidth > 0
       if (bandwidth == 0) {
         bandwidth = 1;
       }
-
       // do oversampling
       bandwidth *= d_oversampling;
+      // ERROR HANDLING: maximum signal bw must be samp rate
       if (bandwidth > d_samp_rate) {
         bandwidth = d_samp_rate;
       }
       int decim = static_cast<int>(d_samp_rate / bandwidth);
-      //std::cout << "Decim = " << decim << std::endl;
-
       // save decimation for later
       d_decimations[signal] = decim;
 
       // let stopband begin at nyquist border
       d_taps = build_taps((1-d_trans_width)*bandwidth/2);
-      // copied from xlating fir filter
-      //std::vector<gr_complex> ctaps(d_taps.size());
-      float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
 
+      // copied from xlating fir filter
+      float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
       // create rotator for current signal
       blocks::rotator rotator;
       rotator.set_phase_incr(exp(gr_complex(0, -fwT0)));
@@ -172,13 +171,10 @@ namespace gr {
 
     void
     signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
-      // clear all vectors for recalculation
-
       // free allocated space
       free_allocation();
       unpack_message(msg);
       // calculate filters
-      // TODO: make this more efficient
       rebuild_all_filters();
     }
 
@@ -187,7 +183,6 @@ namespace gr {
       d_filterbank.clear();
       d_decimations.clear();
       d_rotators.clear();
-      //d_history_buffer.clear();
       d_decimations.resize(d_rf_map.size());
       d_rotators.resize(d_rf_map.size());
       d_filterbank.resize(d_rf_map.size());
@@ -195,7 +190,8 @@ namespace gr {
       for (unsigned int i = 0; i < d_rf_map.size(); i++) {
         build_filter(i);
       }
-
+      // tell work method to reallocate history buffers with eventually
+      // other tap count
       d_buffer_stage = 1;
     }
 
@@ -220,7 +216,6 @@ namespace gr {
       zero.imag(0);
       unsigned signal_count = d_result_vector.size();
       pmt::pmt_t msg = pmt::make_vector(signal_count, pmt::PMT_NIL);
-      //std::cout << "Signal 1 has size " << d_result_vector[0].size() << std::endl;
       for (unsigned i = 0; i < signal_count; i++) {
         pmt::pmt_t curr_signal = pmt::make_c32vector(d_result_vector[i].size(), zero);
         for(unsigned j = 0; j < d_result_vector[i].size(); j++) {
@@ -233,10 +228,8 @@ namespace gr {
 
     void
     signal_separator_c_impl::apply_filter(int i) {
-      //std::cout << "Appling filter " << i << std::endl;
       // size of filter output
       int size = (int)ceil((float)(d_buffer_len)/(float)d_decimations[i]);
-      //std::cout << "Size = " << size << std::endl;
       // allocate enough space for result
       d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
               volk_get_alignment());
@@ -244,7 +237,6 @@ namespace gr {
       // copied from xlating fir filter
       unsigned j = 0;
       for (int k = 0; k < size; k++) {
-        //d_temp_buffer[k] = d_history_buffer[i][j+d_ntaps-1];
         d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
         j += d_decimations[i];
       }
@@ -259,6 +251,7 @@ namespace gr {
     void
     signal_separator_c_impl::forecast(int noutput_items,
                                       gr_vector_int &ninput_items_required) {
+      // lets pretend we're a sync block (in fact we're not - hehe)
       ninput_items_required[0] = noutput_items;
     }
 
@@ -276,10 +269,10 @@ namespace gr {
       }
       // message received, so let's allocate all the needed memory
       else if(d_buffer_stage == 1) {
-        //d_buffer_len = ninput_items[0];
-        d_buffer_len = 6400;
+        d_buffer_len = 6400; // good empirical value
+
+        // allocate history buffer for each signal with length d_ntaps + d_buffer_len
         for(int i = 0; i < d_history_buffer.size(); i++) {
-          //std::cout << "Trying to allocate " << d_ntaps-1 << "+" << d_buffer_len <<" = "<< d_ntaps+d_buffer_len-1 << std::endl;
           d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps+d_buffer_len-1)*sizeof(gr_complex),
                                                          volk_get_alignment());
           // write zeros in buffers
@@ -287,10 +280,10 @@ namespace gr {
             d_history_buffer[i][j] = 0.0;
           }
         }
-        d_buffer_stage = 2; // everything set up, no need to repeat any stuff in this block
+        d_buffer_stage = 2; // everything set up, no need to repeat any stuff in this else if
       }
 
-      // if too frew items, wait for more
+      // if too few items, wait for more
       if(ninput_items[0] < d_buffer_len) {
         return 0;
       }

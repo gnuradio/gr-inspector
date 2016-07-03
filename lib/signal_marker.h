@@ -30,19 +30,21 @@ namespace gr {
 
     class signal_marker
     {
+    private:
+
     public:
-      signal_marker(int i, QwtPlot *plot);
-
-      ~signal_marker();
-
-      void set_marker(int i, float center, float bw, int unit);
-
       QwtPlotMarker* d_center;
       QwtPlotMarker* d_label;
       QwtPlotZoneItem* d_zone;
       QwtPlot* d_plot;
       float d_freq, d_bw;
       int d_number;
+
+      signal_marker(int i, QwtPlot *plot);
+
+      ~signal_marker();
+
+      void set_marker(int i, float center, float bw, int unit);
     };
 
   }

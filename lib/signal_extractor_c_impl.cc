@@ -49,8 +49,7 @@ namespace gr {
               &signal_extractor_c_impl::handle_msg, this, _1));
 
       d_signal = signal;
-      d_ready = false;
-
+      d_ready = false; // tell work to not emit anything until a message arrives
     }
 
     /*
@@ -62,25 +61,20 @@ namespace gr {
 
     void
     signal_extractor_c_impl::handle_msg(pmt::pmt_t msg) {
-      // error handling
-
-      //d_samples.clear();
       if(d_signal+1 > pmt::length(msg)) {
         GR_LOG_WARN(d_logger, "Specified signal does not exist.");
         return;
       }
       else {
-        //std::cout << "Msg len = " << pmt::length(msg) << std::endl;
         pmt::pmt_t pmt_samples = pmt::vector_ref(msg, d_signal);
         d_length = pmt::length(pmt_samples);
         for(int i = 0; i < d_length; i++) {
           d_samples.push_back(pmt::c32vector_ref(pmt_samples, i));
         }
         d_msg_buffer = &d_samples[0];
-        d_ready = true;
+        d_ready = true; // buffer filled, ready to emit samples
       }
     }
-
 
     int
     signal_extractor_c_impl::work(int noutput_items,
@@ -89,14 +83,15 @@ namespace gr {
     {
       gr_complex *out = (gr_complex *) output_items[0];
 
-      // Do <+signal processing+>
       if(d_samples.size() > 0) {
+        // if buffer >= available samples, emit all of them
         if(noutput_items >= d_samples.size()) {
           memcpy(out, d_msg_buffer, d_samples.size()*sizeof(gr_complex));
           d_samples.clear();
           d_msg_buffer = &d_samples[0];
           return d_length;
         }
+        // if buffer < available samples, emit max number and discard the others
         else {
           memcpy(out, d_msg_buffer, noutput_items*sizeof(gr_complex));
           d_samples.clear();

@@ -77,6 +77,20 @@ namespace gr {
     Q_OBJECT
 
     public:
+      void set_axis_x(float start, float stop);
+      void msg_received();
+      void set_cfreq(float freq);
+      void detach_markers();
+      void mousePressEvent (QMouseEvent * eventPress);
+      void mouseReleaseEvent(QMouseEvent *eventRelease);
+      void mouseMoveEvent(QMouseEvent *eventMove);
+      void manual_cb_clicked(int state);
+      void spawn_signal_selector();
+      void add_msg_queue(float cfreq, float bandwidth);
+      float freq_to_x(float freq);
+      float x_to_freq(float x);
+
+      void drawOverlay();
       inspector_form(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
                      bool* manual, gr::msg_queue* msg_queue, int *rf_unit, QWidget *parent);
       ~inspector_form();
@@ -89,8 +103,6 @@ namespace gr {
         CENTER,
         RIGHT
       };
-
-
 
       int d_interval, d_fft_len, d_marker_count;
       int *d_rf_unit;
@@ -121,21 +133,6 @@ namespace gr {
 
     public slots:
       void refresh();
-
-      void set_axis_x(float start, float stop);
-      void msg_received();
-      void set_cfreq(float freq);
-      void detach_markers();
-      void mousePressEvent (QMouseEvent * eventPress);
-      void mouseReleaseEvent(QMouseEvent *eventRelease);
-      void mouseMoveEvent(QMouseEvent *eventMove);
-      void manual_cb_clicked(int state);
-      void spawn_signal_selector();
-      void add_msg_queue(float cfreq, float bandwidth);
-      float freq_to_x(float freq);
-      float x_to_freq(float x);
-
-      void drawOverlay();
 
     };
 

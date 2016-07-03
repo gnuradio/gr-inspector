@@ -4,6 +4,7 @@
   <category>Inspector</category>
   <import>import inspector</import>
   <make>inspector.signal_extractor_c($signal)</make>
+  <callback>set_signal($signal)</callback>
   <param>
     <name>Signal</name>
     <key>signal</key>

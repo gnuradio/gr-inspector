@@ -118,7 +118,8 @@ namespace gr {
     void
     inspector_form::spawn_signal_selector() {
       detach_markers();
-      d_markers[0]->set_marker(0, *d_rf_unit*(d_zoomer->zoomRect().x()+d_zoomer->zoomRect().width()/2)
+      d_markers[0]->set_marker(0, *d_rf_unit*(d_zoomer->zoomRect().x()+
+              d_zoomer->zoomRect().width()/2)
               , *d_rf_unit*d_zoomer->zoomRect().width()/2, *d_rf_unit);
       add_msg_queue(d_markers[0]->d_freq-d_cfreq, d_markers[0]->d_bw);
     }

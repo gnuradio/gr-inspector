@@ -30,7 +30,18 @@ namespace gr {
     class qtgui_inspector_sink_vf_impl : public qtgui_inspector_sink_vf
     {
      private:
-      // Nothing to declare in this block.
+      int d_argc, d_rf_unit, d_fft_len;
+      bool d_manual, d_auto_sent;
+      float d_cfreq;
+      double d_samp_rate;
+      char *d_argv;
+      QWidget *d_parent;
+      pmt::pmt_t d_tmp_msg;
+      inspector_form *d_main_gui;
+      QApplication *d_qApplication;
+      std::vector<double> d_buffer;
+      std::vector<std::vector<float> > d_rf_map;
+      gr::msg_queue* d_msg_queue;
 
      public:
       qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
@@ -43,24 +54,10 @@ namespace gr {
       void* pyqwidget();
 #endif
 
-      int d_argc;
-      bool d_manual, d_auto_sent;
-      char *d_argv;
-      QWidget *d_parent;
-      int d_fft_len;
-      double d_samp_rate;
-      float d_cfreq;
-      int d_rf_unit;
-      pmt::pmt_t d_tmp_msg;
-      inspector_form *d_main_gui;
-      QApplication *d_qApplication;
-      std::vector<double> d_buffer;
-      std::vector<std::vector<float> > d_rf_map;
-      gr::msg_queue* d_msg_queue;
+
       void handle_msg(pmt::pmt_t msg);
       void unpack_message(pmt::pmt_t msg);
       void send_manual_message(float center, float bw);
-
       void set_rf_unit(int unit);
 
       void initialize();
@@ -69,6 +66,12 @@ namespace gr {
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
+      void set_cfreq(float cfreq) {
+        d_cfreq = cfreq;
+        d_main_gui->set_cfreq(cfreq);
+      }
+
     };
 
   } // namespace inspector

@@ -75,6 +75,7 @@ namespace gr {
       d_quantization = quantization;
       d_min_bw = min_bw;
 
+      // allocate buffers
       d_tmpbuf = static_cast<float *>(volk_malloc(
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_tmp_pxx = static_cast<float *>(volk_malloc(
@@ -379,7 +380,7 @@ namespace gr {
                          pack_message());
       }
 
-      return 1;
+      return 1; // one vector has been processed
     }
 
     //</editor-fold>
