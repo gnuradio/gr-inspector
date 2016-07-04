@@ -38,7 +38,6 @@ GR_PYTHON_INSTALL(
     AMC_s.py
     AMC_b.py
     TFModel.py
-    freezegraph.py 
     DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
