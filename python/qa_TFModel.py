@@ -18,31 +18,24 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 # 
-import pmt
-import numpy
-from gnuradio import gr
-import tensorflow as tf
-from tensor import *
 
-class AMC_i(gr.sync_block):
-    """
-    docstring for block AMC
-    """
-    def __init__(self,vlen,graphfile):
+from gnuradio import gr, gr_unittest
+from gnuradio import blocks
+from TFModel import TFModel
 
-        gr.sync_block.__init__(self,
-            name="AMC",
-            in_sig=[(numpy.int32,vlen)],
-            out_sig=[])
+class qa_TFModel (gr_unittest.TestCase):
 
-        sess,inp,out = load_graph(graphfile)        
-        self.sess = sess
-        self.inp = inp
-        self.out = out        
+    def setUp (self):
+        self.tb = gr.top_block ()
 
-        self.message_port_register_out(pmt.intern('classification'))
+    def tearDown (self):
+        self.tb = None
 
-    def work(self, input_items, output_items):
-        process(input_items,self)
-        return 0
+    def test_001_t (self):
+        # set up fg
+        self.tb.run ()
+        # check data
 
+
+if __name__ == '__main__':
+    gr_unittest.run(qa_TFModel, "qa_TFModel.xml")
