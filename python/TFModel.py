@@ -24,15 +24,15 @@ from gnuradio import gr
 import tensorflow as tf
 from tensor import *
 
-class AMC_f(gr.sync_block):
+class TFModel(gr.sync_block):
     """
     docstring for block AMC
     """
-    def __init__(self,vlen,graphfile):
+    def __init__(self,dtype,vlen,graphfile):
 
         gr.sync_block.__init__(self,
             name="AMC",
-            in_sig=[(numpy.float32,vlen)],
+            in_sig=[(numpy.dtype(dtype),vlen)],
             out_sig=[])
 
         sess,inp,out = load_graph(graphfile)        
@@ -43,6 +43,20 @@ class AMC_f(gr.sync_block):
         self.message_port_register_out(pmt.intern('classification'))
 
     def work(self, input_items, output_items):
-        process(input_items,self)
+        for i in input_items:
+            for v in i:
+                a = pmt.make_dict()                                                                                                                         
+                try:
+                    outp = self.sess.run(self.out,feed_dict={self.inp: [v]})[0]
+                except tf.errors.InvalidArgumentError:
+                    print("Invalid size of input vector to TensorFlow model")
+                    quit()
+                c=0
+                for o in outp:
+                    o = o.astype(float)
+                    a = pmt.dict_add(a, pmt.intern("out"+str(c)), pmt.from_double(o))
+                    c=c+1
+                
+                self.message_port_pub(pmt.intern("classification"),a)  
         return 0
 

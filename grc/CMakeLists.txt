@@ -28,5 +28,6 @@ install(FILES
     inspector_ofdm_synchronizer_cc.xml 
     inspector_scf.xml
     inspector_TensorFlow.xml
-    inspector_AMC.xml DESTINATION share/gnuradio/grc/blocks
+    inspector_AMC.xml 
+    inspector_TFModel.xml DESTINATION share/gnuradio/grc/blocks
 )
