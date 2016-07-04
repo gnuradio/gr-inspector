@@ -22,7 +22,6 @@ import pmt
 import numpy
 from gnuradio import gr
 import tensorflow as tf
-from tensor import *
 
 class TFModel(gr.sync_block):
     """
@@ -35,12 +34,24 @@ class TFModel(gr.sync_block):
             in_sig=[(numpy.dtype(dtype),vlen)],
             out_sig=[])
 
-        sess,inp,out = load_graph(graphfile)        
+        sess,inp,out = self.load_graph(graphfile)        
         self.sess = sess
         self.inp = inp
         self.out = out        
 
         self.message_port_register_out(pmt.intern('classification'))
+
+    def load_graph(self,output_graph_path):
+        with tf.Graph().as_default():
+            output_graph_def = tf.GraphDef()
+            with open(output_graph_path, "rb") as f:
+                output_graph_def.ParseFromString(f.read())
+                _ = tf.import_graph_def(output_graph_def, name="")
+    
+            with tf.Session() as sess:
+                n_input = sess.graph.get_tensor_by_name("inp:0")
+                output = sess.graph.get_tensor_by_name("out:0")
+                return (sess,n_input,output)
 
     def work(self, input_items, output_items):
         for i in input_items:
