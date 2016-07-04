@@ -40,9 +40,12 @@ namespace gr {
      */
     ofdm_estimator_c_impl::ofdm_estimator_c_impl(double samp_rate)
       : gr::sync_block("ofdm_estimator_c",
-              gr::io_signature::make(<+MIN_IN+>, <+MAX_IN+>, sizeof(<+ITYPE+>)),
-              gr::io_signature::make(<+MIN_OUT+>, <+MAX_OUT+>, sizeof(<+OTYPE+>)))
-    {}
+              gr::io_signature::make(1, 1, sizeof(gr_complex)),
+              gr::io_signature::make(0,0,0))
+    {
+      d_samp_rate = samp_rate;
+      message_port_register_out(pmt::intern("ofdm_out"));
+    }
 
     /*
      * Our virtual destructor.
@@ -56,8 +59,7 @@ namespace gr {
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
-      const <+ITYPE+> *in = (const <+ITYPE+> *) input_items[0];
-      <+OTYPE+> *out = (<+OTYPE+> *) output_items[0];
+      const gr_complex *in = (const gr_complex *) input_items[0];
 
       // Do <+signal processing+>
 

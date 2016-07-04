@@ -29,7 +29,7 @@ namespace gr {
     class ofdm_estimator_c_impl : public ofdm_estimator_c
     {
      private:
-      // Nothing to declare in this block.
+      double d_samp_rate;
 
      public:
       ofdm_estimator_c_impl(double samp_rate);
