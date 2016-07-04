@@ -33,7 +33,7 @@ GR_PYTHON_INSTALL(
     __init__.py
     TFModel.py
     freezegraph.py 
-    tensor.py DESTINATION ${GR_PYTHON_DIR}/inspector
+    DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
 ########################################################################
