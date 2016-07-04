@@ -4,7 +4,7 @@
 	<key>inspector_TFModel</key>
 	<category>inspector</category>
 	<import>import inspector</import>
-	<make>inspector.TFModel($type.typ,$vlen,$graphfile)</make>
+	<make>inspector.TFModel($type.typ,$vlen,$graphfile,$itensor,$otensor)</make>
 
 	<param>
 		<name>Input Type</name>

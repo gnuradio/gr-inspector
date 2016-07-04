@@ -27,17 +27,21 @@ class TFModel(gr.sync_block):
     """
     docstring for block AMC
     """
-    def __init__(self,dtype,vlen,graphfile):
+    def __init__(self,dtype,vlen,graphfile,itensor,otensor):
 
         gr.sync_block.__init__(self,
-            name="AMC",
+            name="TFModel",
             in_sig=[(numpy.dtype(dtype),vlen)],
             out_sig=[])
 
-        sess,inp,out = self.load_graph(graphfile)        
+        self.itensor = itensor
+        self.otensor = otensor
+
+        sess,inp,out = self.load_graph(graphfile)  
+
         self.sess = sess
         self.inp = inp
-        self.out = out        
+        self.out = out
 
         self.message_port_register_out(pmt.intern('classification'))
 
@@ -49,8 +53,8 @@ class TFModel(gr.sync_block):
                 _ = tf.import_graph_def(output_graph_def, name="")
     
             with tf.Session() as sess:
-                n_input = sess.graph.get_tensor_by_name("inp:0")
-                output = sess.graph.get_tensor_by_name("out:0")
+                n_input = sess.graph.get_tensor_by_name("%s:0" % self.itensor)
+                output = sess.graph.get_tensor_by_name("%s:0" % self.otensor)
                 return (sess,n_input,output)
 
     def work(self, input_items, output_items):
