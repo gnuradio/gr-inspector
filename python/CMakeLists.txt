@@ -32,7 +32,6 @@ GR_PYTHON_INSTALL(
     FILES
     __init__.py
     TFModel.py
-    freezegraph.py 
     DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
