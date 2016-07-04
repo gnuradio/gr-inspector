@@ -53,6 +53,19 @@
                 <value></value>
                 <type>string</type>
 	</param>
+        <param>
+                <name>Input Tensor</name>
+                <key>itensor</key>
+                <value>inp</value>
+                <type>string</type>
+        </param>
+        <param>
+                <name>Output Tensor</name>
+                <key>otensor</key>
+                <value>out</value>
+                <type>string</type>
+        </param>
+
 	<sink>
     		<name>in</name>
 		<type>$type</type>

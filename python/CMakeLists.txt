@@ -39,7 +39,7 @@ GR_PYTHON_INSTALL(
     AMC_b.py
     TFModel.py
     freezegraph.py 
-    tensor.py DESTINATION ${GR_PYTHON_DIR}/inspector
+    DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
 ########################################################################
