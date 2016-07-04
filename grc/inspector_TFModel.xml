@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
-	<name>AMC</name>
-	<key>inspector_AMC</key>
+	<name>TFModel</name>
+	<key>inspector_TFModel</key>
 	<category>inspector</category>
 	<import>import inspector</import>
-	<make>inspector.AMC_$(type.typ)($vlen,$graphfile)</make>
+	<make>inspector.TFModel($type.typ,$vlen,$graphfile)</make>
 
 	<param>
 		<name>Input Type</name>
@@ -20,25 +20,25 @@
 			<name>Float</name>
 			<key>float</key>
 			<opt>size:gr.sizeof_float</opt>
-			<opt>typ:f</opt>
+			<opt>typ:"float32"</opt>
 		</option>
 		<option>
 			<name>Int</name>
 			<key>int</key>
 			<opt>size:gr.sizeof_int</opt>
-			<opt>typ:i</opt>
+			<opt>typ:"int32"</opt>
 		</option>
 		<option>
 			<name>Short</name>
 			<key>short</key>
 			<opt>size:gr.sizeof_short</opt>
-			<opt>typ:s</opt>
+			<opt>typ:"int16"</opt>
 		</option>
 		<option>
 			<name>Byte</name>
 			<key>byte</key>
 			<opt>size:gr.sizeof_char</opt>
-			<opt>typ:b</opt>
+			<opt>typ:"int8"</opt>
 		</option>
 	</param>
 	<param>
