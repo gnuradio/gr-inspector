@@ -1,10 +1,32 @@
 /*! \mainpage
 
-Welcome to the GNU Radio INSPECTOR Block
+Welcome to the Inspector!
 
-This is the intro page for the Doxygen manual generated for the INSPECTOR
-block (docs/doxygen/other/main_page.dox). Edit it to add more detailed
-documentation about the new GNU Radio modules contained in this
-project.
+\section intro Introduction
+
+The Inspector (or gr-inspector) is a GNU Radio module for automatic
+signal analysis and signal intelligence. It has the ability to detect,
+filter, mix and decimate input signals and do a Automatic Modulation
+Classification (AMC) on them. All functionality is possible with only
+little user input and preliminary knowledge.
+
+\section install Installation
+To install the Inspector, the following dependencies are required:
+
+- GNU Radio runtime
+- gr-filter
+- QT4
+- QWT
+
+Install by the following shell commands:
+
+<code>mkdir build\n
+cd build\n
+cmake .. -DENABLE_PYTHON=ON\n
+make -j4\n
+sudo make install</code>
+
+\section usage Usage
+To use the Inspector, get inspired by the examples.
 
 */

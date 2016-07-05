@@ -34,12 +34,13 @@ namespace gr {
     signal_detector_cvf::make(double samp_rate, int fft_len,
                              int window_type, float threshold,
                              float sensitivity, bool auto_threshold,
-                             float average) {
+                             float average, float quantization, float min_bw) {
       return gnuradio::get_initial_sptr
               (new signal_detector_cvf_impl(samp_rate, fft_len,
                                            window_type,
                                            threshold, sensitivity,
-                                           auto_threshold, average));
+                                           auto_threshold, average,
+                                           quantization, min_bw));
     }
 
     //<editor-fold desc="Initalization">
@@ -53,27 +54,27 @@ namespace gr {
                                                      float threshold,
                                                      float sensitivity,
                                                      bool auto_threshold,
-                                                     float average)
+                                                     float average,
+                                                     float quantization,
+                                                     float min_bw)
             : sync_decimator("signal_detector_cvf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
-                        gr::io_signature::make(1, 2, sizeof(float) *
+                        gr::io_signature::make(1, 1, sizeof(float) *
                                                      fft_len),
                         fft_len) {
 
       // set properties
-      set_samp_rate(samp_rate);
-      set_fft_len(fft_len);
-      set_window_type(window_type);
-      set_threshold(threshold);
-      set_sensitivity(sensitivity);
-      set_auto_threshold(auto_threshold);
-      set_average(average);
-      message_port_register_out(pmt::intern("map_out"));
+      d_samp_rate = samp_rate;
+      d_fft_len = fft_len;
+      d_window_type = (filter::firdes::win_type)window_type;
+      d_threshold = threshold;
+      d_sensitivity = sensitivity;
+      d_auto_threshold = auto_threshold;
+      d_average = average;
+      d_quantization = quantization;
+      d_min_bw = min_bw;
 
-      //fill properties
-      build_window();
-      d_fft = new fft::fft_complex(fft_len, true);
       d_tmpbuf = static_cast<float *>(volk_malloc(
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_tmp_pxx = static_cast<float *>(volk_malloc(
@@ -82,11 +83,14 @@ namespace gr {
               sizeof(float) * d_fft_len, volk_get_alignment()));
       d_pxx_out = (float*)volk_malloc(sizeof(float)*d_fft_len,
                                       volk_get_alignment());
-      d_avg_filter.resize(d_fft_len);
+      d_fft = new fft::fft_complex(fft_len, true);
 
+      d_avg_filter.resize(d_fft_len);
+      build_window();
       for(unsigned int i = 0; i < d_fft_len; i++) {
-        d_avg_filter[i].set_taps(average);
+        d_avg_filter[i].set_taps(d_average);
       }
+      message_port_register_out(pmt::intern("map_out"));
 
     }
 
@@ -99,6 +103,37 @@ namespace gr {
       volk_free(d_tmp_pxx);
       volk_free(d_pxx);
       volk_free(d_pxx_out);
+    }
+
+    void
+    signal_detector_cvf_impl::set_fft_len(int fft_len)  {
+      signal_detector_cvf_impl::d_fft_len = fft_len;
+      delete d_fft;
+      volk_free(d_tmpbuf);
+      volk_free(d_tmp_pxx);
+      volk_free(d_pxx);
+      volk_free(d_pxx_out);
+      d_fft = new fft::fft_complex(fft_len, true);
+      d_tmpbuf = static_cast<float *>(volk_malloc(
+              sizeof(float) * d_fft_len, volk_get_alignment()));
+      d_tmp_pxx = static_cast<float *>(volk_malloc(
+              sizeof(float) * d_fft_len, volk_get_alignment()));
+      d_pxx = static_cast<float *>(volk_malloc(
+              sizeof(float) * d_fft_len, volk_get_alignment()));
+      d_pxx_out = (float*)volk_malloc(sizeof(float)*d_fft_len,
+                                      volk_get_alignment());
+      d_avg_filter.resize(d_fft_len);
+      build_window();
+      for(unsigned int i = 0; i < d_fft_len; i++) {
+        d_avg_filter[i].set_taps(d_average);
+      }
+      set_decimation(fft_len);
+    }
+
+    void
+    signal_detector_cvf_impl::set_window_type(int window)  {
+      signal_detector_cvf_impl::d_window_type = static_cast<filter::firdes::win_type>(window);
+      build_window();
     }
 
     //</editor-fold>
@@ -173,10 +208,10 @@ namespace gr {
       // sort bins
       d_threshold = 500;
       std::sort(d_tmp_pxx, d_tmp_pxx + d_fft_len);
-      float maximum = d_tmp_pxx[d_fft_len - 1];
+      float range = d_tmp_pxx[d_fft_len - 1] - d_tmp_pxx[0];
       // search specified normized jump
       for (unsigned int i = 0; i < d_fft_len; i++) {
-        if ((d_tmp_pxx[i + 1] - d_tmp_pxx[i]) / maximum > 1 - d_sensitivity) {
+        if ((d_tmp_pxx[i + 1] - d_tmp_pxx[i]) / range > 1 - d_sensitivity) {
           d_threshold = d_tmp_pxx[i];
           break;
         }
@@ -198,6 +233,7 @@ namespace gr {
       if(pos.size() == 0) {
         return flanks;
       }
+
       // check for adjacent bins to group
       std::vector<unsigned int> curr_edges;
 
@@ -241,11 +277,11 @@ namespace gr {
               flanks.push_back(curr_edges);
             }
             else {
-              if (pos[i + 1] != pos[i] + 1) {
-                curr_edges.push_back(pos[i]);
+              if(pos[i-1] + 1 != pos[i]) {
+                curr_edges.push_back(pos[i - 1]);
                 flanks.push_back(curr_edges);
                 curr_edges.clear();
-                new_signal = true;
+                curr_edges.push_back(pos[i]);
               }
             }
           }
@@ -262,7 +298,7 @@ namespace gr {
       for (unsigned i = 0; i < signal_count; i++) {
         pmt::pmt_t curr_edge = pmt::make_f32vector(2, 0.0);
         pmt::f32vector_set(curr_edge, 0, d_signal_edges.at(i).at(0));
-        pmt::f32vector_set(curr_edge, 1, d_signal_edges.at(i).at(0));
+        pmt::f32vector_set(curr_edge, 1, d_signal_edges.at(i).at(1));
         pmt::vector_set(msg, i, curr_edge);
       }
       return msg;
@@ -281,7 +317,7 @@ namespace gr {
             change = true;
           }
           if (std::abs(edges->at(i).at(1) - d_signal_edges.at(i).at(1)) >
-              0.01 * d_signal_edges.at(i).at(1)) {
+              0) {
             change = true;
           }
         }
@@ -318,25 +354,23 @@ namespace gr {
       std::vector<std::vector<unsigned int> > flanks = find_signal_edges();
 
       std::vector<std::vector<float> > rf_map;
+      float bandwidth = 0;
+      float freq_c = 0;
+      int quantization = (int)floor(d_quantization*d_samp_rate);
       for (unsigned int i = 0; i < flanks.size(); i++) {
         std::vector<float> temp;
-        temp.push_back(d_freq[flanks[i][0]]);
-        temp.push_back(d_freq[flanks[i][1]]);
-        rf_map.push_back(temp);
+        bandwidth = d_freq[flanks[i][1]] - d_freq[flanks[i][0]];
+        freq_c = (d_freq[flanks[i][0]] + d_freq[flanks[i][1]])/2;
+        if(bandwidth >= d_min_bw) {
+          //quantize bandwidth
+          bandwidth = quantization*round(bandwidth/quantization);
+          temp.push_back(freq_c);
+          temp.push_back(bandwidth);
+          rf_map.push_back(temp);
+        }
       }
 
       memcpy(out, d_pxx_out, d_fft_len * sizeof(float));
-
-      //TODO: Remove this (just debug output)
-      float marker[d_fft_len];
-      for (int a = 0; a < d_fft_len; a++) marker[a] =
-               *std::min_element(d_pxx_out, d_pxx_out+d_fft_len);
-      for (int i = 0; i < flanks.size(); i++) {
-        for (int j = flanks[i][0]; j <= flanks[i][1]; j++) {
-          marker[j] = *std::max_element(d_pxx_out, d_pxx_out+d_fft_len);
-        }
-      }
-      memcpy(output_items[1], marker, d_fft_len * sizeof(float));
 
       // spread the message
       if (compare_signal_edges(&rf_map)) {

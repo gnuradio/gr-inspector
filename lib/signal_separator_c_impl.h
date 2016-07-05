@@ -1,17 +1,17 @@
 /* -*- c++ -*- */
-/* 
+/*
  * Copyright 2016 <+YOU OR YOUR COMPANY+>.
- * 
+ *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
@@ -25,6 +25,7 @@
 #include <gnuradio/filter/firdes.h>
 #include <gnuradio/filter/fir_filter.h>
 #include <gnuradio/blocks/rotator.h>
+#include <gnuradio/fft/window.h>
 
 namespace gr {
   namespace inspector {
@@ -33,15 +34,18 @@ namespace gr {
     private:
       double d_samp_rate;
       filter::firdes::win_type d_window;
-      std::vector<filter::kernel::fir_filter_ccc*> d_filterbank;
+      std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
       std::vector<std::vector<float> > d_rf_map;
       float d_trans_width;
-
+      unsigned int d_buffer_stage;
+      int d_buffer_len;
+      int d_ntaps;
       std::vector<float> d_taps;
       std::vector<float> build_taps(double cutoff);
       std::vector<int> d_decimations;
-      std::vector<blocks::rotator*> d_rotators;
+      std::vector<blocks::rotator> d_rotators;
       gr_complex* d_temp_buffer;
+      std::vector<gr_complex*> d_history_buffer;
       std::vector<std::vector<gr_complex> > d_result_vector;
       int d_oversampling;
 
@@ -53,7 +57,6 @@ namespace gr {
 
       void free_allocation();
 
-
       //<editor-fold desc="Getter and Setter">
 
       double samp_rate() const {
@@ -62,6 +65,7 @@ namespace gr {
 
       void set_samp_rate(double d_samp_rate) {
         signal_separator_c_impl::d_samp_rate = d_samp_rate;
+        rebuild_all_filters();
       }
 
       filter::firdes::win_type window() const {
@@ -71,6 +75,7 @@ namespace gr {
       void set_window(int d_window) {
         signal_separator_c_impl::d_window =
                 static_cast<filter::firdes::win_type >(d_window);
+        rebuild_all_filters();
       }
 
       float trans_width() const {
@@ -79,6 +84,7 @@ namespace gr {
 
       void set_trans_width(float d_trans_width) {
         signal_separator_c_impl::d_trans_width = d_trans_width;
+
       }
 
       int oversampling() const {
@@ -87,15 +93,16 @@ namespace gr {
 
       void set_oversampling(int d_oversampling) {
         signal_separator_c_impl::d_oversampling = d_oversampling;
+        rebuild_all_filters();
       }
 
       //</editor-fold>
 
       void build_filter(unsigned int signal);
 
-      void add_filter(filter::kernel::fir_filter_ccc* filter);
+      void rebuild_all_filters();
 
-      void remove_filter(unsigned int signal);
+      void apply_filter(int i);
 
       void handle_msg(pmt::pmt_t msg);
 
@@ -116,4 +123,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_SIGNAL_SEPARATOR_C_IMPL_H */
-

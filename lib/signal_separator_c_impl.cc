@@ -1,17 +1,17 @@
 /* -*- c++ -*- */
-/* 
+/*
  * Copyright 2016 <+YOU OR YOUR COMPANY+>.
- * 
+ *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
@@ -47,11 +47,11 @@ namespace gr {
                         gr::io_signature::make(0, 0, 0)) {
       // fill properties
 
-      //TODO: write setter and getter
-      set_window(window);
-      set_samp_rate(samp_rate);
-      set_trans_width(trans_width);
-      set_oversampling(oversampling);
+      d_window = (filter::firdes::win_type )window;
+      d_samp_rate = samp_rate;
+      d_trans_width = trans_width;
+      d_oversampling = oversampling;
+      d_buffer_stage = 0;
 
       // message port
       message_port_register_out(pmt::intern("msg_out"));
@@ -74,31 +74,35 @@ namespace gr {
     void
     signal_separator_c_impl::free_allocation() {
       // delete all filters
-      for(std::vector<filter::kernel::fir_filter_ccc*>::iterator it = d_filterbank.begin();
+      for(std::vector<filter::kernel::fir_filter_ccf*>::iterator it = d_filterbank.begin();
           it != d_filterbank.end(); ++it) {
         delete(*it);
       }
-      for(std::vector<blocks::rotator*>::iterator it = d_rotators.begin();
-          it != d_rotators.end(); ++it) {
-        delete(*it);
+      //volk_free(d_temp_buffer);
+      for(std::vector<gr_complex*>::iterator it = d_history_buffer.begin();
+              it != d_history_buffer.end(); ++it) {
+        volk_free(*it);
       }
+
     }
 
     // use firdes to generate lowpass taps
     std::vector<float>
     signal_separator_c_impl::build_taps(double cutoff) {
-      return filter::firdes::low_pass(1, d_samp_rate, cutoff,
+      std::vector<float> taps = filter::firdes::low_pass(1, d_samp_rate, cutoff,
                                       d_trans_width*cutoff, d_window, 6.76);
+      if(d_buffer_stage == 0) {
+        d_ntaps = taps.size();
+      }
+      return taps;
     }
 
     // build filter and pass pointer and other calculations in vectors
     void
     signal_separator_c_impl::build_filter(unsigned int signal) {
       // calculate signal parameters
-      double freq_center = ((d_rf_map.at(signal)).at(1) +
-                            (d_rf_map.at(signal)).at(0)) / 2;
-      double bandwidth = (d_rf_map.at(signal)).at(1) -
-                         (d_rf_map.at(signal)).at(0);
+      double freq_center = d_rf_map.at(signal).at(0);
+      double bandwidth = d_rf_map.at(signal).at(1);
       // if only one bin detected, we still need a bandwidth > 0
       if (bandwidth == 0) {
         bandwidth = 1;
@@ -111,35 +115,21 @@ namespace gr {
       // save decimation for later
       d_decimations[signal] = decim;
 
-      d_taps= build_taps(bandwidth / 2);
+      d_taps = build_taps(bandwidth / 4);
       // copied from xlating fir filter
-      std::vector<gr_complex> ctaps(d_taps.size());
+      //std::vector<gr_complex> ctaps(d_taps.size());
       float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
-      for(unsigned int i = 0; i < d_taps.size(); i++) {
-        ctaps[i] = d_taps[i] * exp(gr_complex(0, i * fwT0));
-      }
+
       // create rotator for current signal
-      blocks::rotator* rotator = new blocks::rotator();
-      rotator->set_phase_incr(exp(gr_complex(0, -fwT0 * decim)));
+      blocks::rotator rotator;
+      rotator.set_phase_incr(exp(gr_complex(0, -fwT0)));
       d_rotators[signal] = rotator;
 
       // build filter here
-      filter::kernel::fir_filter_ccc*
-              filter = new filter::kernel::fir_filter_ccc(decim, ctaps);
+      filter::kernel::fir_filter_ccf*
+              filter = new filter::kernel::fir_filter_ccf(decim, d_taps);
 
       d_filterbank[signal] = filter;
-    }
-
-    void
-    signal_separator_c_impl::add_filter(
-            filter::kernel::fir_filter_ccc* filter) {
-      d_filterbank.push_back(filter);
-    }
-
-    void
-    signal_separator_c_impl::remove_filter(
-            unsigned int signal) {
-      d_filterbank.erase(d_filterbank.begin() - 1 + signal);
     }
 
     //</editor-fold>
@@ -149,23 +139,29 @@ namespace gr {
     void
     signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
       // clear all vectors for recalculation
-      d_filterbank.clear();
-      d_decimations.clear();
-      d_rotators.clear();
 
       // free allocated space
       free_allocation();
-
       unpack_message(msg);
-
       // calculate filters
       // TODO: make this more efficient
+      rebuild_all_filters();
+    }
+
+    void
+    signal_separator_c_impl::rebuild_all_filters() {
+      d_filterbank.clear();
+      d_decimations.clear();
+      d_rotators.clear();
       d_decimations.resize(d_rf_map.size());
       d_rotators.resize(d_rf_map.size());
       d_filterbank.resize(d_rf_map.size());
+      d_history_buffer.resize(d_rf_map.size());
       for (unsigned int i = 0; i < d_rf_map.size(); i++) {
         build_filter(i);
       }
+
+      d_buffer_stage = 1;
     }
 
     void
@@ -200,13 +196,34 @@ namespace gr {
     }
 
     void
+    signal_separator_c_impl::apply_filter(int i) {
+      //std::cout << "Appling filter " << i << std::endl;
+      // size of filter output
+      int size = (int)ceil((float)(d_buffer_len)/(float)d_decimations[i]);
+      //std::cout << "Size = " << size << std::endl;
+      // allocate enough space for result
+      d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
+              volk_get_alignment());
+
+      // copied from xlating fir filter
+      unsigned j = 0;
+      for (int k = 0; k < size; k++) {
+        //d_temp_buffer[k] = d_history_buffer[i][j+d_ntaps-1];
+        d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
+        j += d_decimations[i];
+      }
+
+      // convert buffer to vector
+      std::vector<gr_complex> temp_results(d_temp_buffer, d_temp_buffer+size);
+      // save results for current filter
+      d_result_vector.push_back(temp_results);
+      volk_free(d_temp_buffer);
+    }
+
+    void
     signal_separator_c_impl::forecast(int noutput_items,
                                       gr_vector_int &ninput_items_required) {
-      //ninput_items_required[0] = noutput_items;
-      ninput_items_required[0] = 0;
-      for(int i = 0; i < d_decimations.size(); i++) {
-        ninput_items_required[0] += noutput_items*d_decimations[i];
-      }
+      ninput_items_required[0] = 4*noutput_items;
     }
 
     int
@@ -216,40 +233,63 @@ namespace gr {
                                           gr_vector_void_star &output_items) {
       const gr_complex *in = (const gr_complex *) input_items[0];
 
+      // no message received -> nothing to do
+      if(d_buffer_stage == 0) {
+        return 0;
+      }
+      // message received, so let's allocate all the needed memory
+      else if(d_buffer_stage == 1) {
+        d_buffer_len = ninput_items[0];
+        for(int i = 0; i < d_history_buffer.size(); i++) {
+          //std::cout << "Trying to allocate " << d_ntaps-1 << "+" << d_buffer_len <<" = "<< d_ntaps+d_buffer_len-1 << std::endl;
+          d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps+d_buffer_len-1)*sizeof(gr_complex),
+                                                         volk_get_alignment());
+          // write zeros in buffers
+          for(int j = 0; j < d_ntaps+d_buffer_len-1; j++) {
+            d_history_buffer[i][j] = 0.0;
+          }
+        }
+        d_buffer_stage = 2; // everything set up, no need to repeat any stuff in this block
+      }
+
+      // if too frew items, wait for more
+      if(ninput_items[0] < d_buffer_len) {
+        return 0;
+      }
+
+      // free previous result vector
       d_result_vector.clear();
+
+      // rotate and buffer input samples
+      for(int i = 0; i < d_rotators.size(); i++){
+        for(int j = 0; j < d_buffer_len; j++) {
+          d_history_buffer[i][j+d_ntaps-1] = d_rotators[i].rotate(in[j]);
+        }
+      }
 
       // apply all filters on input signal
       // iterate over each filter
       for (unsigned int i = 0; i < d_filterbank.size(); i++) {
-        // size of filter output
-        int size = ninput_items[0]/d_decimations[i];
-        // allocate enough space for result
-        d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
-                volk_get_alignment());
-        // copied from xlating fir filter
-        unsigned j = 0;
-        for (int k = 0; k < size; k++){
-          d_temp_buffer[k] = d_rotators[i]->rotate(d_filterbank[i]->filter(&in[j]));
-          j += d_decimations[i];
-        }
-
-        // convert buffer to vector
-        std::vector<gr_complex> temp_results(d_temp_buffer, d_temp_buffer+ninput_items[0]/d_decimations[i]);
-        // save results for current filter
-        d_result_vector.push_back(temp_results);
-        volk_free(d_temp_buffer);
+        apply_filter(i);
       }
+
+
+      // put current items in history
+      for(int i = 0; i < d_history_buffer.size(); i++) {
+        memcpy(d_history_buffer[i], &d_history_buffer[i][d_buffer_len],
+               (d_ntaps-1)*sizeof(gr_complex));
+      }
+
       // pack message
       pmt::pmt_t msg = pack_message();
 
       message_port_pub(pmt::intern("msg_out"), msg);
       // Tell runtime system how many output items we produced.
-      consume_each(ninput_items[0]);
-      return noutput_items;
+      consume_each(d_buffer_len);
+      return d_buffer_len;
     }
 
     //</editor-fold>
 
   } /* namespace inspector */
 } /* namespace gr */
-

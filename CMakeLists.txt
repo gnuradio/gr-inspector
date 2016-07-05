@@ -40,6 +40,23 @@ set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 #make sure our local CMake Modules path comes first
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
+# Set cmake policies.
+# This will suppress developer warnings during the cmake process that can occur
+# if a newer cmake version than the minimum is used.
+
+if(POLICY CMP0026)
+    cmake_policy(SET CMP0026 OLD)
+endif()
+if(POLICY CMP0043)
+    cmake_policy(SET CMP0043 OLD)
+endif()
+if(POLICY CMP0045)
+    cmake_policy(SET CMP0045 OLD)
+endif()
+if(POLICY CMP0046)
+    cmake_policy(SET CMP0046 OLD)
+endif()
+
 ########################################################################
 # Compiler specific setup
 ########################################################################
@@ -64,6 +81,10 @@ set(Boost_ADDITIONAL_VERSIONS
     "1.65.0" "1.65" "1.66.0" "1.66" "1.67.0" "1.67" "1.68.0" "1.68" "1.69.0" "1.69"
 )
 find_package(Boost "1.35" COMPONENTS filesystem system)
+
+find_package(PythonLibs 2)
+include(GrPython)
+GR_PYTHON_CHECK_MODULE("PyQt4" PyQt4 True PYQT4_FOUND)
 
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost required to compile inspector")
@@ -111,6 +132,8 @@ endif(APPLE)
 ########################################################################
 find_package(CppUnit)
 find_package(Doxygen)
+find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
+find_package(Qwt)
 
 # Search for GNU Radio and its components and versions. Add any
 # components required to the list of GR_REQUIRED_COMPONENTS (in all
@@ -123,6 +146,8 @@ list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 if(NOT CPPUNIT_FOUND)
     message(FATAL_ERROR "CppUnit required to compile inspector")
 endif()
+
+include(GrSetupQt4)
 
 ########################################################################
 # Setup doxygen option
@@ -144,6 +169,9 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${CPPUNIT_INCLUDE_DIRS}
     ${GNURADIO_ALL_INCLUDE_DIRS}
+    ${QWT_INCLUDE_DIRS}
+    ${QT_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -151,6 +179,8 @@ link_directories(
     ${CPPUNIT_LIBRARY_DIRS}
     ${GNURADIO_RUNTIME_LIBRARY_DIRS}
     ${GNURADIO_FILTER_LIBRARY_DIRS}
+    ${QT_LIBRARY_DIRS}
+    ${QWT_LIBRARY_DIRS}
 )
 
 # Set component parameters

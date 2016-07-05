@@ -3,3 +3,4 @@
 /build
 /python/.unittests
 *.pyc
+.tags

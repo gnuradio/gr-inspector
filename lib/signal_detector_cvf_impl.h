@@ -38,7 +38,8 @@ namespace gr {
       signal_detector_cvf_impl(double samp_rate, int fft_len,
                               int window_type, float threshold,
                               float sensitivity, bool auto_threshold,
-                              float average);
+                              float average, float quantization,
+                              float min_bw);
 
       ~signal_detector_cvf_impl();
 
@@ -46,7 +47,6 @@ namespace gr {
       std::vector<float> build_freq();
       void build_threshold();
       std::vector<std::vector<unsigned int> > find_signal_edges();
-
       std::vector<filter::single_pole_iir<float,float,double> > d_avg_filter;
       double d_samp_rate;
       int d_fft_len;
@@ -62,7 +62,7 @@ namespace gr {
       float* d_tmp_pxx;
       float* d_pxx;
       float* d_pxx_out;
-      int d_average;
+      float d_average, d_quantization, d_min_bw;
       std::vector<float> d_freq;
       pmt::pmt_t pack_message();
       bool compare_signal_edges(std::vector<std::vector<float> >* edges);
@@ -79,19 +79,16 @@ namespace gr {
 
       int fft_len() const {
         return d_fft_len;
+
       }
 
-      void set_fft_len(int d_fft_len) {
-        signal_detector_cvf_impl::d_fft_len = d_fft_len;
-      }
+      void set_fft_len(int fft_len);
 
       int window_type() const {
         return static_cast<int>(d_window_type);
       }
 
-      void set_window_type(int d_window) {
-        signal_detector_cvf_impl::d_window_type = static_cast<filter::firdes::win_type>(d_window);
-      }
+      void set_window_type(int d_window);
 
       float threshold() const {
         return d_threshold;
@@ -117,12 +114,23 @@ namespace gr {
         signal_detector_cvf_impl::d_auto_threshold = d_auto_threshold;
       }
 
-      int average() const {
+      float average() const {
         return d_average;
       }
 
-      void set_average(int d_average) {
+      void set_average(float d_average) {
         signal_detector_cvf_impl::d_average = d_average;
+        for(unsigned int i = 0; i < d_fft_len; i++) {
+          d_avg_filter[i].set_taps(d_average);
+        }
+      }
+
+      float quantization() const {
+        return d_quantization;
+      }
+
+      void set_quantization(float d_quantization){
+        signal_detector_cvf_impl::d_quantization = d_quantization;
       }
 
       //</editor-fold>

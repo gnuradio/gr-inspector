@@ -1,6 +1,6 @@
 # gr-inspector
 <center>
-![gr-inspector logo](docs/logo_body.png "The Inspector")
+![gr-inspector logo](docs/doxygen/images/logo_body.png "The Inspector")
 </center>
 ## Introduction
 This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:
@@ -17,6 +17,27 @@ Additional functionality for the post-GSoC period can be:
 - Automatic decoding
 
 Read the full proposal [here](https://github.com/sbmueller/gsoc-proposal/blob/master/sigint-proposal.pdf).
+
+## Installation
+
+To install the Inspector, the following dependencies are required:
+
+- GNU Radio runtime
+- gr-filter
+- QT4
+- QWT
+
+Install by the following shell commands:
+
+```
+mkdir build
+cd build
+cmake .. -DENABLE_PYTHON=ON
+make -j4
+sudo make install
+```
+
+This module is still under development. Please let me know if you run into any issues on the master branch.
 
 ## Contact
 Maintainer of this module:

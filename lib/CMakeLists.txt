@@ -18,6 +18,13 @@
 # Boston, MA 02110-1301, USA.
 
 ########################################################################
+# QT GUI file generation stuff (Q_OBJECT)
+########################################################################
+set(QTGUI_MOC_HEADERS
+		inspector_form.h)
+QT4_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
+
+########################################################################
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
@@ -25,8 +32,21 @@ include(GrPlatform) #define LIB_SUFFIX
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND inspector_sources
+		${QTGUI_MOC_OUTFILES}
     signal_separator_c_impl.cc
-    signal_detector_cvf_impl.cc )
+    signal_detector_cvf_impl.cc
+    signal_extractor_c_impl.cc
+    qtgui_inspector_sink_vf_impl.cc
+		inspector_form.cc
+		signal_marker.cc)
+
+include(GrPython)
+if(ENABLE_PYTHON)
+	add_definitions(-DENABLE_PYTHON)
+	list(APPEND qtgui_libs
+			${PYTHON_LIBRARIES}
+			)
+endif(ENABLE_PYTHON)
 
 set(inspector_sources "${inspector_sources}" PARENT_SCOPE)
 if(NOT inspector_sources)
@@ -35,7 +55,7 @@ if(NOT inspector_sources)
 endif(NOT inspector_sources)
 
 add_library(gnuradio-inspector SHARED ${inspector_sources})
-target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${PYTHON_LIBRARIES} ${QT_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 set_target_properties(gnuradio-inspector PROPERTIES DEFINE_SYMBOL "gnuradio_inspector_EXPORTS")
 
 if(APPLE)
@@ -72,6 +92,8 @@ target_link_libraries(
   ${GNURADIO_RUNTIME_LIBRARIES}
   ${Boost_LIBRARIES}
   ${CPPUNIT_LIBRARIES}
+  ${QWT_LIBRARIES}
+  ${QT_LIBRARIES}
   gnuradio-inspector
 )
 
