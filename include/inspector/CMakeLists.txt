@@ -26,5 +26,5 @@ install(FILES
     signal_detector_cvf.h
     signal_extractor_c.h
     qtgui_inspector_sink_vf.h
-    ofdm_estimator_c.h DESTINATION include/inspector
+    DESTINATION include/inspector
 )

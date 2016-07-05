@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <block>
-  <name>Inspector OFDM Estimator</name>
-  <key>inspector_ofdm_estimator_c</key>
+  <name>OFDM Prototype</name>
+  <key>inspector_ofdm_prototype_c</key>
   <category>Inspector</category>
   <import>import inspector</import>
-  <make>inspector.ofdm_estimator_c($samp_rate)</make>
+  <make>inspector.ofdm_prototype_c($samp_rate)</make>
   <param>
-    <name>Sample rate</name>
+    <name>Samp rate</name>
     <key>samp_rate</key>
     <type>real</type>
   </param>

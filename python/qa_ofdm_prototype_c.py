@@ -21,9 +21,9 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-import inspector_swig as inspector
+from ofdm_prototype_c import ofdm_prototype_c
 
-class qa_ofdm_estimator_c (gr_unittest.TestCase):
+class qa_ofdm_prototype_c (gr_unittest.TestCase):
 
     def setUp (self):
         self.tb = gr.top_block ()
@@ -38,4 +38,4 @@ class qa_ofdm_estimator_c (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_ofdm_estimator_c, "qa_ofdm_estimator_c.xml")
+    gr_unittest.run(qa_ofdm_prototype_c, "qa_ofdm_prototype_c.xml")
