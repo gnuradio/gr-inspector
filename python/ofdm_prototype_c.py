@@ -32,9 +32,11 @@ class ofdm_prototype_c(gr.sync_block):
             name="ofdm_prototype_c",
             in_sig=[numpy.complex64],
             out_sig=None)
-        self.Nb = 2
+        self.Nb = 10
 
         self.busy = False
+        self.iter = 0
+        self.correct = 0
         self.alpha_range = [16, 32, 64, 128, 256, 512, 1024]
         self.beta_range = [4, 8, 16, 32]
         self.samp_rate = samp_rate
@@ -65,16 +67,20 @@ class ofdm_prototype_c(gr.sync_block):
 
 
     def work(self, input_items, output_items):
+        in0 = input_items[0]
         if self.busy:
-            return 0
+            return len(in0)
+        self.iter += 1
+
+        #print("Got " +str(len(in0))+" items")
 
         self.busy = True
-        in0 = input_items[0]
+
         # <+signal processing here+>
         J = -1000 # small value?
         a_res = 0
         b_res = 0
-        print("Optimizing... please be patient")
+        #print("Optimizing... please be patient")
         for a in self.alpha_range:
             for b in self.beta_range:
                 J_new = self.cost_func(in0, a, 1/float(b))
@@ -85,12 +91,20 @@ class ofdm_prototype_c(gr.sync_block):
                     a_res = a
                     b_res = b
         print("")
-        print("------- ESTIMATION RESULTS -------")
-        print("Subcarriers = " + str(a_res))
-        print("Subcarr. Spacing = " + str(self.samp_rate/a_res) + " Hz")
-        print("Symbol time = " + str(float(float(a_res)*(1.0+1/float(b_res))*1000000.0/self.samp_rate)) + " us")
+        print("------- Result #"+str(self.iter)+ " -------")
+        print("FFT len = " + str(a_res))
         print("CP len = " + str(1.0/float(b_res)*float(a_res)))
-        print("")
+        print("Subcarr. Spacing = " + str(self.samp_rate/a_res) + " Hz")
+        print("Symbol time = " + str(float(float(a_res)*(1.0+1/float(b_res))*1000.0/self.samp_rate)) + " ms")
+        #if a_res == 512 and b_res == 32:
+        #    self.correct += 1
+        #    print("Correct estimation " + str(self.correct ) + "/" + str(self.iter))
+        #    print("(a = " + str(a_res) + ", b = " + str(1.0/float(b_res)*float(a_res)) + ")")
+        #else:
+        #    print("Wrong estimation " + str(self.iter-self.correct) + "/" + str(self.iter))
+        #    print("(a = " + str(a_res) + ", b = " + str(1.0/float(b_res)*float(a_res)) + ")")
+        #print("")
+        #numpy.sqrt(100*(10**(-SNR/10.0)))
 
         self.busy = False
         return len(in0)

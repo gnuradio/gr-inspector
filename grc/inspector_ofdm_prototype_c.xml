@@ -2,7 +2,7 @@
 <block>
   <name>OFDM Prototype</name>
   <key>inspector_ofdm_prototype_c</key>
-  <category>Inspector</category>
+  <category>[Inspector]/Analysis</category>
   <import>import inspector</import>
   <make>inspector.ofdm_prototype_c($samp_rate)</make>
   <param>

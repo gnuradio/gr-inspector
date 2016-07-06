@@ -84,7 +84,6 @@ namespace gr {
       void mousePressEvent (QMouseEvent * eventPress);
       void mouseReleaseEvent(QMouseEvent *eventRelease);
       void mouseMoveEvent(QMouseEvent *eventMove);
-      void manual_cb_clicked(int state);
       void spawn_signal_selector();
       void add_msg_queue(float cfreq, float bandwidth);
       float freq_to_x(float freq);
@@ -133,6 +132,7 @@ namespace gr {
 
     public slots:
       void refresh();
+      void manual_cb_clicked(int state);
 
     };
 

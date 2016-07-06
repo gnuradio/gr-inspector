@@ -1,7 +1,7 @@
 <block>
   <name>Signal Separator</name>
   <key>inspector_signal_separator_c</key>
-  <category>Inspector</category>
+  <category>[Inspector]/Conditioning</category>
   <import>import inspector</import>
   <import>from gnuradio.filter import firdes</import>
   <import>import json</import>

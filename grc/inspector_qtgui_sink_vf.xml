@@ -1,7 +1,7 @@
 <block>
   <name>QT GUI Inspector Sink</name>
   <key>inspector_qtgui_sink_vf</key>
-  <category>Inspector</category>
+  <category>[Inspector]/GUI</category>
   <import>import inspector</import>
   <import>from PyQt4 import Qt</import>
   <import>from gnuradio import qtgui</import>

@@ -1,7 +1,7 @@
 <block>
   <name>Signal Extractor</name>
   <key>inspector_signal_extractor_c</key>
-  <category>Inspector</category>
+  <category>[Inspector]/Conditioning</category>
   <import>import inspector</import>
   <make>inspector.signal_extractor_c($signal)</make>
   <callback>set_signal($signal)</callback>

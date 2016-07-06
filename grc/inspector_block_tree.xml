@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Block Tree for inspector.
+###################################################
+ -->
+<cat>
+  <name>[Inspector]</name>
+  <cat>
+    <name>Conditioning</name>
+    <block>signal_detector_cvf</block>
+    <block>signal_separator_c</block>
+    <block>signal_extractor_c</block>
+  </cat>
+  <cat>
+    <name>Analysis</name>
+    <block>ofdm_prototype_c</block>
+  </cat>
+  <cat>
+    <name>GUI</name>
+    <block>qtgui_sink_vf</block>
+  </cat>
+</cat>

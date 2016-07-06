@@ -1,7 +1,7 @@
 <block>
   <name>Signal Detector</name>
   <key>inspector_signal_detector_cvf</key>
-  <category>Inspector</category>
+  <category>[Inspector]/Conditioning</category>
   <import>import inspector</import>
   <make>inspector.signal_detector_cvf($samp_rate, $fft_len, $window,
     $threshold, $sensitivity, $auto, $avg, $quant, $min_bw)</make>

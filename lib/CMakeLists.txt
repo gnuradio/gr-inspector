@@ -100,3 +100,9 @@ target_link_libraries(
 )
 
 GR_ADD_TEST(test_inspector test-inspector)
+
+########################################################################
+# Print summary
+########################################################################
+message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Building for version: ${VERSION} / ${LIBVER}")
