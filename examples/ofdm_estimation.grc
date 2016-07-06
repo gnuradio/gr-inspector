@@ -93,6 +93,60 @@
     </param>
     <param>
       <key>_coordinate</key>
+      <value>(296, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>cp_len</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>8</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(200, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>fft_len</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>256</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
       <value>(8, 76)</value>
     </param>
     <param>
@@ -242,7 +296,7 @@
     </param>
     <param>
       <key>packet_len</key>
-      <value>80</value>
+      <value>50</value>
     </param>
     <param>
       <key>type</key>
@@ -273,7 +327,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(492, 264)</value>
+      <value>(508, 264)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -324,7 +378,7 @@
     </param>
     <param>
       <key>cp_len</key>
-      <value>16</value>
+      <value>cp_len</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -332,7 +386,7 @@
     </param>
     <param>
       <key>fft_len</key>
-      <value>64</value>
+      <value>fft_len</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -368,7 +422,7 @@
     </param>
     <param>
       <key>occupied_carriers</key>
-      <value>()</value>
+      <value>(range(-64,0)+range(1,64),)</value>
     </param>
     <param>
       <key>payload_mod</key>
@@ -482,7 +536,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>fftsize</key>
@@ -769,7 +823,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(472, 56)</value>
+      <value>(488, 56)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -781,7 +835,7 @@
     </param>
     <param>
       <key>interp</key>
-      <value>10</value>
+      <value>2</value>
     </param>
     <param>
       <key>maxoutbuf</key>

@@ -32,10 +32,11 @@ class ofdm_prototype_c(gr.sync_block):
             name="ofdm_prototype_c",
             in_sig=[numpy.complex64],
             out_sig=None)
-        self.Nb = 4
+        self.Nb = 2
+
         self.busy = False
         self.alpha_range = [16, 32, 64, 128, 256, 512, 1024]
-        self.beta_range = [4, 8 , 16, 32]
+        self.beta_range = [4, 8, 16, 32]
         self.samp_rate = samp_rate
         self.message_port_register_out(pmt.intern("ofdm_out"))
 
@@ -47,7 +48,7 @@ class ofdm_prototype_c(gr.sync_block):
         R = 0
         for m in range(0,M-1-a):
             R += sig[m+a]*numpy.conj(sig[m])*numpy.exp(
-                -2*1j*numpy.pi*m*p/(a*(1+b))
+                -1j*2*numpy.pi*m*p/(a*(1+b))
             )
         R = R/M
         return R
@@ -76,7 +77,9 @@ class ofdm_prototype_c(gr.sync_block):
         print("Optimizing... please be patient")
         for a in self.alpha_range:
             for b in self.beta_range:
-                J_new = self.cost_func(in0, a, 1/b)
+                J_new = self.cost_func(in0, a, 1/float(b))
+                #print("a = "+str(a)+", b = 1/"+str(b)+", J = "+str(J_new))
+
                 if J_new > J:
                     J = J_new
                     a_res = a
