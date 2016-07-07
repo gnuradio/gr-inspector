@@ -142,7 +142,7 @@ endif(APPLE)
 find_package(CppUnit)
 find_package(Doxygen)
 find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
-find_package(Qwt)
+find_package(Qwt 6.1.0 REQUIRED)
 
 # Search for GNU Radio and its components and versions. Add any
 # components required to the list of GR_REQUIRED_COMPONENTS (in all

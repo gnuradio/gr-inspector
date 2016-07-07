@@ -25,7 +25,7 @@ To install the Inspector, the following dependencies are required:
 - GNU Radio runtime
 - gr-filter
 - QT4
-- QWT
+- QWT 6.1.0
 
 Install by the following shell commands:
 

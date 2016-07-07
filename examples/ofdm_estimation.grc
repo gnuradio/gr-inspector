@@ -38,7 +38,7 @@
     </param>
     <param>
       <key>generate_options</key>
-      <value>no_gui</value>
+      <value>qt_gui</value>
     </param>
     <param>
       <key>hier_block_src_path</key>
@@ -417,11 +417,11 @@
     </param>
     <param>
       <key>freq_offset</key>
-      <value>0.0</value>
+      <value>2000</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(656, 128)</value>
+      <value>(632, 128)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -441,7 +441,7 @@
     </param>
     <param>
       <key>noise_voltage</key>
-      <value>numpy.sqrt(100*(10**(-SNR/10.0)))</value>
+      <value>numpy.sqrt(20000*(10**(-SNR/10.0)))</value>
     </param>
     <param>
       <key>seed</key>
@@ -449,7 +449,7 @@
     </param>
     <param>
       <key>taps</key>
-      <value>1.0</value>
+      <value>numpy.random.rand(1,10)[0] + 1j*numpy.random.rand(1,10)[0]</value>
     </param>
   </block>
   <block>
@@ -544,6 +544,37 @@
     </param>
   </block>
   <block>
+    <key>import</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(616, 28)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>import_0_0</value>
+    </param>
+    <param>
+      <key>import</key>
+      <value>import numpy</value>
+    </param>
+  </block>
+  <block>
     <key>inspector_ofdm_prototype_c</key>
     <param>
       <key>alias</key>
@@ -626,7 +657,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>fftsize</key>
@@ -634,7 +665,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(864, 12)</value>
+      <value>(888, 28)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -937,7 +968,7 @@
     </param>
     <param>
       <key>taps</key>
-      <value></value>
+      <value>(0.8, 0.01, 0.02, 0.01, 0.01, 0.08, 0.07)</value>
     </param>
     <param>
       <key>type</key>

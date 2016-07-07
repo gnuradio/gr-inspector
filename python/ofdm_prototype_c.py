@@ -32,7 +32,7 @@ class ofdm_prototype_c(gr.sync_block):
             name="ofdm_prototype_c",
             in_sig=[numpy.complex64],
             out_sig=None)
-        self.Nb = 10
+        self.Nb = 5
 
         self.busy = False
         self.iter = 0
