@@ -93,7 +93,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(376, 12)</value>
+      <value>(352, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -105,7 +105,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>10</value>
+      <value>20</value>
     </param>
   </block>
   <block>
@@ -120,7 +120,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(296, 12)</value>
+      <value>(280, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -160,6 +160,33 @@
     <param>
       <key>value</key>
       <value>512</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(424, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>offset</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>1.25</value>
     </param>
   </block>
   <block>
@@ -246,6 +273,57 @@
     <param>
       <key>repeat</key>
       <value>True</value>
+    </param>
+  </block>
+  <block>
+    <key>blocks_file_sink</key>
+    <param>
+      <key>append</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>file</key>
+      <value>/home/senpo/src/tmp/ofdm_"+str(offset)+"_"+str(SNR)+"_dB.dat</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(888, 300)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_file_sink_0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>unbuffered</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
     </param>
   </block>
   <block>
@@ -413,7 +491,7 @@
     </param>
     <param>
       <key>epsilon</key>
-      <value>1.0</value>
+      <value>offset</value>
     </param>
     <param>
       <key>freq_offset</key>
@@ -421,7 +499,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(632, 128)</value>
+      <value>(584, 208)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -449,7 +527,7 @@
     </param>
     <param>
       <key>taps</key>
-      <value>numpy.random.rand(1,10)[0] + 1j*numpy.random.rand(1,10)[0]</value>
+      <value>numpy.random.rand(10)+1j*numpy.random.rand(10)</value>
     </param>
   </block>
   <block>
@@ -512,7 +590,7 @@
     </param>
     <param>
       <key>occupied_carriers</key>
-      <value>(range(-64,0)+range(1,64),)</value>
+      <value>(range(-fft_len/4,0)+range(1,fft_len/4),)</value>
     </param>
     <param>
       <key>payload_mod</key>
@@ -559,7 +637,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(616, 28)</value>
+      <value>(512, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -575,10 +653,14 @@
     </param>
   </block>
   <block>
-    <key>inspector_ofdm_prototype_c</key>
+    <key>inspector_ofdm_estimator_c</key>
     <param>
       <key>alias</key>
       <value></value>
+    </param>
+    <param>
+      <key>beta</key>
+      <value>[4, 8, 16, 32]</value>
     </param>
     <param>
       <key>comment</key>
@@ -589,12 +671,20 @@
       <value></value>
     </param>
     <param>
+      <key>Nb</key>
+      <value>5</value>
+    </param>
+    <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>True</value>
+    </param>
+    <param>
+      <key>alpha</key>
+      <value>[16, 32, 64, 128, 256, 512, 1024]</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(888, 172)</value>
+      <value>(848, 144)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -602,7 +692,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_ofdm_prototype_c_0</value>
+      <value>inspector_ofdm_estimator_c_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -916,65 +1006,6 @@
       <value>dB</value>
     </param>
   </block>
-  <block>
-    <key>rational_resampler_xxx</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>decim</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>fbw</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(488, 56)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>90</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>rational_resampler_xxx_0</value>
-    </param>
-    <param>
-      <key>interp</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>256</value>
-    </param>
-    <param>
-      <key>taps</key>
-      <value>(0.8, 0.01, 0.02, 0.01, 0.01, 0.08, 0.07)</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>ccc</value>
-    </param>
-  </block>
   <connection>
     <source_block_id>analog_random_source_x_0</source_block_id>
     <sink_block_id>blocks_stream_to_tagged_stream_0</sink_block_id>
@@ -989,13 +1020,19 @@
   </connection>
   <connection>
     <source_block_id>blocks_throttle_0</source_block_id>
-    <sink_block_id>rational_resampler_xxx_0</sink_block_id>
+    <sink_block_id>channels_channel_model_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>channels_channel_model_0</source_block_id>
-    <sink_block_id>inspector_ofdm_prototype_c_0</sink_block_id>
+    <sink_block_id>blocks_file_sink_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>channels_channel_model_0</source_block_id>
+    <sink_block_id>inspector_ofdm_estimator_c_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1012,15 +1049,9 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_ofdm_prototype_c_0</source_block_id>
+    <source_block_id>inspector_ofdm_estimator_c_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>ofdm_out</source_key>
     <sink_key>print</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>rational_resampler_xxx_0</source_block_id>
-    <sink_block_id>channels_channel_model_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
   </connection>
 </flow_graph>
