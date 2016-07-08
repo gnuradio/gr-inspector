@@ -38,7 +38,7 @@ GR_PYTHON_INSTALL(
     AMC_s.py
     AMC_b.py
     TFModel.py
-    DESTINATION ${GR_PYTHON_DIR}/inspector
+    SCF.py DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
 ########################################################################
@@ -56,3 +56,4 @@ GR_ADD_TEST(qa_ofdm_zkf_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_of
 GR_ADD_TEST(qa_ofdm_synchronizer_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_ofdm_synchronizer_cc.py)
 GR_ADD_TEST(qa_scf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_scf.py)
 GR_ADD_TEST(qa_AMC ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_AMC.py)
+GR_ADD_TEST(qa_SCF ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_SCF.py)
