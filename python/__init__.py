@@ -40,4 +40,5 @@ from AMC_i import AMC_i
 from AMC_s import AMC_s
 from AMC_b import AMC_b
 from TFModel import TFModel
+from SCF import SCF
 #

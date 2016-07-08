@@ -29,5 +29,6 @@ install(FILES
     inspector_scf.xml
     inspector_TensorFlow.xml
     inspector_AMC.xml 
-    inspector_TFModel.xml DESTINATION share/gnuradio/grc/blocks
+    inspector_TFModel.xml
+    inspector_SCF.xml DESTINATION share/gnuradio/grc/blocks
 )
