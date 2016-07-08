@@ -47,6 +47,10 @@ namespace gr {
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(0, 0, 0))
     {
+      d_samp_rate = samp_rate;
+      d_Nb = Nb;
+      d_alpha = alpha;
+      d_beta = beta;
       message_port_register_out(pmt::intern("ofdm_out"));
     }
 
@@ -55,6 +59,19 @@ namespace gr {
      */
     ofdm_estimator_c_impl::~ofdm_estimator_c_impl()
     {
+    }
+
+    gr_complex
+    ofdm_estimator_c_impl::autocorr(gr_complex *sig, int a, int b,
+                                    int p) {
+      int M = d_len;
+      gr_complex R = gr_complex(0,0);
+      for(int m = 0; m < M-a; m++) {
+        R += sig[m+a];
+      }
+
+      R = R/M;
+      return R;
     }
 
     int

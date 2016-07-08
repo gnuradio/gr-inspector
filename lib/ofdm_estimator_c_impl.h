@@ -29,13 +29,18 @@ namespace gr {
     class ofdm_estimator_c_impl : public ofdm_estimator_c
     {
      private:
-      // Nothing to declare in this block.
+      int d_Nb, d_len;
+      double d_samp_rate;
+      std::vector<int> d_alpha, d_beta;
 
      public:
       ofdm_estimator_c_impl(double samp_rate, int Nb,
                             const std::vector<int> &alpha,
                             const std::vector<int> &beta);
       ~ofdm_estimator_c_impl();
+
+      gr_complex autocorr(gr_complex *sig, int a, int b, int p);
+      float cost_func(gr_complex *sig, int a, int b);
 
       // Where all the action really happens
       int work(int noutput_items,
