@@ -262,10 +262,10 @@ namespace gr {
                                           gr_vector_void_star &output_items) {
       gr::thread::scoped_lock guard(d_mutex);
       const gr_complex *in = (const gr_complex *) input_items[0];
-
       // no message received -> nothing to do
+
       if(d_buffer_stage == 0) {
-        return 0;
+        return ninput_items[0];
       }
       // message received, so let's allocate all the needed memory
       else if(d_buffer_stage == 1) {
