@@ -24,6 +24,7 @@
 
 #include <gnuradio/io_signature.h>
 #include "ofdm_estimator_c_impl.h"
+#include <complex>
 
 namespace gr {
   namespace inspector {
@@ -62,16 +63,32 @@ namespace gr {
     }
 
     gr_complex
-    ofdm_estimator_c_impl::autocorr(gr_complex *sig, int a, int b,
+    ofdm_estimator_c_impl::autocorr(const gr_complex *sig, int a, int b,
                                     int p) {
       int M = d_len;
       gr_complex R = gr_complex(0,0);
+
+      gr_complex base = std::exp(gr_complex(0,-1)*gr_complex(2*M_PI,0)*
+                                 gr_complex(p,0)/
+                                 gr_complex(a*(1+b),0));
+
       for(int m = 0; m < M-a; m++) {
-        R += sig[m+a];
+        R += sig[m+a] * std::conj(sig[m]) * std::pow(base, m);
       }
 
-      R = R/M;
+      R = R/gr_complex(M,0); // normalize
       return R;
+    }
+
+    float
+    ofdm_estimator_c_impl::cost_func(const gr_complex *sig, int a,
+                                     int b) {
+      float J = 0;
+      for(int p = -d_Nb; p <= d_Nb; p++) {
+        J += std::abs(autocorr(sig, a, b, p));
+      }
+      J = J/(2*d_Nb+1); // normalize
+      return J;
     }
 
     int
@@ -80,8 +97,32 @@ namespace gr {
         gr_vector_void_star &output_items)
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
+      d_len = noutput_items;
+      //if(d_len < 512*20) {
+      //  return 0;
+      //}
 
       // Do <+signal processing+>
+      float J = 0.0;
+      float J_new;
+      int a_res = 0;
+      int b_res = 0;
+
+      for(std::vector<int>::iterator a = d_alpha.begin();
+              a != d_alpha.end(); ++a) {
+        for(std::vector<int>::iterator b = d_beta.begin();
+                b != d_beta.end(); ++b){
+          J_new = cost_func(in, *a, 1/ *b);
+          if(J_new > J) {
+            J = J_new;
+            a_res = *a;
+            b_res = *b;
+          }
+        }
+      }
+      std::cout << "-------- Result -------" << std::endl;
+      std::cout << "FFT len = " << a_res << std::endl;
+      std::cout << "CP len = " << 1.0/b_res*a_res << std::endl;
 
       // Tell runtime system how many output items we produced.
       return noutput_items;

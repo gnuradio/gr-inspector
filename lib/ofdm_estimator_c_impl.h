@@ -39,8 +39,8 @@ namespace gr {
                             const std::vector<int> &beta);
       ~ofdm_estimator_c_impl();
 
-      gr_complex autocorr(gr_complex *sig, int a, int b, int p);
-      float cost_func(gr_complex *sig, int a, int b);
+      gr_complex autocorr(const gr_complex *sig, int a, int b, int p);
+      float cost_func(const gr_complex *sig, int a, int b);
 
       // Where all the action really happens
       int work(int noutput_items,
