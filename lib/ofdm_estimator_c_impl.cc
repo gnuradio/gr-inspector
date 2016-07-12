@@ -113,6 +113,7 @@ namespace gr {
         for(std::vector<int>::iterator b = d_beta.begin();
                 b != d_beta.end(); ++b){
           J_new = cost_func(in, *a, 1/ *b);
+          std::cout << "a = " << *a << ", b = " << *b << ", J = " << J_new << std::endl;
           if(J_new > J) {
             J = J_new;
             a_res = *a;
