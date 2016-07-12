@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>fft_len/32</value>
+      <value>fft_len/16</value>
     </param>
   </block>
   <block>

@@ -52,6 +52,7 @@ namespace gr {
       d_Nb = Nb;
       d_alpha = alpha;
       d_beta = beta;
+      d_fft = new fft::fft_complex(1024, true);
       message_port_register_out(pmt::intern("ofdm_out"));
     }
 
@@ -66,15 +67,48 @@ namespace gr {
     ofdm_estimator_c_impl::autocorr(const gr_complex *sig, int a, int b,
                                     int p) {
       int M = d_len;
+
+      gr_complex f[M];
+      for(int i = 0; i < M; i++) {
+        f[i] = sig[i] * std::exp(gr_complex(0,1)*gr_complex(2*M_PI*i*p/(a/b+a),0));
+      }
+
+      gr_complex f_fft[M];
+      gr_complex g_fft[M];
+      gr_complex R_vec[M];
+
+      // fast convolution
+      do_fft(f, f_fft);
+      do_fft(sig, g_fft);
+      for(int i = 0; i < d_len; i++) {
+        R_vec[i] = f_fft[i]*g_fft[i]; // convolution
+      }
+      gr_complex R = R_vec[a];
+      /*
       gr_complex R = gr_complex(0,0);
 
       for(int m = 0; m < M-a; m++) {
         R += sig[m+a] * std::conj(sig[m]) *
                 std::exp(gr_complex(0,-1)*gr_complex(2*M_PI*p*m/(a/b+a),0));
       }
+      */
 
       R = R/gr_complex(M,0); // normalize
       return R;
+    }
+
+    void
+    ofdm_estimator_c_impl::rescale_fft() {
+      delete d_fft;
+      d_fft = new fft::fft_complex(d_len, true);
+      d_fft->set_nthreads(4);
+    }
+
+    void
+    ofdm_estimator_c_impl::do_fft(const gr_complex *in, gr_complex *out) {
+      memcpy(d_fft->get_inbuf(), in, d_len*sizeof(gr_complex));
+      d_fft->execute();
+      memcpy(out, d_fft->get_outbuf(), d_len*sizeof(gr_complex));
     }
 
     float
@@ -95,6 +129,7 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
       d_len = noutput_items;
+      rescale_fft();
       //std::cout << "len = " << d_len << std::endl;
 
       // we need a max number of items for analysis

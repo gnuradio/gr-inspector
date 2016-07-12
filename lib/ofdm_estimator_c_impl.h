@@ -22,6 +22,7 @@
 #define INCLUDED_INSPECTOR_OFDM_ESTIMATOR_C_IMPL_H
 
 #include <inspector/ofdm_estimator_c.h>
+#include <gnuradio/fft/fft.h>
 
 namespace gr {
   namespace inspector {
@@ -32,12 +33,16 @@ namespace gr {
       int d_Nb, d_len;
       double d_samp_rate;
       std::vector<int> d_alpha, d_beta;
+      fft::fft_complex *d_fft;
 
      public:
       ofdm_estimator_c_impl(double samp_rate, int Nb,
                             const std::vector<int> &alpha,
                             const std::vector<int> &beta);
       ~ofdm_estimator_c_impl();
+
+      void rescale_fft();
+      void do_fft(const gr_complex *in, gr_complex *out);
 
       gr_complex autocorr(const gr_complex *sig, int a, int b, int p);
       float cost_func(const gr_complex *sig, int a, int b);
