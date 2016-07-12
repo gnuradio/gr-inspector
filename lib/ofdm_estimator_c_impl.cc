@@ -68,12 +68,9 @@ namespace gr {
       int M = d_len;
       gr_complex R = gr_complex(0,0);
 
-      gr_complex base = std::exp(gr_complex(0,-1)*gr_complex(2*M_PI,0)*
-                                 gr_complex(p,0)/
-                                 gr_complex(a*(1+b),0));
-
       for(int m = 0; m < M-a; m++) {
-        R += sig[m+a] * std::conj(sig[m]) * std::pow(base, m);
+        R += sig[m+a] * std::conj(sig[m]) *
+                std::exp(gr_complex(0,-1)*gr_complex(2*M_PI*p*m/(a/b+a),0));
       }
 
       R = R/gr_complex(M,0); // normalize
@@ -85,7 +82,7 @@ namespace gr {
                                      int b) {
       float J = 0;
       for(int p = -d_Nb; p <= d_Nb; p++) {
-        J += std::abs(autocorr(sig, a, b, p));
+        J += std::pow(std::abs(autocorr(sig, a, b, p)), 2.0);
       }
       J = J/(2*d_Nb+1); // normalize
       return J;
@@ -98,9 +95,12 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
       d_len = noutput_items;
-      //if(d_len < 512*20) {
-      //  return 0;
-      //}
+      //std::cout << "len = " << d_len << std::endl;
+
+      // we need a max number of items for analysis
+      if(d_len < 7000) {
+        return 0;
+      }
 
       // Do <+signal processing+>
       float J = 0.0;
@@ -112,8 +112,8 @@ namespace gr {
               a != d_alpha.end(); ++a) {
         for(std::vector<int>::iterator b = d_beta.begin();
                 b != d_beta.end(); ++b){
-          J_new = cost_func(in, *a, 1/ *b);
-          std::cout << "a = " << *a << ", b = " << *b << ", J = " << J_new << std::endl;
+          J_new = cost_func(in, *a, *b);
+          //std::cout << "a = " << *a << ", b = " << *b << ", J = " << J_new << std::endl;
           if(J_new > J) {
             J = J_new;
             a_res = *a;

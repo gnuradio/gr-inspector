@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>fft_len/16</value>
+      <value>fft_len/32</value>
     </param>
   </block>
   <block>
@@ -480,7 +480,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(280, 120)</value>
+      <value>(288, 116)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -615,6 +615,49 @@
     <param>
       <key>id</key>
       <value>inspector_ofdm_estimator_c_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
+    </param>
+  </block>
+  <block>
+    <key>inspector_ofdm_prototype_c</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(816, 280)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>inspector_ofdm_prototype_c_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1013,6 +1056,12 @@
   </connection>
   <connection>
     <source_block_id>channels_channel_model_0</source_block_id>
+    <sink_block_id>inspector_ofdm_prototype_c_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>channels_channel_model_0</source_block_id>
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
@@ -1025,6 +1074,12 @@
   </connection>
   <connection>
     <source_block_id>inspector_ofdm_estimator_c_0</source_block_id>
+    <sink_block_id>blocks_message_debug_0</sink_block_id>
+    <source_key>ofdm_out</source_key>
+    <sink_key>print</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_ofdm_prototype_c_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>ofdm_out</source_key>
     <sink_key>print</sink_key>
