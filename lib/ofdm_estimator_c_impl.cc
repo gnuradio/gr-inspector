@@ -55,6 +55,20 @@ namespace gr {
       d_beta = beta;
       d_fft = new fft::fft_complex(1024, true);
       message_port_register_out(pmt::intern("ofdm_out"));
+      d_len = 10000;
+
+      // generate vectors
+      d_x1 = (float*)volk_malloc(sizeof(float)*d_len, volk_get_alignment()); //real part of sig
+      d_y1 = (float*)volk_malloc(sizeof(float)*d_len, volk_get_alignment()); //imag part of sig
+      d_x2 = (float*)volk_malloc(sizeof(float)*d_len, volk_get_alignment()); //real part of oscillation
+      d_y2 = (float*)volk_malloc(sizeof(float)*d_len, volk_get_alignment()); //imag part of oscillation
+      d_tmp1 = (float*) volk_malloc(sizeof(float)*d_len, volk_get_alignment());
+      d_tmp2 = (float*) volk_malloc(sizeof(float)*d_len, volk_get_alignment());
+      d_real_pre = (float*) volk_malloc(sizeof(float)*d_len, volk_get_alignment());
+      d_imag_pre = (float*) volk_malloc(sizeof(float)*d_len, volk_get_alignment());
+      d_sig_shift = (gr_complex*)volk_malloc(sizeof(gr_complex)*(d_len), volk_get_alignment());
+      d_res = (gr_complex*) volk_malloc(sizeof(gr_complex)*(d_len), volk_get_alignment());
+      d_osc_vec = (float*)volk_malloc(sizeof(float)*d_len, volk_get_alignment());
     }
 
     /*
@@ -62,6 +76,18 @@ namespace gr {
      */
     ofdm_estimator_c_impl::~ofdm_estimator_c_impl()
     {
+
+      volk_free(d_x1);
+      volk_free(d_y1);
+      volk_free(d_tmp1);
+      volk_free(d_tmp2);
+      volk_free(d_real_pre);
+      volk_free(d_imag_pre);
+      volk_free(d_sig_shift);
+      volk_free(d_res);
+      volk_free(d_osc_vec);
+      volk_free(d_x2);
+      volk_free(d_y2);
     }
 
     gr_complex
@@ -98,57 +124,33 @@ namespace gr {
       for(unsigned int i = 0; i < M; i++){
         m_vec[i] = i;
       }
-
-      float *osc_vec = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment());
       // create oscillation argument
-      volk_32f_s32f_multiply_32f(osc_vec, m_vec, -2*M_PI*p/(a/b+a), M);
+      volk_32f_s32f_multiply_32f(d_osc_vec, m_vec, 2*M_PI*p/(a/b+a), M);
 
-      // generate vectors
-      float *x1 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //real part of sig
-      float *y1 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //imag part of sig
-      float *x2 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //real part of oscillation
-      float *y2 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //imag part of oscillation
+      volk_32fc_deinterleave_real_32f(d_x1, sig, M);
+      volk_32fc_deinterleave_imag_32f(d_y1, sig, M);
+      volk_32f_cos_32f(d_x2, d_osc_vec, M); // create cosine vector
+      volk_32f_sin_32f(d_y2, d_osc_vec, M); // create sine vector
 
-      volk_32fc_deinterleave_real_32f(x1, sig, M);
-      volk_32fc_deinterleave_imag_32f(y1, sig, M);
-      volk_32f_cos_32f(x2, osc_vec, M); // create cosine vector
-      volk_32f_sin_32f(y2, osc_vec, M); // create sine vector
+      volk_32f_x2_multiply_32f(d_tmp1, d_x1, d_x2, M);
+      volk_32f_x2_multiply_32f(d_tmp2, d_y1, d_y2, M);
+      volk_32f_x2_add_32f(d_real_pre, d_tmp1, d_tmp2, M); // final real part
 
-      float *tmp1 = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
-      float *tmp2 = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
-      float *real_pre = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
-      float *imag_pre = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
+      volk_32f_x2_multiply_32f(d_tmp1, d_x1, d_y2, M);
+      volk_32f_x2_multiply_32f(d_tmp2, d_x2, d_y1, M);
+      volk_32f_x2_subtract_32f(d_imag_pre, d_tmp1, d_tmp2, M); // final imag part
 
-      volk_32f_x2_multiply_32f(tmp1, x1, x2, M);
-      volk_32f_x2_multiply_32f(tmp2, y1, y2, M);
-      volk_32f_x2_add_32f(real_pre, tmp1, tmp2, M); // final real part
 
-      volk_32f_x2_multiply_32f(tmp1, x1, y2, M);
-      volk_32f_x2_multiply_32f(tmp2, x2, y1, M);
-      volk_32f_x2_subtract_32f(imag_pre, tmp1, tmp2, M); // final imag part
+      gr_complex pre[M];
+      for(unsigned int i = 0; i < M; i++) {
+        pre[i] = d_real_pre[i]+gr_complex(0,1)*d_imag_pre[i];
+      }
 
-      volk_free(x2);
-      volk_free(y2);
+      memcpy(d_sig_shift, &sig[a], M-a);
+      volk_32fc_x2_multiply_32fc(d_res, d_sig_shift, pre, M-a);
 
-      float *sig_shift_real = (float*)volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
-      float *sig_shift_imag = (float*)volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
-
-      memcpy(sig_shift_real, &x1[a], M-a);
-      memcpy(sig_shift_imag, &y1[a], M-a);
-
-      float *real = (float*) volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
-      float *imag = (float*) volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
-
-      volk_32f_x2_multiply_32f(tmp1, sig_shift_real, real_pre, M-a);
-      volk_32f_x2_multiply_32f(tmp2, sig_shift_imag, imag_pre, M-a);
-      volk_32f_x2_subtract_32f(real, tmp1, tmp2, M-a);
-
-      volk_32f_x2_multiply_32f(tmp1, sig_shift_real, imag_pre, M-a);
-      volk_32f_x2_multiply_32f(tmp2, sig_shift_imag, real_pre, M-a);
-      volk_32f_x2_add_32f(imag, tmp1, tmp2, M-a);
-
-      for(unsigned int i = 0; i < M-a; i++) {
-        R += real[i]+gr_complex(0,1)*imag[i];
+      for(unsigned int i = 0; i< M-a; i++) {
+        R += d_res[i];
       }
 
       /*
@@ -158,19 +160,9 @@ namespace gr {
       }
       */
 
-      volk_free(x1);
-      volk_free(y1);
-      volk_free(tmp1);
-      volk_free(tmp2);
-      volk_free(real_pre);
-      volk_free(imag_pre);
-      volk_free(sig_shift_real);
-      volk_free(sig_shift_imag);
-      volk_free(real);
-      volk_free(imag);
 
 
-      R = R/gr_complex(M,0); // normalize
+      R = R/gr_complex(M-a,0); // normalize
       return R;
     }
 

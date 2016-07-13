@@ -32,6 +32,8 @@ namespace gr {
      private:
       int d_Nb, d_len;
       double d_samp_rate;
+      float *d_x1, *d_y1, *d_x2, *d_y2, *d_tmp1, *d_tmp2, *d_real_pre, *d_imag_pre, *d_osc_vec;
+      gr_complex *d_sig_shift, *d_res;
       std::vector<int> d_alpha, d_beta;
       fft::fft_complex *d_fft;
 

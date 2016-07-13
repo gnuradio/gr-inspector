@@ -512,7 +512,7 @@
     </param>
     <param>
       <key>occupied_carriers</key>
-      <value>(range(-64,0)+range(1,64),)</value>
+      <value>(range(-fft_len/2,0)+range(1,fft_len/2),)</value>
     </param>
     <param>
       <key>payload_mod</key>
