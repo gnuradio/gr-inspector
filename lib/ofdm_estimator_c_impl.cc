@@ -25,6 +25,7 @@
 #include <gnuradio/io_signature.h>
 #include "ofdm_estimator_c_impl.h"
 #include <complex>
+#include <volk/volk.h>
 
 namespace gr {
   namespace inspector {
@@ -67,11 +68,12 @@ namespace gr {
     ofdm_estimator_c_impl::autocorr(const gr_complex *sig, int a, int b,
                                     int p) {
       int M = d_len;
-
+      /*
       gr_complex f[M];
       for(int i = 0; i < M; i++) {
         f[i] = sig[i] * std::exp(gr_complex(0,1)*gr_complex(2*M_PI*i*p/(a/b+a),0));
       }
+
 
       gr_complex f_fft[M];
       gr_complex g_fft[M];
@@ -83,24 +85,99 @@ namespace gr {
       for(int i = 0; i < d_len; i++) {
         R_vec[i] = f_fft[i]*g_fft[i]; // convolution
       }
-      gr_complex R = R_vec[a];
-      /*
+      gr_complex result[M];
+      rescale_fft(false);
+      do_fft(R_vec, result);
+      gr_complex R = result[a];
+       */
+
       gr_complex R = gr_complex(0,0);
 
+      // TODO: make this cooler
+      float m_vec[M];
+      for(unsigned int i = 0; i < M; i++){
+        m_vec[i] = i;
+      }
+
+      float *osc_vec = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment());
+      // create oscillation argument
+      volk_32f_s32f_multiply_32f(osc_vec, m_vec, -2*M_PI*p/(a/b+a), M);
+
+      // generate vectors
+      float *x1 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //real part of sig
+      float *y1 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //imag part of sig
+      float *x2 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //real part of oscillation
+      float *y2 = (float*)volk_malloc(sizeof(float)*M, volk_get_alignment()); //imag part of oscillation
+
+      volk_32fc_deinterleave_real_32f(x1, sig, M);
+      volk_32fc_deinterleave_imag_32f(y1, sig, M);
+      volk_32f_cos_32f(x2, osc_vec, M); // create cosine vector
+      volk_32f_sin_32f(y2, osc_vec, M); // create sine vector
+
+      float *tmp1 = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
+      float *tmp2 = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
+      float *real_pre = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
+      float *imag_pre = (float*) volk_malloc(sizeof(float)*M, volk_get_alignment());
+
+      volk_32f_x2_multiply_32f(tmp1, x1, x2, M);
+      volk_32f_x2_multiply_32f(tmp2, y1, y2, M);
+      volk_32f_x2_add_32f(real_pre, tmp1, tmp2, M); // final real part
+
+      volk_32f_x2_multiply_32f(tmp1, x1, y2, M);
+      volk_32f_x2_multiply_32f(tmp2, x2, y1, M);
+      volk_32f_x2_subtract_32f(imag_pre, tmp1, tmp2, M); // final imag part
+
+      volk_free(x2);
+      volk_free(y2);
+
+      float *sig_shift_real = (float*)volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
+      float *sig_shift_imag = (float*)volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
+
+      memcpy(sig_shift_real, &x1[a], M-a);
+      memcpy(sig_shift_imag, &y1[a], M-a);
+
+      float *real = (float*) volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
+      float *imag = (float*) volk_malloc(sizeof(float)*(M-a), volk_get_alignment());
+
+      volk_32f_x2_multiply_32f(tmp1, sig_shift_real, real_pre, M-a);
+      volk_32f_x2_multiply_32f(tmp2, sig_shift_imag, imag_pre, M-a);
+      volk_32f_x2_subtract_32f(real, tmp1, tmp2, M-a);
+
+      volk_32f_x2_multiply_32f(tmp1, sig_shift_real, imag_pre, M-a);
+      volk_32f_x2_multiply_32f(tmp2, sig_shift_imag, real_pre, M-a);
+      volk_32f_x2_add_32f(imag, tmp1, tmp2, M-a);
+
+      for(unsigned int i = 0; i < M-a; i++) {
+        R += real[i]+gr_complex(0,1)*imag[i];
+      }
+
+      /*
       for(int m = 0; m < M-a; m++) {
         R += sig[m+a] * std::conj(sig[m]) *
                 std::exp(gr_complex(0,-1)*gr_complex(2*M_PI*p*m/(a/b+a),0));
       }
       */
 
+      volk_free(x1);
+      volk_free(y1);
+      volk_free(tmp1);
+      volk_free(tmp2);
+      volk_free(real_pre);
+      volk_free(imag_pre);
+      volk_free(sig_shift_real);
+      volk_free(sig_shift_imag);
+      volk_free(real);
+      volk_free(imag);
+
+
       R = R/gr_complex(M,0); // normalize
       return R;
     }
 
     void
-    ofdm_estimator_c_impl::rescale_fft() {
+    ofdm_estimator_c_impl::rescale_fft(bool forward) {
       delete d_fft;
-      d_fft = new fft::fft_complex(d_len, true);
+      d_fft = new fft::fft_complex(d_len, forward);
       d_fft->set_nthreads(4);
     }
 
@@ -129,7 +206,7 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
       d_len = noutput_items;
-      rescale_fft();
+      rescale_fft(true);
       //std::cout << "len = " << d_len << std::endl;
 
       // we need a max number of items for analysis

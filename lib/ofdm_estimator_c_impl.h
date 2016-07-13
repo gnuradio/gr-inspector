@@ -41,7 +41,7 @@ namespace gr {
                             const std::vector<int> &beta);
       ~ofdm_estimator_c_impl();
 
-      void rescale_fft();
+      void rescale_fft(bool forward);
       void do_fft(const gr_complex *in, gr_complex *out);
 
       gr_complex autocorr(const gr_complex *sig, int a, int b, int p);
