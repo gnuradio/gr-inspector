@@ -91,8 +91,29 @@ namespace gr {
     }
 
     gr_complex
+    ofdm_estimator_c_impl::autocorr_orig(const gr_complex *sig, int a, int b,
+                                         int p) {
+      std::cout << "----------- ORIG ------------" << std::endl;
+      int M = d_len;
+      gr_complex R = gr_complex(0,0);
+
+      for(int m = 0; m < 100; m++) {
+        R += sig[m+a] * std::conj(sig[m]) *
+             std::exp(gr_complex(0,-1)*gr_complex(2*M_PI*p*m/(a/b+a),0));
+        std::cout << sig[m+a] * std::conj(sig[m]) *
+                     std::exp(gr_complex(0,-1)*gr_complex(2*M_PI*p*m/(a/b+a),0)) << " ";
+      }
+      std::cout << std::endl;
+
+      R = R/gr_complex(M-a,0); // normalize
+      //std::cout << "R = " << R << std::endl;
+      return R;
+
+    }
+    float
     ofdm_estimator_c_impl::autocorr(const gr_complex *sig, int a, int b,
                                     int p) {
+      //std::cout << "----------- VOLK ------------" << std::endl;
       int M = d_len;
       /*
       gr_complex f[M];
@@ -125,12 +146,13 @@ namespace gr {
         m_vec[i] = i;
       }
       // create oscillation argument
-      volk_32f_s32f_multiply_32f(d_osc_vec, m_vec, 2*M_PI*p/(a/b+a), M);
+      volk_32f_s32f_multiply_32f(d_osc_vec, m_vec, -2*M_PI*p/(a/b+a), M);
 
       volk_32fc_deinterleave_real_32f(d_x1, sig, M);
       volk_32fc_deinterleave_imag_32f(d_y1, sig, M);
       volk_32f_cos_32f(d_x2, d_osc_vec, M); // create cosine vector
       volk_32f_sin_32f(d_y2, d_osc_vec, M); // create sine vector
+
 
       volk_32f_x2_multiply_32f(d_tmp1, d_x1, d_x2, M);
       volk_32f_x2_multiply_32f(d_tmp2, d_y1, d_y2, M);
@@ -146,12 +168,14 @@ namespace gr {
         pre[i] = d_real_pre[i]+gr_complex(0,1)*d_imag_pre[i];
       }
 
-      memcpy(d_sig_shift, &sig[a], M-a);
+      memcpy(d_sig_shift, &sig[a], (M-a)*sizeof(gr_complex));
       volk_32fc_x2_multiply_32fc(d_res, d_sig_shift, pre, M-a);
 
       for(unsigned int i = 0; i< M-a; i++) {
         R += d_res[i];
+        //std::cout << d_res[i] << " ";
       }
+      //std::cout << std::endl;
 
       /*
       for(int m = 0; m < M-a; m++) {
@@ -159,11 +183,9 @@ namespace gr {
                 std::exp(gr_complex(0,-1)*gr_complex(2*M_PI*p*m/(a/b+a),0));
       }
       */
-
-
-
       R = R/gr_complex(M-a,0); // normalize
-      return R;
+      //std::cout << "R = " << R << std::endl;
+      return std::abs(R);
     }
 
     void
@@ -184,8 +206,14 @@ namespace gr {
     ofdm_estimator_c_impl::cost_func(const gr_complex *sig, int a,
                                      int b) {
       float J = 0;
+      float power[2*d_Nb+1];
+      float R[2*d_Nb+1];
       for(int p = -d_Nb; p <= d_Nb; p++) {
-        J += std::pow(std::abs(autocorr(sig, a, b, p)), 2.0);
+        R[p + d_Nb] = autocorr(sig, a, b, p);
+      }
+      volk_32f_s32f_power_32f(power, R, 2.0, 2*d_Nb+1);
+      for(int i = 0; i < 2*d_Nb+1; i++) {
+        J += power[i];
       }
       J = J/(2*d_Nb+1); // normalize
       return J;

@@ -378,7 +378,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>samp_rate</value>
+      <value>2e6</value>
     </param>
     <param>
       <key>type</key>
@@ -512,7 +512,7 @@
     </param>
     <param>
       <key>occupied_carriers</key>
-      <value>(range(-fft_len/2,0)+range(1,fft_len/2),)</value>
+      <value>(range(-128/2,0)+range(1,128/2),)</value>
     </param>
     <param>
       <key>payload_mod</key>

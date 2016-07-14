@@ -46,7 +46,8 @@ namespace gr {
       void rescale_fft(bool forward);
       void do_fft(const gr_complex *in, gr_complex *out);
 
-      gr_complex autocorr(const gr_complex *sig, int a, int b, int p);
+      float autocorr(const gr_complex *sig, int a, int b, int p);
+      gr_complex autocorr_orig(const gr_complex *sig, int a, int b, int p);
       float cost_func(const gr_complex *sig, int a, int b);
 
       // Where all the action really happens
