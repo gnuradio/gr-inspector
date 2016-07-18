@@ -31,7 +31,8 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    ofdm_prototype_c.py DESTINATION ${GR_PYTHON_DIR}/inspector
+    ofdm_prototype_c.py
+    DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
 ########################################################################
