@@ -19,8 +19,8 @@
  */
 
 
-#ifndef INCLUDED_INSPECTOR_OFDM_ESTIMATOR_C_H
-#define INCLUDED_INSPECTOR_OFDM_ESTIMATOR_C_H
+#ifndef INCLUDED_INSPECTOR_OFDM_ZKF_C_H
+#define INCLUDED_INSPECTOR_OFDM_ZKF_C_H
 
 #include <inspector/api.h>
 #include <gnuradio/sync_block.h>
@@ -33,26 +33,24 @@ namespace gr {
      * \ingroup inspector
      *
      */
-    class INSPECTOR_API ofdm_estimator_c : virtual public gr::sync_block
+    class INSPECTOR_API ofdm_zkf_c : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<ofdm_estimator_c> sptr;
+      typedef boost::shared_ptr<ofdm_zkf_c> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of inspector::ofdm_estimator_c.
+       * \brief Return a shared_ptr to a new instance of inspector::ofdm_zkf_c.
        *
-       * To avoid accidental use of raw pointers, inspector::ofdm_estimator_c's
+       * To avoid accidental use of raw pointers, inspector::ofdm_zkf_c's
        * constructor is in a private implementation
-       * class. inspector::ofdm_estimator_c::make is the public interface for
+       * class. inspector::ofdm_zkf_c::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double samp_rate, int Nb,
-                       const std::vector<int> &alpha,
-                       const std::vector<int> &beta);
+      static sptr make(double samp_rate, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
     };
 
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_OFDM_ESTIMATOR_C_H */
+#endif /* INCLUDED_INSPECTOR_OFDM_ZKF_C_H */
 

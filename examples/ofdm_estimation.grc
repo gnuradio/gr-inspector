@@ -105,7 +105,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>10</value>
+      <value>15</value>
     </param>
   </block>
   <block>
@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>fft_len/16</value>
+      <value>32</value>
     </param>
   </block>
   <block>
@@ -159,7 +159,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>128</value>
+      <value>512</value>
     </param>
   </block>
   <block>
@@ -225,7 +225,7 @@
     </param>
     <param>
       <key>max</key>
-      <value>2</value>
+      <value>256</value>
     </param>
     <param>
       <key>minoutbuf</key>
@@ -350,7 +350,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -429,7 +429,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>32000</value>
+      <value>3200*2</value>
     </param>
     <param>
       <key>type</key>
@@ -464,11 +464,11 @@
     </param>
     <param>
       <key>epsilon</key>
-      <value>0.9</value>
+      <value>0.8</value>
     </param>
     <param>
       <key>freq_offset</key>
-      <value>2000</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -626,7 +626,11 @@
     </param>
   </block>
   <block>
-    <key>inspector_ofdm_estimator_c</key>
+    <key>inspector_ofdm_bouzegzi_c</key>
+    <param>
+      <key>algo</key>
+      <value>zkf</value>
+    </param>
     <param>
       <key>alias</key>
       <value></value>
@@ -649,7 +653,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>True</value>
     </param>
     <param>
       <key>alpha</key>
@@ -657,7 +661,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(872, 144)</value>
+      <value>(896, 136)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -665,15 +669,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_ofdm_estimator_c_0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
+      <value>inspector_ofdm_bouzegzi_c_0</value>
     </param>
     <param>
       <key>samp_rate</key>
@@ -696,7 +692,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1026,7 +1022,7 @@
     <key>qtgui_vector_sink_f</key>
     <param>
       <key>autoscale</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>average</key>
@@ -1046,7 +1042,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1378,7 +1374,7 @@
   </connection>
   <connection>
     <source_block_id>channels_channel_model_0</source_block_id>
-    <sink_block_id>inspector_ofdm_estimator_c_0</sink_block_id>
+    <sink_block_id>inspector_ofdm_bouzegzi_c_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1399,12 +1395,6 @@
     <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>inspector_ofdm_estimator_c_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0</sink_block_id>
-    <source_key>ofdm_out</source_key>
-    <sink_key>print</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_ofdm_prototype_c_0</source_block_id>

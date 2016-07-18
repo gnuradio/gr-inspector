@@ -18,37 +18,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_INSPECTOR_OFDM_ESTIMATOR_C_IMPL_H
-#define INCLUDED_INSPECTOR_OFDM_ESTIMATOR_C_IMPL_H
+#ifndef INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H
+#define INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H
 
-#include <inspector/ofdm_estimator_c.h>
-#include <gnuradio/fft/fft.h>
+#include <inspector/ofdm_zkf_c.h>
 
 namespace gr {
   namespace inspector {
 
-    class ofdm_estimator_c_impl : public ofdm_estimator_c
+    class ofdm_zkf_c_impl : public ofdm_zkf_c
     {
      private:
-      int d_Nb, d_len;
       double d_samp_rate;
-      float *d_x1, *d_y1, *d_x2, *d_y2, *d_tmp1, *d_tmp2, *d_real_pre, *d_imag_pre, *d_osc_vec;
-      gr_complex *d_sig_shift, *d_res;
-      std::vector<int> d_alpha, d_beta;
-      fft::fft_complex *d_fft;
+      std::vector<int> d_typ_len, d_typ_cp;
 
      public:
-      ofdm_estimator_c_impl(double samp_rate, int Nb,
-                            const std::vector<int> &alpha,
-                            const std::vector<int> &beta);
-      ~ofdm_estimator_c_impl();
-
-      void rescale_fft(bool forward);
-      void do_fft(const gr_complex *in, gr_complex *out);
-
-      float autocorr(const gr_complex *sig, int a, int b, int p);
-      gr_complex autocorr_orig(const gr_complex *sig, int a, int b, int p);
-      float cost_func(const gr_complex *sig, int a, int b);
+      ofdm_zkf_c_impl(double samp_rate, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
+      ~ofdm_zkf_c_impl();
 
       // Where all the action really happens
       int work(int noutput_items,
@@ -59,5 +45,5 @@ namespace gr {
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_OFDM_ESTIMATOR_C_IMPL_H */
+#endif /* INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H */
 

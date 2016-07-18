@@ -33,6 +33,8 @@ class ofdm_prototype_c(gr.sync_block):
             in_sig=[numpy.complex64],
             out_sig=[numpy.float32])
         self.d_samp_rate = samp_rate
+        self.typ_a = [32, 64, 128, 256, 512, 1024]
+        self.typ_cp = [4, 8 , 16, 32, 64, 128, 256]
 
     def autocorr(self, in0):
         akf = numpy.correlate(in0, in0, mode='full')
@@ -43,11 +45,12 @@ class ofdm_prototype_c(gr.sync_block):
         in0 = input_items[0]
         out = output_items[0]
         # <+signal processing here+>
-        if len(in0) < 7000:
+        if len(in0) < 4096:
             #print "Got only " + str(len(in0)) + " items!"
             return 0
-        akf = self.autocorr(in0)
-        a = numpy.argmax(akf[16:130])+16
+        akf = abs(self.autocorr(in0))
+        a = numpy.argmax(akf[16:1025])+16
+        a = min(self.typ_a, key=lambda x:abs(x-a))
         print "a = " +str(a)
 
         Rxx = numpy.empty(0)
@@ -57,13 +60,16 @@ class ofdm_prototype_c(gr.sync_block):
             R *= 1.0/(len(Rxx)+1)
             Rxx = numpy.hstack((R, Rxx))
 
-        fft = abs(numpy.fft.fftshift(numpy.fft.fft(Rxx, n=4096)))
-        b = numpy.argmax(fft[5:])+5
-        print "b = " + str(len(fft)/b)
-        #print "FFT = " + str(fft)
+        fft = abs(numpy.fft.fftshift(numpy.fft.fft(Rxx, n=8192)))
+        fft = fft[len(fft)/2:]
+        b = numpy.argmax(fft[int(2*len(fft)/(a+256)):int(2*len(fft)/(a+4))])+int(2*len(fft)/(a+256))
+        b = min(self.typ_cp, key=lambda x:abs(x-a+b))
 
-        out[0:len(fft)] = fft
-        #print "len = "+ str(len(akf))
+        print "b = " + str(2*len(fft)/b)
+        #print "FFT = " + str(fft)
+        print ""
+        #out[:4096] = fft[:4096]
+        #print "len = "+ str(len(akf[:4096]))
 
         #cxx = numpy.fft(akf);
 

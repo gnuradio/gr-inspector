@@ -23,29 +23,29 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "ofdm_estimator_c_impl.h"
+#include "ofdm_bouzegzi_c_impl.h"
 #include <complex>
 #include <volk/volk.h>
 
 namespace gr {
   namespace inspector {
 
-    ofdm_estimator_c::sptr
-    ofdm_estimator_c::make(double samp_rate, int Nb,
+    ofdm_bouzegzi_c::sptr
+    ofdm_bouzegzi_c::make(double samp_rate, int Nb,
                            const std::vector<int> &alpha,
                            const std::vector<int> &beta)
     {
       return gnuradio::get_initial_sptr
-        (new ofdm_estimator_c_impl(samp_rate, Nb, alpha, beta));
+        (new ofdm_bouzegzi_c_impl(samp_rate, Nb, alpha, beta));
     }
 
     /*
      * The private constructor
      */
-    ofdm_estimator_c_impl::ofdm_estimator_c_impl(double samp_rate, int Nb,
+    ofdm_bouzegzi_c_impl::ofdm_bouzegzi_c_impl(double samp_rate, int Nb,
                                                  const std::vector<int> &alpha,
                                                  const std::vector<int> &beta)
-      : gr::sync_block("ofdm_estimator_c",
+      : gr::sync_block("ofdm_bouzegzi_c",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(0, 0, 0))
     {
@@ -74,7 +74,7 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    ofdm_estimator_c_impl::~ofdm_estimator_c_impl()
+    ofdm_bouzegzi_c_impl::~ofdm_bouzegzi_c_impl()
     {
 
       volk_free(d_x1);
@@ -91,7 +91,7 @@ namespace gr {
     }
 
     gr_complex
-    ofdm_estimator_c_impl::autocorr_orig(const gr_complex *sig, int a, int b,
+    ofdm_bouzegzi_c_impl::autocorr_orig(const gr_complex *sig, int a, int b,
                                          int p) {
       std::cout << "----------- ORIG ------------" << std::endl;
       int M = d_len;
@@ -111,7 +111,7 @@ namespace gr {
 
     }
     float
-    ofdm_estimator_c_impl::autocorr(const gr_complex *sig, int a, int b,
+    ofdm_bouzegzi_c_impl::autocorr(const gr_complex *sig, int a, int b,
                                     int p) {
       //std::cout << "----------- VOLK ------------" << std::endl;
       int M = d_len;
@@ -189,21 +189,21 @@ namespace gr {
     }
 
     void
-    ofdm_estimator_c_impl::rescale_fft(bool forward) {
+    ofdm_bouzegzi_c_impl::rescale_fft(bool forward) {
       delete d_fft;
       d_fft = new fft::fft_complex(d_len, forward);
       d_fft->set_nthreads(4);
     }
 
     void
-    ofdm_estimator_c_impl::do_fft(const gr_complex *in, gr_complex *out) {
+    ofdm_bouzegzi_c_impl::do_fft(const gr_complex *in, gr_complex *out) {
       memcpy(d_fft->get_inbuf(), in, d_len*sizeof(gr_complex));
       d_fft->execute();
       memcpy(out, d_fft->get_outbuf(), d_len*sizeof(gr_complex));
     }
 
     float
-    ofdm_estimator_c_impl::cost_func(const gr_complex *sig, int a,
+    ofdm_bouzegzi_c_impl::cost_func(const gr_complex *sig, int a,
                                      int b) {
       float J = 0;
       float power[2*d_Nb+1];
@@ -220,7 +220,7 @@ namespace gr {
     }
 
     int
-    ofdm_estimator_c_impl::work(int noutput_items,
+    ofdm_bouzegzi_c_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {

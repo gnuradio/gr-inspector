@@ -1,20 +1,14 @@
 <?xml version="1.0"?>
 <block>
   <name>OFDM Estimator</name>
-  <key>inspector_ofdm_estimator_c</key>
+  <key>inspector_ofdm_zkf_c</key>
   <category>[Inspector]/Analysis</category>
   <import>import inspector</import>
-  <make>inspector.ofdm_estimator_c($samp_rate, $Nb, $alpha, $beta)</make>
+  <make>inspector.ofdm_zkf_c($samp_rate, $alpha, $beta)</make>
   <param>
     <name>Samp rate</name>
     <key>samp_rate</key>
     <type>real</type>
-  </param>
-  <param>
-    <name>Cycl. frequencies</name>
-    <key>Nb</key>
-    <value>5</value>
-    <type>int</type>
   </param>
   <param>
     <name>FFT lengths</name>
@@ -24,7 +18,8 @@
   </param>
   <param>
     <name>CP lengths</name>
-    <key>beta</key>
+    <key>beta</key>ls
+    
     <value>[4, 8, 16, 32]</value>
     <type>int_vector</type>
   </param>
@@ -32,8 +27,4 @@
     <name>in</name>
     <type>complex</type>
   </sink>
-  <source>
-    <name>ofdm_out</name>
-    <type>message</type>
-  </source>
 </block>
