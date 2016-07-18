@@ -35,6 +35,7 @@ namespace gr {
      public:
       ofdm_zkf_c_impl(double samp_rate, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
       ~ofdm_zkf_c_impl();
+      std::vector<float> autocorr(const gr_complex *in, int len);
 
       // Where all the action really happens
       int work(int noutput_items,

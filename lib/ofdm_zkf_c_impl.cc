@@ -24,6 +24,7 @@
 
 #include <gnuradio/io_signature.h>
 #include "ofdm_zkf_c_impl.h"
+#include <complex>
 
 namespace gr {
   namespace inspector {
@@ -41,7 +42,7 @@ namespace gr {
     ofdm_zkf_c_impl::ofdm_zkf_c_impl(double samp_rate, const std::vector<int> &typ_len, const std::vector<int> &typ_cp)
       : gr::sync_block("ofdm_zkf_c",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(1, 1, sizeof(float)))
     {
       d_samp_rate = samp_rate;
       d_typ_len = typ_len;
@@ -55,15 +56,32 @@ namespace gr {
     {
     }
 
+    std::vector<float>
+    ofdm_zkf_c_impl::autocorr(const gr_complex *in, int len) {
+      std::vector<float> akf;
+      float Rxx = 0;
+      for(unsigned int k = 0; k < len; k++) {
+        for(unsigned int n = 0; n < len-k; n++) {
+          Rxx += std::abs(in[n+k]*std::conj(in[n]));
+        }
+        akf.push_back(Rxx/(len-k-1)); // TODO: div by zero
+        Rxx = 0;
+      }
+      return akf;
+    }
+
     int
     ofdm_zkf_c_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
-      //<+OTYPE+> *out = (<+OTYPE+> *) output_items[0];
+      float *out = (float *) output_items[0];
 
       // Do <+signal processing+>
+      std::vector<float> akf = autocorr(in, noutput_items);
+
+      memcpy(out, &akf[0], sizeof(float)*noutput_items);
 
       // Tell runtime system how many output items we produced.
       return noutput_items;

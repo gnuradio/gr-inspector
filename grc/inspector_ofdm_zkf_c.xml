@@ -18,8 +18,7 @@
   </param>
   <param>
     <name>CP lengths</name>
-    <key>beta</key>ls
-    
+    <key>beta</key>
     <value>[4, 8, 16, 32]</value>
     <type>int_vector</type>
   </param>
@@ -27,4 +26,8 @@
     <name>in</name>
     <type>complex</type>
   </sink>
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
 </block>
