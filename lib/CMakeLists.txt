@@ -39,7 +39,6 @@ list(APPEND inspector_sources
     qtgui_inspector_sink_vf_impl.cc
 		inspector_form.cc
 		signal_marker.cc
-    ofdm_bouzegzi_c_impl.cc
     ofdm_zkf_c_impl.cc )
 
 include(GrPython)
