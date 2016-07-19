@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>64</value>
+      <value>32</value>
     </param>
   </block>
   <block>
@@ -159,7 +159,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>512</value>
+      <value>256</value>
     </param>
   </block>
   <block>
@@ -378,7 +378,7 @@
     </param>
     <param>
       <key>num_items</key>
-      <value>1024</value>
+      <value>4096</value>
     </param>
     <param>
       <key>vlen</key>
@@ -676,7 +676,7 @@
     </param>
     <param>
       <key>beta</key>
-      <value>[4, 8, 16, 32]</value>
+      <value>[4, 8, 16, 32, 64]</value>
     </param>
     <param>
       <key>comment</key>
@@ -1254,7 +1254,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>1024</value>
+      <value>4096</value>
     </param>
     <param>
       <key>x_axis_label</key>

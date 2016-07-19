@@ -22,6 +22,7 @@
 #define INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H
 
 #include <inspector/ofdm_zkf_c.h>
+#include <gnuradio/fft/fft.h>
 
 namespace gr {
   namespace inspector {
@@ -32,11 +33,14 @@ namespace gr {
       double d_samp_rate;
       std::vector<int> d_typ_len, d_typ_cp;
       gr_complex *d_Rxx;
+      fft::fft_complex *d_fft;
 
      public:
       ofdm_zkf_c_impl(double samp_rate, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
       ~ofdm_zkf_c_impl();
       std::vector<float> autocorr(const gr_complex *in, int len);
+      int round_to_list(int val, std::vector<int> *list);
+      void resize_fft(int size);
 
       // Where all the action really happens
       int work(int noutput_items,
