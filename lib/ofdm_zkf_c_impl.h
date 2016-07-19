@@ -31,6 +31,7 @@ namespace gr {
      private:
       double d_samp_rate;
       std::vector<int> d_typ_len, d_typ_cp;
+      gr_complex *d_Rxx;
 
      public:
       ofdm_zkf_c_impl(double samp_rate, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);

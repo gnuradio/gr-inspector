@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>32</value>
+      <value>64</value>
     </param>
   </block>
   <block>
@@ -378,7 +378,7 @@
     </param>
     <param>
       <key>num_items</key>
-      <value>4096</value>
+      <value>1024</value>
     </param>
     <param>
       <key>vlen</key>
@@ -429,7 +429,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>3200*2</value>
+      <value>32000</value>
     </param>
     <param>
       <key>type</key>
@@ -472,7 +472,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(632, 128)</value>
+      <value>(616, 120)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -645,7 +645,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(888, 308)</value>
+      <value>(888, 332)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1022,7 +1022,7 @@
     <key>qtgui_vector_sink_f</key>
     <param>
       <key>autoscale</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>average</key>
@@ -1254,7 +1254,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>4096</value>
+      <value>1024</value>
     </param>
     <param>
       <key>x_axis_label</key>
