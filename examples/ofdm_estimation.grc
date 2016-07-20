@@ -378,7 +378,7 @@
     </param>
     <param>
       <key>num_items</key>
-      <value>4096</value>
+      <value>3967</value>
     </param>
     <param>
       <key>vlen</key>
@@ -429,7 +429,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>32000</value>
+      <value>6400</value>
     </param>
     <param>
       <key>type</key>
@@ -1254,7 +1254,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>4096</value>
+      <value>3967</value>
     </param>
     <param>
       <key>x_axis_label</key>

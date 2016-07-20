@@ -107,10 +107,12 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
       float *out = (float *) output_items[0];
-      if(noutput_items < d_typ_len.back()) {
+      if(noutput_items <= 7000) {//2*d_typ_len.back()+d_typ_cp.back()) {
         // too few items to recognize desired fft lengths
         return 0;
       }
+      std::cout << "------------------------" << std::endl;
+      //std::cout << "In = " << noutput_items << std::endl;
 
       // Do <+signal processing+>
       //gr_complex test[3] = {gr_complex(1,0), gr_complex(2,0), gr_complex(3,0)};
@@ -121,6 +123,7 @@ namespace gr {
       int fft_len = noutput_items-a;
       resize_fft(fft_len);
 
+
       gr_complex corr_temp[fft_len];
       gr_complex Rxx[fft_len];
       gr_complex R = gr_complex(0,0);
@@ -129,7 +132,7 @@ namespace gr {
       for(int i = fft_len-1; i >= 0; i--) {
         R *= k;
         R += corr_temp[i];
-        R *= 1/(k+1);
+        R *= 1.0/(k+1.0);
         Rxx[k] = R;
         k++;
       }
@@ -142,26 +145,32 @@ namespace gr {
 
       // fftshift
       unsigned int d_tmpbuflen = static_cast<unsigned int>(floor((fft_len) / 2.0));
-      float d_tmpbuf[fft_len];
+      float d_tmpbuf[fft_len/2];
       memcpy(d_tmpbuf, &result[0], sizeof(float) * (d_tmpbuflen + 1));
       memcpy(&result[0], &result[fft_len - d_tmpbuflen],
              sizeof(float) * (d_tmpbuflen));
       memcpy(&result[d_tmpbuflen], d_tmpbuf,
              sizeof(float) * (d_tmpbuflen + 1));
 
+      // only use positive frequencies
       std::vector<float> Cxx(result+(fft_len)/2, result+fft_len);
       long b = std::distance(Cxx.begin(), std::max_element(
               Cxx.begin()+(int)(fft_len/(a+d_typ_cp.back())),
               Cxx.begin()+(int)(fft_len/(a+d_typ_cp.front()))));
       b = fft_len/b;
       b = b-a;
-      //b = round_to_list(b, &d_typ_cp);
+      b = round_to_list(b, &d_typ_cp);
       std::cout << "CP Len = " << b << std::endl;
 
-      memcpy(out, result, sizeof(float)*(fft_len));
+      memcpy(out, &Cxx[0], sizeof(float)*(fft_len/2));
+      //std::cout << "Out = " << fft_len/2 << std::endl;
+      //for(int i = fft_len/2; i < fft_len; i++) {
+      //  std::cout << Rxx[i] << ", ";
+      //}
+      std::cout << std::endl;
 
       // Tell runtime system how many output items we produced.
-      return noutput_items;
+      return fft_len/2;
     }
 
   } /* namespace inspector */
