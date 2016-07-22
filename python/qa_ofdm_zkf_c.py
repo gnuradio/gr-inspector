@@ -20,8 +20,11 @@
 # 
 
 from gnuradio import gr, gr_unittest
-from gnuradio import blocks
+from gnuradio import blocks, analog
 import inspector_swig as inspector
+import numpy as np
+import time
+import pmt
 
 class qa_ofdm_zkf_c (gr_unittest.TestCase):
 
@@ -33,9 +36,40 @@ class qa_ofdm_zkf_c (gr_unittest.TestCase):
 
     def test_001_t (self):
         # set up fg
-        self.tb.run ()
-        # check data
+        fft_len = 256
+        cp_len = 32
+        samp_rate = 32000
+        data = np.random.choice([-1, 1], [100, fft_len])
 
+        timefreq = np.fft.ifft(data, axis=0)
+
+        #add cp
+        timefreq = np.hstack((timefreq[:, -cp_len:], timefreq))
+
+        tx = np.reshape(timefreq, (1, -1))
+
+        # GR time!
+        src = blocks.vector_source_c(tx[0].tolist(), True, 1, [])
+        analyzer = inspector.ofdm_zkf_c(samp_rate, 0, [128, 256, 512, 1024], [8, 16, 32, 64])
+        snk = blocks.message_debug()
+
+        # connect
+        self.tb.connect(src, analyzer)
+        self.tb.msg_connect((analyzer, 'ofdm_out'), (snk, 'store'))
+
+        self.tb.start()
+        time.sleep(0.25)
+        self.tb.stop()
+        self.tb.wait()
+
+        # check data
+        result = snk.get_message(0)
+
+        fft_result = pmt.to_uint64(pmt.tuple_ref(pmt.tuple_ref(result, 3), 1))
+        cp_result = pmt.to_uint64(pmt.tuple_ref(pmt.tuple_ref(result, 4), 1))
+
+        self.assertAlmostEqual(fft_len, fft_result)
+        self.assertAlmostEqual(cp_len, cp_result)
 
 if __name__ == '__main__':
     gr_unittest.run(qa_ofdm_zkf_c, "qa_ofdm_zkf_c.xml")

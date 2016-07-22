@@ -46,7 +46,7 @@ namespace gr {
        * class. inspector::ofdm_zkf_c::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double samp_rate, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
+      static sptr make(double samp_rate, int signal, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
     };
 
   } // namespace inspector

@@ -4,11 +4,17 @@
   <key>inspector_ofdm_zkf_c</key>
   <category>[Inspector]/Analysis</category>
   <import>import inspector</import>
-  <make>inspector.ofdm_zkf_c($samp_rate, $alpha, $beta)</make>
+  <make>inspector.ofdm_zkf_c($samp_rate, $signal, $alpha, $beta)</make>
   <param>
     <name>Samp rate</name>
     <key>samp_rate</key>
     <type>real</type>
+  </param>
+  <param>
+    <name>Signal No</name>
+    <key>signal</key>
+    <value>0</value>
+    <type>int</type>
   </param>
   <param>
     <name>FFT lengths</name>
@@ -27,7 +33,8 @@
     <type>complex</type>
   </sink>
   <source>
-    <name>out</name>
-    <type>float</type>
+    <name>ofdm_out</name>
+    <type>message</type>
+    <optional>1</optional>
   </source>
 </block>

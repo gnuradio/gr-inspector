@@ -31,27 +31,30 @@ namespace gr {
   namespace inspector {
 
     ofdm_zkf_c::sptr
-    ofdm_zkf_c::make(double samp_rate, const std::vector<int> &typ_len,
+    ofdm_zkf_c::make(double samp_rate, int signal,
+                     const std::vector<int> &typ_len,
                      const std::vector<int> &typ_cp)
     {
       return gnuradio::get_initial_sptr
-        (new ofdm_zkf_c_impl(samp_rate, typ_len, typ_cp));
+        (new ofdm_zkf_c_impl(samp_rate, signal, typ_len, typ_cp));
     }
 
     /*
      * The private constructor
      */
-    ofdm_zkf_c_impl::ofdm_zkf_c_impl(double samp_rate,
+    ofdm_zkf_c_impl::ofdm_zkf_c_impl(double samp_rate, int signal,
                                      const std::vector<int> &typ_len,
                                      const std::vector<int> &typ_cp)
       : gr::sync_block("ofdm_zkf_c",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
-              gr::io_signature::make(1, 1, sizeof(float)))
+              gr::io_signature::make(0, 0, 0))
     {
       d_samp_rate = samp_rate;
       d_typ_len = typ_len;
       d_typ_cp = typ_cp;
+      d_signal = signal;
       d_fft = new fft::fft_complex(1024, true);
+      message_port_register_out(pmt::intern("ofdm_out"));
     }
 
     /*
@@ -62,6 +65,7 @@ namespace gr {
       delete d_fft;
     }
 
+    // calculate autocorrelation function of given vector
     std::vector<float>
     ofdm_zkf_c_impl::autocorr(const gr_complex *in, int len) {
       std::vector<float> akf;
@@ -81,6 +85,26 @@ namespace gr {
       return akf;
     }
 
+    // calculate time variant autocorrelation for fixed shift
+    gr_complex*
+    ofdm_zkf_c_impl::tv_autocorr(const gr_complex *in, int len,
+                                 int shift) {
+      gr_complex corr_temp[len];
+      gr_complex *Rxx = (gr_complex*)volk_malloc(len*sizeof(gr_complex), volk_get_alignment());
+      gr_complex R = gr_complex(0,0);
+      volk_32fc_x2_multiply_conjugate_32fc(corr_temp, in, &in[shift], len);
+      int k = 0;
+      for(int i = len-1; i >= 0; i--) {
+        R *= k;
+        R += corr_temp[i];
+        R *= 1.0/(k+1.0);
+        Rxx[k] = R;
+        k++;
+      }
+      return Rxx;
+    }
+
+    // round value to nearest list entry
     int
     ofdm_zkf_c_impl::round_to_list(int val, std::vector<int> *list) {
       int result = -1;
@@ -100,51 +124,52 @@ namespace gr {
       d_fft = new fft::fft_complex(size, true);
     }
 
+    pmt::pmt_t
+    ofdm_zkf_c_impl::pack_message(float subc, float time, int fft,
+                                  int cp) {
+      pmt::pmt_t identifier = pmt::make_tuple(pmt::string_to_symbol("Signal"), pmt::from_uint64(d_signal));
+      pmt::pmt_t subcarr = pmt::make_tuple(pmt::string_to_symbol("Subc. space"), pmt::from_float(subc));
+      pmt::pmt_t symtime = pmt::make_tuple(pmt::string_to_symbol("Sym time"), pmt::from_float(time));
+      pmt::pmt_t fftsize = pmt::make_tuple(pmt::string_to_symbol("Subcarriers"), pmt::from_uint64(fft));
+      pmt::pmt_t cyclpre = pmt::make_tuple(pmt::string_to_symbol("CP len"), pmt::from_uint64(cp));
+      pmt::pmt_t msg = pmt::make_tuple(identifier, subcarr, symtime, fftsize, cyclpre);
+      return msg;
+    }
+
     int
     ofdm_zkf_c_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
-      float *out = (float *) output_items[0];
       if(noutput_items <= 7000) {//2*d_typ_len.back()+d_typ_cp.back()) {
         // too few items to recognize desired fft lengths
         return 0;
       }
-      std::cout << "------------------------" << std::endl;
-      //std::cout << "In = " << noutput_items << std::endl;
 
-      // Do <+signal processing+>
-      //gr_complex test[3] = {gr_complex(1,0), gr_complex(2,0), gr_complex(3,0)};
+      // calculate autocorrelation and estimate FFT length
       std::vector<float> akf = autocorr(in, noutput_items);
-      int a = std::distance(akf.begin(), std::max_element(akf.begin()+d_typ_len.front(), akf.end()));
+      int a = std::distance(akf.begin(),
+          std::max_element(akf.begin()+d_typ_len.front(), akf.end()));
       a = round_to_list(a, &d_typ_len);
-      std::cout << "FFT size = " << a << std::endl;
-      int fft_len = noutput_items-a;
-      resize_fft(fft_len);
 
+      // calculate time variant autocorr and cyclic correlation function
+      // and estimate CP length
+      int fft_len = noutput_items-a; // length of all following vectors because of shift a
+      resize_fft(fft_len); // resize FFT
 
-      gr_complex corr_temp[fft_len];
-      gr_complex Rxx[fft_len];
-      gr_complex R = gr_complex(0,0);
-      volk_32fc_x2_multiply_conjugate_32fc(corr_temp, in, &in[a], fft_len);
-      int k = 0;
-      for(int i = fft_len-1; i >= 0; i--) {
-        R *= k;
-        R += corr_temp[i];
-        R *= 1.0/(k+1.0);
-        Rxx[k] = R;
-        k++;
-      }
+      gr_complex *Rxx;
+      Rxx = tv_autocorr(in, fft_len, a); // calc time varaint autocorr
 
-      gr_complex fft[fft_len];
-      memcpy(d_fft->get_inbuf(), Rxx, sizeof(gr_complex)*(fft_len));
+      // FFT to get CCF (cyclic correlation function)
+      memcpy(d_fft->get_inbuf(), Rxx, sizeof(gr_complex)*fft_len);
       d_fft->execute();
-      float result[fft_len];
+      volk_free(Rxx);
+      float result[fft_len]; // magnitude of CCF
       volk_32fc_magnitude_32f(result, d_fft->get_outbuf(), fft_len);
 
       // fftshift
-      unsigned int d_tmpbuflen = static_cast<unsigned int>(floor((fft_len) / 2.0));
+      d_tmpbuflen = static_cast<unsigned int>(std::floor((fft_len) / 2.0));
       float d_tmpbuf[fft_len/2];
       memcpy(d_tmpbuf, &result[0], sizeof(float) * (d_tmpbuflen + 1));
       memcpy(&result[0], &result[fft_len - d_tmpbuflen],
@@ -154,23 +179,22 @@ namespace gr {
 
       // only use positive frequencies
       std::vector<float> Cxx(result+(fft_len)/2, result+fft_len);
+      // search for peak in possible area
       long b = std::distance(Cxx.begin(), std::max_element(
               Cxx.begin()+(int)(fft_len/(a+d_typ_cp.back())),
               Cxx.begin()+(int)(fft_len/(a+d_typ_cp.front()))));
-      b = fft_len/b;
-      b = b-a;
-      b = round_to_list(b, &d_typ_cp);
-      std::cout << "CP Len = " << b << std::endl;
+      b = fft_len/b; // convert peak to length value
+      b = b-a; // calculate CP len from total len
+      b = round_to_list(b, &d_typ_cp); // round to possible value
 
-      memcpy(out, &Cxx[0], sizeof(float)*(fft_len/2));
-      //std::cout << "Out = " << fft_len/2 << std::endl;
-      //for(int i = fft_len/2; i < fft_len; i++) {
-      //  std::cout << Rxx[i] << ", ";
-      //}
-      std::cout << std::endl;
+      // calculate subcarr spacing and symbol time and pub message
+      float subspc = d_samp_rate/a;
+      float symtime = 1/subspc;
+      pmt::pmt_t msg = pack_message(subspc, symtime, a, b);
+      message_port_pub(pmt::intern("ofdm_out"), msg);
 
       // Tell runtime system how many output items we produced.
-      return fft_len/2;
+      return noutput_items;
     }
 
   } /* namespace inspector */
