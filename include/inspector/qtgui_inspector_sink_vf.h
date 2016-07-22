@@ -66,6 +66,8 @@ namespace gr {
        * \param samp_rate Sample rate of the input signal.
        * \param fft_len Vector input size and number of PSD sample points
        * \param cfreq Center frequency of source. Set to 0 if only relative frequencies are desired downstream.
+       * \param rf_unit Determine which unit the GUI uses to display frequencies
+       * \param parent QWidget parent
        */
       static sptr make(double samp_rate, int fft_len, float cfreq = 0, int rf_unit = 1000000, QWidget *parent = NULL);
 

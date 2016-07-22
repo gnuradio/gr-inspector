@@ -39,6 +39,10 @@ namespace gr {
      * The spectrum gets shifted by the center frequency of each signal and filtered
      * with the corresponding filter calculated from the RF map information. A
      * decimation will be applied according to the set oversampling factor.
+     *
+     * To save CPU load, generic taps can be precalculated with the tool in the apps/
+     * folder. This tool outputs a JSON file, which path can be specified in the block
+     * parameter <code>file_path</code>.
      */
     class INSPECTOR_API signal_separator_c : virtual public gr::block
     {
@@ -52,6 +56,8 @@ namespace gr {
        * \param window Firdes window type to scale input samples with
        * \param trans_width Transition width for each signal relative to center frequency (w = trans_width*center_freq)
        * \param oversampling Oversampling factor (OSF) to ensure the whole signal gets passed
+       * \param taps_file Determine wether to use a file of precalculated taps or caluculate them during runtime
+       * \param file_path File path to taps file (leave empty if not enabled)
        */
       static sptr make(double samp_rate, int window, float trans_width,
                        int oversampling, bool taps_file, std::map<float, std::vector<float> > &file_path);
