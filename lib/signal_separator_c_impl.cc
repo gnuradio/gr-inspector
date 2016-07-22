@@ -221,7 +221,8 @@ namespace gr {
         for(unsigned j = 0; j < d_result_vector[i].size(); j++) {
           pmt::c32vector_set(curr_signal, j, d_result_vector[i][j]);
         }
-        pmt::vector_set(msg, i, curr_signal);
+        pmt::pmt_t tupel = pmt::make_tuple(pmt::from_uint64(i), curr_signal);
+        pmt::vector_set(msg, i, tupel);
       }
       return msg;
     }

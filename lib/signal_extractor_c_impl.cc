@@ -66,7 +66,7 @@ namespace gr {
         return;
       }
       else {
-        pmt::pmt_t pmt_samples = pmt::vector_ref(msg, d_signal);
+        pmt::pmt_t pmt_samples = pmt::tuple_ref(pmt::vector_ref(msg, d_signal), 1);
         d_length = pmt::length(pmt_samples);
         for(int i = 0; i < d_length; i++) {
           d_samples.push_back(pmt::c32vector_ref(pmt_samples, i));
