@@ -29,9 +29,17 @@ namespace gr {
   namespace inspector {
 
     /*!
-     * \brief <+description of block+>
-     * \ingroup inspector
+     * \brief Parameter estimation block for OFDM signals
+     * \ingroup inspectort
      *
+     * \details
+     * This block performs a parameter estimation of an input OFDM signal.
+     * Parameters that get estimated are FFT length, cyclic prefix length,
+     * symbol time and subcarrier spacing. For the estimation, the algorithm
+     * in [1] is used. Input is a complex stream, output is a message as
+     * tupel of tupels containing analysis results description and values.
+     *
+     * [1] S. Koslowski, "Implementierung eines OFDM-Merkmalsklassifikators in einer SCA-Umgebung," Diploma Thesis, Karlsruhe Institute of Technology, 2011.
      */
     class INSPECTOR_API ofdm_zkf_c : virtual public gr::sync_block
     {
@@ -41,10 +49,10 @@ namespace gr {
       /*!
        * \brief Return a shared_ptr to a new instance of inspector::ofdm_zkf_c.
        *
-       * To avoid accidental use of raw pointers, inspector::ofdm_zkf_c's
-       * constructor is in a private implementation
-       * class. inspector::ofdm_zkf_c::make is the public interface for
-       * creating new instances.
+       * \param samp_rate The samples rate of the input signal
+       * \param signal The number of the analyzed signal
+       * \param typ_len Typical FFT lengths to search for. Can also be set to a fine grid when no knowledge about the signal is present.
+       * \param typ_cp Typical cyclic prefix lengths to search for. Can also be set to a fine grid when no knowledge about the signal is present.
        */
       static sptr make(double samp_rate, int signal, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
     };
