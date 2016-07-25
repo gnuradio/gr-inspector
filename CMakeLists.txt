@@ -65,6 +65,7 @@ if(POLICY CMP0046)
 endif()
 
 set(CMAKE_CXX_STANDARD 11)
+set(ENABLE_PYTHON ON)
 
 ########################################################################
 # Compiler specific setup
