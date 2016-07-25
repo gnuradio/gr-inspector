@@ -5,6 +5,7 @@
   <category>[Inspector]/Analysis</category>
   <import>import inspector</import>
   <make>inspector.ofdm_zkf_c($samp_rate, $signal, $alpha, $beta)</make>
+  <callback>set_samp_rate($samp_rate)</callback>
   <param>
     <name>Samp rate</name>
     <key>samp_rate</key>

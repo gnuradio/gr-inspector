@@ -46,6 +46,9 @@ namespace gr {
       gr_complex* tv_autocorr(const gr_complex *in, int len, int shift);
       int round_to_list(int val, std::vector<int> *list);
       void resize_fft(int size);
+
+      void set_samp_rate(double d_samp_rate);
+
       pmt::pmt_t pack_message(float subc, float time, int fft, int cp);
       // Where all the action really happens
       int work(int noutput_items,

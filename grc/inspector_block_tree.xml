@@ -14,7 +14,7 @@
   </cat>
   <cat>
     <name>Analysis</name>
-    <block>ofdm_estimator_c</block>
+    <block>ofdm_zkf_c</block>
   </cat>
   <cat>
     <name>GUI</name>

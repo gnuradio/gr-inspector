@@ -59,6 +59,7 @@ namespace gr {
       void unpack_message(pmt::pmt_t msg);
       void send_manual_message(float center, float bw);
       void set_rf_unit(int unit);
+      void set_samp_rate(double d_samp_rate);
 
       void initialize();
 
@@ -66,6 +67,7 @@ namespace gr {
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
 
       void set_cfreq(float cfreq) {
         d_cfreq = cfreq;

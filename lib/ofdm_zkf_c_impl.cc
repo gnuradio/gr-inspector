@@ -85,6 +85,10 @@ namespace gr {
       return akf;
     }
 
+    void ofdm_zkf_c_impl::set_samp_rate(double d_samp_rate) {
+      ofdm_zkf_c_impl::d_samp_rate = d_samp_rate;
+    }
+
     // calculate time variant autocorrelation for fixed shift
     gr_complex*
     ofdm_zkf_c_impl::tv_autocorr(const gr_complex *in, int len,

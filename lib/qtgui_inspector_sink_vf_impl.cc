@@ -89,6 +89,13 @@ namespace gr {
     }
 
     void
+    qtgui_inspector_sink_vf_impl::set_samp_rate(double d_samp_rate) {
+      qtgui_inspector_sink_vf_impl::d_samp_rate = d_samp_rate;
+      d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
+    }
+
+
+    void
     qtgui_inspector_sink_vf_impl::initialize() {
       if(qApp != NULL) {
         d_qApplication = qApp;
@@ -187,6 +194,7 @@ namespace gr {
       }
       return 1;
     }
+
 
   } /* namespace inspector */
 } /* namespace gr */
