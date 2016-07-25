@@ -31,8 +31,6 @@ except ImportError:
 	pass
 
 # import any pure python here
-from ofdm_prototype_c import ofdm_prototype_c
-
 
 
 
