@@ -63,7 +63,7 @@ namespace gr {
        * \param file_path File path to taps file (leave empty if not enabled)
        */
       static sptr make(double samp_rate, int window, float trans_width,
-                       int oversampling, bool taps_file, std::map<float, std::vector<float> > &file_path);
+                       float oversampling, bool taps_file, std::map<float, std::vector<float> > &file_path);
 
       virtual void set_samp_rate(double d_samp_rate) = 0;
 
@@ -73,7 +73,7 @@ namespace gr {
       virtual void set_window(int d_window) = 0;
 
       virtual void set_trans_width(float d_trans_width) = 0;
-      virtual void set_oversampling(int d_oversampling) = 0;
+      virtual void set_oversampling(float d_oversampling) = 0;
     };
 
   } // namespace inspector

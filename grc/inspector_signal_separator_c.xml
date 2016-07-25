@@ -58,7 +58,7 @@
   <param>
     <name>Oversampling</name>
     <key>oversample</key>
-    <type>int</type>
+    <type>real</type>
   </param>
   <param>
     <name>Use Taps file</name>

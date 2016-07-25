@@ -55,6 +55,7 @@ namespace gr {
        * \param typ_cp Typical cyclic prefix lengths to search for. Can also be set to a fine grid when no knowledge about the signal is present.
        */
       static sptr make(double samp_rate, int signal, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
+      virtual void set_samp_rate(double d_samp_rate) = 0;
     };
 
   } // namespace inspector

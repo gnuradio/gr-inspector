@@ -50,6 +50,7 @@ namespace gr {
        * \param signal Output Signal number (beginning with 0) for desired samples
        */
       static sptr make(int signal);
+      virtual void set_signal(int signal) = 0;
     };
 
   } // namespace inspector

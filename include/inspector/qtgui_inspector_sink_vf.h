@@ -71,6 +71,9 @@ namespace gr {
        */
       static sptr make(double samp_rate, int fft_len, float cfreq = 0, int rf_unit = 1000000, QWidget *parent = NULL);
 
+      virtual void set_rf_unit(int unit) = 0;
+      virtual void set_samp_rate(double d_samp_rate) = 0;
+      virtual void set_cfreq(float cfreq) = 0;
 #ifdef ENABLE_PYTHON
       virtual PyObject* pyqwidget() = 0;
 #else

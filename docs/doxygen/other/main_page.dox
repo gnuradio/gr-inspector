@@ -59,7 +59,7 @@ This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. 
 
 Read the full proposal [here](https://github.com/sbmueller/gsoc-proposal/blob/master/sigint-proposal.pdf).
 
-The modulation classification is developed by @chrisruk during ESA Summer of Code in Space program.
+The modulation classification is developed by Christopher Richardson during ESA Summer of Code in Space program.
 
 \section contact Contact
 Maintainer of this module:

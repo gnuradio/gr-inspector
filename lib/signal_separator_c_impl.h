@@ -33,9 +33,9 @@ namespace gr {
     class signal_separator_c_impl : public signal_separator_c {
     private:
       bool d_use_file;
-      int d_buffer_len, d_ntaps, d_oversampling;
+      int d_buffer_len, d_ntaps;
       unsigned int d_buffer_stage;
-      float d_trans_width;
+      float d_trans_width, d_oversampling;
       double d_samp_rate;
       gr_complex* d_temp_buffer;
 
@@ -58,7 +58,7 @@ namespace gr {
 
     public:
       signal_separator_c_impl(double samp_rate, int window, float trans_width,
-                              int oversampling, bool taps_file,
+                              float oversampling, bool taps_file,
                               std::map<float, std::vector<float> > &file_path);
 
       ~signal_separator_c_impl();
@@ -121,7 +121,7 @@ namespace gr {
         return d_oversampling;
       }
 
-      void set_oversampling(int d_oversampling) {
+      void set_oversampling(float d_oversampling) {
         signal_separator_c_impl::d_oversampling = d_oversampling;
         rebuild_all_filters();
       }
