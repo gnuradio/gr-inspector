@@ -4,18 +4,24 @@
 	<key>inspector_TFModel</key>
 	<category>inspector</category>
 	<import>import inspector</import>
-	<make>inspector.TFModel($type.typ,$vlen,$graphfile,$itensor,$otensor)</make>
+	<make>inspector.TFModel($typev.typ,$vlen,$graphfile,$itensor,$otensor,$num_inputs,$neurons)</make>
 
 	<param>
 		<name>Input Type</name>
-		<key>type</key>
+		<key>typev</key>
 		<type>enum</type>
-		<!--<option>
+		<option>
+			<name>Message</name>
+			<key>message</key>
+			<opt>size:1</opt>
+			<opt>typ:"message"</opt>
+		</option>
+		<option>
 			<name>Complex</name>
 			<key>complex</key>
 			<opt>size:gr.sizeof_gr_complex</opt>
-			<opt>typ:c</opt>
-		</option>-->
+			<opt>typ:"complex64"</opt>
+		</option>
 		<option>
 			<name>Float</name>
 			<key>float</key>
@@ -66,11 +72,29 @@
                 <type>string</type>
         </param>
 
+	<param>
+		<name>Number of model inputs</name>
+		<key>num_inputs</key>
+		<value>1</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>Neuron Tensor</name>
+		<key>neurons</key>
+		<value></value>
+		<type>string</type>
+	</param>
+
+
+
 	<sink>
     		<name>in</name>
-		<type>$type</type>
+		<type>$typev</type>
 		<vlen>$vlen</vlen>  
+		<nports>$num_inputs</nports>
 	</sink>
+
  	<source>
     		<name>classification</name>
  		<type>message</type>
