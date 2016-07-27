@@ -44,7 +44,7 @@ class sync_prototype_cc(gr.sync_block):
             Rxx = numpy.hstack((R, Rxx))
         return Rxx
 
-    def cyclic_corr(self, in0):
+    def fourier(self, in0):
         R = numpy.fft.fftshift(numpy.fft.fft(in0))
         R = R[len(R)/2:]
         return R
@@ -52,21 +52,17 @@ class sync_prototype_cc(gr.sync_block):
     def work(self, input_items, output_items):
         in0 = input_items[0]
         out = output_items[0]
-        if(len(in0) < 1024):
+        if(len(in0) < 4096):
             return 0
         # <+signal processing here+>
-        l = len(self.cyclic_corr(self.autocorr(in0, 256)))
-        R = numpy.empty([0, l])
-        for t in self.taus:
-            R = numpy.vstack((R, self.cyclic_corr(self.autocorr(in0, t))[:l]))
-
-        n = numpy.mean([1/(2*numpy.pi*k/288) * numpy.angle(R[0][k]) for k in range(1, len(R[0]))])
-        fo = numpy.mean([1/(2*numpy.pi*256) * numpy.angle(R[1][k] * numpy.exp(1j*2*numpy.pi*k/288*n)) for k in range(1, len(R[1]))])
-
+        r = self.autocorr(in0, 0)
+        R = self.fourier(r)
+        k = numpy.argmax(abs(R[100:]))+100
+        n = 1/(2*numpy.pi*k/288)*numpy.angle(R[k])
+        #fo = numpy.mean([1/(2*numpy.pi*256) * numpy.angle(R[1][k] * numpy.exp(1j*2*numpy.pi*k/288*n)) for k in range(1, len(R[1]))])
         print "n = " + str(n)
-        print "fo = " + str(fo)
+        #print "n = " + str(n)
+        #print "fo = " + str(fo)
 
-
-        out[:len(R[0])] = numpy.abs(R[0])
-        return len(R[0])
-
+        out[:len(r)] = numpy.abs(r)
+        return len(r)
