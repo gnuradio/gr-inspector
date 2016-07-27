@@ -16,6 +16,6 @@
   </sink>
   <source>
     <name>out</name>
-    <type>complex</type>
+    <type>float</type>
   </source>
 </block>
