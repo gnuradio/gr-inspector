@@ -33,10 +33,10 @@ namespace gr {
 
     qtgui_inspector_sink_vf::sptr
     qtgui_inspector_sink_vf::make(double samp_rate, int fft_len,
-                                  float cfreq, int rf_unit, QWidget *parent)
+                                  float cfreq, int rf_unit, int msgports, QWidget *parent)
     {
       return gnuradio::get_initial_sptr
-              (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, rf_unit, parent));
+              (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, rf_unit, msgports, parent));
     }
 
     /*
@@ -46,6 +46,7 @@ namespace gr {
                                                                int fft_len,
                                                                float cfreq,
                                                                int rf_unit,
+                                                               int msgports,
                                                                QWidget *parent)
             : gr::sync_block("qtgui_inspector_sink_vf",
                              gr::io_signature::make(1, 1, sizeof(float)*fft_len),
@@ -56,6 +57,12 @@ namespace gr {
       message_port_register_in(pmt::intern("map_in"));
       set_msg_handler(pmt::intern("map_in"), boost::bind(
               &qtgui_inspector_sink_vf_impl::handle_msg, this, _1));
+
+      for(int i = 0; i < msgports; i++) {
+        message_port_register_in(pmt::intern("analysis_in"+i));
+        set_msg_handler(pmt::intern("analysis_in"+i), boost::bind(
+                &qtgui_inspector_sink_vf_impl::handle_analysis, this, _1));
+      }
 
       d_argc = 1;
       d_argv = new char;
@@ -125,6 +132,27 @@ namespace gr {
         message_port_pub(pmt::intern("map_out"), msg);
       }
       d_tmp_msg = msg;
+    }
+
+    void
+    qtgui_inspector_sink_vf_impl::handle_analysis(pmt::pmt_t msg) {
+      int len = pmt::length(msg);
+      int signal = pmt::to_uint64(pmt::tuple_ref(pmt::tuple_ref(msg, 0), 1));
+      float val;
+      std::string text = "";
+      for(int i = 1; i < len; i++) {
+        text += pmt::symbol_to_string(pmt::tuple_ref(pmt::tuple_ref(msg, i), 0));
+        text += ": ";
+        val = pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, i), 1));
+        if(floor(val) == val) {
+          text += std::to_string((int)val);
+        }
+        else {
+          text += std::to_string(val);
+        }
+        text += "\n";
+      }
+      d_main_gui->add_analysis_text(signal, text);
     }
 
     void

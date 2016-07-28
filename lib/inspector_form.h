@@ -88,8 +88,10 @@ namespace gr {
       void add_msg_queue(float cfreq, float bandwidth);
       float freq_to_x(float freq);
       float x_to_freq(float x);
+      void add_analysis_text(int signal, std::string text);
 
       void drawOverlay();
+      void draw_analysis_text();
       inspector_form(int fft_len, std::vector<double> *buffer, std::vector<std::vector<float> >* rf_map,
                      bool* manual, gr::msg_queue* msg_queue, int *rf_unit, QWidget *parent);
       ~inspector_form();
@@ -110,9 +112,10 @@ namespace gr {
       std::vector<double> *d_buffer;
       float d_max, d_min, d_cfreq, d_mouse_offset;
       double* d_freq;
+      std::map<int, std::string> d_analysis_texts;
       std::vector<std::vector<float> >* d_rf_map;
       markerType d_clicked_marker;
-
+      QList<signal_marker*> d_markers;
       QwtSymbol *d_symbol;
       Zoomer* d_zoomer;
       QwtPlot *d_plot;
@@ -121,7 +124,7 @@ namespace gr {
       QTimer *d_timer;
       QwtPlotGrid* d_grid;
       QGridLayout *d_layout;
-      QList<signal_marker*> d_markers;
+
       QCheckBox* d_manual_cb;
       gr::msg_queue* d_msg_queue;
 

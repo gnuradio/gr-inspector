@@ -45,7 +45,7 @@ namespace gr {
 
      public:
       qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
-                                   float cfreq, int rf_unit, QWidget *parent);
+                                   float cfreq, int rf_unit, int msgports, QWidget *parent);
       ~qtgui_inspector_sink_vf_impl();
 
 #ifdef ENABLE_PYTHON
@@ -56,6 +56,7 @@ namespace gr {
 
 
       void handle_msg(pmt::pmt_t msg);
+      void handle_analysis(pmt::pmt_t msg);
       void unpack_message(pmt::pmt_t msg);
       void send_manual_message(float center, float bw);
       void set_rf_unit(int unit);

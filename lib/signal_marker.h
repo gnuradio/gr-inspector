@@ -38,11 +38,14 @@ namespace gr {
       QwtPlotZoneItem* d_zone;
       QwtPlot* d_plot;
       float d_freq, d_bw;
-      int d_number;
+      int d_number, d_unit;
+      QString d_unittxt;
 
       signal_marker(int i, QwtPlot *plot);
 
       ~signal_marker();
+
+      void add_text(std::string text);
 
       void set_marker(int i, float center, float bw, int unit);
     };

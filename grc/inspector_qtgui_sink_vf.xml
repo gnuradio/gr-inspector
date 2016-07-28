@@ -7,7 +7,7 @@
   <import>from gnuradio import qtgui</import>
   <import>import sip</import>
   <make>#set $win = 'self._%s_win'%$id
-inspector.qtgui_inspector_sink_vf($samp_rate, $fft_len, $cfreq, $rf_unit)
+inspector.qtgui_inspector_sink_vf($samp_rate, $fft_len, $cfreq, $rf_unit, $msgports)
 self._$(id)_win = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget)
 $(gui_hint()($win))</make>
   <callback>set_rf_unit($rf_unit)</callback>
@@ -52,6 +52,12 @@ $(gui_hint()($win))</make>
     </option>
   </param>
   <param>
+    <name>No. of MSG ports</name>
+    <key>msgports</key>
+    <value>1</value>
+    <type>int</type>
+  </param>
+  <param>
     <name>GUI Hint</name>
     <key>gui_hint</key>
     <value></value>
@@ -66,6 +72,12 @@ $(gui_hint()($win))</make>
   <sink>
     <name>map_in</name>
     <type>message</type>
+  </sink>
+  <sink>
+    <name>analysis_in</name>
+    <type>message</type>
+    <nports>$msgports</nports>
+    <optional>1</optional>
   </sink>
   <source>
     <name>map_out</name>

@@ -249,37 +249,6 @@
     </param>
   </block>
   <block>
-    <key>blocks_message_debug</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(904, 344)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_message_debug_0</value>
-    </param>
-  </block>
-  <block>
     <key>blocks_stream_to_tagged_stream</key>
     <param>
       <key>alias</key>
@@ -627,6 +596,144 @@
     <param>
       <key>signal</key>
       <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>inspector_qtgui_sink_vf</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>cfreq</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>fft_len</key>
+      <value>1024</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1096, 224)</value>
+    </param>
+    <param>
+      <key>gui_hint</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>inspector_qtgui_sink_vf_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>msgports</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>rf_unit</key>
+      <value>1000</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
+    </param>
+  </block>
+  <block>
+    <key>inspector_signal_detector_cvf</key>
+    <param>
+      <key>auto</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>avg</key>
+      <value>0.8</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>fft_len</key>
+      <value> 1024</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(864, 112)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>inspector_signal_detector_cvf_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>min_bw</key>
+      <value>10000</value>
+    </param>
+    <param>
+      <key>quant</key>
+      <value>0.0001</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>sensitivity</key>
+      <value> 0.2</value>
+    </param>
+    <param>
+      <key>threshold</key>
+      <value>-35</value>
+    </param>
+    <param>
+      <key>window</key>
+      <value>firdes.WIN_BLACKMAN_hARRIS</value>
     </param>
   </block>
   <block>
@@ -1013,6 +1120,12 @@
   </connection>
   <connection>
     <source_block_id>channels_channel_model_0</source_block_id>
+    <sink_block_id>inspector_signal_detector_cvf_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>channels_channel_model_0</source_block_id>
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
@@ -1025,9 +1138,21 @@
   </connection>
   <connection>
     <source_block_id>inspector_ofdm_zkf_c_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0</sink_block_id>
+    <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
     <source_key>ofdm_out</source_key>
-    <sink_key>print</sink_key>
+    <sink_key>analysis_in</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
+    <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
+    <source_key>map_out</source_key>
+    <sink_key>map_in</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
+    <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>rational_resampler_xxx_0</source_block_id>

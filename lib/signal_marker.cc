@@ -46,6 +46,7 @@ namespace gr {
       d_number = i;
       d_freq = center;
       d_bw = bw;
+      d_unit = unit;
       d_center->setLineStyle(QwtPlotMarker::VLine);
       QColor c = Qt::white;
       c.setAlpha(70);
@@ -57,25 +58,25 @@ namespace gr {
       QString unittxt = "Hz";
       switch(unit) {
         case 1:
-          unittxt = "Hz";
+          d_unittxt = "Hz";
           break;
         case 1000:
-          unittxt = "kHz";
+          d_unittxt = "kHz";
           break;
         case 1000000:
-          unittxt = "MHz";
+          d_unittxt = "MHz";
           break;
         case 1000000000:
-          unittxt = "GHz";
+          d_unittxt = "GHz";
           break;
         default:
-          unittxt = "Hz";
+          d_unittxt = "Hz";
       }
       qstring.push_back("Signal "+QString::number(i+1));
       qstring.append("\n");
-      qstring.append("f = "+QString::number(center/unit)+" "+unittxt);
+      qstring.append("f = "+QString::number(center/unit)+" "+d_unittxt);
       qstring.append("\n");
-      qstring.append("B = "+QString::number(bw/unit)+" "+unittxt);
+      qstring.append("B = "+QString::number(bw/unit)+" "+d_unittxt);
       text.setText(qstring);
       text.setColor(Qt::red);
       d_label->setLabelAlignment(Qt::AlignLeft);
@@ -95,6 +96,25 @@ namespace gr {
       d_label->attach(d_plot);
       d_zone->attach(d_plot);
       d_center->attach(d_plot);
+    }
+
+    void
+    signal_marker::add_text(std::string text) {
+      QString qstring;
+      QwtText qwttext;
+      qstring.push_back("Signal "+QString::number(d_number+1));
+      qstring.append("\n");
+      qstring.append("f = "+QString::number(d_freq/d_unit)+" "+d_unittxt);
+      qstring.append("\n");
+      qstring.append("B = "+QString::number(d_bw/d_unit)+" "+d_unittxt);
+      qstring.append("\n");
+      qstring.append(text.c_str());
+      qwttext.setText(qstring);
+      qwttext.setColor(Qt::red);
+      d_label->setLabelAlignment(Qt::AlignLeft);
+      d_label->setLabel(qwttext);
+      d_label->setXValue((d_freq-d_bw/2-300)/d_unit);
+      d_label->setYValue(13);
     }
   } /* namespace inspector */
 } /* namespace gr */

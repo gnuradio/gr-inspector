@@ -297,6 +297,30 @@ namespace gr {
       if(!*d_manual) {
         drawOverlay();
       }
+      draw_analysis_text();
+    }
+
+    void
+    inspector_form::add_analysis_text(int signal, std::string text) {
+      d_analysis_texts[signal] = text;
+    }
+
+    void
+    inspector_form::draw_analysis_text() {
+      if(d_rf_map->size() <= d_marker_count) {
+        for (int i = 0; i < d_rf_map->size(); i++) {
+          if(!d_analysis_texts[i].empty()) {
+            d_markers[i]->add_text(d_analysis_texts[i]);
+          }
+        }
+      }
+      else {
+        for (int i = 0; i < d_marker_count; i++) {
+          if(!d_analysis_texts[i].empty()) {
+            d_markers[i]->add_text(d_analysis_texts[i]);
+          }
+        }
+      }
     }
 
     void
