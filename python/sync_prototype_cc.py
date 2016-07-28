@@ -33,15 +33,20 @@ class sync_prototype_cc(gr.sync_block):
             in_sig=[numpy.complex64],
             out_sig=[numpy.float32])
         self.taus = [0, 255]
+        self.samp_rate = samp_rate
 
     def autocorr(self, in0, tau):
-        R = 0
-        Rxx = numpy.empty(0)
-        for i in numpy.arange(len(in0)-tau-1,-1,-1):
-            R *= len(Rxx)
-            R += in0[i+tau]*numpy.conj(in0[i])
-            R *= 1.0/(len(Rxx)+1)
-            Rxx = numpy.hstack((R, Rxx))
+        #R = 0
+        #Rxx = numpy.empty(0)
+        #for i in numpy.arange(len(in0)-tau-1,-1,-1):
+        #    R *= len(Rxx)
+        #    R += in0[i+tau]*numpy.conj(in0[i])
+        #    R *= 1.0/(len(Rxx)+1)
+        #    Rxx = numpy.hstack((R, Rxx))
+
+
+        corr = [in0[i+tau]*numpy.conj(in0[i]) for i in range(0, len(in0)-tau)]
+        Rxx = [numpy.sum(corr[n:n+32]) for n in range(0,len(corr)-32)]
         return Rxx
 
     def fourier(self, in0):
@@ -55,12 +60,13 @@ class sync_prototype_cc(gr.sync_block):
         if(len(in0) < 4096):
             return 0
         # <+signal processing here+>
-        r = self.autocorr(in0, 0)
+        r = self.autocorr(in0, 256)
         R = self.fourier(r)
-        k = numpy.argmax(abs(R[100:]))+100
-        n = 1/(2*numpy.pi*k/288)*numpy.angle(R[k])
+        k = numpy.argmax(r[0:288])
+        n = numpy.angle(r[k])*9600
         #fo = numpy.mean([1/(2*numpy.pi*256) * numpy.angle(R[1][k] * numpy.exp(1j*2*numpy.pi*k/288*n)) for k in range(1, len(R[1]))])
         print "n = " + str(n)
+        print "k = " +str(k)
         #print "n = " + str(n)
         #print "fo = " + str(fo)
 
