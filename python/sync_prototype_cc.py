@@ -22,6 +22,7 @@
 import numpy
 from gnuradio import gr
 import matplotlib.pyplot as plt
+import pmt
 
 class sync_prototype_cc(gr.sync_block):
     """
@@ -62,13 +63,18 @@ class sync_prototype_cc(gr.sync_block):
         # <+signal processing here+>
         r = self.autocorr(in0, 256)
         R = self.fourier(r)
-        k = numpy.argmax(r[0:288])
-        n = numpy.angle(r[k])*9600
+        k = numpy.argmax(numpy.abs(r[:288]))
+        n = numpy.angle(r[k])/(2*numpy.pi)
+        n = n*self.samp_rate/256
         #fo = numpy.mean([1/(2*numpy.pi*256) * numpy.angle(R[1][k] * numpy.exp(1j*2*numpy.pi*k/288*n)) for k in range(1, len(R[1]))])
-        print "n = " + str(n)
-        print "k = " +str(k)
+        print "f_o = " + str(n)
+        #print "k = " +str(k)
         #print "n = " + str(n)
         #print "fo = " + str(fo)
+        i = k
+        while i < self.nitems_written(0) + len(in0):
+            self.add_item_tag(0, i, pmt.intern("begin"), pmt.from_float(288))
+            i += 288
 
-        out[:len(r)] = numpy.abs(r)
+        out[:] = numpy.abs(in0)
         return len(r)
