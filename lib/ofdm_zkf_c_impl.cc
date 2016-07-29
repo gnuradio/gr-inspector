@@ -134,8 +134,8 @@ namespace gr {
       pmt::pmt_t identifier = pmt::make_tuple(pmt::string_to_symbol("Signal"), pmt::from_uint64(d_signal));
       pmt::pmt_t subcarr = pmt::make_tuple(pmt::string_to_symbol("Subc. space"), pmt::from_float(subc));
       pmt::pmt_t symtime = pmt::make_tuple(pmt::string_to_symbol("Sym time"), pmt::from_float(time));
-      pmt::pmt_t fftsize = pmt::make_tuple(pmt::string_to_symbol("Subcarriers"), pmt::from_uint64(fft));
-      pmt::pmt_t cyclpre = pmt::make_tuple(pmt::string_to_symbol("CP len"), pmt::from_uint64(cp));
+      pmt::pmt_t fftsize = pmt::make_tuple(pmt::string_to_symbol("Subcarriers"), pmt::from_float(fft));
+      pmt::pmt_t cyclpre = pmt::make_tuple(pmt::string_to_symbol("CP len"), pmt::from_float(cp));
       pmt::pmt_t msg = pmt::make_tuple(identifier, subcarr, symtime, fftsize, cyclpre);
       return msg;
     }

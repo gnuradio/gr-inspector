@@ -27,5 +27,6 @@ install(FILES
     signal_extractor_c.h
     qtgui_inspector_sink_vf.h
     ofdm_bouzegzi_c.h
-    ofdm_zkf_c.h DESTINATION include/inspector
+    ofdm_zkf_c.h
+    ofdm_synchronizer_cc.h DESTINATION include/inspector
 )
