@@ -41,7 +41,7 @@ list(APPEND inspector_sources
 		signal_marker.cc
 		ofdm_bouzegzi_c_impl.cc
     ofdm_zkf_c_impl.cc
-    )
+    ofdm_synchronizer_cc_impl.cc )
 
 include(GrPython)
 if(ENABLE_PYTHON)

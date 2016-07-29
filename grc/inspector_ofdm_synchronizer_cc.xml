@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<block>
+  <name>OFDM Syncronizer</name>
+  <key>inspector_ofdm_synchronizer_cc</key>
+  <category>[Inspector]/Conditioning</category>
+  <import>import inspector</import>
+  <make>inspector.ofdm_synchronizer_cc($samp_rate)</make>
+  <param>
+    <name>Sample rate</name>
+    <key>samp_rate</key>
+    <type>real</type>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+  <sink>
+    <name>ofdm_in</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>
