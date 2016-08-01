@@ -57,34 +57,33 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         tx = np.reshape(timefreq, (1, -1))
 
         # GR time!
-        src = blocks.vector_source_c(tx[0].tolist(), True, 1, [])
-        channel = channels.channel_model(0, 50.0/samp_rate, 1, (1,), 0, False)
-        sync = inspector.ofdm_synchronizer_cc(samp_rate)
+        src = blocks.vector_source_c(tx[0].tolist(), False, 1, [])
+        channel = channels.channel_model(0, 0/samp_rate, 1, (1,), 0, False)
+        #sync = inspector.ofdm_synchronizer_cc(samp_rate)
         dst = blocks.vector_sink_c()
         dst2 = blocks.vector_sink_c()
         msg_src = blocks.message_strobe(msg, 100)
 
         # connect
         self.tb.connect(src, channel)
-        self.tb.connect(channel, sync)
-        self.tb.msg_connect((msg_src, 'strobe'), (sync, 'ofdm_in'))
-        self.tb.connect(sync, dst)
+        self.tb.connect(channel, dst)
+        #self.tb.msg_connect((msg_src, 'strobe'), (sync, 'ofdm_in'))
+        #self.tb.connect(sync, dst)
         self.tb.connect(src, dst2)
 
         self.tb.start()
-        time.sleep(0.1)
-        dst2.reset()
-        dst.reset()
         time.sleep(0.2)
         self.tb.stop()
         self.tb.wait()
 
-
         # check data
         output = dst.data()
         expect = dst2.data()
-        for i in range(min(len(expect), len(output))):
-            self.assertComplexAlmostEqual2(expect[i], output[i], abs_eps=1)
+        print len(output)
+        print len(expect)
+
+        for i in range(min(len(output), len(expect))):
+            self.assertComplexAlmostEqual2(expect[i], output[i], 0.0001)
 
 if __name__ == '__main__':
     gr_unittest.run(qa_ofdm_synchronizer_cc, "qa_ofdm_synchronizer_cc.xml")

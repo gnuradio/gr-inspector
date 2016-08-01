@@ -80,11 +80,9 @@ namespace gr {
       std::vector<gr_complex> result;
       gr_complex *temp = (gr_complex*)volk_malloc((len-d_fft_len)*sizeof(gr_complex), volk_get_alignment());
       gr_complex Rxx;
-      std::cout << "len = " << len << std::endl;
-      std::cout << "fft = " << d_fft_len << std::endl;
-      std::cout << "cp = " << d_cp_len << std::endl;
+
       volk_32fc_x2_multiply_conjugate_32fc(temp, &in[d_fft_len], in, len-d_fft_len);
-      std::cout << "Volk juchee" << std::endl;
+
       for(int i = 0; i < len-d_fft_len-d_cp_len; i++) {
         Rxx = gr_complex(0,0);
         for(int k = 0; k < d_cp_len; k++) {
