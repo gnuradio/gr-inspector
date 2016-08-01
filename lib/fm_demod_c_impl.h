@@ -22,6 +22,7 @@
 #define INCLUDED_INSPECTOR_FM_DEMOD_C_IMPL_H
 
 #include <inspector/fm_demod_c.h>
+#include <gnuradio/audio/sink.h>
 
 namespace gr {
   namespace inspector {
@@ -29,10 +30,12 @@ namespace gr {
     class fm_demod_c_impl : public fm_demod_c
     {
      private:
-      // Nothing to declare in this block.
+      int d_signal;
+      float d_bw;
+      audio::sink::sptr d_audio;
 
      public:
-      fm_demod_c_impl();
+      fm_demod_c_impl(int signal);
       ~fm_demod_c_impl();
       void handle_msg(pmt::pmt_t msg);
 

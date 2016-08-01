@@ -29,20 +29,23 @@ namespace gr {
   namespace inspector {
 
     fm_demod_c::sptr
-    fm_demod_c::make()
+    fm_demod_c::make(int signal)
     {
       return gnuradio::get_initial_sptr
-        (new fm_demod_c_impl());
+        (new fm_demod_c_impl(signal));
     }
 
     /*
      * The private constructor
      */
-    fm_demod_c_impl::fm_demod_c_impl()
+    fm_demod_c_impl::fm_demod_c_impl(int signal)
       : gr::sync_block("fm_demod_c",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(0, 0, 0))
     {
+      d_signal = signal;
+      d_bw = 0;
+      d_audio = new audio::sink::sptr(48000);
       message_port_register_in(pmt::intern("map_in"));
       set_msg_handler(pmt::intern("map_in"), boost::bind(
               &fm_demod_c_impl::handle_msg, this, _1));
@@ -53,11 +56,13 @@ namespace gr {
      */
     fm_demod_c_impl::~fm_demod_c_impl()
     {
+      delete d_audio;
     }
 
     void
     fm_demod_c_impl::handle_msg(pmt::pmt_t msg) {
-
+      pmt::pmt_t tuple = pmt::vector_ref(msg, d_signal);
+      d_bw = pmt::to_float(pmt::vector_ref(tuple, 1));
     }
 
     int
@@ -68,7 +73,6 @@ namespace gr {
       const gr_complex *in = (const gr_complex *) input_items[0];
 
       // Do <+signal processing+>
-
       // Tell runtime system how many output items we produced.
       return noutput_items;
     }
