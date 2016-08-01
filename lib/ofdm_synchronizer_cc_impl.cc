@@ -66,18 +66,25 @@ namespace gr {
     void
     ofdm_synchronizer_cc_impl::handle_msg(pmt::pmt_t msg) {
       // get FFT and CP length out of parameter estmation msg
-      d_fft_len = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 3), 1));
-      d_cp_len = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1));
-      d_msg_received = true;
+      int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 3), 1));
+      int cplen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1));
+      if(fftlen < 10000 && fftlen > 0 && cplen < 1000 && cplen > 0) {
+        d_fft_len = fftlen;
+        d_cp_len = cplen;
+        d_msg_received = true;
+      }
     }
 
     std::vector<gr_complex>
     ofdm_synchronizer_cc_impl::autocorr(const gr_complex *in, int len) {
       std::vector<gr_complex> result;
-      gr_complex temp[len-d_fft_len];
+      gr_complex *temp = (gr_complex*)volk_malloc((len-d_fft_len)*sizeof(gr_complex), volk_get_alignment());
       gr_complex Rxx;
+      std::cout << "len = " << len << std::endl;
+      std::cout << "fft = " << d_fft_len << std::endl;
+      std::cout << "cp = " << d_cp_len << std::endl;
       volk_32fc_x2_multiply_conjugate_32fc(temp, &in[d_fft_len], in, len-d_fft_len);
-
+      std::cout << "Volk juchee" << std::endl;
       for(int i = 0; i < len-d_fft_len-d_cp_len; i++) {
         Rxx = gr_complex(0,0);
         for(int k = 0; k < d_cp_len; k++) {
@@ -85,6 +92,7 @@ namespace gr {
         }
         result.push_back(Rxx);
       }
+      volk_free(temp);
       return result;
     }
 
@@ -112,7 +120,7 @@ namespace gr {
       float n = std::arg(r[k]);
       d_rotator.set_phase_incr(std::exp(gr_complex(0,-n/d_fft_len)));
 
-      std::cout << "n = " << n*d_samp_rate/(2*d_fft_len*M_PI) << std::endl;
+      //std::cout << "n = " << n*d_samp_rate/(2*d_fft_len*M_PI) << std::endl;
 
       for(int i = 0; i < noutput_items; i++) {
         out[i] = d_rotator.rotate(in[i]);

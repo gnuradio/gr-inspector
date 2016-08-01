@@ -65,8 +65,8 @@ class qa_ofdm_zkf_c (gr_unittest.TestCase):
         # check data
         result = snk.get_message(0)
 
-        fft_result = pmt.to_uint64(pmt.tuple_ref(pmt.tuple_ref(result, 3), 1))
-        cp_result = pmt.to_uint64(pmt.tuple_ref(pmt.tuple_ref(result, 4), 1))
+        fft_result = pmt.to_float(pmt.tuple_ref(pmt.tuple_ref(result, 3), 1))
+        cp_result = pmt.to_float(pmt.tuple_ref(pmt.tuple_ref(result, 4), 1))
 
         self.assertAlmostEqual(fft_len, fft_result)
         self.assertAlmostEqual(cp_len, cp_result)

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>OFDM Syncronizer</name>
+  <name>OFDM Synchronizer</name>
   <key>inspector_ofdm_synchronizer_cc</key>
   <category>[Inspector]/Conditioning</category>
   <import>import inspector</import>
