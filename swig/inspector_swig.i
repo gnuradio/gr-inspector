@@ -19,6 +19,7 @@ namespace std {
 #include "inspector/signal_extractor_c.h"
 #include "inspector/qtgui_inspector_sink_vf.h"
 #include "inspector/ofdm_zkf_c.h"
+#include "inspector/fm_demod_c.h"
 %}
 %include "inspector/signal_separator_c.h"
 GR_SWIG_BLOCK_MAGIC2(inspector, signal_separator_c);
@@ -30,3 +31,6 @@ GR_SWIG_BLOCK_MAGIC2(inspector, signal_extractor_c);
 GR_SWIG_BLOCK_MAGIC2(inspector, qtgui_inspector_sink_vf);
 %include "inspector/ofdm_zkf_c.h"
 GR_SWIG_BLOCK_MAGIC2(inspector, ofdm_zkf_c);
+
+%include "inspector/fm_demod_c.h"
+GR_SWIG_BLOCK_MAGIC2(inspector, fm_demod_c);

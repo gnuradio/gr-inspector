@@ -22,5 +22,6 @@ install(FILES
     inspector_signal_extractor_c.xml
     inspector_qtgui_sink_vf.xml
     inspector_block_tree.xml
-    inspector_ofdm_zkf_c.xml DESTINATION share/gnuradio/grc/blocks
+    inspector_ofdm_zkf_c.xml
+    inspector_fm_demod_c.xml DESTINATION share/gnuradio/grc/blocks
 )

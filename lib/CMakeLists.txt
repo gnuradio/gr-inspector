@@ -40,7 +40,8 @@ list(APPEND inspector_sources
 		inspector_form.cc
 		signal_marker.cc
 		ofdm_bouzegzi_c_impl.cc
-    ofdm_zkf_c_impl.cc )
+    ofdm_zkf_c_impl.cc
+    fm_demod_c_impl.cc )
 
 include(GrPython)
 if(ENABLE_PYTHON)
