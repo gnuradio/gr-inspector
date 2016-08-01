@@ -20,7 +20,7 @@
 # 
 
 from gnuradio import gr, gr_unittest
-from gnuradio import blocks, channels
+from gnuradio import blocks, channels, analog
 import inspector_swig as inspector
 import numpy as np
 import time
@@ -58,31 +58,33 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
 
         # GR time!
         src = blocks.vector_source_c(tx[0].tolist(), False, 1, [])
-        channel = channels.channel_model(0, 0/samp_rate, 1, (1,), 0, False)
-        #sync = inspector.ofdm_synchronizer_cc(samp_rate)
+        freq_offset = analog.sig_source_c(1, analog.GR_SIN_WAVE, 50.0/samp_rate, 1.0, 0.0)
+        mixer = blocks.multiply_cc()
+        sync = inspector.ofdm_synchronizer_cc(samp_rate)
         dst = blocks.vector_sink_c()
         dst2 = blocks.vector_sink_c()
-        msg_src = blocks.message_strobe(msg, 100)
+        msg_src = blocks.message_strobe(msg, 0)
 
         # connect
-        self.tb.connect(src, channel)
-        self.tb.connect(channel, dst)
-        #self.tb.msg_connect((msg_src, 'strobe'), (sync, 'ofdm_in'))
-        #self.tb.connect(sync, dst)
+        self.tb.connect(src, (mixer, 0))
+        self.tb.connect(freq_offset, (mixer, 1))
+        self.tb.connect(mixer, sync)
+        self.tb.msg_connect((msg_src, 'strobe'), (sync, 'ofdm_in'))
+        self.tb.connect(sync, dst)
         self.tb.connect(src, dst2)
 
         self.tb.start()
-        time.sleep(0.2)
+        time.sleep(0.3)
         self.tb.stop()
         self.tb.wait()
 
         # check data
         output = dst.data()
         expect = dst2.data()
-        print len(output)
-        print len(expect)
+        # cut last items when sync block is waiting for big enough input buffer
+        expect = expect[:len(output)]
 
-        for i in range(min(len(output), len(expect))):
+        for i in range(min(len(output), len(expect))-1, 10000, -1):
             self.assertComplexAlmostEqual2(expect[i], output[i], 0.0001)
 
 if __name__ == '__main__':
