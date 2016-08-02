@@ -30,13 +30,12 @@ namespace gr {
     class ofdm_synchronizer_cc_impl : public ofdm_synchronizer_cc
     {
      private:
-      double d_samp_rate;
       int d_fft_len, d_cp_len;
       bool d_msg_received;
       blocks::rotator d_rotator;
 
      public:
-      ofdm_synchronizer_cc_impl(double samp_rate);
+      ofdm_synchronizer_cc_impl();
       ~ofdm_synchronizer_cc_impl();
 
       void handle_msg(pmt::pmt_t msg);
