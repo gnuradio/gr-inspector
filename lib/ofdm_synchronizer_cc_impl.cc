@@ -31,21 +31,20 @@ namespace gr {
   namespace inspector {
 
     ofdm_synchronizer_cc::sptr
-    ofdm_synchronizer_cc::make(double samp_rate)
+    ofdm_synchronizer_cc::make()
     {
       return gnuradio::get_initial_sptr
-        (new ofdm_synchronizer_cc_impl(samp_rate));
+        (new ofdm_synchronizer_cc_impl());
     }
 
     /*
      * The private constructor
      */
-    ofdm_synchronizer_cc_impl::ofdm_synchronizer_cc_impl(double samp_rate)
+    ofdm_synchronizer_cc_impl::ofdm_synchronizer_cc_impl()
       : gr::sync_block("ofdm_synchronizer_cc",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(1, 1, sizeof(gr_complex)))
     {
-      d_samp_rate = samp_rate;
       d_fft_len = 0;
       d_cp_len = 0;
       d_msg_received = false;

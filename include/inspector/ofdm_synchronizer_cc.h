@@ -29,8 +29,21 @@ namespace gr {
   namespace inspector {
 
     /*!
-     * \brief <+description of block+>
+     * \brief OFDM frequency synchronizer and timing estimator
      * \ingroup inspector
+     *
+     * \details
+     * This block can be inserted downstream to the OFDM parameter
+     * estimation block. It performs a frequency offset estimation and
+     * symbol timing estimation according to [1]. Frequency offsets smaller than the
+     * subcarrier spacing will be corrected to obtain orthogonality of
+     * the carriers. Output is a stream with stream tags at the estimated
+     * OFDM symbol beginnings (PMT symbol "symbol").
+     *
+     * Connect output of OFDM parameter estimator to message port and
+     * signal itself to the stream input.
+     *
+     * [1] J. J. van de Beek, M. Sandell, and P. O. Borjesson, “ML estimation of time and frequency offset in OFDM systems,” IEEE Transactions on Signal Processing, vol. 45, no. 7, pp. 1800–1805, 1997. [Online]. Available: http://pure.ltu.se/portal/files/1612155/Article.pdf.
      *
      */
     class INSPECTOR_API ofdm_synchronizer_cc : virtual public gr::sync_block
@@ -41,12 +54,8 @@ namespace gr {
       /*!
        * \brief Return a shared_ptr to a new instance of inspector::ofdm_synchronizer_cc.
        *
-       * To avoid accidental use of raw pointers, inspector::ofdm_synchronizer_cc's
-       * constructor is in a private implementation
-       * class. inspector::ofdm_synchronizer_cc::make is the public interface for
-       * creating new instances.
        */
-      static sptr make(double samp_rate);
+      static sptr make();
     };
 
   } // namespace inspector

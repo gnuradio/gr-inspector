@@ -57,8 +57,9 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         tx = np.reshape(timefreq, (1, -1))
 
         # GR time!
-        src = blocks.vector_source_c(tx[0].tolist(), False, 1, [])
-        freq_offset = analog.sig_source_c(1, analog.GR_SIN_WAVE, 50.0/samp_rate, 1.0, 0.0)
+        src = blocks.vector_source_c(tx[0].tolist(), True, 1, [])
+        freq_offset = analog.sig_source_c(1, analog.GR_SIN_WAVE,
+                                          50.0/samp_rate, 1.0, 0.0)
         mixer = blocks.multiply_cc()
         sync = inspector.ofdm_synchronizer_cc(samp_rate)
         dst = blocks.vector_sink_c()
@@ -74,7 +75,7 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         self.tb.connect(src, dst2)
 
         self.tb.start()
-        time.sleep(0.3)
+        time.sleep(0.5)
         self.tb.stop()
         self.tb.wait()
 
@@ -84,8 +85,8 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         # cut last items when sync block is waiting for big enough input buffer
         expect = expect[:len(output)]
 
-        for i in range(min(len(output), len(expect))-1, 10000, -1):
-            self.assertComplexAlmostEqual2(expect[i], output[i], 0.0001)
+        # block outputs 0j until it has enough OFDM symbols to perform estimations -> cut first half
+        self.assertComplexTuplesAlmostEqual2(expect[len(expect)/2:], output[len(output)/2:], abs_eps = 1)
 
 if __name__ == '__main__':
     gr_unittest.run(qa_ofdm_synchronizer_cc, "qa_ofdm_synchronizer_cc.xml")
