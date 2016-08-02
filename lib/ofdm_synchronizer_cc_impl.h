@@ -33,6 +33,7 @@ namespace gr {
       int d_fft_len, d_cp_len;
       bool d_msg_received;
       blocks::rotator d_rotator;
+      gr::thread::mutex d_mutex;
 
      public:
       ofdm_synchronizer_cc_impl();

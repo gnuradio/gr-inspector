@@ -65,7 +65,8 @@ namespace gr {
     void
     ofdm_synchronizer_cc_impl::handle_msg(pmt::pmt_t msg) {
       // get FFT and CP length out of parameter estmation msg
-      int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 3), 1));
+      gr::thread::scoped_lock guard(d_mutex);
+      int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 3), 1);
       int cplen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1));
       if(fftlen < 10000 && fftlen > 0 && cplen < 1000 && cplen > 0) {
         d_fft_len = fftlen;
@@ -77,7 +78,8 @@ namespace gr {
     std::vector<gr_complex>
     ofdm_synchronizer_cc_impl::autocorr(const gr_complex *in, int len) {
       std::vector<gr_complex> result;
-      gr_complex *temp = (gr_complex*)volk_malloc((len-d_fft_len)*sizeof(gr_complex), volk_get_alignment());
+      gr_complex *temp = (gr_complex*)volk_malloc((len-d_fft_len)*
+                            sizeof(gr_complex), volk_get_alignment());
       gr_complex Rxx;
 
       volk_32fc_x2_multiply_conjugate_32fc(temp, &in[d_fft_len], in, len-d_fft_len);
@@ -113,7 +115,8 @@ namespace gr {
       float r_mag[noutput_items-d_fft_len-d_cp_len];
       volk_32fc_magnitude_32f(r_mag, &r[0], noutput_items-d_fft_len-d_cp_len);
       std::vector<float> r_vec(r_mag, r_mag+noutput_items-d_fft_len-d_cp_len);
-      int k = std::distance(r_vec.begin(), std::max_element(r_vec.begin(), r_vec.begin()+d_fft_len+d_cp_len));
+      int k = std::distance(r_vec.begin(),
+                            std::max_element(r_vec.begin(), r_vec.begin()+d_fft_len+d_cp_len));
       float n = std::arg(r[k]);
       d_rotator.set_phase_incr(std::exp(gr_complex(0,-n/d_fft_len)));
 
