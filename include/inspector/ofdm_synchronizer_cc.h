@@ -43,8 +43,10 @@ namespace gr {
      * Connect output of OFDM parameter estimator to message port and
      * signal itself to the stream input.
      *
-     * [1] J. J. van de Beek, M. Sandell, and P. O. Borjesson, “ML estimation of time and frequency offset in OFDM systems,” IEEE Transactions on Signal Processing, vol. 45, no. 7, pp. 1800–1805, 1997. [Online]. Available: http://pure.ltu.se/portal/files/1612155/Article.pdf.
-     *
+     * [1] J. J. van de Beek, M. Sandell, and P. O. Borjesson,
+     * “ML estimation of time and frequency offset in OFDM systems,”
+     * IEEE Transactions on Signal Processing, vol. 45, no. 7, pp.
+     * 1800–1805, 1997. [Online]. Available: http://pure.ltu.se/portal/files/1612155/Article.pdf.
      */
     class INSPECTOR_API ofdm_synchronizer_cc : virtual public gr::sync_block
     {

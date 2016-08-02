@@ -30,7 +30,7 @@ namespace gr {
 
     /*!
      * \brief Parameter estimation block for OFDM signals
-     * \ingroup inspectort
+     * \ingroup inspector
      *
      * \details
      * This block performs a parameter estimation of an input OFDM signal.

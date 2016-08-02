@@ -667,10 +667,6 @@
       <key>minoutbuf</key>
       <value>0</value>
     </param>
-    <param>
-      <key>samp_rate</key>
-      <value>samp_rate</value>
-    </param>
   </block>
   <block>
     <key>inspector_ofdm_zkf_c</key>
@@ -1382,11 +1378,11 @@
     </param>
     <param>
       <key>ymax</key>
-      <value>1</value>
+      <value>100</value>
     </param>
     <param>
       <key>ymin</key>
-      <value>-1</value>
+      <value>-100</value>
     </param>
   </block>
   <block>
