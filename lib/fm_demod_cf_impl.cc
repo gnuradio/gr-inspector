@@ -23,56 +23,61 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "fm_demod_c_impl.h"
+#include "fm_demod_cf_impl.h"
 
 namespace gr {
   namespace inspector {
 
-    fm_demod_c::sptr
-    fm_demod_c::make(int signal)
+    fm_demod_cf::sptr
+    fm_demod_cf::make(int signal)
     {
       return gnuradio::get_initial_sptr
-        (new fm_demod_c_impl(signal));
+        (new fm_demod_cf_impl(signal));
     }
 
     /*
      * The private constructor
      */
-    fm_demod_c_impl::fm_demod_c_impl(int signal)
-      : gr::sync_block("fm_demod_c",
+    fm_demod_cf_impl::fm_demod_cf_impl(int signal)
+      : gr::sync_decimator("fm_demod_cf",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(1, 1, sizeof(float)), 10)
     {
       d_signal = signal;
-      d_bw = 0;
-      d_audio = new audio::sink::sptr(48000);
       message_port_register_in(pmt::intern("map_in"));
       set_msg_handler(pmt::intern("map_in"), boost::bind(
-              &fm_demod_c_impl::handle_msg, this, _1));
+              &fm_demod_cf_impl::handle_msg, this, _1));
     }
 
     /*
      * Our virtual destructor.
      */
-    fm_demod_c_impl::~fm_demod_c_impl()
+    fm_demod_cf_impl::~fm_demod_cf_impl()
     {
-      delete d_audio;
     }
 
     void
-    fm_demod_c_impl::handle_msg(pmt::pmt_t msg) {
+    fm_demod_cf_impl::handle_msg(pmt::pmt_t msg) {
       pmt::pmt_t tuple = pmt::vector_ref(msg, d_signal);
-      d_bw = pmt::to_float(pmt::vector_ref(tuple, 1));
+      set_decimation(pmt::to_float(pmt::vector_ref(tuple, 1))/48000.0);
     }
 
     int
-    fm_demod_c_impl::work(int noutput_items,
+    fm_demod_cf_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
+      float *out = (float *) output_items[0];
+
+      int j = 0;
+      for(int i = 0; i < noutput_items; i++) {
+        out[i] = std::abs(in[j]);
+        j += decimation();
+      }
 
       // Do <+signal processing+>
+
       // Tell runtime system how many output items we produced.
       return noutput_items;
     }

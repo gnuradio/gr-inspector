@@ -18,39 +18,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef INCLUDED_INSPECTOR_FM_DEMOD_CF_IMPL_H
+#define INCLUDED_INSPECTOR_FM_DEMOD_CF_IMPL_H
 
-#ifndef INCLUDED_INSPECTOR_FM_DEMOD_C_H
-#define INCLUDED_INSPECTOR_FM_DEMOD_C_H
-
-#include <inspector/api.h>
-#include <gnuradio/sync_block.h>
+#include <inspector/fm_demod_cf.h>
 
 namespace gr {
   namespace inspector {
 
-    /*!
-     * \brief <+description of block+>
-     * \ingroup inspector
-     *
-     */
-    class INSPECTOR_API fm_demod_c : virtual public gr::sync_block
+    class fm_demod_cf_impl : public fm_demod_cf
     {
-     public:
-      typedef boost::shared_ptr<fm_demod_c> sptr;
+     private:
+      int d_signal;
 
-      /*!
-       * \brief Return a shared_ptr to a new instance of inspector::fm_demod_c.
-       *
-       * To avoid accidental use of raw pointers, inspector::fm_demod_c's
-       * constructor is in a private implementation
-       * class. inspector::fm_demod_c::make is the public interface for
-       * creating new instances.
-       */
-      static sptr make(int signal);
+
+     public:
+      fm_demod_cf_impl(int signal);
+      ~fm_demod_cf_impl();
+
+      void handle_msg(pmt::pmt_t msg);
+
+      // Where all the action really happens
+      int work(int noutput_items,
+         gr_vector_const_void_star &input_items,
+         gr_vector_void_star &output_items);
     };
 
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_FM_DEMOD_C_H */
+#endif /* INCLUDED_INSPECTOR_FM_DEMOD_CF_IMPL_H */
 

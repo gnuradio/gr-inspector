@@ -18,35 +18,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_INSPECTOR_FM_DEMOD_C_IMPL_H
-#define INCLUDED_INSPECTOR_FM_DEMOD_C_IMPL_H
 
-#include <inspector/fm_demod_c.h>
-#include <gnuradio/audio/sink.h>
+#ifndef INCLUDED_INSPECTOR_FM_DEMOD_CF_H
+#define INCLUDED_INSPECTOR_FM_DEMOD_CF_H
+
+#include <inspector/api.h>
+#include <gnuradio/sync_decimator.h>
 
 namespace gr {
   namespace inspector {
 
-    class fm_demod_c_impl : public fm_demod_c
+    /*!
+     * \brief <+description of block+>
+     * \ingroup inspector
+     *
+     */
+    class INSPECTOR_API fm_demod_cf : virtual public gr::sync_decimator
     {
-     private:
-      int d_signal;
-      float d_bw;
-      audio::sink::sptr d_audio;
-
      public:
-      fm_demod_c_impl(int signal);
-      ~fm_demod_c_impl();
-      void handle_msg(pmt::pmt_t msg);
+      typedef boost::shared_ptr<fm_demod_cf> sptr;
 
-      // Where all the action really happens
-      int work(int noutput_items,
-         gr_vector_const_void_star &input_items,
-         gr_vector_void_star &output_items);
+      /*!
+       * \brief Return a shared_ptr to a new instance of inspector::fm_demod_cf.
+       *
+       * To avoid accidental use of raw pointers, inspector::fm_demod_cf's
+       * constructor is in a private implementation
+       * class. inspector::fm_demod_cf::make is the public interface for
+       * creating new instances.
+       */
+      static sptr make(int signal);
     };
 
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_FM_DEMOD_C_IMPL_H */
+#endif /* INCLUDED_INSPECTOR_FM_DEMOD_CF_H */
 

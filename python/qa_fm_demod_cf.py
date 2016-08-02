@@ -23,7 +23,7 @@ from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 import inspector_swig as inspector
 
-class qa_fm_demod_c (gr_unittest.TestCase):
+class qa_fm_demod_cf (gr_unittest.TestCase):
 
     def setUp (self):
         self.tb = gr.top_block ()
@@ -38,4 +38,4 @@ class qa_fm_demod_c (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_fm_demod_c, "qa_fm_demod_c.xml")
+    gr_unittest.run(qa_fm_demod_cf, "qa_fm_demod_cf.xml")

@@ -20,4 +20,8 @@
     <name>GUI</name>
     <block>qtgui_sink_vf</block>
   </cat>
+  <cat>
+    <name>Demodulation</name>
+    <block>fm_demod_cf</block>
+  </cat>
 </cat>

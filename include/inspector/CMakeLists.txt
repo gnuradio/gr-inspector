@@ -28,5 +28,5 @@ install(FILES
     qtgui_inspector_sink_vf.h
     ofdm_bouzegzi_c.h
     ofdm_zkf_c.h
-    fm_demod_c.h DESTINATION include/inspector
+    fm_demod_cf.h DESTINATION include/inspector
 )
