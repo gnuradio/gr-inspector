@@ -30,7 +30,7 @@ namespace gr {
     class ofdm_synchronizer_cc_impl : public ofdm_synchronizer_cc
     {
      private:
-      int d_fft_len, d_cp_len;
+      int d_fft_len, d_cp_len, d_tag_pos;
       bool d_msg_received;
       blocks::rotator d_rotator;
       gr::thread::mutex d_mutex;
