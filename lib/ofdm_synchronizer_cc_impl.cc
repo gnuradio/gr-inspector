@@ -66,7 +66,7 @@ namespace gr {
     ofdm_synchronizer_cc_impl::handle_msg(pmt::pmt_t msg) {
       // get FFT and CP length out of parameter estmation msg
       gr::thread::scoped_lock guard(d_mutex);
-      int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 3), 1);
+      int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 3), 1));
       int cplen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1));
       if(fftlen < 10000 && fftlen > 0 && cplen < 1000 && cplen > 0) {
         d_fft_len = fftlen;
