@@ -46,7 +46,7 @@ namespace gr {
        * class. inspector::fm_demod_cf::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int signal);
+      static sptr make(int signal, int audio_rate);
     };
 
   } // namespace inspector

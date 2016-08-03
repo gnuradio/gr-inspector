@@ -22,6 +22,8 @@
 #define INCLUDED_INSPECTOR_FM_DEMOD_CF_IMPL_H
 
 #include <inspector/fm_demod_cf.h>
+#include <gnuradio/filter/fir_filter.h>
+#include <gnuradio/filter/pfb_arb_resampler.h>
 
 namespace gr {
   namespace inspector {
@@ -29,11 +31,14 @@ namespace gr {
     class fm_demod_cf_impl : public fm_demod_cf
     {
      private:
-      int d_signal;
-
+      int d_signal, d_audio_rate;
+      float d_gain, d_ratio;
+      filter::kernel::fir_filter_fff *d_audio_filter;
+      std::vector<float> d_taps, d_fir_buffer;
+      filter::kernel::pfb_arb_resampler_fff *d_resampler;
 
      public:
-      fm_demod_cf_impl(int signal);
+      fm_demod_cf_impl(int signal, int audio_rate);
       ~fm_demod_cf_impl();
 
       void handle_msg(pmt::pmt_t msg);
