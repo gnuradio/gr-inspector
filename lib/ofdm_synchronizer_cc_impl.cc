@@ -72,6 +72,7 @@ namespace gr {
         d_fft_len = fftlen;
         d_cp_len = cplen;
         d_msg_received = true;
+        d_tag_pos = -1;
       }
     }
 
@@ -125,10 +126,12 @@ namespace gr {
       for(int i = 0; i < noutput_items; i++) {
         out[i] = d_rotator.rotate(in[i]);
       }
-      int pos = k;
-      while(pos < nitems_written(0)+noutput_items) {
-        add_item_tag(0, pos, pmt::intern("symbol"), pmt::from_long(d_fft_len+d_cp_len));
-        pos += d_fft_len+d_cp_len;
+      if(d_tag_pos == -1) {
+        d_tag_pos = k;
+      }
+      while(d_tag_pos < nitems_written(0)+noutput_items) {
+        add_item_tag(0, d_tag_pos, pmt::intern("symbol"), pmt::from_long(d_fft_len+d_cp_len));
+        d_tag_pos += d_fft_len+d_cp_len;
       }
 
       // Tell runtime system how many output items we produced.
