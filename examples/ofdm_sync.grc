@@ -249,61 +249,6 @@
     </param>
   </block>
   <block>
-    <key>blocks_delay</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>delay</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(848, 116)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_delay_0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>num_ports</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-  </block>
-  <block>
     <key>blocks_stream_to_tagged_stream</key>
     <param>
       <key>alias</key>
@@ -445,7 +390,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(624, 112)</value>
+      <value>(624, 216)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -568,37 +513,6 @@
     </param>
   </block>
   <block>
-    <key>import</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(616, 52)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>import_0_0</value>
-    </param>
-    <param>
-      <key>import</key>
-      <value>import numpy</value>
-    </param>
-  </block>
-  <block>
     <key>inspector_ofdm_synchronizer_cc</key>
     <param>
       <key>alias</key>
@@ -618,7 +532,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(952, 216)</value>
+      <value>(872, 176)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -665,7 +579,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(640, 320)</value>
+      <value>(872, 312)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -740,7 +654,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(976, 40)</value>
+      <value>(648, 92)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -748,7 +662,7 @@
     </param>
     <param>
       <key>_rotation</key>
-      <value>0</value>
+      <value>180</value>
     </param>
     <param>
       <key>grid</key>
@@ -1027,7 +941,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1080, 324)</value>
+      <value>(1072, 172)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1382,7 +1296,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(488, 56)</value>
+      <value>(488, 104)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1420,12 +1334,6 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>blocks_delay_0</source_block_id>
-    <sink_block_id>inspector_ofdm_synchronizer_cc_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
     <source_block_id>blocks_stream_to_tagged_stream_0</source_block_id>
     <sink_block_id>digital_ofdm_tx_0</sink_block_id>
     <source_key>0</source_key>
@@ -1439,7 +1347,7 @@
   </connection>
   <connection>
     <source_block_id>channels_channel_model_0</source_block_id>
-    <sink_block_id>blocks_delay_0</sink_block_id>
+    <sink_block_id>inspector_ofdm_synchronizer_cc_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1459,7 +1367,7 @@
     <source_block_id>inspector_ofdm_synchronizer_cc_0</source_block_id>
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
-    <sink_key>1</sink_key>
+    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_ofdm_synchronizer_cc_0</source_block_id>
@@ -1483,6 +1391,6 @@
     <source_block_id>rational_resampler_xxx_0</source_block_id>
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
-    <sink_key>0</sink_key>
+    <sink_key>1</sink_key>
   </connection>
 </flow_graph>
