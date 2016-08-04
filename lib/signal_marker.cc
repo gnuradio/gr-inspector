@@ -79,8 +79,8 @@ namespace gr {
       qstring.append("B = "+QString::number(bw/unit)+" "+d_unittxt);
       text.setText(qstring);
       text.setColor(Qt::red);
-      d_label->setLabelAlignment(Qt::AlignLeft);
       d_label->setLabel(text);
+      d_label->setLabelAlignment(Qt::AlignLeft);
       d_label->setXValue((center-bw/2-300)/unit);
       d_label->setYValue(13);
 

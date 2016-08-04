@@ -41,7 +41,7 @@ list(APPEND inspector_sources
 		signal_marker.cc
 		ofdm_bouzegzi_c_impl.cc
     ofdm_zkf_c_impl.cc
-    fm_demod_cf_impl.cc )
+    fixed_resampler_ff_impl.cc )
 
 include(GrPython)
 if(ENABLE_PYTHON)

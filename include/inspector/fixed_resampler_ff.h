@@ -18,39 +18,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_INSPECTOR_FM_DEMOD_CF_IMPL_H
-#define INCLUDED_INSPECTOR_FM_DEMOD_CF_IMPL_H
 
-#include <inspector/fm_demod_cf.h>
-#include <gnuradio/filter/fir_filter.h>
-#include <gnuradio/filter/pfb_arb_resampler.h>
+#ifndef INCLUDED_INSPECTOR_FIXED_RESAMPLER_FF_H
+#define INCLUDED_INSPECTOR_FIXED_RESAMPLER_FF_H
+
+#include <inspector/api.h>
+#include <gnuradio/filter/fractional_resampler_cc.h>
 
 namespace gr {
   namespace inspector {
 
-    class fm_demod_cf_impl : public fm_demod_cf
+    /*!
+     * \brief <+description of block+>
+     * \ingroup inspector
+     *
+     */
+    class INSPECTOR_API fixed_resampler_ff : virtual public filter::fractional_resampler_cc
     {
-     private:
-      int d_signal, d_audio_rate;
-      float d_gain, d_ratio;
-      filter::kernel::fir_filter_fff *d_audio_filter;
-      std::vector<float> d_taps, d_fir_buffer;
-      filter::kernel::pfb_arb_resampler_fff *d_resampler;
-
      public:
-      fm_demod_cf_impl(int signal, int audio_rate);
-      ~fm_demod_cf_impl();
+      typedef boost::shared_ptr<fixed_resampler_ff> sptr;
 
-      void handle_msg(pmt::pmt_t msg);
-
-      // Where all the action really happens
-      int work(int noutput_items,
-         gr_vector_const_void_star &input_items,
-         gr_vector_void_star &output_items);
+      /*!
+       * \brief Return a shared_ptr to a new instance of inspector::fixed_resampler_ff.
+       *
+       * To avoid accidental use of raw pointers, inspector::fixed_resampler_ff's
+       * constructor is in a private implementation
+       * class. inspector::fixed_resampler_ff::make is the public interface for
+       * creating new instances.
+       */
+      static sptr make(int signal, float out_samp_rate);
     };
 
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_FM_DEMOD_CF_IMPL_H */
+#endif /* INCLUDED_INSPECTOR_FIXED_RESAMPLER_FF_H */
 

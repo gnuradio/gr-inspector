@@ -18,39 +18,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef INCLUDED_INSPECTOR_FIXED_RESAMPLER_FF_IMPL_H
+#define INCLUDED_INSPECTOR_FIXED_RESAMPLER_FF_IMPL_H
 
-#ifndef INCLUDED_INSPECTOR_FM_DEMOD_CF_H
-#define INCLUDED_INSPECTOR_FM_DEMOD_CF_H
-
-#include <inspector/api.h>
-#include <gnuradio/sync_decimator.h>
+#include <inspector/fixed_resampler_ff.h>
 
 namespace gr {
   namespace inspector {
 
-    /*!
-     * \brief <+description of block+>
-     * \ingroup inspector
-     *
-     */
-    class INSPECTOR_API fm_demod_cf : virtual public gr::sync_decimator
+    class fixed_resampler_ff_impl : public fixed_resampler_ff
     {
-     public:
-      typedef boost::shared_ptr<fm_demod_cf> sptr;
+     private:
+      int d_samp_rate, d_signal;
+      float d_bw;
+      boost::shared_ptr<filter::fractional_resampler_cc> d_mother;
 
-      /*!
-       * \brief Return a shared_ptr to a new instance of inspector::fm_demod_cf.
-       *
-       * To avoid accidental use of raw pointers, inspector::fm_demod_cf's
-       * constructor is in a private implementation
-       * class. inspector::fm_demod_cf::make is the public interface for
-       * creating new instances.
-       */
-      static sptr make(int signal, int audio_rate);
+     public:
+      fixed_resampler_ff_impl(int signal, float out_samp_rate);
+      ~fixed_resampler_ff_impl();
+
+      void handle_msg(pmt::pmt_t msg);
+
     };
 
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_FM_DEMOD_CF_H */
+#endif /* INCLUDED_INSPECTOR_FIXED_RESAMPLER_FF_IMPL_H */
 
