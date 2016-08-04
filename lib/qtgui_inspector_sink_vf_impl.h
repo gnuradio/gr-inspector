@@ -45,7 +45,9 @@ namespace gr {
 
      public:
       qtgui_inspector_sink_vf_impl(double samp_rate, int fft_len,
-                                   float cfreq, int rf_unit, int msgports, QWidget *parent);
+                                   float cfreq, int rf_unit,
+                                   int msgports, bool manual,
+                                   QWidget *parent);
       ~qtgui_inspector_sink_vf_impl();
 
 #ifdef ENABLE_PYTHON

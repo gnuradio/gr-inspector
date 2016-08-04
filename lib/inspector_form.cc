@@ -97,6 +97,7 @@ namespace gr {
       d_manual_cb = new QCheckBox("Manual", d_plot);
       d_manual_cb->setGeometry(QRect(10,10,85,20)),
       connect(d_manual_cb, SIGNAL(stateChanged(int)), this, SLOT(manual_cb_clicked(int)));
+      d_manual_cb->setChecked(*d_manual);
     }
 
     inspector_form::~inspector_form(){
@@ -186,6 +187,10 @@ namespace gr {
       }
 
       d_plot->setAxisTitle(QwtPlot::xBottom, "Frequency ["+unit+"]");
+
+      if(*d_manual) {
+        spawn_signal_selector();
+      }
     }
 
     void
@@ -345,6 +350,11 @@ namespace gr {
     void
     inspector_form::refresh(){
       gr::thread::scoped_lock guard(d_mutex);
+      // adjust text position to zoom rect
+      for(int i = 0; i < d_markers.size(); i++) {
+        d_markers[i]->set_label_y(
+                d_zoomer->zoomRect().y()+d_zoomer->zoomRect().height()*0.85);
+      }
 
       if(d_buffer->size() < d_fft_len) {
         return;

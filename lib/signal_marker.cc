@@ -99,6 +99,11 @@ namespace gr {
     }
 
     void
+    signal_marker::set_label_y(qreal yval) {
+      d_label->setYValue(yval);
+    }
+
+    void
     signal_marker::add_text(std::string text) {
       QString qstring;
       QwtText qwttext;

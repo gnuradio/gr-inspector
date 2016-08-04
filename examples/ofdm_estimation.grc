@@ -571,7 +571,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(640, 320)</value>
+      <value>(680, 280)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -641,6 +641,10 @@
       <value>inspector_qtgui_sink_vf_0</value>
     </param>
     <param>
+      <key>manual</key>
+      <value>False</value>
+    </param>
+    <param>
       <key>maxoutbuf</key>
       <value>0</value>
     </param>
@@ -650,7 +654,7 @@
     </param>
     <param>
       <key>msgports</key>
-      <value>1</value>
+      <value>2</value>
     </param>
     <param>
       <key>rf_unit</key>
@@ -1140,7 +1144,13 @@
     <source_block_id>inspector_ofdm_zkf_c_0</source_block_id>
     <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
     <source_key>ofdm_out</source_key>
-    <sink_key>analysis_in</sink_key>
+    <sink_key>analysis_in0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_ofdm_zkf_c_0</source_block_id>
+    <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
+    <source_key>ofdm_out</source_key>
+    <sink_key>analysis_in1</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_signal_detector_cvf_0</source_block_id>

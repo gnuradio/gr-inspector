@@ -46,7 +46,7 @@ namespace gr {
       ~signal_marker();
 
       void add_text(std::string text);
-
+      void set_label_y(qreal yval);
       void set_marker(int i, float center, float bw, int unit);
     };
 

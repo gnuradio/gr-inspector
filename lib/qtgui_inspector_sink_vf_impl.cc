@@ -33,10 +33,13 @@ namespace gr {
 
     qtgui_inspector_sink_vf::sptr
     qtgui_inspector_sink_vf::make(double samp_rate, int fft_len,
-                                  float cfreq, int rf_unit, int msgports, QWidget *parent)
+                                  float cfreq, int rf_unit, int msgports,
+                                  bool manual, QWidget *parent)
     {
       return gnuradio::get_initial_sptr
-              (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len, cfreq, rf_unit, msgports, parent));
+              (new qtgui_inspector_sink_vf_impl(samp_rate, fft_len,
+                                                cfreq, rf_unit, msgports,
+                                                manual, parent));
     }
 
     /*
@@ -47,6 +50,7 @@ namespace gr {
                                                                float cfreq,
                                                                int rf_unit,
                                                                int msgports,
+                                                               bool manual,
                                                                QWidget *parent)
             : gr::sync_block("qtgui_inspector_sink_vf",
                              gr::io_signature::make(1, 1, sizeof(float)*fft_len),
@@ -58,10 +62,17 @@ namespace gr {
       set_msg_handler(pmt::intern("map_in"), boost::bind(
               &qtgui_inspector_sink_vf_impl::handle_msg, this, _1));
 
-      for(int i = 0; i < msgports; i++) {
-        message_port_register_in(pmt::intern("analysis_in"+i));
-        set_msg_handler(pmt::intern("analysis_in"+i), boost::bind(
+      if(msgports == 1) {
+        message_port_register_in(pmt::intern("analysis_in"));
+        set_msg_handler(pmt::intern("analysis_in"), boost::bind(
                 &qtgui_inspector_sink_vf_impl::handle_analysis, this, _1));
+      }
+      else {
+        for(int i = 0; i < msgports; i++) {
+          message_port_register_in(pmt::intern("analysis_in"+std::to_string(i)));
+          set_msg_handler(pmt::intern("analysis_in"+std::to_string(i)), boost::bind(
+                  &qtgui_inspector_sink_vf_impl::handle_analysis, this, _1));
+        }
       }
 
       d_argc = 1;
@@ -75,6 +86,7 @@ namespace gr {
       d_cfreq = cfreq;
       d_rf_unit = rf_unit;
       d_msg_queue = new gr::msg_queue(1);
+      d_manual = manual;
       initialize();
     }
 

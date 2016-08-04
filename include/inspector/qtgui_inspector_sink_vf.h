@@ -69,7 +69,9 @@ namespace gr {
        * \param rf_unit Determine which unit the GUI uses to display frequencies
        * \param parent QWidget parent
        */
-      static sptr make(double samp_rate, int fft_len, float cfreq = 0, int rf_unit = 1000000, int msgports = 1, QWidget *parent = NULL);
+      static sptr make(double samp_rate, int fft_len, float cfreq = 0,
+                       int rf_unit = 1000000, int msgports = 1,
+                       bool manual = false, QWidget *parent = NULL);
 
       virtual void set_rf_unit(int unit) = 0;
       virtual void set_samp_rate(double d_samp_rate) = 0;
