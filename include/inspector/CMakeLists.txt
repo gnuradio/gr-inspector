@@ -28,5 +28,5 @@ install(FILES
     qtgui_inspector_sink_vf.h
     ofdm_bouzegzi_c.h
     ofdm_zkf_c.h
-    fixed_resampler_ff.h DESTINATION include/inspector
+    DESTINATION include/inspector
 )
