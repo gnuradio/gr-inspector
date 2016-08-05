@@ -3,7 +3,7 @@
   <key>inspector_signal_extractor_c</key>
   <category>[Inspector]/Conditioning</category>
   <import>import inspector</import>
-  <make>inspector.signal_extractor_c($signal)</make>
+  <make>inspector.signal_extractor_c($signal, $resample, $rate, $osf)</make>
   <callback>set_signal($signal)</callback>
   <param>
     <name>Signal</name>
@@ -28,6 +28,13 @@
     <name>Output samp rate</name>
     <key>rate</key>
     <value>48000</value>
+    <type>real</type>
+    <hide>#if str($resample) == 'True' then 'none' else 'all'#</hide>
+  </param>
+  <param>
+    <name>Oversampling</name>
+    <key>osf</key>
+    <value>1</value>
     <type>real</type>
     <hide>#if str($resample) == 'True' then 'none' else 'all'#</hide>
   </param>

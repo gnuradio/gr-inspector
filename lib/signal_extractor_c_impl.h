@@ -22,7 +22,7 @@
 #define INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_IMPL_H
 
 #include <inspector/signal_extractor_c.h>
-#include <gnuradio/filter/fractional_resampler_cc.h>
+#include <gnuradio/filter/pfb_arb_resampler.h>
 
 namespace gr {
   namespace inspector {
@@ -32,13 +32,14 @@ namespace gr {
      private:
       int d_signal, d_length;
       bool d_ready, d_resample;
-      float d_rate;
+      float d_out_rate, d_oversampling, d_rate;
       std::vector<gr_complex> d_samples;
       gr_complex* d_msg_buffer;
-      boost::shared_ptr<filter::fractional_resampler_cc> d_resampler_impl;
+      filter::kernel::pfb_arb_resampler_ccf *d_resampler;
 
      public:
-      signal_extractor_c_impl(int signal, bool resample, float rate);
+      signal_extractor_c_impl(int signal, bool resample, float rate,
+      float osf);
       ~signal_extractor_c_impl();
 
       // write samples from message in buffer
@@ -46,8 +47,6 @@ namespace gr {
       void handle_map(pmt::pmt_t msg);
 
       // Where all the action really happens
-      void forecast(int noutput_items,
-                    gr_vector_int &ninput_items_required);
       int work(int noutput_items,
                        gr_vector_const_void_star &input_items,
                        gr_vector_void_star &output_items);

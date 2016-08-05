@@ -25,21 +25,26 @@
 #include <gnuradio/io_signature.h>
 #include "signal_extractor_c_impl.h"
 #include <volk/volk.h>
+#include <gnuradio/filter/firdes.h>
 
 namespace gr {
   namespace inspector {
 
     signal_extractor_c::sptr
-    signal_extractor_c::make(int signal, bool resample, float rate)
+    signal_extractor_c::make(int signal, bool resample, float rate,
+                            float osf)
     {
       return gnuradio::get_initial_sptr
-        (new signal_extractor_c_impl(signal, resample, rate));
+        (new signal_extractor_c_impl(signal, resample, rate, osf));
     }
 
     /*
      * The private constructor
      */
-    signal_extractor_c_impl::signal_extractor_c_impl(int signal,  bool resample, float rate)
+    signal_extractor_c_impl::signal_extractor_c_impl(int signal,
+                                                     bool resample,
+                                                     float rate,
+                                                     float osf)
       : gr::sync_block("signal_extractor_c",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(1, 1, sizeof(gr_complex)))
@@ -52,10 +57,13 @@ namespace gr {
               &signal_extractor_c_impl::handle_map, this, _1));
 
       d_signal = signal;
+      d_oversampling = osf;
       d_ready = false; // tell work to not emit anything until a message arrives
-      d_rate = rate;
+      d_out_rate = rate;
+      d_rate = 1;
       d_resample = resample;
-      d_resampler_impl = filter::fractional_resampler_cc::make(0.0, 1.0);
+      std::vector<float> taps = filter::firdes::low_pass(32, 1000, 500, 50);
+      d_resampler = new filter::kernel::pfb_arb_resampler_ccf(d_rate, taps, 32);
     }
 
     /*
@@ -63,14 +71,7 @@ namespace gr {
      */
     signal_extractor_c_impl::~signal_extractor_c_impl()
     {
-    }
-
-    // proxy forecast
-    void
-    signal_extractor_c_impl::forecast(int noutput_items,
-                                           gr_vector_int &ninput_items_required)
-    {
-      d_resampler_impl->forecast(noutput_items, ninput_items_required);
+      delete d_resampler;
     }
 
     void
@@ -98,8 +99,10 @@ namespace gr {
       }
       else if (d_resample){
         float bw = pmt::f32vector_ref(pmt::vector_ref(msg, d_signal), 1);
-        if(bw/d_rate != d_resampler_impl->resamp_ratio())
-          d_resampler_impl->set_resamp_ratio(bw/d_rate);
+        // TODO: calculate resampler parameters
+        d_rate = d_out_rate/(d_oversampling*bw);
+        d_resampler->set_rate(d_rate);
+        std::cout << "set rate = " << d_rate << std::endl;
       }
     }
 
@@ -108,21 +111,30 @@ namespace gr {
                                           gr_vector_const_void_star &input_items,
                                           gr_vector_void_star &output_items)
     {
-      if(d_samples.size() > 0) {
-        gr_vector_const_void_star fake_input;
-        gr_complex *input_samples = (gr_complex*)volk_malloc(
-                d_samples.size()*sizeof(gr_complex), volk_get_alignment());
-        memcpy(input_samples, &d_samples[0], d_samples.size()*sizeof(gr_complex));
-        fake_input.push_back(input_samples);
-        gr_vector_int fake_ninput;
-        fake_ninput.push_back(d_samples.size());
-
-        int reval = d_resampler_impl->general_work(noutput_items,
-                                      fake_ninput,
-                                      fake_input, output_items);
-        d_samples.clear();
-        volk_free(input_samples);
-        return reval;
+      gr_complex *out = (gr_complex*)output_items[0];
+       if(d_samples.size() > 0) {
+         std::cout << "samples = " << d_samples.size() << std::endl;
+         std::cout << "rate = " << d_rate << std::endl;
+         std::cout << "noutput = " << noutput_items << std::endl;
+         int nout;
+         int item_count = noutput_items;
+         if(d_resample) {
+           item_count *= 1/d_rate;
+           if(item_count > d_samples.size())
+             item_count = d_samples.size();
+           std::cout << "item count = " << item_count << std::endl;
+           d_resampler->filter(out, &d_samples[0], item_count, nout);
+           d_samples.clear();
+           std::cout << "out = " << d_rate*nout << std::endl;
+           return d_rate*nout;
+         }
+         else {
+           if(item_count > d_samples.size())
+             item_count = d_samples.size();
+           memcpy(out, &d_samples[0], sizeof(gr_complex)*item_count);
+           d_samples.clear();
+           return item_count;
+         }
       }
       else {
         return 0;

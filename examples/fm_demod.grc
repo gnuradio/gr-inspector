@@ -175,7 +175,7 @@
     <key>analog_wfm_rcv</key>
     <param>
       <key>audio_decimation</key>
-      <value>20</value>
+      <value>2</value>
     </param>
     <param>
       <key>alias</key>
@@ -191,11 +191,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(456, 44)</value>
+      <value>(536, 60)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -215,7 +215,7 @@
     </param>
     <param>
       <key>quad_rate</key>
-      <value>samp_rate</value>
+      <value>96000</value>
     </param>
   </block>
   <block>
@@ -238,11 +238,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(928, 124)</value>
+      <value>(808, 68)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -263,53 +263,6 @@
     <param>
       <key>samp_rate</key>
       <value>48000</value>
-    </param>
-  </block>
-  <block>
-    <key>inspector_fm_demod_cf</key>
-    <param>
-      <key>rate</key>
-      <value>48000</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(936, 224)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>inspector_fm_demod_cf_0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>signal</key>
-      <value>0</value>
     </param>
   </block>
   <block>
@@ -439,7 +392,7 @@
     </param>
     <param>
       <key>threshold</key>
-      <value>-50</value>
+      <value>-40</value>
     </param>
     <param>
       <key>window</key>
@@ -483,6 +436,18 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>rate</key>
+      <value>96000</value>
+    </param>
+    <param>
+      <key>osf</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>resample</key>
+      <value>True</value>
     </param>
     <param>
       <key>signal</key>
@@ -592,7 +557,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>fftsize</key>
@@ -600,7 +565,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(880, 412)</value>
+      <value>(976, 212)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -824,7 +789,7 @@
     </param>
     <param>
       <key>type</key>
-      <value>float</value>
+      <value>complex</value>
     </param>
     <param>
       <key>update_time</key>
@@ -887,7 +852,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(640, 304)</value>
+      <value>(696, 328)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -982,7 +947,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -2727,26 +2692,14 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_fm_demod_cf_0</source_block_id>
-    <sink_block_id>audio_sink_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>inspector_fm_demod_cf_0</source_block_id>
-    <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>inspector_fm_demod_cf_0</source_block_id>
+    <source_block_id>analog_wfm_rcv_0</source_block_id>
     <sink_block_id>qtgui_time_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_qtgui_sink_vf_0</source_block_id>
-    <sink_block_id>inspector_fm_demod_cf_0</sink_block_id>
+    <sink_block_id>inspector_signal_extractor_c_0</sink_block_id>
     <source_key>map_out</source_key>
     <sink_key>map_in</sink_key>
   </connection>
@@ -2770,7 +2723,13 @@
   </connection>
   <connection>
     <source_block_id>inspector_signal_extractor_c_0</source_block_id>
-    <sink_block_id>inspector_fm_demod_cf_0</sink_block_id>
+    <sink_block_id>analog_wfm_rcv_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_signal_extractor_c_0</source_block_id>
+    <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -2779,12 +2738,6 @@
     <sink_block_id>inspector_signal_extractor_c_0</sink_block_id>
     <source_key>msg_out</source_key>
     <sink_key>sig_in</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>rtlsdr_source_0</source_block_id>
-    <sink_block_id>analog_wfm_rcv_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>rtlsdr_source_0</source_block_id>
