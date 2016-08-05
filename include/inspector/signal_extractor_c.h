@@ -38,6 +38,12 @@ namespace gr {
      * contain the samples of all detected signals. This block only passes the
      * ones beloging to the specified signal number as a complex stream. This
      * way, custom signal chains can be appended after the inspector blocks.
+     *
+     * If the resample option is used, the block will try to resample the
+     * input samples based on the message input from the map port to the
+     * desired output sample rate. An oversampling factor can be taken
+     * into account, if the input samples are oversampled by the
+     * signal separator.
      */
     class INSPECTOR_API signal_extractor_c : virtual public gr::sync_block
     {
@@ -47,7 +53,10 @@ namespace gr {
       /*!
        * \brief Return a new Extractor block instance
        *
-       * \param signal Output Signal number (beginning with 0) for desired samples
+       * \param signal Output Signal number (beginning with 0) for desired sample
+       * \param resample Enable resampling of samples
+       * \param rate Desired output sample rate if resample is enabled
+       * \param osf Oversampling factor of the input signal (relative to map input)
        */
       static sptr make(int signal, bool resample = false,
                        float rate = 1.0, float osf = 1.0);

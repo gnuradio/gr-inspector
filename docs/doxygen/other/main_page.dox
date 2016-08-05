@@ -14,7 +14,7 @@ This GNU Radio module is developed to realize signal analysis abilities in typic
 To install the Inspector, the following dependencies are required:
 
 - GNU Radio core
-- gr-filter
+- gr-analog, gr-blocks, gr-channel, gr-filter
 - QT4
 - QWT 6.1.0
 

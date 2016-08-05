@@ -45,6 +45,11 @@ namespace gr {
      * with signal markers and informations. Manual signal selection can be done
      * within the GUI created by this block.
      *
+     * Analysis blocks can pass information to the GUI block by providing
+     * messages in the tuple format
+     *
+     * <code>((pmt::intern("signal"), signal_no), (pmt::intern("description1"), pmt::from_float(value1)), ...)</code>
+     *
      * Controls: Use CTRL+LeftMouse to zoom, RightMouse to zoom out.
      * This prevents confusion when in manual selection mode, where the
      * signals are selected with LeftMouse.
@@ -52,6 +57,8 @@ namespace gr {
      * Message ports:
      * - map in: takes RF map from Signal Detector block and visualizes the included
      * information in the plot
+     * - analysis_in: takes messages of analysis blocks and displays their content
+     * in the GUI plot.
      * - map out: passes either the input message when manual selection is deactivated
      * or passes RF map according to the user's settings.
      */
@@ -67,6 +74,8 @@ namespace gr {
        * \param fft_len Vector input size and number of PSD sample points
        * \param cfreq Center frequency of source. Set to 0 if only relative frequencies are desired downstream.
        * \param rf_unit Determine which unit the GUI uses to display frequencies
+       * \param msgports Number of message ports for analysis feedback
+       * \param manual Enable manual signal selection
        * \param parent QWidget parent
        */
       static sptr make(double samp_rate, int fft_len, float cfreq = 0,
