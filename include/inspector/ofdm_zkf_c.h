@@ -51,10 +51,11 @@ namespace gr {
        *
        * \param samp_rate The samples rate of the input signal
        * \param signal The number of the analyzed signal
+       * \param min_items Set minimum items required for each work call. Should be several FFT lengths.
        * \param typ_len Typical FFT lengths to search for. Can also be set to a fine grid when no knowledge about the signal is present.
        * \param typ_cp Typical cyclic prefix lengths to search for. Can also be set to a fine grid when no knowledge about the signal is present.
        */
-      static sptr make(double samp_rate, int signal, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
+      static sptr make(double samp_rate, int signal, int min_items, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
       virtual void set_samp_rate(double d_samp_rate) = 0;
     };
 

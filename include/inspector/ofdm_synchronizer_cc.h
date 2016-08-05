@@ -56,8 +56,9 @@ namespace gr {
       /*!
        * \brief Return a shared_ptr to a new instance of inspector::ofdm_synchronizer_cc.
        *
+       * \param min_items Set minimum items required for each work call. Should be several FFT lengths.
        */
-      static sptr make();
+      static sptr make(int min_items);
     };
 
   } // namespace inspector

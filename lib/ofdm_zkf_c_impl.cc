@@ -31,18 +31,20 @@ namespace gr {
   namespace inspector {
 
     ofdm_zkf_c::sptr
-    ofdm_zkf_c::make(double samp_rate, int signal,
+    ofdm_zkf_c::make(double samp_rate, int signal, int min_items,
                      const std::vector<int> &typ_len,
                      const std::vector<int> &typ_cp)
     {
       return gnuradio::get_initial_sptr
-        (new ofdm_zkf_c_impl(samp_rate, signal, typ_len, typ_cp));
+        (new ofdm_zkf_c_impl(samp_rate, signal, min_items, typ_len,
+                             typ_cp));
     }
 
     /*
      * The private constructor
      */
     ofdm_zkf_c_impl::ofdm_zkf_c_impl(double samp_rate, int signal,
+                                     int min_items,
                                      const std::vector<int> &typ_len,
                                      const std::vector<int> &typ_cp)
       : gr::sync_block("ofdm_zkf_c",
@@ -53,6 +55,7 @@ namespace gr {
       d_typ_len = typ_len;
       d_typ_cp = typ_cp;
       d_signal = signal;
+      d_min_items = min_items;
       d_fft = new fft::fft_complex(1024, true);
       message_port_register_out(pmt::intern("ofdm_out"));
     }
@@ -147,7 +150,7 @@ namespace gr {
         gr_vector_void_star &output_items)
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
-      if(noutput_items <= 7000) {//2*d_typ_len.back()+d_typ_cp.back()) {
+      if(noutput_items <= d_min_items) {//2*d_typ_len.back()+d_typ_cp.back()) {
         // too few items to recognize desired fft lengths
         return 0;
       }

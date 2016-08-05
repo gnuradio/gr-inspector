@@ -30,13 +30,13 @@ namespace gr {
     class ofdm_synchronizer_cc_impl : public ofdm_synchronizer_cc
     {
      private:
-      int d_fft_len, d_cp_len, d_tag_pos;
+      int d_fft_len, d_cp_len, d_tag_pos, d_min_items;
       bool d_msg_received;
       blocks::rotator d_rotator;
       gr::thread::mutex d_mutex;
 
      public:
-      ofdm_synchronizer_cc_impl();
+      ofdm_synchronizer_cc_impl(int min_items);
       ~ofdm_synchronizer_cc_impl();
 
       void handle_msg(pmt::pmt_t msg);

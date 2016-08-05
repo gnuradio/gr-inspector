@@ -36,9 +36,10 @@ namespace gr {
       gr_complex *d_Rxx;
       fft::fft_complex *d_fft;
       unsigned int d_tmpbuflen;
+      int d_min_items;
 
      public:
-      ofdm_zkf_c_impl(double samp_rate, int signal,
+      ofdm_zkf_c_impl(double samp_rate, int signal, int min_items,
                       const std::vector<int> &typ_len,
                       const std::vector<int> &typ_cp);
       ~ofdm_zkf_c_impl();

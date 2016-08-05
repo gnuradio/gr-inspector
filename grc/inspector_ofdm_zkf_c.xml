@@ -4,7 +4,7 @@
   <key>inspector_ofdm_zkf_c</key>
   <category>[Inspector]/Analysis</category>
   <import>import inspector</import>
-  <make>inspector.ofdm_zkf_c($samp_rate, $signal, $alpha, $beta)</make>
+  <make>inspector.ofdm_zkf_c($samp_rate, $signal, $min_items, $alpha, $beta)</make>
   <callback>set_samp_rate($samp_rate)</callback>
   <param>
     <name>Samp rate</name>
@@ -15,6 +15,12 @@
     <name>Signal No</name>
     <key>signal</key>
     <value>0</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Min input items</name>
+    <key>min_items</key>
+    <value>7000</value>
     <type>int</type>
   </param>
   <param>

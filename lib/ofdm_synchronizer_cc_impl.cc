@@ -31,16 +31,16 @@ namespace gr {
   namespace inspector {
 
     ofdm_synchronizer_cc::sptr
-    ofdm_synchronizer_cc::make()
+    ofdm_synchronizer_cc::make(int min_items)
     {
       return gnuradio::get_initial_sptr
-        (new ofdm_synchronizer_cc_impl());
+        (new ofdm_synchronizer_cc_impl(min_items));
     }
 
     /*
      * The private constructor
      */
-    ofdm_synchronizer_cc_impl::ofdm_synchronizer_cc_impl()
+    ofdm_synchronizer_cc_impl::ofdm_synchronizer_cc_impl(int min_items)
       : gr::sync_block("ofdm_synchronizer_cc",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(1, 1, sizeof(gr_complex)))
@@ -48,7 +48,7 @@ namespace gr {
       d_fft_len = 0;
       d_cp_len = 0;
       d_msg_received = false;
-
+      d_min_items = min_items;
       // message port for parameter estimations
       message_port_register_in(pmt::intern("ofdm_in"));
       set_msg_handler(pmt::intern("ofdm_in"), boost::bind(
@@ -107,7 +107,7 @@ namespace gr {
         return noutput_items;
       }
 
-      if(noutput_items < 4096) {
+      if(noutput_items < d_min_items) {
         return 0;
       }
 

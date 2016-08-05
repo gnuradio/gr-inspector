@@ -550,6 +550,10 @@
       <key>minoutbuf</key>
       <value>0</value>
     </param>
+    <param>
+      <key>min_items</key>
+      <value>4096</value>
+    </param>
   </block>
   <block>
     <key>inspector_ofdm_zkf_c</key>
@@ -596,6 +600,10 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>min_items</key>
+      <value>7000</value>
     </param>
     <param>
       <key>samp_rate</key>
