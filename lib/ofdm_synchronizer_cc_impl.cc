@@ -66,8 +66,8 @@ namespace gr {
     ofdm_synchronizer_cc_impl::handle_msg(pmt::pmt_t msg) {
       // get FFT and CP length out of parameter estmation msg
       gr::thread::scoped_lock guard(d_mutex);
-      int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 3), 1));
-      int cplen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1));
+      int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1));
+      int cplen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 5), 1));
       if(fftlen < 10000 && fftlen > 0 && cplen < 1000 && cplen > 0) {
         d_fft_len = fftlen;
         d_cp_len = cplen;
@@ -122,7 +122,6 @@ namespace gr {
       d_rotator.set_phase_incr(std::exp(gr_complex(0,-n/d_fft_len)));
 
       //std::cout << "n = " << n*d_samp_rate/(2*d_fft_len*M_PI) << std::endl;
-
       for(int i = 0; i < noutput_items; i++) {
         out[i] = d_rotator.rotate(in[i]);
       }
