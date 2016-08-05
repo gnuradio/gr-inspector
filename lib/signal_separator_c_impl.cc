@@ -59,7 +59,7 @@ namespace gr {
       d_precalc = file_path;
 
       // message port
-      message_port_register_out(pmt::intern("msg_out"));
+      message_port_register_out(pmt::intern("sig_out"));
       message_port_register_in(pmt::intern("map_in"));
       set_msg_handler(pmt::intern("map_in"), boost::bind(
               &signal_separator_c_impl::handle_msg, this, _1));
@@ -317,7 +317,7 @@ namespace gr {
       // pack message
       pmt::pmt_t msg = pack_message();
 
-      message_port_pub(pmt::intern("msg_out"), msg);
+      message_port_pub(pmt::intern("sig_out"), msg);
       // Tell runtime system how many output items we produced.
       consume_each(d_buffer_len);
       return d_buffer_len;

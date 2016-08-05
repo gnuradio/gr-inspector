@@ -308,12 +308,20 @@
       <value>inspector_qtgui_sink_vf_0</value>
     </param>
     <param>
+      <key>manual</key>
+      <value>False</value>
+    </param>
+    <param>
       <key>maxoutbuf</key>
       <value>0</value>
     </param>
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>msgports</key>
+      <value>1</value>
     </param>
     <param>
       <key>rf_unit</key>
@@ -419,7 +427,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(696, 256)</value>
+      <value>(696, 248)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2264,7 +2272,7 @@
   <connection>
     <source_block_id>inspector_signal_separator_c_0</source_block_id>
     <sink_block_id>inspector_signal_extractor_c_0</sink_block_id>
-    <source_key>msg_out</source_key>
+    <source_key>sig_out</source_key>
     <sink_key>sig_in</sink_key>
   </connection>
   <connection>

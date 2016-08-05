@@ -828,7 +828,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1056, 332)</value>
+      <value>(1056, 320)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -845,6 +845,18 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>rate</key>
+      <value>48000</value>
+    </param>
+    <param>
+      <key>osf</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>resample</key>
+      <value>False</value>
     </param>
     <param>
       <key>signal</key>
@@ -1300,7 +1312,7 @@
   <connection>
     <source_block_id>inspector_signal_separator_c_0</source_block_id>
     <sink_block_id>inspector_signal_extractor_c_0</sink_block_id>
-    <source_key>msg_out</source_key>
+    <source_key>sig_out</source_key>
     <sink_key>sig_in</sink_key>
   </connection>
 </flow_graph>
