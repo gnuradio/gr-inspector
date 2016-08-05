@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.10'?>
+<?grc format='1' created='3.7.11'?>
 <flow_graph>
   <timestamp>Wed May  4 16:44:48 2016</timestamp>
   <block>
@@ -490,37 +490,6 @@
     </param>
   </block>
   <block>
-    <key>blocks_message_debug</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1032, 144)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_message_debug_0</value>
-    </param>
-  </block>
-  <block>
     <key>blocks_throttle</key>
     <param>
       <key>alias</key>
@@ -666,7 +635,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(600, 352)</value>
+      <value>(600, 392)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -725,7 +694,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(816, 184)</value>
+      <value>(824, 184)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -740,12 +709,20 @@
       <value>inspector_qtgui_sink_vf_0</value>
     </param>
     <param>
+      <key>manual</key>
+      <value>False</value>
+    </param>
+    <param>
       <key>maxoutbuf</key>
       <value>0</value>
     </param>
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>msgports</key>
+      <value>1</value>
     </param>
     <param>
       <key>rf_unit</key>
@@ -788,7 +765,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(600, 168)</value>
+      <value>(600, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -851,7 +828,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1040, 316)</value>
+      <value>(1056, 332)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -985,7 +962,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(824, 280)</value>
+      <value>(824, 296)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1295,12 +1272,6 @@
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>inspector_qtgui_sink_vf_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0</sink_block_id>
-    <source_key>map_out</source_key>
-    <sink_key>print</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_qtgui_sink_vf_0</source_block_id>

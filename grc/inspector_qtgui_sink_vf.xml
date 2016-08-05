@@ -60,7 +60,7 @@ $(gui_hint()($win))</make>
   <param>
     <name>Manual selection</name>
     <key>manual</key>
-    <value>False</value>
+    <value>True</value>
     <type>bool</type>
     <option>
       <name>On</name>
