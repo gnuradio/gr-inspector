@@ -62,7 +62,7 @@ namespace gr {
       d_out_rate = rate;
       d_rate = 1;
       d_resample = resample;
-      std::vector<float> taps = filter::firdes::low_pass(32, 1000, 500, 50);
+      std::vector<float> taps = filter::firdes::low_pass(32, 1000, 1000/32, 100/32);
       d_resampler = new filter::kernel::pfb_arb_resampler_ccf(d_rate, taps, 32);
     }
 
@@ -102,7 +102,6 @@ namespace gr {
         // TODO: calculate resampler parameters
         d_rate = d_out_rate/(d_oversampling*bw);
         d_resampler->set_rate(d_rate);
-        std::cout << "set rate = " << d_rate << std::endl;
       }
     }
 
@@ -113,19 +112,14 @@ namespace gr {
     {
       gr_complex *out = (gr_complex*)output_items[0];
        if(d_samples.size() > 0) {
-         std::cout << "samples = " << d_samples.size() << std::endl;
-         std::cout << "rate = " << d_rate << std::endl;
-         std::cout << "noutput = " << noutput_items << std::endl;
          int nout;
          int item_count = noutput_items;
          if(d_resample) {
            item_count *= 1/d_rate;
            if(item_count > d_samples.size())
              item_count = d_samples.size();
-           std::cout << "item count = " << item_count << std::endl;
            d_resampler->filter(out, &d_samples[0], item_count, nout);
            d_samples.clear();
-           std::cout << "out = " << d_rate*nout << std::endl;
            return d_rate*nout;
          }
          else {
