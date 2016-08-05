@@ -10,9 +10,35 @@
     <key>signal</key>
     <type>int</type>
   </param>
+  <param>
+    <name>Resample signal</name>
+    <key>resample</key>
+    <value>False</value>
+    <type>bool</type>
+    <option>
+      <name>On</name>
+      <key>True</key>
+    </option>
+    <option>
+      <name>Off</name>
+      <key>False</key>
+    </option>
+  </param>
+  <param>
+    <name>Output samp rate</name>
+    <key>rate</key>
+    <value>48000</value>
+    <type>real</type>
+    <hide>#if str($resample) == 'True' then 'none' else 'all'#</hide>
+  </param>
   <sink>
     <name>sig_in</name>
     <type>message</type>
+  </sink>
+  <sink>
+    <name>map_in</name>
+    <type>message</type>
+    <optional>1</optional>
   </sink>
   <source>
     <name>out</name>

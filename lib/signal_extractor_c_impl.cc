@@ -30,16 +30,16 @@ namespace gr {
   namespace inspector {
 
     signal_extractor_c::sptr
-    signal_extractor_c::make(int signal)
+    signal_extractor_c::make(int signal, bool resample, float rate)
     {
       return gnuradio::get_initial_sptr
-        (new signal_extractor_c_impl(signal));
+        (new signal_extractor_c_impl(signal, resample, rate));
     }
 
     /*
      * The private constructor
      */
-    signal_extractor_c_impl::signal_extractor_c_impl(int signal)
+    signal_extractor_c_impl::signal_extractor_c_impl(int signal,  bool resample, float rate)
       : gr::sync_block("signal_extractor_c",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(1, 1, sizeof(gr_complex)))
@@ -47,9 +47,15 @@ namespace gr {
       message_port_register_in(pmt::intern("sig_in"));
       set_msg_handler(pmt::intern("sig_in"), boost::bind(
               &signal_extractor_c_impl::handle_msg, this, _1));
+      message_port_register_in(pmt::intern("map_in"));
+      set_msg_handler(pmt::intern("map_in"), boost::bind(
+              &signal_extractor_c_impl::handle_map, this, _1));
 
       d_signal = signal;
       d_ready = false; // tell work to not emit anything until a message arrives
+      d_rate = rate;
+      d_resample = resample;
+      d_resampler_impl = filter::fractional_resampler_cc::make(0.0, 1.0);
     }
 
     /*
@@ -57,6 +63,14 @@ namespace gr {
      */
     signal_extractor_c_impl::~signal_extractor_c_impl()
     {
+    }
+
+    // proxy forecast
+    void
+    signal_extractor_c_impl::forecast(int noutput_items,
+                                           gr_vector_int &ninput_items_required)
+    {
+      d_resampler_impl->forecast(noutput_items, ninput_items_required);
     }
 
     void
@@ -76,28 +90,39 @@ namespace gr {
       }
     }
 
+    void
+    signal_extractor_c_impl::handle_map(pmt::pmt_t msg) {
+      if(d_signal+1 > pmt::length(msg)) {
+        GR_LOG_WARN(d_logger, "Specified signal does not exist.");
+        return;
+      }
+      else if (d_resample){
+        float bw = pmt::f32vector_ref(pmt::vector_ref(msg, d_signal), 1);
+        if(bw/d_rate != d_resampler_impl->resamp_ratio())
+          d_resampler_impl->set_resamp_ratio(bw/d_rate);
+      }
+    }
+
     int
     signal_extractor_c_impl::work(int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items)
+                                          gr_vector_const_void_star &input_items,
+                                          gr_vector_void_star &output_items)
     {
-      gr_complex *out = (gr_complex *) output_items[0];
-
       if(d_samples.size() > 0) {
-        // if buffer >= available samples, emit all of them
-        if(noutput_items >= d_samples.size()) {
-          memcpy(out, d_msg_buffer, d_samples.size()*sizeof(gr_complex));
-          d_samples.clear();
-          d_msg_buffer = &d_samples[0];
-          return d_length;
-        }
-        // if buffer < available samples, emit max number and discard the others
-        else {
-          memcpy(out, d_msg_buffer, noutput_items*sizeof(gr_complex));
-          d_samples.clear();
-          d_msg_buffer = &d_samples[0];
-          return noutput_items;
-        }
+        gr_vector_const_void_star fake_input;
+        gr_complex *input_samples = (gr_complex*)volk_malloc(
+                d_samples.size()*sizeof(gr_complex), volk_get_alignment());
+        memcpy(input_samples, &d_samples[0], d_samples.size()*sizeof(gr_complex));
+        fake_input.push_back(input_samples);
+        gr_vector_int fake_ninput;
+        fake_ninput.push_back(d_samples.size());
+
+        int reval = d_resampler_impl->general_work(noutput_items,
+                                      fake_ninput,
+                                      fake_input, output_items);
+        d_samples.clear();
+        volk_free(input_samples);
+        return reval;
       }
       else {
         return 0;

@@ -49,7 +49,7 @@ namespace gr {
        *
        * \param signal Output Signal number (beginning with 0) for desired samples
        */
-      static sptr make(int signal);
+      static sptr make(int signal, bool resample = false, float rate = 1.0);
       virtual void set_signal(int signal) = 0;
     };
 
