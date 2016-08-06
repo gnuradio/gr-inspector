@@ -664,14 +664,6 @@
       <value>0</value>
     </param>
     <param>
-      <key>neurons</key>
-      <value></value>
-    </param>
-    <param>
-      <key>num_inputs</key>
-      <value>1</value>
-    </param>
-    <param>
       <key>vlen</key>
       <value>2 * P * L * 2 * Np</value>
     </param>
