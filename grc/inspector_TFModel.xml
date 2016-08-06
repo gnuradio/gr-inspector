@@ -2,7 +2,7 @@
 <block>
 	<name>TFModel</name>
 	<key>inspector_TFModel</key>
-	<category>inspector</category>
+	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
 	<make>inspector.TFModel($typev.typ,$vlen,$graphfile,$itensor,$otensor,$num_inputs,$neurons)</make>
 

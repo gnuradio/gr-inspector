@@ -21,6 +21,8 @@
 
 import numpy
 from gnuradio import gr
+import matplotlib
+matplotlib.use("Qt4Agg")
 import matplotlib.pyplot as plt
 
 class sync_prototype_cc(gr.sync_block):
