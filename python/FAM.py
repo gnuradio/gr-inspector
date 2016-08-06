@@ -35,9 +35,10 @@ Np = 64  # 2xNp is the number of columns
 P = 256  # number of new items needed to calculate estimate
 L = 2
 
+## Modulation schemes
 MOD = ["fsk", "qam16", "qam64", "2psk", "4psk", "8psk", "gmsk", "wbfm", "nfm"]
 
-
+## GNU Radio block, for FAM classification
 class FAM(gr.sync_block):
     """
     docstring for block AMC
@@ -62,6 +63,7 @@ class FAM(gr.sync_block):
         self.message_port_register_out(pmt.intern('classification'))
 
 
+    ## Load graph from file through TensorFlow serving
     def load_graph(self,output_graph_path):
 
         sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath(output_graph_path) 
@@ -81,7 +83,7 @@ class FAM(gr.sync_block):
             print("INP",sess.graph.get_tensor_by_name( input_name).get_shape())
             return (sess,input_name,output_name)
 
-
+    ## Work function to accept input FAM data, to reshape and pass to model
     def work(self, input_items, output_items):
         tensordata = []
         input_i = []
