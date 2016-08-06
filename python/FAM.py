@@ -35,11 +35,14 @@ Np = 64  # 2xNp is the number of columns
 P = 256  # number of new items needed to calculate estimate
 L = 2
 
-class TFModel(gr.sync_block):
+MOD = ["fsk", "qam16", "qam64", "2psk", "4psk", "8psk", "gmsk", "wbfm", "nfm"]
+
+
+class FAM(gr.sync_block):
     """
     docstring for block AMC
     """
-    def __init__(self,dtype,vlen,graphfile,itensor,otensor,num_inputs,neurons=None):
+    def __init__(self,dtype,vlen,graphfile,num_inputs,neurons=None):
     
         self.pmtin = False
 
@@ -54,7 +57,7 @@ class TFModel(gr.sync_block):
         print(inputs)
 
         gr.sync_block.__init__(self,
-            name="TFModel",
+            name="FAM",
             in_sig=inputs,
             out_sig=[])
 
@@ -63,9 +66,6 @@ class TFModel(gr.sync_block):
             self.set_msg_handler(pmt.intern("in"), self.msg_handler)
 
         self.inputs = inputs
-        self.itensor = itensor
-        self.otensor = otensor
-
         sess,inp,out = self.load_graph(graphfile)  
 
         self.sess = sess
@@ -74,11 +74,6 @@ class TFModel(gr.sync_block):
 
         self.old = collections.deque(maxlen=3)
 
-
-        #self.keep = sess.graph.get_tensor_by_name("drop1/cond/dropout/keep_prob:0")
-
-        
-    
         if neurons == None:
             self.neuronsb = False
         else: 
@@ -93,19 +88,7 @@ class TFModel(gr.sync_block):
 
     def load_graph(self,output_graph_path):
 
-        """
-        with tf.Graph().as_default():
-            output_graph_def = tf.GraphDef()
-            with open(output_graph_path, "rb") as f:
-                output_graph_def.ParseFromString(f.read())
-                _ = tf.import_graph_def(output_graph_def, name="")
-    
-            with tf.Session() as sess:
-                n_input = sess.graph.get_tensor_by_name("%s:0" % self.itensor)
-                output = sess.graph.get_tensor_by_name("%s:0" % self.otensor)
-                return (sess,n_input,output)
-        """
-        sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath("/tmp/sess/00000001") 
+        sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath(output_graph_path) 
 
         with sess.as_default():
 
@@ -122,17 +105,12 @@ class TFModel(gr.sync_block):
             print("INP",sess.graph.get_tensor_by_name( input_name).get_shape())
             return (sess,input_name,output_name)
 
-
-
-
     def msg_handler(self,msg):
         msg = pmt.to_python(msg)
-
         for v in msg:
 
             # v[0] Signal ID
             # v[1] Signal
-        
             signal = v[1]
 
             print("SIGLEN",len(signal))
@@ -225,7 +203,7 @@ class TFModel(gr.sync_block):
             #if self.neuronsb:
             #mod = self.neurons [ np.argmax(outp) ] 
             
-            pmtv = pmt.dict_add(pmtv, pmt.intern("Mod"), pmt.from_long(np.argmax(outp)))
+            pmtv = pmt.dict_add(pmtv, pmt.intern("Mod"), pmt.to_pmt(MOD[np.argmax(outp)]))
             pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
                 
             """ 
