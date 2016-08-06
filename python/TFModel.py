@@ -17,7 +17,13 @@
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
+#
+from __future__ import division, print_function, absolute_import
+import tensorflow as tf    
+from tensorflow.contrib.session_bundle import manifest_pb2
+from tensorflow.contrib.session_bundle import constants
+from tensorflow.contrib.session_bundle import session_bundle
+ 
 import pmt
 import numpy as np
 from gnuradio import gr
@@ -66,7 +72,7 @@ class TFModel(gr.sync_block):
         self.old = collections.deque(maxlen=3)
 
 
-        self.keep = sess.graph.get_tensor_by_name("drop1/cond/dropout/keep_prob:0")
+        #self.keep = sess.graph.get_tensor_by_name("drop1/cond/dropout/keep_prob:0")
 
         
     
@@ -83,6 +89,8 @@ class TFModel(gr.sync_block):
         self.message_port_register_out(pmt.intern('classification'))
 
     def load_graph(self,output_graph_path):
+
+        """
         with tf.Graph().as_default():
             output_graph_def = tf.GraphDef()
             with open(output_graph_path, "rb") as f:
@@ -93,6 +101,24 @@ class TFModel(gr.sync_block):
                 n_input = sess.graph.get_tensor_by_name("%s:0" % self.itensor)
                 output = sess.graph.get_tensor_by_name("%s:0" % self.otensor)
                 return (sess,n_input,output)
+        """
+        sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath("/tmp/sess/00000001") 
+
+        with sess.as_default():
+
+            collection_def = meta_graph_def.collection_def
+            signatures_any = collection_def[constants.SIGNATURES_KEY].any_list.value
+            signatures = manifest_pb2.Signatures()
+            signatures_any[0].Unpack(signatures)
+            default_signature = signatures.default_signature
+
+            input_name = default_signature.classification_signature.input.tensor_name
+            output_name = default_signature.classification_signature.scores.tensor_name
+    
+            return (sess,input_name,output_name)
+
+
+
 
     def msg_handler(self,msg):
         msg = pmt.to_python(msg)
@@ -113,7 +139,7 @@ class TFModel(gr.sync_block):
 
             pmtv = pmt.make_dict()                                                                                                                         
             try:
-                outp = self.sess.run(self.out,feed_dict={self.inp: [[re,im]],self.keep: 1.0})[0]
+                outp = self.sess.run(self.out,feed_dict={self.inp: [[re,im]]})[0]
             except tf.errors.InvalidArgumentError:
                 print("Invalid size of input vector to TensorFlow model")
                 quit()
@@ -174,7 +200,7 @@ class TFModel(gr.sync_block):
         for v in tensordata:
             pmtv = pmt.make_dict()                                                                                                                         
             try:
-                outp = self.sess.run(self.out,feed_dict={self.inp: [v],self.keep: 1.0})[0]
+                outp = self.sess.run(self.out,feed_dict={self.inp: [v]})[0]
                 ne.append(outp)
             except tf.errors.InvalidArgumentError:
                 print("Invalid size of input vector to TensorFlow model")

@@ -31,14 +31,9 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    scf.py
     sync_prototype_cc.py 
-    AMC_f.py
-    AMC_i.py
-    AMC_s.py
-    AMC_b.py
     TFModel.py
-    SCF.py DESTINATION ${GR_PYTHON_DIR}/inspector
+    DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
 ########################################################################
@@ -54,6 +49,4 @@ GR_ADD_TEST(qa_signal_extractor_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DI
 GR_ADD_TEST(qa_qtgui_inspector_sink_vf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_qtgui_inspector_sink_vf.py)
 GR_ADD_TEST(qa_ofdm_zkf_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_ofdm_zkf_c.py)
 GR_ADD_TEST(qa_ofdm_synchronizer_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_ofdm_synchronizer_cc.py)
-GR_ADD_TEST(qa_scf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_scf.py)
 GR_ADD_TEST(qa_AMC ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_AMC.py)
-GR_ADD_TEST(qa_SCF ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_SCF.py)
