@@ -40,9 +40,8 @@ MOD = ["fsk", "qam16", "qam64", "2psk", "4psk", "8psk", "gmsk", "wbfm", "nfm"]
 
 ## GNU Radio block, for FAM classification
 class FAM(gr.sync_block):
-    """
-    docstring for block AMC
-    """
+    
+    ## Create our block
     def __init__(self,dtype,vlen,graphfile):
     
         inputs = []
@@ -79,12 +78,11 @@ class FAM(gr.sync_block):
             input_name = default_signature.classification_signature.input.tensor_name
             output_name = default_signature.classification_signature.scores.tensor_name
    
-            print( default_signature.classification_signature ) 
-            print("INP",sess.graph.get_tensor_by_name( input_name).get_shape())
             return (sess,input_name,output_name)
 
     ## Work function to accept input FAM data, to reshape and pass to model
     def work(self, input_items, output_items):
+
         tensordata = []
         input_i = []
         shapev = np.array(input_items[0]).shape
@@ -97,7 +95,6 @@ class FAM(gr.sync_block):
         floats = np.reshape(inp, (2 * P * L, (2 * Np) - 0))
         tensordata.append(np.array([floats]))
 
-        mod = ""     
         ne = []
         for v in tensordata:
             try:
@@ -113,7 +110,6 @@ class FAM(gr.sync_block):
             pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
                 
             self.message_port_pub(pmt.intern("classification"),pmtv)  
-
         
         return len(input_items[0]) 
 
