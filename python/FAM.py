@@ -42,17 +42,17 @@ class FAM(gr.sync_block):
     """
     docstring for block AMC
     """
-    def __init__(self,dtype,vlen,graphfile,num_inputs,neurons=None):
+    def __init__(self,dtype,vlen,graphfile):
     
-        self.pmtin = False
+        #self.pmtin = False
 
         inputs = []
 
-        if dtype == "message":
-            self.pmtin = True
-        else:
-            for i in range(num_inputs):
-                inputs.append((np.dtype(dtype),vlen))
+        #if dtype == "message":
+        #    self.pmtin = True
+        #else:
+        for i in range(1):
+            inputs.append((np.dtype(dtype),vlen))
 
         print(inputs)
 
@@ -60,10 +60,12 @@ class FAM(gr.sync_block):
             name="FAM",
             in_sig=inputs,
             out_sig=[])
-
+    
+        """
         if self.pmtin:
             self.message_port_register_in(pmt.intern('in'))
             self.set_msg_handler(pmt.intern("in"), self.msg_handler)
+        """
 
         self.inputs = inputs
         sess,inp,out = self.load_graph(graphfile)  
@@ -73,7 +75,8 @@ class FAM(gr.sync_block):
         self.out = out
 
         self.old = collections.deque(maxlen=3)
-
+    
+        """
         if neurons == None:
             self.neuronsb = False
         else: 
@@ -83,8 +86,11 @@ class FAM(gr.sync_block):
                 print(self.neurons)
             except:
                 self.neuronsb = False
+    
 
+        """
         self.message_port_register_out(pmt.intern('classification'))
+
 
     def load_graph(self,output_graph_path):
 
@@ -105,6 +111,7 @@ class FAM(gr.sync_block):
             print("INP",sess.graph.get_tensor_by_name( input_name).get_shape())
             return (sess,input_name,output_name)
 
+    """
     def msg_handler(self,msg):
         msg = pmt.to_python(msg)
         for v in msg:
@@ -137,11 +144,10 @@ class FAM(gr.sync_block):
 
 
         return len(msg)
-
+    """
 
 
     def work(self, input_items, output_items):
-        #output_items[0][:] = input_items[0] * input_items[0] # Only works because numpy.array
         tensordata = []
         input_i = []
         shapev = np.array(input_items[0]).shape
@@ -150,40 +156,9 @@ class FAM(gr.sync_block):
         if np.mean(inp) == 0.0 :
             return len(input_items[0]) 
 
-            
-        print("MEAN",np.mean(inp))
         inp = (inp - np.mean(inp)) / np.std(inp)
         floats = np.reshape(inp, (2 * P * L, (2 * Np) - 0))
         tensordata.append(np.array([floats]))
-        """
-        items = np.array(input_items).shape[0] * np.array(input_items).shape[1] 
-        
-        for i in range(shapev[0]):
-            in_v = []
-            re = []
-            im = []
-
-            for v in range(shapev[1]):
-                #print("i",i,"v",v,len(input_items[i]))
-                re.append(inp[i][v].real)
-                im.append(inp[i][v].imag)
-                    
-            in_v.append(np.array(re)[:,newaxis])
-            in_v.append(np.array(im)[:,newaxis])
-
-            #print(len(in_v))
-
-
-            tensordata.append(in_v)
-                    
-            else:
-                for v in range(len(input_items[0])):
-                    in_v.append(np.array(input_items[i][v])[:, newaxis])
-            
-                    tensordata.append(in_v)
-        """
-    
-
 
         mod = ""     
         ne = []
@@ -199,9 +174,6 @@ class FAM(gr.sync_block):
         for outp in ne:
         
             c=0
-            
-            #if self.neuronsb:
-            #mod = self.neurons [ np.argmax(outp) ] 
             
             pmtv = pmt.dict_add(pmtv, pmt.intern("Mod"), pmt.to_pmt(MOD[np.argmax(outp)]))
             pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
