@@ -44,29 +44,14 @@ class FAM(gr.sync_block):
     """
     def __init__(self,dtype,vlen,graphfile):
     
-        #self.pmtin = False
-
         inputs = []
-
-        #if dtype == "message":
-        #    self.pmtin = True
-        #else:
-        for i in range(1):
-            inputs.append((np.dtype(dtype),vlen))
-
-        print(inputs)
+        inputs.append((np.dtype(dtype),vlen))
 
         gr.sync_block.__init__(self,
             name="FAM",
             in_sig=inputs,
             out_sig=[])
     
-        """
-        if self.pmtin:
-            self.message_port_register_in(pmt.intern('in'))
-            self.set_msg_handler(pmt.intern("in"), self.msg_handler)
-        """
-
         self.inputs = inputs
         sess,inp,out = self.load_graph(graphfile)  
 
@@ -74,21 +59,6 @@ class FAM(gr.sync_block):
         self.inp = inp
         self.out = out
 
-        self.old = collections.deque(maxlen=3)
-    
-        """
-        if neurons == None:
-            self.neuronsb = False
-        else: 
-            self.neuronsb = True
-            try:
-                self.neurons =  sess.run(sess.graph.get_tensor_by_name("%s:0" % neurons))
-                print(self.neurons)
-            except:
-                self.neuronsb = False
-    
-
-        """
         self.message_port_register_out(pmt.intern('classification'))
 
 
@@ -110,41 +80,6 @@ class FAM(gr.sync_block):
             print( default_signature.classification_signature ) 
             print("INP",sess.graph.get_tensor_by_name( input_name).get_shape())
             return (sess,input_name,output_name)
-
-    """
-    def msg_handler(self,msg):
-        msg = pmt.to_python(msg)
-        for v in msg:
-
-            # v[0] Signal ID
-            # v[1] Signal
-            signal = v[1]
-
-            print("SIGLEN",len(signal))
-            if not len(signal) > 128:
-                continue
-                     
-            re = signal[0:128].real[:,newaxis]
-            im = signal[0:128].imag[:,newaxis]
-
-            pmtv = pmt.make_dict()                                                                                                                         
-            try:
-                outp = self.sess.run(self.out,feed_dict={self.inp: [[re,im]]})[0]
-            except tf.errors.InvalidArgumentError:
-                print("Invalid size of input vector to TensorFlow model")
-                quit()
-    
-            if self.neuronsb:
-                mod = self.neurons [ np.argmax(outp) ] 
-                #pmtv = pmt.dict_add(pmtv, pmt.intern("Mod"), pmt.intern(mod))
-                outp = pmt.to_pmt([v[0],mod])
-            
-        
-                self.message_port_pub(pmt.intern("classification"),outp)  
-
-
-        return len(msg)
-    """
 
 
     def work(self, input_items, output_items):
@@ -172,18 +107,9 @@ class FAM(gr.sync_block):
 
         pmtv = pmt.make_dict()                                                                                                                         
         for outp in ne:
-        
-            c=0
-            
             pmtv = pmt.dict_add(pmtv, pmt.intern("Mod"), pmt.to_pmt(MOD[np.argmax(outp)]))
             pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
                 
-            """ 
-                for o in outp:
-                    o = o.astype(float)
-                    pmtv = pmt.dict_add(pmtv, pmt.intern("out"+self.neurons[c]), pmt.from_double(o))
-                    c=c+1
-            """
             self.message_port_pub(pmt.intern("classification"),pmtv)  
 
         
