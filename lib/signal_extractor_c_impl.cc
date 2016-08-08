@@ -62,8 +62,8 @@ namespace gr {
       d_out_rate = rate;
       d_rate = 1;
       d_resample = resample;
-      std::vector<float> taps = filter::firdes::low_pass(32, 1000, 1000/32, 100/32);
-      d_resampler = new filter::kernel::pfb_arb_resampler_ccf(d_rate, taps, 32);
+      std::vector<float> taps = filter::firdes::low_pass(64, 1000, 1000.0/64.0, 100/64);
+      d_resampler = new filter::kernel::pfb_arb_resampler_ccf(d_rate, taps, 64);
     }
 
     /*
@@ -102,6 +102,8 @@ namespace gr {
         // TODO: calculate resampler parameters
         d_rate = d_out_rate/(d_oversampling*bw);
         d_resampler->set_rate(d_rate);
+        GR_LOG_INFO(d_logger, "Actual output sample rate: "+std::to_string(
+                bw*d_resampler->interpolation_rate()/d_resampler->decimation_rate()));
       }
     }
 

@@ -348,7 +348,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(368, 352)</value>
+      <value>(336, 352)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -364,7 +364,7 @@
     </param>
     <param>
       <key>manual</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>maxoutbuf</key>
