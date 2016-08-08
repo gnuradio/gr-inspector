@@ -28,5 +28,6 @@ install(FILES
     qtgui_inspector_sink_vf.h
     ofdm_bouzegzi_c.h
     ofdm_zkf_c.h
-    ofdm_synchronizer_cc.h DESTINATION include/inspector
+    ofdm_synchronizer_cc.h
+    FAMVis.h DESTINATION include/inspector
 )

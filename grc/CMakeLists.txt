@@ -29,5 +29,6 @@ install(FILES
     inspector_ofdm_synchronizer_cc.xml
     inspector_FAM.xml
     inspector_CNN.xml 
-    inspector_TFModel.xml DESTINATION share/gnuradio/grc/blocks
+    inspector_TFModel.xml
+    inspector_FAMVis.xml DESTINATION share/gnuradio/grc/blocks
 )

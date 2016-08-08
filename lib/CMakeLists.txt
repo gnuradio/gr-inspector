@@ -41,7 +41,8 @@ list(APPEND inspector_sources
 		signal_marker.cc
 		ofdm_bouzegzi_c_impl.cc
     ofdm_zkf_c_impl.cc
-    ofdm_synchronizer_cc_impl.cc )
+    ofdm_synchronizer_cc_impl.cc
+    FAMVis_impl.cc )
 
 include(GrPython)
 if(ENABLE_PYTHON)
@@ -87,6 +88,7 @@ include_directories(${CPPUNIT_INCLUDE_DIRS})
 list(APPEND test_inspector_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/test_inspector.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/qa_inspector.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/qa_FAMVis.cc
 )
 
 add_executable(test-inspector ${test_inspector_sources})

@@ -352,7 +352,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>8</value>
+      <value>16</value>
     </param>
     <param>
       <key>sensitivity</key>
@@ -411,7 +411,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>2</value>
+      <value>16</value>
     </param>
     <param>
       <key>verbose</key>
