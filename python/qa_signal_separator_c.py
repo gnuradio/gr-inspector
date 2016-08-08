@@ -66,7 +66,7 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         self.tb.connect(src, separator)
         self.tb.connect(src, vec_sink)
         self.tb.msg_connect((msg_src, 'strobe'), (separator, 'map_in'))
-        self.tb.msg_connect((separator, 'msg_out'), (ext, 'sig_in'))
+        self.tb.msg_connect((separator, 'sig_out'), (ext, 'sig_in'))
         self.tb.connect(ext, snk)
 
         self.tb.start()

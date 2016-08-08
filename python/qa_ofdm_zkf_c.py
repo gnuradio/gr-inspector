@@ -50,7 +50,7 @@ class qa_ofdm_zkf_c (gr_unittest.TestCase):
 
         # GR time!
         src = blocks.vector_source_c(tx[0].tolist(), True, 1, [])
-        analyzer = inspector.ofdm_zkf_c(samp_rate, 0, [128, 256, 512, 1024], [8, 16, 32, 64])
+        analyzer = inspector.ofdm_zkf_c(samp_rate, 0, 7000, [128, 256, 512, 1024], [8, 16, 32, 64])
         snk = blocks.message_debug()
 
         # connect
@@ -65,8 +65,8 @@ class qa_ofdm_zkf_c (gr_unittest.TestCase):
         # check data
         result = snk.get_message(0)
 
-        fft_result = pmt.to_float(pmt.tuple_ref(pmt.tuple_ref(result, 3), 1))
-        cp_result = pmt.to_float(pmt.tuple_ref(pmt.tuple_ref(result, 4), 1))
+        fft_result = pmt.to_float(pmt.tuple_ref(pmt.tuple_ref(result, 4), 1))
+        cp_result = pmt.to_float(pmt.tuple_ref(pmt.tuple_ref(result, 5), 1))
 
         self.assertAlmostEqual(fft_len, fft_result)
         self.assertAlmostEqual(cp_len, cp_result)

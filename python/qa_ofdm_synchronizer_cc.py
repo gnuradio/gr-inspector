@@ -48,11 +48,12 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
 
         # msg
         id1 = pmt.make_tuple(pmt.intern("Signal"), pmt.from_uint64(0))
+        name = pmt.make_tuple(pmt.intern("OFDM"), pmt.from_float(1.0));
         id2 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(0.0))
         id3 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(0.0))
         id4 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(256))
         id5 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(32))
-        msg = pmt.make_tuple(id1, id2, id3, id4, id5)
+        msg = pmt.make_tuple(id1, name, id2, id3, id4, id5)
 
         tx = np.reshape(timefreq, (1, -1))
 
@@ -61,7 +62,7 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         freq_offset = analog.sig_source_c(1, analog.GR_SIN_WAVE,
                                           50.0/samp_rate, 1.0, 0.0)
         mixer = blocks.multiply_cc()
-        sync = inspector.ofdm_synchronizer_cc()
+        sync = inspector.ofdm_synchronizer_cc(4096)
         dst = blocks.vector_sink_c()
         dst2 = blocks.vector_sink_c()
         msg_src = blocks.message_strobe(msg, 0)
@@ -82,7 +83,6 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         # check data
         output = dst.data()
         expect = dst2.data()
-
 
         # block outputs 0j until it has enough OFDM symbols to perform estimations
         k = (k for k in range(len(output)) if output[k] != 0j).next()
