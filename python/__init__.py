@@ -34,4 +34,5 @@ except ImportError:
 from sync_prototype_cc import sync_prototype_cc
 from TFModel import TFModel
 from FAM import FAM
+from CNN import CNN
 #
