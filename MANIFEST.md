@@ -1,19 +1,30 @@
-title: GNU Radio Signal Inspector
+title: The Inspector (gr-inspector)
 brief: A signal analysis toolbox for GNU Radio
 tags:
-  - sdr
-  - signal analysis
-  - spectrum analysis
+  - SDR
+  - Signal Analysis
+  - Spectrum Analysis
+  - Signal Intelligence
+  - AMC
+  - OFDM
 author:
-  - Author Name <authors@email.address>
+  - Sebastian Müller <gsenpo@gmail.com>
+  - Christopher Richardson <c.richardson@lancaster.ac.uk>
 copyright_owner:
-  - Free Software Foundation
+  - Sebastian Müller
+  - Christopher Richardson
 license: GPLv3
-#repo: # Put the URL of the repository here, or leave blank for default
-#website: <module_website> # If you have a separate project website, put it here
-#icon: <icon_url> # Put a URL to a square image here that will be used as an icon on CGRAN
+repo: https://github.com/gnuradio/gr-inspector
+website: https://grinspector.wordpress.com/
+icon: https://dl.dropboxusercontent.com/u/69056/logo_body.png
 ---
 *Signal Analysis Toolbox for GNU Radio*
 
 This toolbox provides algorithms, blocks and tools for signal analysis and
-spectrum monitoring.
+spectrum monitoring. Detailed functionality includes signal detection,
+signal filtering/mixing/decimating/resampling. Further, it is possible
+to estimate OFDM signal parameters and synchronize to a given OFDM signal.
+For single carrier signals, an Automatic Modulation Classification (AMC) 
+block is available.
+
+This project was initiated as a Google Summer of Code project and developed at the *Communication Engineering Lab (CEL)* at the *Karlsruhe Institute of Technology (KIT)*, Germany, <http://www.cel.kit.edu>.
