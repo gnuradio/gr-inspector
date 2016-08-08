@@ -646,7 +646,7 @@
     </param>
     <param>
       <key>manual</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -658,7 +658,7 @@
     </param>
     <param>
       <key>msgports</key>
-      <value>2</value>
+      <value>1</value>
     </param>
     <param>
       <key>rf_unit</key>
@@ -1148,13 +1148,7 @@
     <source_block_id>inspector_ofdm_zkf_c_0</source_block_id>
     <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
     <source_key>ofdm_out</source_key>
-    <sink_key>analysis_in0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>inspector_ofdm_zkf_c_0</source_block_id>
-    <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
-    <source_key>ofdm_out</source_key>
-    <sink_key>analysis_in1</sink_key>
+    <sink_key>analysis_in</sink_key>
   </connection>
   <connection>
     <source_block_id>inspector_signal_detector_cvf_0</source_block_id>
