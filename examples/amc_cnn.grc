@@ -93,87 +93,6 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(800, 16)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>180</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>L</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>2</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(536, 16)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>Np</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>64</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(664, 16)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>180</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>P</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>256</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
       <value>(344, 16)</value>
     </param>
     <param>
@@ -237,7 +156,7 @@
     </param>
     <param>
       <key>num_samps</key>
-      <value>1000</value>
+      <value>100000</value>
     </param>
     <param>
       <key>type</key>
@@ -268,7 +187,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1112, 816)</value>
+      <value>(1008, 776)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -299,7 +218,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(360, 792)</value>
+      <value>(328, 756)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -311,7 +230,7 @@
     </param>
     <param>
       <key>type</key>
-      <value>float</value>
+      <value>complex</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -323,7 +242,7 @@
     </param>
     <param>
       <key>num_items</key>
-      <value>2 * P * L * 2 * Np</value>
+      <value>128</value>
     </param>
     <param>
       <key>vlen</key>
@@ -386,57 +305,6 @@
     </param>
   </block>
   <block>
-    <key>blocks_vector_to_stream</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(72, 792)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_vector_to_stream_0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>num_items</key>
-      <value>2*Np</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-  </block>
-  <block>
     <key>digital_gfsk_mod</key>
     <param>
       <key>bt</key>
@@ -456,7 +324,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -484,7 +352,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>2</value>
+      <value>8</value>
     </param>
     <param>
       <key>sensitivity</key>
@@ -570,7 +438,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>excess_bw</key>
@@ -606,11 +474,11 @@
     </param>
     <param>
       <key>constellation_points</key>
-      <value>2</value>
+      <value>4</value>
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>7</value>
+      <value>16</value>
     </param>
     <param>
       <key>verbose</key>
@@ -618,7 +486,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_FAM</key>
+    <key>inspector_CNN</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -637,7 +505,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(688, 776)</value>
+      <value>(600, 752)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -645,15 +513,15 @@
     </param>
     <param>
       <key>graphfile</key>
-      <value>/tmp/sess/00000001</value>
+      <value>/tmp/cnn/00000001</value>
     </param>
     <param>
       <key>id</key>
-      <value>inspector_FAM_0</value>
+      <value>inspector_CNN_0</value>
     </param>
     <param>
       <key>typev</key>
-      <value>float</value>
+      <value>complex</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -665,7 +533,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>2 * P * L * 2 * Np</value>
+      <value>128</value>
     </param>
   </block>
   <block>
@@ -708,7 +576,7 @@
     </param>
     <param>
       <key>interp</key>
-      <value>2</value>
+      <value>1</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -725,57 +593,6 @@
     <param>
       <key>type</key>
       <value>ccc</value>
-    </param>
-  </block>
-  <block>
-    <key>specest_cyclo_fam</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>Np</key>
-      <value>Np</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1400, 508)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>specest_cyclo_fam_0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>L</key>
-      <value>L</value>
-    </param>
-    <param>
-      <key>P</key>
-      <value>P</value>
     </param>
   </block>
   <connection>
@@ -798,19 +615,13 @@
   </connection>
   <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
-    <sink_block_id>inspector_FAM_0</sink_block_id>
+    <sink_block_id>inspector_CNN_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_throttle_0</source_block_id>
     <sink_block_id>rational_resampler_xxx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blocks_vector_to_stream_0</source_block_id>
-    <sink_block_id>blocks_stream_to_vector_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -833,20 +644,14 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_FAM_0</source_block_id>
+    <source_block_id>inspector_CNN_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>classification</source_key>
     <sink_key>print</sink_key>
   </connection>
   <connection>
     <source_block_id>rational_resampler_xxx_0</source_block_id>
-    <sink_block_id>specest_cyclo_fam_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>specest_cyclo_fam_0</source_block_id>
-    <sink_block_id>blocks_vector_to_stream_0</sink_block_id>
+    <sink_block_id>blocks_stream_to_vector_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
