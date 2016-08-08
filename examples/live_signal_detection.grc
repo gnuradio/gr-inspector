@@ -93,7 +93,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(368, 12)</value>
+      <value>(304, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -246,7 +246,7 @@
     </param>
     <param>
       <key>manual</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -277,7 +277,7 @@
     </param>
     <param>
       <key>avg</key>
-      <value>0.2</value>
+      <value>0.005</value>
     </param>
     <param>
       <key>alias</key>

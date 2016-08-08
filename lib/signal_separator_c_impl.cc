@@ -230,7 +230,9 @@ namespace gr {
     void
     signal_separator_c_impl::apply_filter(int i) {
       // size of filter output
-      int size = (int)ceil((float)(d_buffer_len)/(float)d_decimations[i]);
+      int size = (int)((float)(d_buffer_len)/(float)d_decimations[i]);
+      std::cout << "size = " << size << ", buffer = " << d_buffer_len << ", decim = " << d_decimations[i] << std::endl;
+      std::cout << "history size = " << d_history_buffer.size() << std::endl;
       // allocate enough space for result
       d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
               volk_get_alignment());
@@ -238,6 +240,7 @@ namespace gr {
       // copied from xlating fir filter
       unsigned j = 0;
       for (int k = 0; k < size; k++) {
+        std::cout << i << "/" << j << std::endl;
         d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
         j += d_decimations[i];
       }
@@ -274,6 +277,8 @@ namespace gr {
       else if(d_buffer_stage == 1) {
         d_buffer_len = 6400; // good empirical value
 
+        std::cout << "allocating " << d_history_buffer.size() << std::endl;
+
         // allocate history buffer for each signal with length d_ntaps + d_buffer_len
         for(int i = 0; i < d_history_buffer.size(); i++) {
           d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps+d_buffer_len-1)*sizeof(gr_complex),
@@ -295,7 +300,7 @@ namespace gr {
       d_result_vector.clear();
 
       // rotate and buffer input samples
-      for(int i = 0; i < d_rotators.size(); i++){
+      for(int i = 0; i < d_history_buffer.size(); i++){
         for(int j = 0; j < d_buffer_len; j++) {
           d_history_buffer[i][j+d_ntaps-1] = d_rotators[i].rotate(in[j]);
         }
@@ -303,7 +308,7 @@ namespace gr {
 
       // apply all filters on input signal
       // iterate over each filter
-      for (unsigned int i = 0; i < d_filterbank.size(); i++) {
+      for (unsigned int i = 0; i < d_history_buffer.size(); i++) {
         apply_filter(i);
       }
 
@@ -320,7 +325,7 @@ namespace gr {
       message_port_pub(pmt::intern("sig_out"), msg);
       // Tell runtime system how many output items we produced.
       consume_each(d_buffer_len);
-      return d_buffer_len;
+      return noutput_items;
     }
 
     //</editor-fold>

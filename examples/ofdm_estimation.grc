@@ -590,6 +590,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>min_items</key>
+      <value>7000</value>
+    </param>
+    <param>
       <key>samp_rate</key>
       <value>samp_rate</value>
     </param>
@@ -626,7 +630,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1096, 224)</value>
+      <value>(1128, 224)</value>
     </param>
     <param>
       <key>gui_hint</key>
