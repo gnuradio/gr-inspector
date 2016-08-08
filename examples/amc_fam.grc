@@ -456,7 +456,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -484,7 +484,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>2</value>
+      <value>16</value>
     </param>
     <param>
       <key>sensitivity</key>
@@ -543,7 +543,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>2</value>
+      <value>16</value>
     </param>
     <param>
       <key>verbose</key>
@@ -570,7 +570,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>excess_bw</key>
@@ -610,7 +610,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>7</value>
+      <value>16</value>
     </param>
     <param>
       <key>verbose</key>
@@ -645,7 +645,7 @@
     </param>
     <param>
       <key>graphfile</key>
-      <value>/tmp/sess/00000001</value>
+      <value>/tmp/fam/00000001</value>
     </param>
     <param>
       <key>id</key>
@@ -708,7 +708,7 @@
     </param>
     <param>
       <key>interp</key>
-      <value>2</value>
+      <value>1</value>
     </param>
     <param>
       <key>maxoutbuf</key>
