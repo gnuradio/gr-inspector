@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <block>
-	<name>FAM</name>
-	<key>inspector_FAM</key>
+	<name>cnn</name>
+	<key>inspector_cnn</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
-	<make>inspector.FAM($typev.typ,$vlen,$graphfile)</make>
+	<make>inspector.cnn($typev.typ,$vlen,$graphfile)</make>
 
 	<param>
 		<name>Input Type</name>
 		<key>typev</key>
 		<type>enum</type>
-		<!--<option>
+		<option>
 			<name>Message</name>
 			<key>message</key>
 			<opt>size:1</opt>
@@ -21,32 +21,8 @@
 			<key>complex</key>
 			<opt>size:gr.sizeof_gr_complex</opt>
 			<opt>typ:"complex64"</opt>
-		</option>-->
-		<option>
-			<name>Float</name>
-			<key>float</key>
-			<opt>size:gr.sizeof_float</opt>
-			<opt>typ:"float32"</opt>
 		</option>
-		<!--<option>
-			<name>Int</name>
-			<key>int</key>
-			<opt>size:gr.sizeof_int</opt>
-			<opt>typ:"int32"</opt>
-		</option>
-		<option>
-			<name>Short</name>
-			<key>short</key>
-			<opt>size:gr.sizeof_short</opt>
-			<opt>typ:"int16"</opt>
-		</option>
-		<option>
-			<name>Byte</name>
-			<key>byte</key>
-			<opt>size:gr.sizeof_char</opt>
-			<opt>typ:"int8"</opt>
-		</option>-->
-	</param>
+		</param>
 	<param>
 		<name>Vec Length</name>
 		<key>vlen</key>
@@ -59,29 +35,12 @@
                 <value></value>
                 <type>string</type>
 	</param>
-	<!--<param>
-		<name>Number of model inputs</name>
-		<key>num_inputs</key>
-		<value>1</value>
-		<type>int</type>
-	</param>-->
-
-	<!--<param>
-		<name>Neuron Tensor</name>
-		<key>neurons</key>
-		<value></value>
-		<type>string</type>
-	</param>-->
-
-
-
 	<sink>
     		<name>in</name>
 		<type>$typev</type>
 		<vlen>$vlen</vlen>  
 		<nports>$num_inputs</nports>
 	</sink>
-
  	<source>
     		<name>classification</name>
  		<type>message</type>

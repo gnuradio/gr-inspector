@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
-	<name>TFModel</name>
-	<key>inspector_TFModel</key>
+	<name>tfmodel</name>
+	<key>inspector_tfmodel</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
-	<make>inspector.TFModel($typev.typ,$vlen,$graphfile,$itensor,$otensor,$num_inputs,$neurons)</make>
+	<make>inspector.tfmodel($typev.typ,$vlen,$graphfile,$itensor,$otensor,$num_inputs,$neurons)</make>
 
 	<param>
 		<name>Input Type</name>
