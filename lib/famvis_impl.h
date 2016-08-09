@@ -21,7 +21,7 @@
 #ifndef INCLUDED_INSPECTOR_FAMVIS_IMPL_H
 #define INCLUDED_INSPECTOR_FAMVIS_IMPL_H
 
-#include <inspector/FAMVis.h>
+#include <inspector/famvis.h>
 #include "fam_form.h"
 
 namespace gr
@@ -29,14 +29,14 @@ namespace gr
     namespace inspector
     {
 
-        class FAMVis_impl : public FAMVis
+        class famvis_impl : public famvis
         {
         private:
             // Nothing to declare in this block.
 
         public:
-            FAMVis_impl(int,QWidget*);
-            ~FAMVis_impl();
+            famvis_impl(int,QWidget*);
+            ~famvis_impl();
             fam_form *d_main_gui;
             // Where all the action really happens
             int work(int noutput_items,

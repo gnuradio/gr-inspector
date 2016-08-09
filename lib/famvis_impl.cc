@@ -31,25 +31,25 @@
 #include <qwtplot3d/qwt3d_surfaceplot.h>
 #include <qwtplot3d/qwt3d_function.h>
 #include <gnuradio/io_signature.h>
-#include "FAMVis_impl.h"
+#include "famvis_impl.h"
 
 namespace gr
 {
     namespace inspector
     {
 
-        FAMVis::sptr
-        FAMVis::make(int vlen,QWidget *parent)
+        famvis::sptr
+        famvis::make(int vlen,QWidget *parent)
         {
             return gnuradio::get_initial_sptr
-                   (new FAMVis_impl(vlen,parent));
+                   (new famvis_impl(vlen,parent));
         }
 
         /*
          * The private constructor
          */
-        FAMVis_impl::FAMVis_impl(int vlen,QWidget *parent)
-            : gr::sync_block("FAMVis",
+        famvis_impl::famvis_impl(int vlen,QWidget *parent)
+            : gr::sync_block("famvis",
                              gr::io_signature::make(1,1, sizeof(float)*vlen),
                              gr::io_signature::make(0, 0, 0))
         {
@@ -65,7 +65,7 @@ namespace gr
 
 #ifdef ENABLE_PYTHON
         PyObject*
-        FAMVis_impl::pyqwidget()
+        famvis_impl::pyqwidget()
         {
             PyObject *w = PyLong_FromVoidPtr((void*)d_main_gui);
             PyObject *retarg = Py_BuildValue("N", w);
@@ -73,7 +73,7 @@ namespace gr
         }
 #else
         void *
-        FAMVis_impl::pyqwidget()
+        famvis_impl::pyqwidget()
         {
             return NULL;
         }
@@ -82,12 +82,12 @@ namespace gr
         /*
          * Our virtual destructor.
          */
-        FAMVis_impl::~FAMVis_impl()
+        famvis_impl::~famvis_impl()
         {
         }
 
         int
-        FAMVis_impl::work(int noutput_items,
+        famvis_impl::work(int noutput_items,
                           gr_vector_const_void_star &input_items,
                           gr_vector_void_star &output_items)
         {

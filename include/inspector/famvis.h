@@ -39,10 +39,10 @@ namespace gr {
      * \ingroup inspector
      *
      */
-    class INSPECTOR_API FAMVis : virtual public gr::sync_block
+    class INSPECTOR_API famvis : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<FAMVis> sptr;
+      typedef boost::shared_ptr<famvis> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of inspector::FAMVis.

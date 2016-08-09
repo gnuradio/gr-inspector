@@ -19,20 +19,28 @@
  */
 
 
-#include <gnuradio/attributes.h>
-#include <cppunit/TestAssert.h>
-#include "qa_FAMVis.h"
-#include <inspector/FAMVis.h>
+#ifndef _QA_FAMVIS_H_
+#define _QA_FAMVIS_H_
+
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestCase.h>
 
 namespace gr {
   namespace inspector {
 
-    void
-    qa_FAMVis::t1()
+    class qa_famvis : public CppUnit::TestCase
     {
-      // Put test here
-    }
+    public:
+      CPPUNIT_TEST_SUITE(qa_famvis);
+      CPPUNIT_TEST(t1);
+      CPPUNIT_TEST_SUITE_END();
+
+    private:
+      void t1();
+    };
 
   } /* namespace inspector */
 } /* namespace gr */
+
+#endif /* _QA_FAMVIS_H_ */
 
