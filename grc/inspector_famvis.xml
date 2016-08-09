@@ -1,13 +1,13 @@
 <block>
-  <name>FAMVis</name>
-  <key>inspector_FAMVis</key>
+  <name>famvis</name>
+  <key>inspector_famvis</key>
   <category>[Inspector]/AMC</category>
   <import>import inspector</import>
   <import>from PyQt4 import Qt</import>
   <import>from gnuradio import qtgui</import> 
   <import>import sip</import>
   <make>#set $win = 'self._%s_win'%$id
-inspector.FAMVis($vlen)
+inspector.famvis($vlen)
 $(win) = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget) 
 $(gui_hint()($win))</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.

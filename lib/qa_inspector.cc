@@ -26,13 +26,13 @@
  */
 
 #include "qa_inspector.h"
-#include "qa_FAMVis.h"
+#include "qa_famvis.h"
 
 CppUnit::TestSuite *
 qa_inspector::suite()
 {
   CppUnit::TestSuite *s = new CppUnit::TestSuite("inspector");
-  s->addTest(gr::inspector::qa_FAMVis::suite());
+  s->addTest(gr::inspector::qa_famvis::suite());
 
   return s;
 }
