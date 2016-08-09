@@ -268,7 +268,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1112, 816)</value>
+      <value>(1384, 816)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -618,7 +618,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_FAM</key>
+    <key>inspector_fam</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -637,7 +637,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(688, 776)</value>
+      <value>(776, 776)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -649,7 +649,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_FAM_0</value>
+      <value>inspector_fam_0</value>
     </param>
     <param>
       <key>typev</key>
@@ -798,7 +798,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
-    <sink_block_id>inspector_FAM_0</sink_block_id>
+    <sink_block_id>inspector_fam_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -833,7 +833,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_FAM_0</source_block_id>
+    <source_block_id>inspector_fam_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>classification</source_key>
     <sink_key>print</sink_key>

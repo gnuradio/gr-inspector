@@ -187,7 +187,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1008, 776)</value>
+      <value>(1144, 776)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -474,7 +474,7 @@
     </param>
     <param>
       <key>constellation_points</key>
-      <value>4</value>
+      <value>2</value>
     </param>
     <param>
       <key>samples_per_symbol</key>
@@ -486,7 +486,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_CNN</key>
+    <key>inspector_cnn</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -505,7 +505,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(600, 752)</value>
+      <value>(608, 744)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -517,7 +517,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_CNN_0</value>
+      <value>inspector_cnn_0</value>
     </param>
     <param>
       <key>typev</key>
@@ -615,7 +615,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
-    <sink_block_id>inspector_CNN_0</sink_block_id>
+    <sink_block_id>inspector_cnn_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -644,7 +644,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_CNN_0</source_block_id>
+    <source_block_id>inspector_cnn_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>classification</source_key>
     <sink_key>print</sink_key>
