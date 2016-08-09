@@ -32,7 +32,7 @@ except ImportError:
 
 # import any pure python here
 from sync_prototype_cc import sync_prototype_cc
-from TFModel import TFModel
-from FAM import FAM
-from CNN import CNN
+from tfmodel import tfmodel
+from fam import fam
+from cnn import cnn
 #

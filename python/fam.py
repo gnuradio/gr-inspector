@@ -31,11 +31,15 @@ import tensorflow as tf
 from numpy import zeros, newaxis
 import collections
 
+Np = 64  # 2xNp is the number of columns
+P = 256  # number of new items needed to calculate estimate
+L = 2
+
 ## Modulation schemes
 MOD = ["fsk", "qam16", "qam64", "2psk", "4psk", "8psk", "gmsk", "wbfm", "nfm"]
 
-## GNU Radio block, for CNN classification
-class CNN(gr.sync_block):
+## GNU Radio block, for fam classification
+class fam(gr.sync_block):
 
     # Create our block
     def __init__(self, dtype, vlen, graphfile):
@@ -44,7 +48,7 @@ class CNN(gr.sync_block):
         inputs.append((np.dtype(dtype), vlen))
 
         gr.sync_block.__init__(self,
-                               name="CNN",
+                               name="fam",
                                in_sig=inputs,
                                out_sig=[])
 
@@ -77,7 +81,7 @@ class CNN(gr.sync_block):
 
             return (sess, input_name, output_name)
 
-    ## Work function to accept input CNN data, to reshape and pass to model
+    ## Work function to accept input fam data, to reshape and pass to model
     def work(self, input_items, output_items):
 
         tensordata = []
@@ -85,11 +89,16 @@ class CNN(gr.sync_block):
         shapev = np.array(input_items[0]).shape
         inp = np.array(input_items[0][0])
 
-        inp = np.array(input_items[0])
+        if np.mean(inp) == 0.0:
+            return len(input_items[0])
 
-        # iterate through all 128 blocks, passed to us
-        for i in range(inp.shape[0]):
-            tensordata.append(np.array([[inp[i].real,inp[i].imag]]))
+        ## Normalise data
+        inp = (inp - np.mean(inp)) / np.std(inp)
+
+        ## Reshape to 2D
+        floats = np.reshape(inp, (2 * P * L, (2 * Np) - 0))
+
+        tensordata.append(np.array([floats]))
 
         ne = []
         for v in tensordata:
@@ -105,6 +114,7 @@ class CNN(gr.sync_block):
             pmtv = pmt.dict_add(pmtv, pmt.intern(
                 "Mod"), pmt.to_pmt(MOD[np.argmax(outp)]))
             pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
+
             self.message_port_pub(pmt.intern("classification"), pmtv)
 
         return len(input_items[0])

@@ -35,7 +35,7 @@ Np = 64  # 2xNp is the number of columns
 P = 256  # number of new items needed to calculate estimate
 L = 2
 
-class TFModel(gr.sync_block):
+class tfmodel(gr.sync_block):
     """
     docstring for block AMC
     """
@@ -54,7 +54,7 @@ class TFModel(gr.sync_block):
         print(inputs)
 
         gr.sync_block.__init__(self,
-            name="TFModel",
+            name="tfmodel",
             in_sig=inputs,
             out_sig=[])
 
