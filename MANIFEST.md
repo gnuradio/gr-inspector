@@ -1,4 +1,4 @@
-title: The Inspector (gr-inspector)
+title: gr-inspector
 brief: A signal analysis toolbox for GNU Radio
 tags:
   - SDR
@@ -13,6 +13,8 @@ author:
 copyright_owner:
   - Sebastian Müller
   - Christopher Richardson
+dependencies:
+  - gnuradio, Qt4, Qwt 6.1.0
 license: GPLv3
 repo: https://github.com/gnuradio/gr-inspector
 website: https://grinspector.wordpress.com/
