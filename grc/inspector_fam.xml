@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-	<name>fam</name>
+	<name>FAM</name>
 	<key>inspector_fam</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
