@@ -222,7 +222,6 @@ namespace gr {
     // find bins above threshold and adjacent bins for each signal
     std::vector<std::vector<unsigned int> >
     signal_detector_cvf_impl::find_signal_edges() {
-
       std::vector<unsigned int> pos;
       //find values above threshold
       for (unsigned int i = 0; i < d_fft_len; i++) {
@@ -262,32 +261,23 @@ namespace gr {
         }
       }
       else {
-        bool new_signal = false;
         for (unsigned int i = 1; i < pos.size(); i++) {
-          if (new_signal) {
+          if (i == pos.size() - 1 and curr_edges.size() == 1
+                  and pos[i-1]+1 == pos[i]) {
             curr_edges.push_back(pos[i]);
-            new_signal = false;
-            if (i == pos.size() - 1) {
-              curr_edges.push_back(pos[i]);
-              flanks.push_back(curr_edges);
-            }
+            flanks.push_back(curr_edges);
           }
           else {
-            if (i == pos.size() - 1) {
-              curr_edges.push_back(pos[i]);
+            if (pos[i - 1] + 1 != pos[i]) {
+              curr_edges.push_back(pos[i - 1]);
               flanks.push_back(curr_edges);
-            }
-            else {
-              if(pos[i-1] + 1 != pos[i]) {
-                curr_edges.push_back(pos[i - 1]);
-                flanks.push_back(curr_edges);
-                curr_edges.clear();
-                curr_edges.push_back(pos[i]);
-              }
+              curr_edges.clear();
+              curr_edges.push_back(pos[i]);
             }
           }
         }
       }
+
       return flanks;
     }
 

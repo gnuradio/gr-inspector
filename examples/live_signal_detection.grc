@@ -187,7 +187,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -210,7 +210,7 @@
     </param>
     <param>
       <key>cfreq</key>
-      <value>101669000</value>
+      <value>0</value>
     </param>
     <param>
       <key>comment</key>
@@ -262,7 +262,7 @@
     </param>
     <param>
       <key>rf_unit</key>
-      <value>1000000</value>
+      <value>1000</value>
     </param>
     <param>
       <key>samp_rate</key>
