@@ -33,8 +33,6 @@ include(GrPlatform) #define LIB_SUFFIX
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS} ${GNURADIO_ALL_LIBRARIES})
 
-set (CMAKE_CXX_FLAGS "-lqwtplot3d -lGLU")
-
 list(APPEND inspector_sources
 		${QTGUI_MOC_OUTFILES}
     signal_separator_c_impl.cc
