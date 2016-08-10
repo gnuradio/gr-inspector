@@ -78,11 +78,11 @@ namespace gr {
 
     void
     signal_separator_c_impl::free_allocation() {
-      gr::thread::scoped_lock guard(d_mutex);
+      //gr::thread::scoped_lock guard(d_mutex);
       // delete all filters
       for(std::vector<filter::kernel::fir_filter_ccf*>::iterator it = d_filterbank.begin();
           it != d_filterbank.end(); ++it) {
-        delete(*it);
+        delete *it;
       }
       // delete histroy buffers
       while(!d_history_buffer.empty()) {
@@ -129,7 +129,7 @@ namespace gr {
     // build filter and pass pointer and other calculations in vectors
     void
     signal_separator_c_impl::build_filter(unsigned int signal) {
-      gr::thread::scoped_lock guard(d_mutex);
+      //gr::thread::scoped_lock guard(d_mutex);
       // calculate signal parameters
       double freq_center = d_rf_map.at(signal).at(0);
       double bandwidth = d_rf_map.at(signal).at(1);
@@ -171,6 +171,7 @@ namespace gr {
 
     void
     signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
+      gr::thread::scoped_lock guard(d_mutex);
       // free allocated space
       free_allocation();
       unpack_message(msg);
@@ -237,7 +238,8 @@ namespace gr {
       d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
               volk_get_alignment());
 
-      // copied from xlating fir filter
+      // copied from xlating fir
+      std::cout << "d_buffer_stage = " << d_buffer_stage << std::endl;
       unsigned j = 0;
       for (int k = 0; k < size; k++) {
         std::cout << i << "/" << j << std::endl;
@@ -299,10 +301,14 @@ namespace gr {
       // free previous result vector
       d_result_vector.clear();
 
+      int copy_len = d_buffer_len;
+      if(d_buffer_len > ninput_items[0])
+        copy_len = ninput_items[0];
+
       // rotate and buffer input samples
       for(int i = 0; i < d_history_buffer.size(); i++){
-        for(int j = 0; j < d_buffer_len; j++) {
-          d_history_buffer[i][j+d_ntaps-1] = d_rotators[i].rotate(in[j]);
+        for(int j = 0; j < copy_len; j++) {
+          d_history_buffer[i][j+d_ntaps-2] = d_rotators[i].rotate(in[j]);
         }
       }
 
