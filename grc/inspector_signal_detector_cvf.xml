@@ -121,4 +121,15 @@
     <type>message</type>
     <optional>1</optional> 
  </source>
+  <doc>
+Takes input spectrum as complex float and performs an energy detection to find potential signals and build a RF map. The RF map gets passed as a message with center frequency and bandwidth information for each detected signal.
+
+Threshold for energy detection can either be set in dB or an automatic threshold calculation can be performed by setting a sensitivity between 0 and 1. The PSD is then sorted and searched for relative power jumps with height (1-sensitivity) and the threshold is set to the sample before that jump (which should be the strongest noise sample).
+
+To surpress false detection in noisy scenarios, the minimum signal bandwidth can be set. All detected signals smaller than this value will not be written in the RF map.
+
+To average the PSD (and provide a better detection) an single pole IIR filter is implemented in this block. The parameter alpha can be set as block parameter. The IIR equation yields y[n] = alpha*x[n]+(1-alpha)*y[n-1].
+
+The bandwidth of the detected signals can be quantized relative to the sampling rate. This leads to less recalculations in the Signal Separator block. There, a filter must be recalculated, when the bandwidth of a signal changed.
+  </doc>
 </block>

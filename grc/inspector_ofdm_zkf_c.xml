@@ -44,4 +44,7 @@
     <type>message</type>
     <optional>1</optional>
   </source>
+  <doc>
+This block performs a parameter estimation of an input OFDM signal. Parameters that get estimated are FFT length, cyclic prefix length, symbol time and subcarrier spacing. For the estimation, the algorithm in [1] is used. Input is a complex stream, output is a message as tupel of tupels containing analysis results description and values.
+  </doc>
 </block>

@@ -93,4 +93,11 @@
     <name>sig_out</name>
     <type>message</type>
   </source>
+  <doc>
+Signal Separator block takes input signal and RF map with signal center frequencies and bandwidths and filters the input spectrum for each signal.
+
+Internally, FIR filters get calculated according to the RF map's specs. The steepness of the filters can be set with the relative transition width parameter. The spectrum gets shifted by the center frequency of each signal and filtered with the corresponding filter calculated from the RF map information. A floored integer decimation will be applied according to the set oversampling factor (decim = floor(samp_rate/(bw*OSF))).
+
+To save CPU load, generic taps can be precalculated with the tool in the apps/ folder. This tool outputs a JSON file, which path can be specified in the block parameter file_path.
+  </doc>
 </block>

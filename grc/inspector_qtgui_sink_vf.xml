@@ -98,4 +98,20 @@ $(gui_hint()($win))</make>
     <type>message</type>
     <optional>1</optional>
   </source>
+  <doc>
+This GUI uses QT and QWT to create a graphical interface to control the inspector and get feedback about the detected and analyzed signals.
+
+The PSD estimation of the Signal Detector block gets displayed here along with signal markers and informations. Manual signal selection can be done within the GUI created by this block.
+
+Analysis blocks can pass information to the GUI block by providing messages in the tuple format
+
+((pmt::intern("signal"), signal_no), (pmt::intern("description1"), pmt::from_float(value1)), ...)
+
+Controls: Use CTRL+LeftMouse to zoom, RightMouse to zoom out. This prevents confusion when in manual selection mode, where the signals are selected with LeftMouse.
+
+Message ports:
+- map in: takes RF map from Signal Detector block and visualizes the included information in the plot
+- analysis_in: takes messages of analysis blocks and displays their content in the GUI plot.
+- map out: passes either the input message when manual selection is deactivated or passes RF map according to the user's settings.
+  </doc>
 </block>

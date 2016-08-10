@@ -23,4 +23,9 @@
     <name>out</name>
     <type>complex</type>
   </source>
+  <doc>
+This block can be inserted downstream to the OFDM parameter estimation block. It performs a frequency offset estimation and symbol timing estimation according to [1]. Frequency offsets smaller than the subcarrier spacing will be corrected to obtain orthogonality of the carriers. Output is a stream with stream tags at the estimated OFDM symbol beginnings (PMT symbol "symbol").
+
+Connect output of OFDM parameter estimator to message port and signal itself to the stream input.
+  </doc>
 </block>
