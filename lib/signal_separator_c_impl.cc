@@ -279,7 +279,7 @@ namespace gr {
       else if(d_buffer_stage == 1) {
         d_buffer_len = 6400; // good empirical value
 
-        std::cout << "allocating " << d_history_buffer.size() << std::endl;
+        std::cout << "allocating " << (d_ntaps+d_buffer_len-1) << std::endl;
 
         // allocate history buffer for each signal with length d_ntaps + d_buffer_len
         for(int i = 0; i < d_history_buffer.size(); i++) {
