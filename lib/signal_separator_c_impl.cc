@@ -57,6 +57,7 @@ namespace gr {
       d_buffer_stage = 0;
       d_use_file = taps_file;
       d_precalc = file_path;
+      d_queue = new messages::msg_queue(0);
 
       // message port
       message_port_register_out(pmt::intern("sig_out"));
@@ -70,6 +71,7 @@ namespace gr {
      */
     signal_separator_c_impl::~signal_separator_c_impl() {
       free_allocation();
+      delete d_queue;
     }
 
     //</editor-fold>
@@ -171,12 +173,13 @@ namespace gr {
 
     void
     signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
-      gr::thread::scoped_lock guard(d_mutex);
+      d_queue->insert_tail(msg);
+      //gr::thread::scoped_lock guard(d_mutex);
       // free allocated space
-      free_allocation();
-      unpack_message(msg);
+      //free_allocation();
+      //unpack_message(msg);
       // calculate filters
-      rebuild_all_filters();
+      //rebuild_all_filters();
     }
 
     void
@@ -268,6 +271,12 @@ namespace gr {
                                           gr_vector_void_star &output_items) {
       gr::thread::scoped_lock guard(d_mutex);
       const gr_complex *in = (const gr_complex *) input_items[0];
+
+      if(!d_queue->empty_p()) {
+        free_allocation();
+        unpack_message(d_queue->delete_head());
+        rebuild_all_filters();
+      }
 
       // no message received -> nothing to do
       if(d_buffer_stage == 0) {

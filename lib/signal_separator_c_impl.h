@@ -26,6 +26,7 @@
 #include <gnuradio/filter/fir_filter.h>
 #include <gnuradio/blocks/rotator.h>
 #include <gnuradio/thread/thread.h>
+#include <gnuradio/messages/msg_queue.h>
 
 namespace gr {
   namespace inspector {
@@ -40,6 +41,8 @@ namespace gr {
       gr_complex* d_temp_buffer;
 
       filter::firdes::win_type d_window;
+
+      messages::msg_queue *d_queue;
 
       std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
       std::vector<std::vector<float> > d_rf_map;
