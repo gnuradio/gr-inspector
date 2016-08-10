@@ -32,44 +32,26 @@
 namespace Qwt3D
 {
 
-    class Rosenbrock : public Function
-    {
-    public:
 
-        Rosenbrock(SurfacePlot* pw) :Function(pw)
-        {
-        }
-
-        double operator()(double x, double y)
-        {
-            return log((1-x)*(1-x) + 100 * (y - x*x)*(y - x*x)) / 8;
-        }
-    };
-
-
-    class Plot : public SurfacePlot
-    {
-    public:
-        Plot();
-    };
 
     Plot::Plot()
     {
         setTitle("A Simple SurfacePlot Demonstration");
 
-        Rosenbrock rosenbrock(this);
+        /*Rosenbrock rosenbrock(this);
 
         rosenbrock.setMesh(41,31);
         rosenbrock.setDomain(-1.73,1.5,-1.5,1.5);
         rosenbrock.setMinZ(-10);
 
-        rosenbrock.create();
+        rosenbrock.create();*/
 
         setRotation(30,0,15);
         setScale(1,1,1);
         setShift(0.15,0,0);
         setZoom(0.9);
 
+/*
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
             coordinates()->axes[i].setMajors(7);
@@ -83,7 +65,7 @@ namespace Qwt3D
 
 
         setCoordinateStyle(BOX);
-
+*/
         updateData();
         updateGL();
     }
@@ -99,10 +81,36 @@ namespace gr
         fam_form::fam_form(QWidget *parent) : QWidget(parent)
         {
             d_marker_count = 30;
-            Qwt3D::Plot * plot = new Qwt3D::Plot() ;
+            plot = new Qwt3D::Plot() ;
             QHBoxLayout layout;
             layout.addWidget(plot);
             plot->resize(800,600);
+
+           // double data[10][10] = { {0.0} }; // all elements initialized to 0.
+
+            unsigned int columns = 10;
+            unsigned int rows = 10;
+
+            double** dat = new double*[rows];
+            for(int i = 0; i < rows; ++i)
+                dat[i] = new double[columns];
+                
+            for(int y=0;y<columns;y++){
+            for(int x=0;x<rows;x++){
+                dat[x][y] = 1.3;
+            }   
+            }
+
+            double minx=0.0,maxx=10.0,miny=0,maxy=10.0;
+            plot->loadFromData 	(   dat,
+			                        columns,
+		  	                        rows,
+		                            minx,
+		                            maxx,
+		                            miny,
+                                    maxy	 
+	                            ); 	
+
             setLayout(&layout);
         }
 
@@ -112,6 +120,42 @@ namespace gr
             delete[] d_freq;
             delete d_symbol;
             delete d_manual_cb;
+        }
+
+        void fam_form::update(const float *d){
+            int Np = 64  ;// 2xNp is the number of columns                                                                                                                                                                        
+            int P = 256  ;// number of new items needed to calculate estimate                                                                                                                                                     
+            int L = 2   ;
+
+            unsigned int rows = 2 * Np;
+            unsigned int columns = 2*P*L;
+
+            double** dat = new double*[rows];
+            for(int i = 0; i < rows; ++i)
+                dat[i] = new double[columns];
+                
+            int z = 0.0;
+            for(int y=0;y<columns;y++){
+            for(int x=0;x<rows;x++){
+                dat[x][y] = d[z];
+                z++;
+            }   
+            }
+
+            double minx=0.0,maxx=10.0,miny=0,maxy=10.0;
+            plot->loadFromData 	(   dat,
+			                        rows,
+		  	                        columns,
+		                            minx,
+		                            maxx,
+		                            miny,
+                                    maxy	 
+	                            ); 
+            //plot->updateNormals();
+            plot->coordinates()->axes[0].recalculateTics();
+            plot->coordinates()->axes[1].recalculateTics();
+            plot->repaint();
+            repaint();
         }
 
         void
