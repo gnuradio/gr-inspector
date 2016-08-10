@@ -11,6 +11,7 @@
     <block>signal_detector_cvf</block>
     <block>signal_separator_c</block>
     <block>signal_extractor_c</block>
+    <block>ofdm_synchronizer_cc</block>
   </cat>
   <cat>
     <name>Analysis</name>
@@ -19,9 +20,5 @@
   <cat>
     <name>GUI</name>
     <block>qtgui_sink_vf</block>
-  </cat>
-  <cat>
-    <name>Demodulation</name>
-    <block>fm_demod_cf</block>
   </cat>
 </cat>
