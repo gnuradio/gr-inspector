@@ -33,7 +33,7 @@ namespace gr
         {
         private:
             // Nothing to declare in this block.
-
+            
         public:
             famvis_impl(int,QWidget*);
             ~famvis_impl();

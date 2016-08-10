@@ -29,11 +29,23 @@
 #include <gnuradio/io_signature.h>
 #include "signal_marker.h"
 
+namespace Qwt3D
+{
+    class Plot : public SurfacePlot
+    {
+    public:
+        Plot();
+    };
+
+}
+
+
 namespace gr
 {
 
     namespace inspector
     {
+
 
         class fam_form : public QWidget
         {
@@ -47,6 +59,10 @@ namespace gr
             void add_msg_queue(float cfreq, float bandwidth);
             float freq_to_x(float freq);
             float x_to_freq(float x);
+            
+            void update(const float *d);
+ 
+            Qwt3D::Plot * plot;
 
             void drawOverlay();
             fam_form(QWidget *parent);
