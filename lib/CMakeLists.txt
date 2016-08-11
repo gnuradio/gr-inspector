@@ -17,7 +17,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-set (CMAKE_CXX_FLAGS "-lqwtplot3d -lGLU") 
+#set (CMAKE_CXX_FLAGS "-lqwtplot3d -lGLU") 
 ########################################################################
 # QT GUI file generation stuff (Q_OBJECT)
 ########################################################################
@@ -63,7 +63,7 @@ endif(NOT inspector_sources)
 
 
 add_library(gnuradio-inspector SHARED ${inspector_sources})
-target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${PYTHON_LIBRARIES} ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${PYTHON_LIBRARIES} ${QWTPLOT3D_LIBRARIES} ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 set_target_properties(gnuradio-inspector PROPERTIES DEFINE_SYMBOL "gnuradio_inspector_EXPORTS")
 
 if(APPLE)

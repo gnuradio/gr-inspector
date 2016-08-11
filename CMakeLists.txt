@@ -195,8 +195,10 @@ link_directories(
     ${CPPUNIT_LIBRARY_DIRS}
     ${GNURADIO_RUNTIME_LIBRARY_DIRS}
     ${GNURADIO_FILTER_LIBRARY_DIRS}
+    ${QT_QWTPLOT3D_LIBRARY_DIRS}
     ${QT_LIBRARY_DIRS}
     ${QWT_LIBRARY_DIRS}
+    
 )
 
 # Set component parameters
