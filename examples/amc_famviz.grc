@@ -190,6 +190,65 @@
     </param>
   </block>
   <block>
+    <key>analog_nbfm_tx</key>
+    <param>
+      <key>audio_rate</key>
+      <value>44100</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(944, 272)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>analog_nbfm_tx_0</value>
+    </param>
+    <param>
+      <key>max_dev</key>
+      <value>5e3</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>fh</key>
+      <value>-1.0</value>
+    </param>
+    <param>
+      <key>quad_rate</key>
+      <value>44100*2</value>
+    </param>
+    <param>
+      <key>tau</key>
+      <value>75e-6</value>
+    </param>
+  </block>
+  <block>
     <key>analog_random_source_x</key>
     <param>
       <key>alias</key>
@@ -272,7 +331,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(816, 200)</value>
+      <value>(960, 80)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -531,7 +590,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>/home/chris/Repositories/models/music.wav</value>
+      <value>/tmp/music2.wav</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -960,6 +1019,12 @@
     </param>
   </block>
   <connection>
+    <source_block_id>analog_nbfm_tx_0</source_block_id>
+    <sink_block_id>blocks_throttle_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>analog_random_source_x_0</source_block_id>
     <sink_block_id>digital_gfsk_mod_0</sink_block_id>
     <source_key>0</source_key>
@@ -1010,6 +1075,12 @@
   <connection>
     <source_block_id>blocks_vector_to_stream_0</source_block_id>
     <sink_block_id>blocks_stream_to_vector_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_wavfile_source_0</source_block_id>
+    <sink_block_id>analog_nbfm_tx_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
