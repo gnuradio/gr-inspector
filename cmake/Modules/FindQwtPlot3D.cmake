@@ -6,7 +6,7 @@
 find_path( QT_QWTPLOT3D_INCLUDE_DIR qwt3d_plot.h /usr/include/ /usr/local/include /usr/include/qwtplot3d/ /usr/include/qwtplot3d-qt4/ /usr/local/include/qwtplot3d-qt4 )
 
 #message( STATUS "${QWTPLOT3D_INCLUDE_DIR}")
-find_library( QWTPLOT3D_LIBRARIES qwtplot3d qwtplot3d-qt4 /usr/lib/ usr/local/lib ) 
+find_library( QWTPLOT3D_LIBRARIES NAMES qwtplot3d-qt4 qwtplot3d /usr/lib/ usr/local/lib ) 
 #message( STATUS "${QWTPLOT3D_LIBRARIES}")
 if ( QT_QWTPLOT3D_INCLUDE_DIR  AND QWTPLOT3D_LIBRARIES ) 
   set( QWTPLOT3D_FOUND TRUE ) 
