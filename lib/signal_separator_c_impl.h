@@ -34,7 +34,7 @@ namespace gr {
     class signal_separator_c_impl : public signal_separator_c {
     private:
       bool d_use_file;
-      int d_buffer_len, d_ntaps;
+      int d_buffer_len;
       unsigned int d_buffer_stage;
       float d_trans_width, d_oversampling;
       double d_samp_rate;
@@ -49,6 +49,7 @@ namespace gr {
 
       std::vector<float> build_taps(double cutoff);
       std::vector<int> d_decimations;
+      std::vector<int> d_ntaps;
       std::vector<blocks::rotator> d_rotators;
 
       std::vector<gr_complex*> d_history_buffer;

@@ -57,6 +57,7 @@ namespace gr {
       d_buffer_stage = 0;
       d_use_file = taps_file;
       d_precalc = file_path;
+      d_buffer_len = 6400; // good empirical value
       d_queue = new messages::msg_queue(0);
 
       // message port
@@ -106,13 +107,15 @@ namespace gr {
                                           d_window, 6.76);
         }
         else {
-          taps = std::vector<float>(d_ntaps, 0.0);
+          taps = std::vector<float>(2, 0.0);
           GR_LOG_WARN(d_logger,
                       "Firdes check failed: 0 < cutoff <= samp_rate/2");
         }
+		/*
         if (d_buffer_stage == 0) {
           d_ntaps = taps.size();
         }
+		*/
       }
       else {
         cutoff = cutoff/d_samp_rate; // normize cutoff
@@ -122,7 +125,7 @@ namespace gr {
         else {
           taps = d_precalc.upper_bound(cutoff)->second;
         }
-        d_ntaps = taps.size();
+        //d_ntaps = taps.size();
       }
 
       return taps;
@@ -152,6 +155,7 @@ namespace gr {
 
       // let stopband begin at nyquist border
       d_taps = build_taps((1-d_trans_width)*bandwidth/2);
+      d_ntaps[signal] = d_taps.size();
 
       // copied from xlating fir filter
       float fwT0 = 2 * M_PI * freq_center / d_samp_rate;
@@ -186,8 +190,10 @@ namespace gr {
     signal_separator_c_impl::rebuild_all_filters() {
       d_filterbank.clear();
       d_decimations.clear();
+      d_ntaps.clear();
       d_rotators.clear();
       d_decimations.resize(d_rf_map.size());
+      d_ntaps.resize(d_rf_map.size());
       d_rotators.resize(d_rf_map.size());
       d_filterbank.resize(d_rf_map.size());
       d_history_buffer.resize(d_rf_map.size());
@@ -235,17 +241,17 @@ namespace gr {
     signal_separator_c_impl::apply_filter(int i) {
       // size of filter output
       int size = (int)((float)(d_buffer_len)/(float)d_decimations[i]);
-      std::cout << "size = " << size << ", buffer = " << d_buffer_len << ", decim = " << d_decimations[i] << std::endl;
-      std::cout << "history size = " << d_history_buffer.size() << std::endl;
+      //std::cout << "size = " << size << ", buffer = " << d_buffer_len << ", decim = " << d_decimations[i] << std::endl;
+      //std::cout << "history size = " << d_history_buffer.size() << std::endl;
       // allocate enough space for result
       d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
               volk_get_alignment());
 
       // copied from xlating fir
-      std::cout << "d_buffer_stage = " << d_buffer_stage << std::endl;
+      //std::cout << "d_buffer_stage = " << d_buffer_stage << std::endl;
       unsigned j = 0;
       for (int k = 0; k < size; k++) {
-        std::cout << i << "/" << j << std::endl;
+        //std::cout << i << "/" << j << std::endl;
         d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
         j += d_decimations[i];
       }
@@ -286,16 +292,15 @@ namespace gr {
       }
       // message received, so let's allocate all the needed memory
       else if(d_buffer_stage == 1) {
-        d_buffer_len = 6400; // good empirical value
 
-        std::cout << "allocating " << (d_ntaps+d_buffer_len-1) << std::endl;
+        //std::cout << "allocating " << (d_ntaps[i]+d_buffer_len-1) << std::endl;
 
         // allocate history buffer for each signal with length d_ntaps + d_buffer_len
         for(int i = 0; i < d_history_buffer.size(); i++) {
-          d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps+d_buffer_len-1)*sizeof(gr_complex),
+          d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps[i]+d_buffer_len-1)*sizeof(gr_complex),
                                                          volk_get_alignment());
           // write zeros in buffers
-          for(int j = 0; j < d_ntaps+d_buffer_len-1; j++) {
+          for(int j = 0; j < d_ntaps[i]+d_buffer_len-1; j++) {
             d_history_buffer[i][j] = 0.0;
           }
         }
@@ -317,7 +322,7 @@ namespace gr {
       // rotate and buffer input samples
       for(int i = 0; i < d_history_buffer.size(); i++){
         for(int j = 0; j < copy_len; j++) {
-          d_history_buffer[i][j+d_ntaps-2] = d_rotators[i].rotate(in[j]);
+          d_history_buffer[i][j+d_ntaps[i]-2] = d_rotators[i].rotate(in[j]);
         }
       }
 
@@ -331,7 +336,7 @@ namespace gr {
       // put current items in history
       for(int i = 0; i < d_history_buffer.size(); i++) {
         memcpy(d_history_buffer[i], &d_history_buffer[i][d_buffer_len],
-               (d_ntaps-1)*sizeof(gr_complex));
+               (d_ntaps[i]-1)*sizeof(gr_complex));
       }
 
       // pack message
