@@ -33,6 +33,95 @@ namespace Qwt3D
 {
 
 
+void Plot::adjustScales(){
+    ParallelEpiped hull = this->hull();
+
+    int d = (hull.maxVertex - hull.minVertex).length();
+        
+    double xxScale = 0.5;
+    double yScale = 0.5;
+    double zScale = 0.5;
+    setScale(xxScale, yScale, zScale);
+
+    setZoom(d / (2*sqrt(3.0)));
+
+    coordinates()->axes[Z1].setTicLength(3*xxScale, xxScale);
+    coordinates()->axes[Z2].setTicLength(3*xxScale, xxScale);
+    coordinates()->axes[Z3].setTicLength(3*xxScale, xxScale);
+    coordinates()->axes[Z4].setTicLength(3*xxScale, xxScale);
+
+    coordinates()->axes[X1].setTicLength(3*yScale, yScale);
+    coordinates()->axes[X2].setTicLength(3*yScale, yScale);
+    coordinates()->axes[X3].setTicLength(3*yScale, yScale);
+    coordinates()->axes[X4].setTicLength(3*yScale, yScale);
+
+    coordinates()->axes[Y1].setTicLength(3*xxScale, xxScale);
+    coordinates()->axes[Y2].setTicLength(3*xxScale, xxScale);
+    coordinates()->axes[Y3].setTicLength(3*xxScale, xxScale);
+    coordinates()->axes[Y4].setTicLength(3*xxScale, xxScale);
+
+}
+
+
+
+
+
+
+
+
+
+void Plot::calculateHull()
+{
+	if (actualData_p->empty())
+		return;
+
+
+ParallelEpiped hull(Triple(DBL_MAX,DBL_MAX,DBL_MAX),Triple(-DBL_MAX,-DBL_MAX,-DBL_MAX));
+
+
+
+hull.minVertex.x = 0;
+hull.maxVertex.x = 10;
+
+hull.minVertex.y = 0;
+hull.maxVertex.y = 10;
+
+hull.minVertex.z = 0;
+hull.maxVertex.z = 10;
+/*
+	*	if (data[i].x < hull.minVertex.x)
+			hull.minVertex.x = data[i].x;
+		if (data[i].y < hull.minVertex.y)
+			hull.minVertex.y = data[i].y;
+		if (data[i].z < hull.minVertex.z)
+			hull.minVertex.z = data[i].z;
+	
+		if (data[i].x > hull.maxVertex.x)
+			hull.maxVertex.x = data[i].x;
+		if (data[i].y > hull.maxVertex.y)
+			hull.maxVertex.y = data[i].y;
+		if (data[i].z > hull.maxVertex.z)
+			hull.maxVertex.z = data[i].z;*/
+
+//	actualDataC_->setHull(hull);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	setHull(hull);
+}
 
     Plot::Plot()
     {
@@ -48,9 +137,9 @@ namespace Qwt3D
 
         setRotation(30,0,15);
         setScale(1,1,1);
-        setShift(0.15,0,0);
+       // setShift(0.15,0,0);
         setZoom(0.9);
-
+        showNormals(false);
 /*
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
@@ -152,9 +241,32 @@ namespace gr
                                     maxy	 
 	                            ); 
             //plot->updateNormals();
-            plot->coordinates()->axes[0].recalculateTics();
-            plot->coordinates()->axes[1].recalculateTics();
+           // plot->coordinates()->axes[0].recalculateTics();
+            //plot->coordinates()->axes[1].recalculateTics();
+
+            for (int i=0; i<4*3;i++)
+                    plot->coordinates()->axes[i].setAutoScale(false);
+
+
+
+/*
+        plot->setRotation(30,0,15);
+        plot->setScale(1,1,1);
+       // setShift(0.15,0,0);
+    plot->setIsolines(0);
+        plot->setZoom(0.9);
+        plot->showNormals(false);
+*/
             plot->repaint();
+
+
+
+
+
+
+
+
+
             repaint();
         }
 

@@ -190,6 +190,65 @@
     </param>
   </block>
   <block>
+    <key>analog_nbfm_tx</key>
+    <param>
+      <key>audio_rate</key>
+      <value>44100</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1216, 592)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>analog_nbfm_tx_0</value>
+    </param>
+    <param>
+      <key>max_dev</key>
+      <value>5e3</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>fh</key>
+      <value>-1.0</value>
+    </param>
+    <param>
+      <key>quad_rate</key>
+      <value>44100*2</value>
+    </param>
+    <param>
+      <key>tau</key>
+      <value>75e-6</value>
+    </param>
+  </block>
+  <block>
     <key>analog_random_source_x</key>
     <param>
       <key>alias</key>
@@ -205,11 +264,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(16, 200)</value>
+      <value>(80, 544)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -249,6 +308,65 @@
     </param>
   </block>
   <block>
+    <key>analog_wfm_tx</key>
+    <param>
+      <key>audio_rate</key>
+      <value>44100</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1192, 352)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>analog_wfm_tx_0</value>
+    </param>
+    <param>
+      <key>max_dev</key>
+      <value>75e3</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>fh</key>
+      <value>-1.0</value>
+    </param>
+    <param>
+      <key>quad_rate</key>
+      <value>44100*5</value>
+    </param>
+    <param>
+      <key>tau</key>
+      <value>75e-6</value>
+    </param>
+  </block>
+  <block>
     <key>blocks_message_debug</key>
     <param>
       <key>alias</key>
@@ -268,7 +386,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1384, 816)</value>
+      <value>(1448, 1160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -299,7 +417,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(360, 792)</value>
+      <value>(424, 1136)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -350,7 +468,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(832, 536)</value>
+      <value>(896, 880)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -405,7 +523,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(72, 792)</value>
+      <value>(136, 1136)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -437,6 +555,108 @@
     </param>
   </block>
   <block>
+    <key>blocks_wavfile_source</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>file</key>
+      <value>/tmp/music2.wav</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(880, 632)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_wavfile_source_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>nchan</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>repeat</key>
+      <value>True</value>
+    </param>
+  </block>
+  <block>
+    <key>blocks_wavfile_source</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>file</key>
+      <value>/tmp/music2.wav</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(888, 400)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_wavfile_source_0_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>nchan</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>repeat</key>
+      <value>True</value>
+    </param>
+  </block>
+  <block>
     <key>digital_gfsk_mod</key>
     <param>
       <key>bt</key>
@@ -456,11 +676,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(344, 340)</value>
+      <value>(408, 684)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -519,7 +739,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(344, 224)</value>
+      <value>(408, 560)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -570,7 +790,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>excess_bw</key>
@@ -578,7 +798,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(344, 480)</value>
+      <value>(408, 824)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -618,6 +838,140 @@
     </param>
   </block>
   <block>
+    <key>digital_qam_mod</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>differential</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>excess_bw</key>
+      <value>0.35</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(400, 336)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>mod_code</key>
+      <value>"gray"</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>digital_qam_mod_0</value>
+    </param>
+    <param>
+      <key>log</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>constellation_points</key>
+      <value>16</value>
+    </param>
+    <param>
+      <key>samples_per_symbol</key>
+      <value>16</value>
+    </param>
+    <param>
+      <key>verbose</key>
+      <value>False</value>
+    </param>
+  </block>
+  <block>
+    <key>digital_qam_mod</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>differential</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>excess_bw</key>
+      <value>0.35</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(392, 136)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>mod_code</key>
+      <value>"gray"</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>digital_qam_mod_0_0</value>
+    </param>
+    <param>
+      <key>log</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>constellation_points</key>
+      <value>64</value>
+    </param>
+    <param>
+      <key>samples_per_symbol</key>
+      <value>16</value>
+    </param>
+    <param>
+      <key>verbose</key>
+      <value>False</value>
+    </param>
+  </block>
+  <block>
     <key>inspector_fam</key>
     <param>
       <key>alias</key>
@@ -637,7 +991,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(776, 776)</value>
+      <value>(840, 1120)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -696,7 +1050,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1096, 496)</value>
+      <value>(1160, 840)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -751,7 +1105,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1400, 508)</value>
+      <value>(1464, 852)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -779,6 +1133,12 @@
     </param>
   </block>
   <connection>
+    <source_block_id>analog_nbfm_tx_0</source_block_id>
+    <sink_block_id>blocks_throttle_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>analog_random_source_x_0</source_block_id>
     <sink_block_id>digital_gfsk_mod_0</sink_block_id>
     <source_key>0</source_key>
@@ -793,6 +1153,24 @@
   <connection>
     <source_block_id>analog_random_source_x_0</source_block_id>
     <sink_block_id>digital_psk_mod_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>analog_random_source_x_0</source_block_id>
+    <sink_block_id>digital_qam_mod_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>analog_random_source_x_0</source_block_id>
+    <sink_block_id>digital_qam_mod_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>analog_wfm_tx_0</source_block_id>
+    <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -815,6 +1193,18 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>blocks_wavfile_source_0</source_block_id>
+    <sink_block_id>analog_nbfm_tx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_wavfile_source_0_0</source_block_id>
+    <sink_block_id>analog_wfm_tx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>digital_gfsk_mod_0</source_block_id>
     <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
@@ -828,6 +1218,18 @@
   </connection>
   <connection>
     <source_block_id>digital_psk_mod_0</source_block_id>
+    <sink_block_id>blocks_throttle_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>digital_qam_mod_0</source_block_id>
+    <sink_block_id>blocks_throttle_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>digital_qam_mod_0_0</source_block_id>
     <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>

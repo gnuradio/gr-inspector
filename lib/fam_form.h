@@ -34,6 +34,8 @@ namespace Qwt3D
     class Plot : public SurfacePlot
     {
     public:
+        void adjustScales();
+        void calculateHull();
         Plot();
     };
 
