@@ -58,7 +58,6 @@ namespace gr {
       d_use_file = taps_file;
       d_precalc = file_path;
       d_buffer_len = 6400; // good empirical value
-      d_queue = new messages::msg_queue(0);
 
       // message port
       message_port_register_out(pmt::intern("sig_out"));
@@ -72,7 +71,7 @@ namespace gr {
      */
     signal_separator_c_impl::~signal_separator_c_impl() {
       free_allocation();
-      delete d_queue;
+      //delete d_queue;
     }
 
     //</editor-fold>
@@ -81,10 +80,9 @@ namespace gr {
 
     void
     signal_separator_c_impl::free_allocation() {
-      //gr::thread::scoped_lock guard(d_mutex);
       // delete all filters
-      for(std::vector<filter::kernel::fir_filter_ccf*>::iterator it = d_filterbank.begin();
-          it != d_filterbank.end(); ++it) {
+      for(std::vector<filter::kernel::fir_filter_ccf*>::iterator it =
+              d_filterbank.begin(); it != d_filterbank.end(); ++it) {
         delete *it;
       }
       // delete histroy buffers
@@ -111,11 +109,6 @@ namespace gr {
           GR_LOG_WARN(d_logger,
                       "Firdes check failed: 0 < cutoff <= samp_rate/2");
         }
-		/*
-        if (d_buffer_stage == 0) {
-          d_ntaps = taps.size();
-        }
-		*/
       }
       else {
         cutoff = cutoff/d_samp_rate; // normize cutoff
@@ -125,7 +118,6 @@ namespace gr {
         else {
           taps = d_precalc.upper_bound(cutoff)->second;
         }
-        //d_ntaps = taps.size();
       }
 
       return taps;
@@ -134,7 +126,6 @@ namespace gr {
     // build filter and pass pointer and other calculations in vectors
     void
     signal_separator_c_impl::build_filter(unsigned int signal) {
-      //gr::thread::scoped_lock guard(d_mutex);
       // calculate signal parameters
       double freq_center = d_rf_map.at(signal).at(0);
       double bandwidth = d_rf_map.at(signal).at(1);
@@ -177,13 +168,12 @@ namespace gr {
 
     void
     signal_separator_c_impl::handle_msg(pmt::pmt_t msg) {
-      d_queue->insert_tail(msg);
-      //gr::thread::scoped_lock guard(d_mutex);
-      // free allocated space
-      //free_allocation();
-      //unpack_message(msg);
+      gr::thread::scoped_lock guard(d_mutex);
+      //free allocated space
+      free_allocation();
+      unpack_message(msg);
       // calculate filters
-      //rebuild_all_filters();
+      rebuild_all_filters();
     }
 
     void
@@ -241,17 +231,13 @@ namespace gr {
     signal_separator_c_impl::apply_filter(int i) {
       // size of filter output
       int size = (int)((float)(d_buffer_len)/(float)d_decimations[i]);
-      //std::cout << "size = " << size << ", buffer = " << d_buffer_len << ", decim = " << d_decimations[i] << std::endl;
-      //std::cout << "history size = " << d_history_buffer.size() << std::endl;
       // allocate enough space for result
       d_temp_buffer = (gr_complex*)volk_malloc(size*sizeof(gr_complex),
               volk_get_alignment());
 
       // copied from xlating fir
-      //std::cout << "d_buffer_stage = " << d_buffer_stage << std::endl;
       unsigned j = 0;
       for (int k = 0; k < size; k++) {
-        //std::cout << i << "/" << j << std::endl;
         d_temp_buffer[k] = d_filterbank[i]->filter(&d_history_buffer[i][j]);
         j += d_decimations[i];
       }
@@ -278,12 +264,6 @@ namespace gr {
       gr::thread::scoped_lock guard(d_mutex);
       const gr_complex *in = (const gr_complex *) input_items[0];
 
-      if(!d_queue->empty_p()) {
-        free_allocation();
-        unpack_message(d_queue->delete_head());
-        rebuild_all_filters();
-      }
-
       // no message received -> nothing to do
       if(d_buffer_stage == 0) {
         // throw away all items, we can't use them now
@@ -292,9 +272,6 @@ namespace gr {
       }
       // message received, so let's allocate all the needed memory
       else if(d_buffer_stage == 1) {
-
-        //std::cout << "allocating " << (d_ntaps[i]+d_buffer_len-1) << std::endl;
-
         // allocate history buffer for each signal with length d_ntaps + d_buffer_len
         for(int i = 0; i < d_history_buffer.size(); i++) {
           d_history_buffer[i] = (gr_complex*)volk_malloc((d_ntaps[i]+d_buffer_len-1)*sizeof(gr_complex),

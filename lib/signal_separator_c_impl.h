@@ -42,8 +42,6 @@ namespace gr {
 
       filter::firdes::win_type d_window;
 
-      messages::msg_queue *d_queue;
-
       std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
       std::vector<std::vector<float> > d_rf_map;
 

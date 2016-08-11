@@ -31,7 +31,6 @@ except ImportError:
 	pass
 
 # import any pure python here
-from sync_prototype_cc import sync_prototype_cc
 
 
 

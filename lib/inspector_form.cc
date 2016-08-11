@@ -25,6 +25,7 @@
 #include <cmath>
 #include <qwt_transform.h>
 #include <pmt/pmt.h>
+#include <qwt_plot_canvas.h>
 
 
 namespace gr {
@@ -74,6 +75,7 @@ namespace gr {
       d_plot->setAxisTitle(QwtPlot::yLeft, "dB");
       d_plot->setAxisScale(QwtPlot::yLeft, -120, 30);
       d_plot->setCanvasBackground(QColor(30,30,30));
+      ((QwtPlotCanvas*)d_plot->canvas())->setPaintAttribute(QwtPlotCanvas::ImmediatePaint, true);
       //d_plot->show();
       // Do replot
       d_plot->replot();
@@ -364,7 +366,6 @@ namespace gr {
 
       // Do replot
       d_plot->replot();
-      d_plot->repaint();
     }
 
   }
