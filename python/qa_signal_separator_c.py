@@ -22,7 +22,6 @@
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks, analog, filter
 import inspector_swig as inspector_test
-import inspector
 import pmt
 import numpy
 import time
@@ -48,9 +47,9 @@ class qa_signal_separator_c (gr_unittest.TestCase):
 
     def test_001_t (self):
         src = blocks.vector_source_c(range(10000), False, 1, [])
-        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100, False, inspector.map_float_vector({0.0:[0.0]}))
+        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100, False, inspector_test.map_float_vector({0.0:[0.0]}))
         vec_sink = blocks.vector_sink_c(1)
-        ext = inspector.signal_extractor_c(0)
+        ext = inspector_test.signal_extractor_c(0)
         snk = blocks.vector_sink_c(1)
         # pack message
         msg = pmt.make_vector(1, pmt.PMT_NIL)
