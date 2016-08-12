@@ -42,10 +42,10 @@ namespace gr {
       d_fft_len = fft_len;
       // Setup GUI
       d_buffer = buffer;
-      d_interval = 250;
+      d_interval = 250; // update interval
       d_rf_map = rf_map;
       d_manual = manual;
-      d_marker_count = 30;
+      d_marker_count = 30; // max number of signal markers
       d_msg_queue = msg_queue;
       d_rf_unit = rf_unit;
 
@@ -53,30 +53,36 @@ namespace gr {
 
       // spawn all QT stuff
       d_layout = new QGridLayout(this);
+
       d_plot = new QwtPlot(this); // make main plot
-      d_plot->setMouseTracking(true);
+      d_plot->setMouseTracking(true); // needed for drag & drop
       d_curve = new QwtPlotCurve(); // make curve plot
+
       d_curve->attach(d_plot); // attach curve to plot
       d_curve->setPen(Qt::cyan, 1); // curve color
       d_symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(QColor(Qt::blue)),
                                QPen(QColor(Qt::blue)), QSize(7,7));
       d_curve->setSymbol(d_symbol);
+
       d_grid = new QwtPlotGrid();
-      d_zoomer = new Zoomer(QwtPlot::xBottom, QwtPlot::yLeft, d_plot->canvas());
       d_grid->setPen(QPen(QColor(60,60,60),0.5, Qt::DashLine));
-      d_grid->attach(d_plot);
+      d_grid->attach(d_plot); // add grid to plot
+
       d_layout->addWidget(d_plot, 0, 0);
       d_layout->setColumnStretch(0, 1);
       setLayout(d_layout);
+      d_zoomer = new Zoomer(QwtPlot::xBottom, QwtPlot::yLeft, d_plot->canvas());
+
       // Plot axis and title
       std::string label_title = "Inspector GUI";
       d_plot->setTitle(QwtText(label_title.c_str()));
 
       d_plot->setAxisTitle(QwtPlot::yLeft, "dB");
-      d_plot->setAxisScale(QwtPlot::yLeft, -120, 30);
+      d_plot->setAxisScale(QwtPlot::yLeft, -120, 30); // should work for all signals
       d_plot->setCanvasBackground(QColor(30,30,30));
+      // Set this to avoid segfaults due to synchronous Qt plotting
       ((QwtPlotCanvas*)d_plot->canvas())->setPaintAttribute(QwtPlotCanvas::ImmediatePaint, true);
-      //d_plot->show();
+
       // Do replot
       d_plot->replot();
 
@@ -96,7 +102,7 @@ namespace gr {
         d_markers.push_back(marker);
       }
 
-      d_manual_cb = new QCheckBox("Manual", d_plot);
+      d_manual_cb = new QCheckBox("Manual", d_plot); // checkbox for manual signal selection
       d_manual_cb->setGeometry(QRect(10,10,85,20)),
       connect(d_manual_cb, SIGNAL(stateChanged(int)), this, SLOT(manual_cb_clicked(int)));
       d_manual_cb->setChecked(*d_manual);
@@ -120,6 +126,7 @@ namespace gr {
 
     void
     inspector_form::spawn_signal_selector() {
+      // initial marker when manual is selected (covers 1/2 bw)
       detach_markers();
       d_markers[0]->set_marker(0, *d_rf_unit*(d_zoomer->zoomRect().x()+
               d_zoomer->zoomRect().width()/2)
@@ -129,6 +136,7 @@ namespace gr {
 
     void
     inspector_form::manual_cb_clicked(int state) {
+      // slot to enable manual signal selection
       *d_manual = static_cast<bool>(state);
       if(*d_manual) {
         spawn_signal_selector();
@@ -141,10 +149,10 @@ namespace gr {
 
     void
     inspector_form::detach_markers() {
+      // let markers disappear
       d_plot->detachItems( QwtPlotItem::Rtti_PlotMarker, false);
       d_plot->detachItems( QwtPlotItem::Rtti_PlotZone, false);
     }
-
 
     void
     inspector_form::resizeEvent( QResizeEvent * event ){
@@ -153,17 +161,21 @@ namespace gr {
 
     void
     inspector_form::set_axis_x(float start, float stop) {
+      // calc axis stuff
       d_axis_x.clear();
-      d_axis_x.push_back((d_cfreq + start)/ *d_rf_unit);
-      d_axis_x.push_back((stop-start)/d_fft_len/ *d_rf_unit);
-      d_axis_x.push_back((d_cfreq + stop)/ *d_rf_unit);
+      d_axis_x.push_back((d_cfreq + start)/ *d_rf_unit); // start
+      d_axis_x.push_back((stop-start)/d_fft_len/ *d_rf_unit); // step
+      d_axis_x.push_back((d_cfreq + stop)/ *d_rf_unit); // stop
 
       d_plot->setAxisScale(QwtPlot::xBottom, d_axis_x[0], d_axis_x[2]);
 
+      // build frequency vector
       for(int i = 0; i < d_fft_len; i++) {
         d_freq[i] = d_axis_x[0] + i*d_axis_x[1];
       }
       refresh();
+
+      // set zoom base to new axis width
       QRectF zbase = d_zoomer->zoomBase();
       d_zoomer->zoom(zbase);
       d_zoomer->setZoomBase(zbase);
@@ -202,7 +214,8 @@ namespace gr {
 
     void
     inspector_form::mousePressEvent(QMouseEvent *eventPress) {
-      // check if mouse clicked in manual mode withoud CTRL key
+      // move or resize manual signal marker
+      // check if mouse clicked in manual mode without CTRL key
       if(*d_manual && eventPress->button() == Qt::LeftButton &&
               eventPress->modifiers() != Qt::ControlModifier) {
         // check left boundry
@@ -282,12 +295,14 @@ namespace gr {
 
     float
     inspector_form::freq_to_x(float freq) {
+      // convert frequency value to pixel value
       float offset = this->width()-d_plot->canvas()->width();
       return d_plot->transform(QwtPlot::xBottom, freq)+offset;
     }
 
     float
     inspector_form::x_to_freq(float x) {
+      // convert pixel value to frequency value
       float offset = this->width()-d_plot->canvas()->width();
       return d_plot->invTransform(QwtPlot::xBottom, x-offset);
     }

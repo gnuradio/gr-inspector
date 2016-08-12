@@ -1,6 +1,6 @@
 # The Inspector (gr-inspector)
 <center>
-![gr-inspector logo](docs/doxygen/images/logo_body.png "The Inspector")
+![gr-inspector logo](docs/doxygen/images/logo_body_big.png "The Inspector")
 </center>
 ## Intorduction
 This GNU Radio module is developed to realize signal analysis abilities in typical block-structure. The module is capable of the following:
