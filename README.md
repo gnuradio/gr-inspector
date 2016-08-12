@@ -2,12 +2,13 @@
 <center>
 ![gr-inspector logo](docs/doxygen/images/logo_body_big.png "The Inspector")
 </center>
-## Intorduction
+## Introduction
 This GNU Radio module is developed to realize signal analysis abilities in typical block-structure. The module is capable of the following:
-
 - Energy detection of signals
 - Filtering of detected signals
 - OFDM parameter estimation (carrier spacing, symbol time)
+- Blind OFDM synchronization
+- Resampling of signals to constant rate
 
 ## Installation
 
@@ -28,12 +29,11 @@ make -j4
 sudo make install
 ```
 
-This module is still under development. Please let me know if you run into any issues on the master branch.
-
 ## Usage
 Get inspired by the examples. There are flowgraphs for each block that should explain how to use them.
 
-## Blocks
+For detailed information about each block, visit the Doxygen HTML pages.
+## Brief block description
 
 #### Signal Detector
 Performs an energy detection on the input signal. A threshold in dB can be set or an autmatic threshold calculation can be used.
@@ -47,8 +47,13 @@ Takes the signal info from the previous blocks and performs a down-mixing, filte
 #### Signal Extractor
 Adapter block to extract the samples of one signal out of the messages from the Signal Separator. Output is again a complex stream.
 
+Resampling can be used to assure a constant output sample rate of the stream. (Needed for FM demod for instance.)
+
 #### OFDM Estimator
 Estimates the parameters subcarrier spacing, symbol time, FFT size and cyclic prefix length for a input signal. The signal should not be oversampled for this block.
+
+#### OFDM Synchronizer
+After OFDM parameter estimation, the signal is frequency synced and symbol beginnings are marked with stream tags.
 
 ## Google Summer of Code
 This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:
@@ -60,6 +65,8 @@ This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. 
 - Doxygen documentation
 
 Read the full proposal [here](https://github.com/sbmueller/gsoc-proposal/blob/master/sigint-proposal.pdf).
+
+This project was developed in cooperation with the [Communications Engineering Lab](http://www.cel.kit.edu/) of the Karlsruhe Institute of Technology.
 
 The modulation classification is developed by @chrisruk during ESA Summer of Code in Space program.
 
