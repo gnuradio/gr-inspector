@@ -190,6 +190,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(584, 1048)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>sym</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>3</value>
+    </param>
+  </block>
+  <block>
     <key>variable_qtgui_range</key>
     <param>
       <key>comment</key>
@@ -197,7 +224,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>-52</value>
+      <value>-65</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -272,7 +299,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(384, 400)</value>
+      <value>(40, 432)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -327,7 +354,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -413,7 +440,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(216, 824)</value>
+      <value>(816, 456)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -468,7 +495,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1464, 664)</value>
+      <value>(1448, 664)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -500,120 +527,6 @@
     </param>
   </block>
   <block>
-    <key>digital_gfsk_mod</key>
-    <param>
-      <key>bt</key>
-      <value>0.35</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1152, 460)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>digital_gfsk_mod_0</value>
-    </param>
-    <param>
-      <key>log</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>samples_per_symbol</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>sensitivity</key>
-      <value>1.0</value>
-    </param>
-    <param>
-      <key>verbose</key>
-      <value>False</value>
-    </param>
-  </block>
-  <block>
-    <key>digital_gmsk_mod</key>
-    <param>
-      <key>bt</key>
-      <value>0.35</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1160, 328)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>digital_gmsk_mod_0</value>
-    </param>
-    <param>
-      <key>log</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>samples_per_symbol</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>verbose</key>
-      <value>False</value>
-    </param>
-  </block>
-  <block>
     <key>digital_psk_mod</key>
     <param>
       <key>alias</key>
@@ -641,7 +554,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(32, 600)</value>
+      <value>(336, 408)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -673,7 +586,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>7</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -681,7 +594,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_FAM</key>
+    <key>inspector_fam</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -696,11 +609,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1680, 888)</value>
+      <value>(1584, 848)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -708,11 +621,11 @@
     </param>
     <param>
       <key>graphfile</key>
-      <value>/tmp/sess/00000001</value>
+      <value>/tmp/fam/00000001</value>
     </param>
     <param>
       <key>id</key>
-      <value>inspector_FAM_0</value>
+      <value>inspector_fam_0</value>
     </param>
     <param>
       <key>typev</key>
@@ -948,7 +861,7 @@
     </param>
     <param>
       <key>oversample</key>
-      <value>1</value>
+      <value>10</value>
     </param>
     <param>
       <key>samp_rate</key>
@@ -999,7 +912,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(744, 888)</value>
+      <value>(760, 800)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1083,25 +996,13 @@
   </block>
   <connection>
     <source_block_id>analog_random_source_x_0</source_block_id>
-    <sink_block_id>digital_gfsk_mod_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>analog_random_source_x_0</source_block_id>
-    <sink_block_id>digital_gmsk_mod_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>analog_random_source_x_0</source_block_id>
     <sink_block_id>digital_psk_mod_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
-    <sink_block_id>inspector_FAM_0</sink_block_id>
+    <sink_block_id>inspector_fam_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1124,25 +1025,13 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>digital_gfsk_mod_0</source_block_id>
-    <sink_block_id>blocks_throttle_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>digital_gmsk_mod_0</source_block_id>
-    <sink_block_id>blocks_throttle_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
     <source_block_id>digital_psk_mod_0</source_block_id>
     <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_FAM_0</source_block_id>
+    <source_block_id>inspector_fam_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>classification</source_key>
     <sink_key>print</sink_key>

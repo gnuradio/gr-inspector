@@ -32,7 +32,7 @@
 namespace Qwt3D
 {
 
-
+/*
 void Plot::adjustScales(){
     ParallelEpiped hull = this->hull();
 
@@ -61,7 +61,7 @@ void Plot::adjustScales(){
     coordinates()->axes[Y4].setTicLength(3*xxScale, xxScale);
 
 }
-
+*/
 
 
 
@@ -173,7 +173,7 @@ namespace gr
             plot = new Qwt3D::Plot() ;
             QHBoxLayout layout;
             layout.addWidget(plot);
-            plot->resize(800,600);
+            plot->resize(1024,1024);
 
            // double data[10][10] = { {0.0} }; // all elements initialized to 0.
 

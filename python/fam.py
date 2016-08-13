@@ -36,7 +36,8 @@ P = 256  # number of new items needed to calculate estimate
 L = 2
 
 ## Modulation schemes
-MOD = ["fsk", "qam16", "qam64", "2psk", "4psk", "8psk", "gmsk", "wbfm", "nfm"]
+#MOD = ["fsk", "qam16", "qam64", "2psk", "4psk", "8psk", "gmsk", "wbfm", "nfm"]
+MOD = ["fsk", "qam16", "qam64", "psk","gmsk", "wbfm", "nfm"] 
 
 ## GNU Radio block, for fam classification
 class fam(gr.sync_block):

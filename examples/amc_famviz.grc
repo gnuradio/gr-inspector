@@ -190,6 +190,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(928, 8)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>sym</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>3</value>
+    </param>
+  </block>
+  <block>
     <key>analog_nbfm_tx</key>
     <param>
       <key>audio_rate</key>
@@ -390,7 +417,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(696, 1064)</value>
+      <value>(1032, 760)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -594,7 +621,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(360, 120)</value>
+      <value>(352, 120)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -669,7 +696,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>sensitivity</key>
@@ -728,7 +755,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -795,74 +822,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
-    </param>
-    <param>
-      <key>verbose</key>
-      <value>False</value>
-    </param>
-  </block>
-  <block>
-    <key>digital_psk_mod</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>differential</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>excess_bw</key>
-      <value>0.35</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(312, 960)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>mod_code</key>
-      <value>"gray"</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>digital_psk_mod_0_0</value>
-    </param>
-    <param>
-      <key>log</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>constellation_points</key>
-      <value>8</value>
-    </param>
-    <param>
-      <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -991,7 +951,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1400, 508)</value>
+      <value>(1528, 508)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1039,12 +999,6 @@
   <connection>
     <source_block_id>analog_random_source_x_0</source_block_id>
     <sink_block_id>digital_psk_mod_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>analog_random_source_x_0</source_block_id>
-    <sink_block_id>digital_psk_mod_0_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1104,12 +1058,6 @@
   </connection>
   <connection>
     <source_block_id>digital_psk_mod_0</source_block_id>
-    <sink_block_id>blocks_throttle_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>digital_psk_mod_0_0</source_block_id>
     <sink_block_id>blocks_throttle_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
