@@ -190,6 +190,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(928, 16)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>sym</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>3</value>
+    </param>
+  </block>
+  <block>
     <key>analog_nbfm_tx</key>
     <param>
       <key>audio_rate</key>
@@ -386,7 +413,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1448, 1160)</value>
+      <value>(1536, 1112)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -417,7 +444,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(424, 1136)</value>
+      <value>(512, 1088)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -523,7 +550,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(136, 1136)</value>
+      <value>(224, 1088)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -676,7 +703,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -704,7 +731,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>sensitivity</key>
@@ -763,7 +790,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -790,7 +817,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>excess_bw</key>
@@ -830,7 +857,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -897,7 +924,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -964,7 +991,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -991,7 +1018,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(840, 1120)</value>
+      <value>(928, 1072)</value>
     </param>
     <param>
       <key>_rotation</key>
