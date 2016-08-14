@@ -46,7 +46,7 @@ namespace Qwt3D
         hull.maxVertex.y = maxy;
 
         hull.minVertex.z = 0;
-        hull.maxVertex.z = 50 ; //maxz;
+        hull.maxVertex.z = 10 ; //maxz;
 	
         setHull(hull);
     }
@@ -176,9 +176,9 @@ namespace gr
                     plot->coordinates()->axes[i].setAutoScale(false);
 
 
-        plot->setRotation(15,0,15);
-        plot->setScale(1.0,1.0,1.0);
-        plot->setZoom(0.7);
+            plot->setRotation(15,0,15);
+            plot->setScale(1.0,1.0,1.0);
+            plot->setZoom(0.7);
             /*
             plot->setRotation(30,0,15);
             plot->setScale(1,1,1);

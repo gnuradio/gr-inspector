@@ -92,28 +92,18 @@ namespace gr
                           gr_vector_void_star &output_items)
         {
             const float *in = (const float *) input_items[0];
-            printf("got sig %d\n",noutput_items);
+            printf("Output items %d\n",noutput_items);
             fflush(stdout);
 
+            for(int i=0; i<noutput_items; i++) {
             
+                //float *z = in[i];
+    
+            }
+            
+            d_main_gui->update(in);
 
-
-
-
-
-
-             d_main_gui->update(in);
-
-
-
-
-
-
-
-
-
-
-
+            consume_each (noutput_items);
 
             return noutput_items;
         }
