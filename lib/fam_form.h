@@ -37,6 +37,15 @@ namespace Qwt3D
         void adjustScales();
         void calculateHull();
         Plot();
+
+        int minx;
+        int miny;
+
+        int maxx;
+        int maxy;
+
+        int maxz;
+
     };
 
 }

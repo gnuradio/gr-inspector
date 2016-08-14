@@ -39,14 +39,14 @@ namespace Qwt3D
 
         ParallelEpiped hull(Triple(DBL_MAX,DBL_MAX,DBL_MAX),Triple(-DBL_MAX,-DBL_MAX,-DBL_MAX));
 
-        hull.minVertex.x = 0;
-        hull.maxVertex.x = 10;
+        hull.minVertex.x = minx;
+        hull.maxVertex.x = maxx;
 
-        hull.minVertex.y = 0;
-        hull.maxVertex.y = 10;
+        hull.minVertex.y = miny;
+        hull.maxVertex.y = maxy;
 
         hull.minVertex.z = 0;
-        hull.maxVertex.z = 10;
+        hull.maxVertex.z = 50 ; //maxz;
 	
         setHull(hull);
     }
@@ -60,11 +60,12 @@ namespace Qwt3D
         rosenbrock.setMinZ(-10);
         rosenbrock.create();*/
 
-        setRotation(30,0,15);
-        setScale(1,1,1);
+        setRotation(5,0,5);
+        //setScale(1.2,1.2,1.2);
+        setZoom(5.0);
         // setShift(0.15,0,0);
-        setZoom(0.9);
-        showNormals(false);
+        //setZoom(0.9);
+        //showNormals(false);
         /*
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
@@ -96,6 +97,7 @@ namespace gr
             layout.addWidget(plot);
             plot->resize(1024,1024);
 
+            /*
             unsigned int columns = 10;
             unsigned int rows = 10;
 
@@ -111,7 +113,7 @@ namespace gr
 		                            maxx,
 		                            miny,
                                     maxy	 
-	                            ); 	
+	                            ); 	*/
 
             setLayout(&layout);
         }
@@ -137,14 +139,27 @@ namespace gr
                 dat[i] = new double[columns];
                 
             int z = 0.0;
+
+            double maxz = 0.0;
             for(int y=0;y<columns;y++){
-            for(int x=0;x<rows;x++){
-                dat[x][y] = d[z];
-                z++;
-            }   
+                for(int x=0;x<rows;x++){
+                    if (d[z] > maxz)
+                        maxz = d[z];
+                        
+                    dat[x][y] = d[z];
+                    z++;
+                }   
             }
 
-            double minx=0.0,maxx=10.0,miny=0,maxy=10.0;
+            double minx=0.0,maxx=10,miny=0,maxy=10;
+
+            plot->minx = minx;
+            plot->maxx = maxx;
+
+            plot->miny = miny;
+            plot->maxy = maxy;
+
+            plot->maxz = maxz;
             plot->loadFromData 	(   dat,
 			                        rows,
 		  	                        columns,
@@ -154,12 +169,16 @@ namespace gr
                                     maxy	 
 	                            ); 
             //plot->updateNormals();
-           // plot->coordinates()->axes[0].recalculateTics();
+            //plot->coordinates()->axes[0].recalculateTics();
             //plot->coordinates()->axes[1].recalculateTics();
 
             for (int i=0; i<4*3;i++)
                     plot->coordinates()->axes[i].setAutoScale(false);
 
+
+        plot->setRotation(15,0,15);
+        plot->setScale(1.0,1.0,1.0);
+        plot->setZoom(0.7);
             /*
             plot->setRotation(30,0,15);
             plot->setScale(1,1,1);
