@@ -2,7 +2,7 @@
 <center>
 ![gr-inspector logo](docs/doxygen/images/logo_body.png "The Inspector")
 </center>
-## Intorduction
+## Introduction
 This GNU Radio module is developed to realize signal analysis abilities in typical block-structure. The module is capable of the following:
 
 - Energy detection of signals
