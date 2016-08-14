@@ -95,12 +95,6 @@ namespace gr
             printf("Output items %d\n",noutput_items);
             fflush(stdout);
 
-            for(int i=0; i<noutput_items; i++) {
-            
-                //float *z = in[i];
-    
-            }
-            
             d_main_gui->update(in);
 
             consume_each (noutput_items);
