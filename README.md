@@ -14,7 +14,7 @@ This GNU Radio module is developed to realize signal analysis abilities in typic
 
 To install the Inspector, the following dependencies are required:
 
-- GNU Radio core
+- [GNU Radio](https://github.com/gnuradio/gnuradio)
 - gr-analog, gr-blocks, gr-channel, gr-filter
 - QT4
 - QWT 6.1.0
@@ -22,6 +22,8 @@ To install the Inspector, the following dependencies are required:
 Install by the following shell commands:
 
 ```
+git clone git@github.com:gnuradio/gr-inspector.git
+cd gr-inspector
 mkdir build
 cd build
 cmake ..
@@ -69,6 +71,9 @@ Read the full proposal [here](https://github.com/sbmueller/gsoc-proposal/blob/ma
 This project was developed in cooperation with the [Communications Engineering Lab](http://www.cel.kit.edu/) of the Karlsruhe Institute of Technology.
 
 The modulation classification is developed by @chrisruk during ESA Summer of Code in Space program.
+
+## License
+This software is Copyright © 2016 Sebastian Müller. It is free software, and is released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) License.
 
 ## Contact
 Maintainer of this module:
