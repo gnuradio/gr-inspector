@@ -1,6 +1,6 @@
 <div align="center">
 
-![gr-inspector logo](docs/doxygen/images/logo_body_big.png "The Inspector")
+<img src="https://github.com/gnuradio/gr-inspector/raw/dev/docs/doxygen/images/logo_body_big.png" />
 
 </div>
 
