@@ -51,9 +51,4 @@
     <name>out</name>
     <type>complex</type>
   </source>
-  <doc>
-Signal Extractor block is able to extract signal samples for specified signal out of message passed by Signal Separator block. These messages contain the samples of all detected signals. This block only passes the ones beloging to the specified signal number as a complex stream. This way, custom signal chains can be appended after the inspector blocks.
-
-If the resample option is used, the block will try to resample the input samples based on the message input from the map port to the desired output sample rate. An oversampling factor can be taken into account, if the input samples are oversampled by the signal separator.
-  </doc>
 </block>
