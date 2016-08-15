@@ -161,16 +161,8 @@ namespace gr {
       // calc fft to periodogram
       volk_32fc_s32f_x2_power_spectral_density_32f(pxx, d_fft->get_outbuf(),
       d_fft_len, 1.0, d_fft_len);
-      //volk_32fc_magnitude_squared_32f(pxx, d_fft->get_outbuf(),
-                                      //d_fft_len);
-      //volk_32f_s32f_normalize(pxx, d_fft_len, d_fft_len);
-
-      // calculate in dB
-      //volk_32f_log2_32f(pxx, pxx, d_fft_len);
-      //volk_32f_s32f_normalize(pxx, log2(10)/10, d_fft_len);
 
       // do fftshift
-
       d_tmpbuflen = static_cast<unsigned int>(floor(d_fft_len / 2.0));
       memcpy(d_tmpbuf, &pxx[0], sizeof(float) * (d_tmpbuflen + 1));
       memcpy(&pxx[0], &pxx[d_fft_len - d_tmpbuflen],

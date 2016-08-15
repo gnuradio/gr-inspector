@@ -1,7 +1,11 @@
-# The Inspector (gr-inspector)
-<center>
+<div align="center">
+
 ![gr-inspector logo](docs/doxygen/images/logo_body_big.png "The Inspector")
-</center>
+
+</div>
+
+# The Inspector (gr-inspector)
+
 ## Introduction
 This GNU Radio module is developed to realize signal analysis abilities in typical block-structure. The module is capable of the following:
 - Energy detection of signals

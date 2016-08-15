@@ -83,8 +83,9 @@ namespace gr {
                             sizeof(gr_complex), volk_get_alignment());
       gr_complex Rxx;
 
+      // shift equal to fft length
       volk_32fc_x2_multiply_conjugate_32fc(temp, &in[d_fft_len], in, len-d_fft_len);
-
+      // sum up over cyclic prefix length
       for(int i = 0; i < len-d_fft_len-d_cp_len; i++) {
         Rxx = gr_complex(0,0);
         for(int k = 0; k < d_cp_len; k++) {
@@ -107,27 +108,30 @@ namespace gr {
         return noutput_items;
       }
 
+      // skip work function if too freq items provided
       if(noutput_items < d_min_items) {
         return 0;
       }
 
-      // Do <+signal processing+>
       std::vector<gr_complex> r = autocorr(in, noutput_items);
       float r_mag[noutput_items-d_fft_len-d_cp_len];
       volk_32fc_magnitude_32f(r_mag, &r[0], noutput_items-d_fft_len-d_cp_len);
       std::vector<float> r_vec(r_mag, r_mag+noutput_items-d_fft_len-d_cp_len);
+      // calculate argmax
       int k = std::distance(r_vec.begin(),
                             std::max_element(r_vec.begin(), r_vec.begin()+d_fft_len+d_cp_len));
-      float n = std::arg(r[k]);
+      float n = std::arg(r[k]); // phase at argmax
+      // set frequency offset compensation
       d_rotator.set_phase_incr(std::exp(gr_complex(0,-n/d_fft_len)));
 
-      //std::cout << "n = " << n*d_samp_rate/(2*d_fft_len*M_PI) << std::endl;
+      // correct frequency
       for(int i = 0; i < noutput_items; i++) {
         out[i] = d_rotator.rotate(in[i]);
       }
       if(d_tag_pos == -1) {
         d_tag_pos = k;
       }
+      // add stream tags
       while(d_tag_pos < nitems_written(0)+noutput_items) {
         add_item_tag(0, d_tag_pos, pmt::intern("symbol"), pmt::from_long(d_fft_len+d_cp_len));
         d_tag_pos += d_fft_len+d_cp_len;

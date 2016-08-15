@@ -62,6 +62,7 @@ namespace gr {
       set_msg_handler(pmt::intern("map_in"), boost::bind(
               &qtgui_inspector_sink_vf_impl::handle_msg, this, _1));
 
+      // analysis port logic
       if(msgports == 1) {
         message_port_register_in(pmt::intern("analysis_in"));
         set_msg_handler(pmt::intern("analysis_in"), boost::bind(
@@ -138,7 +139,6 @@ namespace gr {
       unpack_message(msg);
       d_main_gui->msg_received();
 
-
       // bypass block if no manual signal selection
       if(!d_manual){
         message_port_pub(pmt::intern("map_out"), msg);
@@ -191,7 +191,7 @@ namespace gr {
       }
     }
 
-
+    // copied from gr-qtgui
 #ifdef ENABLE_PYTHON
     PyObject*
     qtgui_inspector_sink_vf_impl::pyqwidget()
@@ -214,12 +214,12 @@ namespace gr {
                                        gr_vector_void_star &output_items)
     {
       const float *in = (const float*) input_items[0];
-      // Do <+signal processing+>
+      // push samples into buffer for QWidget
       d_buffer.clear();
       for(int i = 0; i < d_fft_len; i++) {
         d_buffer.push_back(in[i]);
       }
-      // Tell runtime system how many output items we produced.
+      // check msg_queue from QWidget for manual message info
       if(d_manual && !d_msg_queue->empty_p()) {
         gr::message::sptr msg = d_msg_queue->delete_head();
         float center = msg->arg1();

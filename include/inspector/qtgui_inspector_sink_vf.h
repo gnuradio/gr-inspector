@@ -48,7 +48,7 @@ namespace gr {
      * Analysis blocks can pass information to the GUI block by providing
      * messages in the tuple format
      *
-     * <code>((pmt::intern("signal"), signal_no), (pmt::intern("description1"), pmt::from_float(value1)), ...)</code>
+     * <code>((pmt::intern("signal"), pmt::from_uint64(signal_no)), (pmt::intern("description1"), pmt::from_float(value1)), ...)</code>
      *
      * Controls: Use CTRL+LeftMouse to zoom, RightMouse to zoom out.
      * This prevents confusion when in manual selection mode, where the
@@ -60,7 +60,7 @@ namespace gr {
      * - analysis_in: takes messages of analysis blocks and displays their content
      * in the GUI plot.
      * - map out: passes either the input message when manual selection is deactivated
-     * or passes RF map according to the user's settings.
+     * or passes RF map according to the user's manual settings.
      */
     class INSPECTOR_API qtgui_inspector_sink_vf : virtual public gr::sync_block
     {

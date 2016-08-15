@@ -16,12 +16,12 @@ print "WIN_KAISER = 4"
 print "WIN_BLACKMAN_HARRIS = 5"
 print "WIN_BARTLETT = 6"
 print "WIN_FLATTOP = 7"
-win = input("Window type ")
-trans = input("Rel. trans. width (trans_width/cutoff) ")
-print "Input relative cutoffs here (fc/fs):"
-start = input("Start cutoff ")
-stop = input("End cutoff ")
-step = input("Step ")
+win = input("Window type: ")
+trans = input("Rel. trans. width (trans_width/cutoff): ")
+print "Input relative cutoffs for the following (fc/fs):"
+start = input("Start cutoff: ")
+stop = input("End cutoff: ")
+step = input("Step: ")
 
 cutoffs = numpy.arange(start, stop, step)
 

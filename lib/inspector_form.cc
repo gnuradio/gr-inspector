@@ -128,9 +128,9 @@ namespace gr {
     inspector_form::spawn_signal_selector() {
       // initial marker when manual is selected (covers 1/2 bw)
       detach_markers();
-      d_markers[0]->set_marker(0, *d_rf_unit*(d_zoomer->zoomRect().x()+
-              d_zoomer->zoomRect().width()/2)
-              , *d_rf_unit*d_zoomer->zoomRect().width()/2, *d_rf_unit);
+      d_markers[0]->set_marker(0,
+                  *d_rf_unit*(d_zoomer->zoomRect().x()+ d_zoomer->zoomRect().width()/2), // center of current zoom
+                  *d_rf_unit*d_zoomer->zoomRect().width()/2, *d_rf_unit); // half bandwidth of current zoom
       add_msg_queue(d_markers[0]->d_freq-d_cfreq, d_markers[0]->d_bw);
     }
 
@@ -247,6 +247,7 @@ namespace gr {
 
     void
     inspector_form::mouseMoveEvent(QMouseEvent *eventMove) {
+      // implements drag and drop and mouse over cursors
       // check if marker was selected with left button
       if (d_clicked_marker != NONE &&
           eventMove->buttons() == Qt::LeftButton) {
@@ -275,6 +276,7 @@ namespace gr {
 
     void
     inspector_form::mouseReleaseEvent(QMouseEvent *eventRelease) {
+      // after marker moving, set values
       if(d_clicked_marker != NONE && eventRelease->button() == Qt::LeftButton) {
         double xVal = x_to_freq(eventRelease->x()-d_mouse_offset);
         float cfreq = d_markers[0]->d_freq;

@@ -78,7 +78,7 @@
     <name>Taps file</name>
     <key>taps_file</key>
     <value></value>
-    <type>string</type>
+    <type>file_open</type>
     <hide>#if str($file) == 'True' then 'none' else 'all'#</hide>
   </param>
   <sink>

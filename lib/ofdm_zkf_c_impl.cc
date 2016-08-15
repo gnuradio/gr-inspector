@@ -101,6 +101,7 @@ namespace gr {
       gr_complex R = gr_complex(0,0);
       volk_32fc_x2_multiply_conjugate_32fc(corr_temp, in, &in[shift], len);
       int k = 0;
+      // begin at back and summarize up to front
       for(int i = len-1; i >= 0; i--) {
         R *= k;
         R += corr_temp[i];
@@ -115,7 +116,7 @@ namespace gr {
     int
     ofdm_zkf_c_impl::round_to_list(int val, std::vector<int> *list) {
       int result = -1;
-      int diff = 99999;
+      int diff = 99999; // "high value"
       for(unsigned int i = 0; i < list->size(); i++) {
         if(std::abs(list->at(i) - val) < diff) {
           diff = std::abs(list->at(i) - val);
@@ -131,6 +132,7 @@ namespace gr {
       d_fft = new fft::fft_complex(size, true);
     }
 
+    // GUI message
     pmt::pmt_t
     ofdm_zkf_c_impl::pack_message(float subc, float time, int fft,
                                   int cp) {
@@ -150,16 +152,17 @@ namespace gr {
         gr_vector_void_star &output_items)
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
-      if(noutput_items <= d_min_items) {//2*d_typ_len.back()+d_typ_cp.back()) {
-        // too few items to recognize desired fft lengths
+      if(noutput_items <= d_min_items) {
+        // too few items to make good estimations
         return 0;
       }
 
       // calculate autocorrelation and estimate FFT length
       std::vector<float> akf = autocorr(in, noutput_items);
+      // argmax
       int a = std::distance(akf.begin(),
           std::max_element(akf.begin()+d_typ_len.front(), akf.end()));
-      a = round_to_list(a, &d_typ_len);
+      a = round_to_list(a, &d_typ_len); // round to possible values
 
       // calculate time variant autocorr and cyclic correlation function
       // and estimate CP length

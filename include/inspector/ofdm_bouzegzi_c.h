@@ -29,9 +29,12 @@ namespace gr {
   namespace inspector {
 
     /*!
-     * \brief <+description of block+>
+     * \brief OFDM parameter estimator (Bouzegzi algorithm)
      * \ingroup inspector
      *
+     * \details
+     * This block was not further developed during GSoC since
+     * real-time estimation was not possible.
      */
     class INSPECTOR_API ofdm_bouzegzi_c : virtual public gr::sync_block
     {

@@ -2,12 +2,14 @@
 
 The Inspector (gr-inspector)
 
-\section intro Intorduction
+\section intro Introduction
 This GNU Radio module is developed to realize signal analysis abilities in typical block-structure. The module is capable of the following:
 
 - Energy detection of signals
 - Filtering of detected signals
 - OFDM parameter estimation (carrier spacing, symbol time)
+- Blind OFDM synchronization
+- Resampling of signals to constant rate
 
 \section install Installation
 
@@ -20,7 +22,9 @@ To install the Inspector, the following dependencies are required:
 
 Install by the following shell commands:
 
-<code>mkdir build<br />
+<code>git clone git@github.com:gnuradio/gr-inspector.git<br />
+cd gr-inspector<br />
+mkdir build<br />
 cd build<br />
 cmake ..<br />
 make -j4<br />
@@ -44,9 +48,13 @@ Takes the signal info from the previous blocks and performs a down-mixing, filte
 
 \subsection se Signal Extractor
 Adapter block to extract the samples of one signal out of the messages from the Signal Separator. Output is again a complex stream.
+Resampling can be used to assure a constant output sample rate of the stream. (Needed for FM demod for instance.)
 
 \subsection ofdm OFDM Estimator
 Estimates the parameters subcarrier spacing, symbol time, FFT size and cyclic prefix length for a input signal. The signal should not be oversampled for this block.
+
+\subsection ofdmsync OFDM Synchronizer
+After OFDM parameter estimation, the signal is frequency synced and symbol beginnings are marked with stream tags.
 
 \section gsoc Google Summer of Code
 This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:
