@@ -1,6 +1,6 @@
 /*! \page taps_gen Precalculate filter taps for Signal Separator
 
-\section intro Background
+\section background Background
 The Signal Separator uses FIR filters to extract the detected signals
 out of the input stream. To save CPU load, their taps can be calculated
 before runtime. Since the bandwidth of the signals is not known beforehand,
@@ -8,7 +8,7 @@ several taps are created for a defined grid of normalized cutoff frequencies.
 The Signal Separator will choose the taps with the nearest cutoff frequency
 for each detected signal.
 
-\section usage Usage
+\section tapsusage Usage
 The python tool <code>apps/taps_gen.py</code> is able to create a JSON
 file with precalculated taps. Use it like this:
 
