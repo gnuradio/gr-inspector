@@ -32,7 +32,7 @@ class qa_qtgui_inspector_sink_vf (gr_unittest.TestCase):
         self.tb = None
 
     def test_001_t (self):
-        # set up fg
+        # no signal processing done -> nothing to test
         self.tb.run ()
         # check data
 

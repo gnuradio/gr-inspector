@@ -113,9 +113,11 @@ namespace gr {
                                           gr_vector_void_star &output_items)
     {
       gr_complex *out = (gr_complex*)output_items[0];
+      // if no samples received, skip work
        if(d_samples.size() > 0) {
          int nout;
          int item_count = noutput_items;
+         // resampling
          if(d_resample) {
            item_count *= 1/d_rate;
            if(item_count > d_samples.size())
@@ -124,6 +126,7 @@ namespace gr {
            d_samples.clear();
            return d_rate*nout;
          }
+         // copy raw samples into output buffer
          else {
            if(item_count > d_samples.size())
              item_count = d_samples.size();

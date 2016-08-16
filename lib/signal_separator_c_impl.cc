@@ -71,7 +71,6 @@ namespace gr {
      */
     signal_separator_c_impl::~signal_separator_c_impl() {
       free_allocation();
-      //delete d_queue;
     }
 
     //</editor-fold>

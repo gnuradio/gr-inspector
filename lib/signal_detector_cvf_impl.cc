@@ -256,10 +256,12 @@ namespace gr {
         for (unsigned int i = 1; i < pos.size(); i++) {
           if (i == pos.size() - 1 and curr_edges.size() == 1
                   and pos[i-1]+1 == pos[i]) {
+            // write last flank
             curr_edges.push_back(pos[i]);
             flanks.push_back(curr_edges);
           }
           else {
+            // if not adjacent bin, write new signal
             if (pos[i - 1] + 1 != pos[i]) {
               curr_edges.push_back(pos[i - 1]);
               flanks.push_back(curr_edges);
@@ -300,7 +302,7 @@ namespace gr {
             change = true;
           }
           if (std::abs(edges->at(i).at(1) - d_signal_edges.at(i).at(1)) >
-              0) {
+              0) { // zero tolerance because of bandwidth quantization
             change = true;
           }
         }

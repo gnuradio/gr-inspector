@@ -53,8 +53,6 @@ namespace gr {
       d_center->setLinePen(c);
       d_center->setXValue(center/unit);
 
-      QwtText text;
-      QString qstring;
       QString unittxt = "Hz";
       switch(unit) {
         case 1:
@@ -72,17 +70,8 @@ namespace gr {
         default:
           d_unittxt = "Hz";
       }
-      qstring.push_back("Signal "+QString::number(i+1));
-      qstring.append("\n");
-      qstring.append("f = "+QString::number(center/unit)+" "+d_unittxt);
-      qstring.append("\n");
-      qstring.append("B = "+QString::number(bw/unit)+" "+d_unittxt);
-      text.setText(qstring);
-      text.setColor(Qt::red);
-      d_label->setLabel(text);
-      d_label->setLabelAlignment(Qt::AlignLeft);
-      d_label->setXValue((center-bw/2-300)/unit);
-      d_label->setYValue(13);
+
+      set_label_text(basic_text());
 
       d_zone->setOrientation(Qt::Vertical);
       c = Qt::red;
@@ -103,23 +92,35 @@ namespace gr {
       d_label->setYValue(yval);
     }
 
-    void
-    signal_marker::add_text(std::string text) {
+    QString
+    signal_marker::basic_text() {
       QString qstring;
-      QwtText qwttext;
       qstring.push_back("Signal "+QString::number(d_number+1));
       qstring.append("\n");
       qstring.append("f = "+QString::number(d_freq/d_unit)+" "+d_unittxt);
       qstring.append("\n");
       qstring.append("B = "+QString::number(d_bw/d_unit)+" "+d_unittxt);
-      qstring.append("\n");
-      qstring.append(text.c_str());
+      return qstring;
+    }
+
+    void
+    signal_marker::set_label_text(QString qstring) {
+      QwtText qwttext;
       qwttext.setText(qstring);
       qwttext.setColor(Qt::red);
+      d_label->label();
       d_label->setLabelAlignment(Qt::AlignLeft);
       d_label->setLabel(qwttext);
       d_label->setXValue((d_freq-d_bw/2-300)/d_unit);
       d_label->setYValue(13);
+    }
+
+    void
+    signal_marker::add_text(std::string text) {
+      QString qstring = basic_text();
+      qstring.append("\n");
+      qstring.append(text.c_str());
+      set_label_text(qstring);
     }
   } /* namespace inspector */
 } /* namespace gr */

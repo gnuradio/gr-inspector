@@ -80,6 +80,7 @@ namespace gr {
       for(unsigned int k = 0; k < d_typ_len.back(); k++) {
         akf_temp = 0;
         volk_32fc_x2_multiply_conjugate_32fc(Rxx, in, &in[k], len-k);
+        // sum
         for(unsigned int i = 0; i < len-k; i++) {
           akf_temp += Rxx[i];
         }

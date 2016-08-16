@@ -46,7 +46,7 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         #add cp
         timefreq = np.hstack((timefreq[:, -cp_len:], timefreq))
 
-        # msg
+        # msg (only 4th and 5th tuples are needed)
         id1 = pmt.make_tuple(pmt.intern("Signal"), pmt.from_uint64(0))
         name = pmt.make_tuple(pmt.intern("OFDM"), pmt.from_float(1.0));
         id2 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(0.0))
