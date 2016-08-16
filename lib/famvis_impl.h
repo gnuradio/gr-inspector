@@ -29,11 +29,14 @@ namespace gr
     namespace inspector
     {
 
+
+
         class famvis_impl : public famvis
         {
         private:
             // Nothing to declare in this block.
-            
+            QApplication *d_qApplication;
+
         public:
             famvis_impl(int,QWidget*);
             ~famvis_impl();
@@ -47,8 +50,6 @@ namespace gr
 #else
             void* pyqwidget();
 #endif
-
-
         };
 
     } // namespace inspector

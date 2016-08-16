@@ -50,7 +50,6 @@ namespace Qwt3D
 
 }
 
-
 namespace gr
 {
 
@@ -58,7 +57,35 @@ namespace gr
     {
 
 
-        class fam_form : public QWidget
+        const QEvent::Type MY_CUSTOM_EVENT = static_cast<QEvent::Type>(QEvent::User + 1);
+
+        class MyCustomEvent : public QEvent
+        {
+        public:
+            MyCustomEvent( double ** customData1, const int customData2):
+                QEvent(MY_CUSTOM_EVENT),
+                m_customData1(customData1),
+                m_customData2(customData2)
+            {
+            }
+
+            double ** getCustomData1() const
+            {
+                return m_customData1;
+            }
+
+            int getCustomData2() const
+            {
+                return m_customData2;
+            }
+
+        private:
+            double ** m_customData1;
+            int m_customData2;
+        };
+
+
+        class fam_form : public QMainWindow // public QWidget
         {
             Q_OBJECT
 
@@ -70,14 +97,15 @@ namespace gr
             void add_msg_queue(float cfreq, float bandwidth);
             float freq_to_x(float freq);
             float x_to_freq(float x);
-            
-            void update(const float *d);
- 
+
+
             Qwt3D::Plot * plot;
 
             void drawOverlay();
             fam_form(QWidget *parent);
             ~fam_form();
+
+            bool updated=false;
 
         private:
 
@@ -110,12 +138,20 @@ namespace gr
             void resizeEvent(QResizeEvent * event);
 
         public slots:
-            //void refresh();
-            //void manual_cb_clicked(int state);
+
+            void update(double * *d);
+        public:
+            void postMyCustomEvent(double* * customData1, const int customData2);
+        protected:
+            void customEvent(QEvent *event); // This overrides QObject::customEvent()
+        private:
+            void handleMyCustomEvent(const MyCustomEvent *event);
+
+
 
         };
 
     }
 }
 
-#endif 
+#endif

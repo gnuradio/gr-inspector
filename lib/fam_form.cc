@@ -28,14 +28,16 @@
 #include <qwtplot3d/qwt3d_surfaceplot.h>
 #include <qwtplot3d/qwt3d_function.h>
 #include <gnuradio/io_signature.h>
+#include <qwt_plot_canvas.h>
+
 
 namespace Qwt3D
 {
 
     void Plot::calculateHull()
     {
-	    if (actualData_p->empty())
-		    return;
+        if (actualData_p->empty())
+            return;
 
         ParallelEpiped hull(Triple(DBL_MAX,DBL_MAX,DBL_MAX),Triple(-DBL_MAX,-DBL_MAX,-DBL_MAX));
 
@@ -47,36 +49,23 @@ namespace Qwt3D
 
         hull.minVertex.z = 0;
         hull.maxVertex.z = 10 ; //maxz;
-	
+
         setHull(hull);
     }
 
     Plot::Plot()
     {
-        //setTitle("A Simple SurfacePlot Demonstration");
-        /*Rosenbrock rosenbrock(this);
-        rosenbrock.setMesh(41,31);
-        rosenbrock.setDomain(-1.73,1.5,-1.5,1.5);
-        rosenbrock.setMinZ(-10);
-        rosenbrock.create();*/
-
-        setRotation(5,0,5);
-        //setScale(1.2,1.2,1.2);
-        setZoom(5.0);
-        // setShift(0.15,0,0);
-        //setZoom(0.9);
-        //showNormals(false);
-        /*
+        setTitle("A Simple SurfacePlot Demonstration");
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
             coordinates()->axes[i].setMajors(7);
             coordinates()->axes[i].setMinors(4);
         }
-        coordinates()->axes[X1].setLabelString("x-axis");
-        coordinates()->axes[Y1].setLabelString("y-axis");
-        coordinates()->axes[Z1].setLabelString(QChar (0x38f)); // Omega - see http://www.unicode.org/charts/
-        setCoordinateStyle(BOX);
-        */
+        setRotation(15,0,15);
+        setScale(1.0,1.0,1.0);
+        setZoom(0.5);
+
+
         updateData();
         updateGL();
     }
@@ -85,37 +74,18 @@ namespace Qwt3D
 
 }
 
+
 namespace gr
 {
     namespace inspector
     {
-        fam_form::fam_form(QWidget *parent) : QWidget(parent)
+        fam_form::fam_form(QWidget *parent) : QMainWindow(parent) // QWidget(parent)
         {
-            d_marker_count = 30;
             plot = new Qwt3D::Plot() ;
-            QHBoxLayout layout;
-            layout.addWidget(plot);
-            plot->resize(1024,1024);
 
-            /*
-            unsigned int columns = 10;
-            unsigned int rows = 10;
 
-            double** dat = new double*[rows];
-            for(int i = 0; i < rows; ++i)
-                dat[i] = new double[columns];
-                
-            double minx=0.0,maxx=10.0,miny=0,maxy=10.0;
-            plot->loadFromData 	(   dat,
-			                        columns,
-		  	                        rows,
-		                            minx,
-		                            maxx,
-		                            miny,
-                                    maxy	 
-	                            ); 	*/
+            setCentralWidget(plot);
 
-            setLayout(&layout);
         }
 
         fam_form::~fam_form()
@@ -126,31 +96,14 @@ namespace gr
             delete d_manual_cb;
         }
 
-        void fam_form::update(const float *d){
-            int Np = 64  ;// 2xNp is the number of columns                                                                                                                                                                        
-            int P = 256  ;// number of new items needed to calculate estimate                                                                                                                                                     
+        void fam_form::update( double * *d)
+        {
+            int Np = 64  ;// 2xNp is the number of columns
+            int P = 256  ;// number of new items needed to calculate estimate
             int L = 2   ;
 
             unsigned int rows = 2 * Np;
             unsigned int columns = 2*P*L;
-
-            double** dat = new double*[rows];
-            for(int i = 0; i < rows; ++i)
-                dat[i] = new double[columns];
-                
-            int z = 0.0;
-
-            double maxz = 0.0;
-            for(int y=0;y<columns;y++){
-                for(int x=0;x<rows;x++){
-                    if (d[z] > maxz)
-                        maxz = d[z];
-                        
-                    dat[x][y] = d[z];
-                    z++;
-                }   
-            }
-
             double minx=0.0,maxx=10,miny=0,maxy=10;
 
             plot->minx = minx;
@@ -159,34 +112,19 @@ namespace gr
             plot->miny = miny;
             plot->maxy = maxy;
 
-            plot->maxz = maxz;
-            plot->loadFromData 	(   dat,
-			                        rows,
-		  	                        columns,
-		                            minx,
-		                            maxx,
-		                            miny,
-                                    maxy	 
-	                            ); 
-            //plot->updateNormals();
-            //plot->coordinates()->axes[0].recalculateTics();
-            //plot->coordinates()->axes[1].recalculateTics();
+            plot->maxz = 20;
+            plot->loadFromData 	(   d,
+                                    rows,
+                                    columns,
+                                    minx,
+                                    maxx,
+                                    miny,
+                                    maxy
+                                );
 
-            for (int i=0; i<4*3;i++)
-                    plot->coordinates()->axes[i].setAutoScale(false);
+            plot-> updateData();
+            plot->updateGL();
 
-
-            plot->setRotation(15,0,15);
-            plot->setScale(1.0,1.0,1.0);
-            plot->setZoom(0.7);
-            /*
-            plot->setRotation(30,0,15);
-            plot->setScale(1,1,1);
-            setShift(0.15,0,0);
-            plot->setIsolines(0);
-            plot->setZoom(0.9);
-            plot->showNormals(false);
-            */
             plot->repaint();
             repaint();
         }
@@ -200,6 +138,25 @@ namespace gr
         void
         fam_form::resizeEvent( QResizeEvent * event )
         {
+        }
+
+        void fam_form::customEvent(QEvent * event)
+        {
+            // When we get here, we've crossed the thread boundary and are now
+            // executing in the Qt object's thread
+
+            if(event->type() == MY_CUSTOM_EVENT)
+            {
+                handleMyCustomEvent(static_cast<MyCustomEvent *>(event));
+            }
+        }
+
+
+        void fam_form::handleMyCustomEvent(const MyCustomEvent *event)
+        {
+            // Now you can safely do something with your Qt objects.
+            // Access your custom data using event->getCustomData1() etc.
+            update(event->getCustomData1());
         }
 
     }
