@@ -54,13 +54,32 @@ namespace gr
                              gr::io_signature::make(0, 0, 0))
         {
 
+            if(qApp != NULL)
+            {
+                d_qApplication = qApp;
+            }
+            else
+            {
+
 #if QT_VERSION >= 0x040500
-            std::string style = prefs::singleton()->get_string("qtgui", "style", "raster");
-            QApplication::setGraphicsSystem(QString(style.c_str()));
+                std::string style = prefs::singleton()->get_string("qtgui", "style", "raster");
+                QApplication::setGraphicsSystem(QString(style.c_str()));
 #endif
+
+                char *d_argv;
+
+                int d_argc = 1;
+                d_argv = new char;
+                d_argv[0] = '\0';
+
+                if (d_qApplication == NULL)
+                    d_qApplication = new QApplication(d_argc, &d_argv);
+
+            }
 
             d_main_gui = new fam_form(parent);
             d_main_gui->show();
+
         }
 
 #ifdef ENABLE_PYTHON
@@ -86,18 +105,39 @@ namespace gr
         {
         }
 
+
         int
         famvis_impl::work(int noutput_items,
                           gr_vector_const_void_star &input_items,
                           gr_vector_void_star &output_items)
         {
             const float *in = (const float *) input_items[0];
-            printf("Output items %d\n",noutput_items);
-            fflush(stdout);
 
-            d_main_gui->update(in);
+            int Np = 64  ;// 2xNp is the number of columns
+            int P = 256  ;// number of new items needed to calculate estimate
+            int L = 2   ;
 
-            consume_each (noutput_items);
+            unsigned int rows = 2 * Np;
+            unsigned int columns = 2*P*L;
+
+            double** dat = new double*[rows];
+            for(int i = 0; i < rows; ++i)
+                dat[i] = new double[columns];
+
+            int z = 0.0;
+            double maxz = 0.0;
+            for(int y=0; y<columns; y++)
+            {
+                for(int x=0; x<rows; x++)
+                {
+                    dat[x][y] = in[z];
+                    z++;
+                }
+            }
+
+            usleep(1000*300);
+
+            QCoreApplication::postEvent(d_main_gui,new MyCustomEvent(dat, 0));
 
             return noutput_items;
         }
