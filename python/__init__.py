@@ -33,6 +33,3 @@ except ImportError:
 # import any pure python here
 from sync_prototype_cc import sync_prototype_cc
 from tfmodel import tfmodel
-from fam import fam
-from cnn import cnn
-#

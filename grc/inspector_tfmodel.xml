@@ -4,7 +4,7 @@
 	<key>inspector_tfmodel</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
-	<make>inspector.tfmodel($typev.typ,$vlen,$graphfile,$itensor,$otensor,$num_inputs,$neurons)</make>
+	<make>inspector.tfmodel($typev.typ,$vlen,$graphfile)</make>
 
 	<param>
 		<name>Input Type</name>
@@ -59,33 +59,6 @@
                 <value></value>
                 <type>string</type>
 	</param>
-        <param>
-                <name>Input Tensor</name>
-                <key>itensor</key>
-                <value>inp</value>
-                <type>string</type>
-        </param>
-        <param>
-                <name>Output Tensor</name>
-                <key>otensor</key>
-                <value>out</value>
-                <type>string</type>
-        </param>
-
-	<param>
-		<name>Number of model inputs</name>
-		<key>num_inputs</key>
-		<value>1</value>
-		<type>int</type>
-	</param>
-
-	<param>
-		<name>Neuron Tensor</name>
-		<key>neurons</key>
-		<value></value>
-		<type>string</type>
-	</param>
-
 
 
 	<sink>

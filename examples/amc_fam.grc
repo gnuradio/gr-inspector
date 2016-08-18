@@ -999,7 +999,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_fam</key>
+    <key>inspector_tfmodel</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1018,7 +1018,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(928, 1072)</value>
+      <value>(944, 1064)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1030,7 +1030,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_fam_0</value>
+      <value>inspector_tfmodel_0</value>
     </param>
     <param>
       <key>typev</key>
@@ -1203,7 +1203,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
-    <sink_block_id>inspector_fam_0</sink_block_id>
+    <sink_block_id>inspector_tfmodel_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1262,7 +1262,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_fam_0</source_block_id>
+    <source_block_id>inspector_tfmodel_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>classification</source_key>
     <sink_key>print</sink_key>

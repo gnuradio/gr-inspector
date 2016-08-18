@@ -109,6 +109,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(520, 24)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>sym</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>3</value>
+    </param>
+  </block>
+  <block>
     <key>analog_random_source_x</key>
     <param>
       <key>alias</key>
@@ -187,7 +214,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1144, 776)</value>
+      <value>(1360, 776)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -352,7 +379,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>sensitivity</key>
@@ -411,7 +438,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -438,7 +465,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>excess_bw</key>
@@ -478,7 +505,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>16</value>
+      <value>sym</value>
     </param>
     <param>
       <key>verbose</key>
@@ -486,7 +513,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_cnn</key>
+    <key>inspector_tfmodel</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -505,7 +532,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(608, 744)</value>
+      <value>(784, 752)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -517,7 +544,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_cnn_0</value>
+      <value>inspector_tfmodel_1</value>
     </param>
     <param>
       <key>typev</key>
@@ -564,7 +591,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1096, 496)</value>
+      <value>(1336, 448)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -615,7 +642,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
-    <sink_block_id>inspector_cnn_0</sink_block_id>
+    <sink_block_id>inspector_tfmodel_1</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -644,7 +671,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>inspector_cnn_0</source_block_id>
+    <source_block_id>inspector_tfmodel_1</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>classification</source_key>
     <sink_key>print</sink_key>
