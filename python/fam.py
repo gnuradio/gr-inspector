@@ -37,7 +37,7 @@ L = 2
 
 ## Modulation schemes
 #MOD = ["fsk", "qam16", "qam64", "2psk", "4psk", "8psk", "gmsk", "wbfm", "nfm"]
-MOD = ["fsk", "qam16", "qam64", "psk","gmsk", "wbfm", "nfm"] 
+#MOD = ["fsk", "qam16", "qam64", "psk","gmsk", "wbfm", "nfm"] 
 
 ## GNU Radio block, for fam classification
 class fam(gr.sync_block):
@@ -54,11 +54,12 @@ class fam(gr.sync_block):
                                out_sig=[])
 
         self.inputs = inputs
-        sess, inp, out = self.load_graph(graphfile)
+        sess, inp, out,classes = self.load_graph(graphfile)
 
         self.sess = sess
         self.inp = inp
         self.out = out
+        self.classes = classes
 
         self.message_port_register_out(pmt.intern('classification'))
 
@@ -79,8 +80,9 @@ class fam(gr.sync_block):
 
             input_name = default_signature.classification_signature.input.tensor_name
             output_name = default_signature.classification_signature.scores.tensor_name
-
-            return (sess, input_name, output_name)
+            classes = default_signature.classification_signature.classes.tensor_name
+            classes = sess.run(sess.graph.get_tensor_by_name(classes))
+            return (sess, input_name, output_name,classes)
 
     ## Work function to accept input fam data, to reshape and pass to model
     def work(self, input_items, output_items):
@@ -113,7 +115,7 @@ class fam(gr.sync_block):
         pmtv = pmt.make_dict()
         for outp in ne:
             pmtv = pmt.dict_add(pmtv, pmt.intern(
-                "Mod"), pmt.to_pmt(MOD[np.argmax(outp)]))
+                "Mod"), pmt.to_pmt(self.classes[np.argmax(outp)]))
             pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
 
             self.message_port_pub(pmt.intern("classification"), pmtv)
