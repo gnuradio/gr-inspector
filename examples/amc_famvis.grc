@@ -880,12 +880,20 @@
       <value>0</value>
     </param>
     <param>
+      <key>height</key>
+      <value>2 * Np</value>
+    </param>
+    <param>
       <key>id</key>
       <value>inspector_famvis_0</value>
     </param>
     <param>
       <key>vlen</key>
       <value>2 * P * L * 2 * Np</value>
+    </param>
+    <param>
+      <key>width</key>
+      <value>2*P*L   </value>
     </param>
   </block>
   <block>

@@ -39,20 +39,23 @@ namespace gr
     {
 
         famvis::sptr
-        famvis::make(int vlen,QWidget *parent)
+        famvis::make(int vlen,int width, int height,QWidget *parent)
         {
             return gnuradio::get_initial_sptr
-                   (new famvis_impl(vlen,parent));
+                   (new famvis_impl(vlen,width,height,parent));
+
         }
 
         /*
          * The private constructor
          */
-        famvis_impl::famvis_impl(int vlen,QWidget *parent)
+        famvis_impl::famvis_impl(int vlen,int width, int height,QWidget *parent)
             : gr::sync_block("famvis",
                              gr::io_signature::make(1,1, sizeof(float)*vlen),
                              gr::io_signature::make(0, 0, 0))
         {
+            this->width = width;
+            this->height = height;
 
             if(qApp != NULL)
             {
@@ -113,12 +116,12 @@ namespace gr
         {
             const float *in = (const float *) input_items[0];
 
-            int Np = 64  ;// 2xNp is the number of columns
+            /*int Np = 64  ;// 2xNp is the number of columns
             int P = 256  ;// number of new items needed to calculate estimate
-            int L = 2   ;
+            int L = 2   ;*/
 
-            unsigned int rows = 2 * Np;
-            unsigned int columns = 2*P*L;
+            unsigned int rows = height; // 2 * Np;
+            unsigned int columns = width; //2*P*L;
 
             double** dat = new double*[rows];
             for(int i = 0; i < rows; ++i)
