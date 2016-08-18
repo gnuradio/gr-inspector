@@ -36,206 +36,97 @@ P = 256  # number of new items needed to calculate estimate
 L = 2
 
 class tfmodel(gr.sync_block):
-    """
-    docstring for block AMC
-    """
-    def __init__(self,dtype,vlen,graphfile,itensor,otensor,num_inputs,neurons=None):
-    
-        self.pmtin = False
+
+
+    # Create our block
+    def __init__(self, dtype, vlen, graphfile):
 
         inputs = []
-
-        if dtype == "message":
-            self.pmtin = True
-        else:
-            for i in range(num_inputs):
-                inputs.append((np.dtype(dtype),vlen))
-
-        print(inputs)
+        inputs.append((np.dtype(dtype), vlen))
 
         gr.sync_block.__init__(self,
-            name="tfmodel",
-            in_sig=inputs,
-            out_sig=[])
+                               name="fam",
+                               in_sig=inputs,
+                               out_sig=[])
 
-        if self.pmtin:
-            self.message_port_register_in(pmt.intern('in'))
-            self.set_msg_handler(pmt.intern("in"), self.msg_handler)
-
+        self.dtype = np.dtype(dtype)
         self.inputs = inputs
-        self.itensor = itensor
-        self.otensor = otensor
-
-        sess,inp,out = self.load_graph(graphfile)  
+        sess, inp, out,classes = self.load_graph(graphfile)
 
         self.sess = sess
         self.inp = inp
         self.out = out
-
-        self.old = collections.deque(maxlen=3)
-
-
-        #self.keep = sess.graph.get_tensor_by_name("drop1/cond/dropout/keep_prob:0")
-
-        
-    
-        if neurons == None:
-            self.neuronsb = False
-        else: 
-            self.neuronsb = True
-            try:
-                self.neurons =  sess.run(sess.graph.get_tensor_by_name("%s:0" % neurons))
-                print(self.neurons)
-            except:
-                self.neuronsb = False
+        self.classes = classes
 
         self.message_port_register_out(pmt.intern('classification'))
 
-    def load_graph(self,output_graph_path):
 
-        """
-        with tf.Graph().as_default():
-            output_graph_def = tf.GraphDef()
-            with open(output_graph_path, "rb") as f:
-                output_graph_def.ParseFromString(f.read())
-                _ = tf.import_graph_def(output_graph_def, name="")
-    
-            with tf.Session() as sess:
-                n_input = sess.graph.get_tensor_by_name("%s:0" % self.itensor)
-                output = sess.graph.get_tensor_by_name("%s:0" % self.otensor)
-                return (sess,n_input,output)
-        """
-        sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath("/tmp/sess/00000001") 
+    ## Load graph from file through TensorFlow serving
+    def load_graph(self, output_graph_path):
+
+        sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath(
+            output_graph_path)
 
         with sess.as_default():
 
             collection_def = meta_graph_def.collection_def
-            signatures_any = collection_def[constants.SIGNATURES_KEY].any_list.value
+            signatures_any = collection_def[
+                constants.SIGNATURES_KEY].any_list.value
             signatures = manifest_pb2.Signatures()
             signatures_any[0].Unpack(signatures)
             default_signature = signatures.default_signature
 
             input_name = default_signature.classification_signature.input.tensor_name
             output_name = default_signature.classification_signature.scores.tensor_name
-   
-            print( default_signature.classification_signature ) 
-            print("INP",sess.graph.get_tensor_by_name( input_name).get_shape())
-            return (sess,input_name,output_name)
+            classes = default_signature.classification_signature.classes.tensor_name
+            classes = sess.run(sess.graph.get_tensor_by_name(classes))
+            return (sess, input_name, output_name,classes)
 
-
-
-
-    def msg_handler(self,msg):
-        msg = pmt.to_python(msg)
-
-        for v in msg:
-
-            # v[0] Signal ID
-            # v[1] Signal
-        
-            signal = v[1]
-
-            print("SIGLEN",len(signal))
-            if not len(signal) > 128:
-                continue
-                     
-            re = signal[0:128].real[:,newaxis]
-            im = signal[0:128].imag[:,newaxis]
-
-            pmtv = pmt.make_dict()                                                                                                                         
-            try:
-                outp = self.sess.run(self.out,feed_dict={self.inp: [[re,im]]})[0]
-            except tf.errors.InvalidArgumentError:
-                print("Invalid size of input vector to TensorFlow model")
-                quit()
-    
-            if self.neuronsb:
-                mod = self.neurons [ np.argmax(outp) ] 
-                #pmtv = pmt.dict_add(pmtv, pmt.intern("Mod"), pmt.intern(mod))
-                outp = pmt.to_pmt([v[0],mod])
-            
-        
-                self.message_port_pub(pmt.intern("classification"),outp)  
-
-
-        return len(msg)
-
-
-
+    #def msg_handler(self,msg):
+    ## Work function to accept input fam data, to reshape and pass to model
     def work(self, input_items, output_items):
-        #output_items[0][:] = input_items[0] * input_items[0] # Only works because numpy.array
+
         tensordata = []
         input_i = []
         shapev = np.array(input_items[0]).shape
         inp = np.array(input_items[0][0])
 
-        if np.mean(inp) == 0.0 :
-            return len(input_items[0]) 
+        if self.dtype == np.complex64:
 
-            
-        print("MEAN",np.mean(inp))
-        inp = (inp - np.mean(inp)) / np.std(inp)
-        floats = np.reshape(inp, (2 * P * L, (2 * Np) - 0))
-        tensordata.append(np.array([floats]))
-        """
-        items = np.array(input_items).shape[0] * np.array(input_items).shape[1] 
-        
-        for i in range(shapev[0]):
-            in_v = []
-            re = []
-            im = []
+            inp = np.array(input_items[0])
 
-            for v in range(shapev[1]):
-                #print("i",i,"v",v,len(input_items[i]))
-                re.append(inp[i][v].real)
-                im.append(inp[i][v].imag)
-                    
-            in_v.append(np.array(re)[:,newaxis])
-            in_v.append(np.array(im)[:,newaxis])
+            # iterate through all 128 blocks, passed to us
+            for i in range(inp.shape[0]):
+                tensordata.append(np.array([[inp[i].real,inp[i].imag]]))
 
-            #print(len(in_v))
+        elif self.dtype == np.float32:
 
+            if np.mean(inp) == 0.0:
+                return len(input_items[0])
 
-            tensordata.append(in_v)
-                    
-            else:
-                for v in range(len(input_items[0])):
-                    in_v.append(np.array(input_items[i][v])[:, newaxis])
-            
-                    tensordata.append(in_v)
-        """
-    
+            ## Normalise data
+            inp = (inp - np.mean(inp)) / np.std(inp)
 
+            ## Reshape to 2D
+            floats = np.reshape(inp, (2 * P * L, (2 * Np) - 0))
 
-        mod = ""     
+            tensordata.append(np.array([floats]))
+
         ne = []
         for v in tensordata:
             try:
-                outp = self.sess.run(self.out,feed_dict={self.inp: [v]})[0]
+                outp = self.sess.run(self.out, feed_dict={self.inp: [v]})[0]
                 ne.append(outp)
             except tf.errors.InvalidArgumentError:
                 print("Invalid size of input vector to TensorFlow model")
                 quit()
 
-        pmtv = pmt.make_dict()                                                                                                                         
+        pmtv = pmt.make_dict()
         for outp in ne:
-        
-            c=0
-            
-            #if self.neuronsb:
-            #mod = self.neurons [ np.argmax(outp) ] 
-            
-            pmtv = pmt.dict_add(pmtv, pmt.intern("Mod"), pmt.from_long(np.argmax(outp)))
+            pmtv = pmt.dict_add(pmtv, pmt.intern(
+                "Mod"), pmt.to_pmt(self.classes[np.argmax(outp)]))
             pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
-                
-            """ 
-                for o in outp:
-                    o = o.astype(float)
-                    pmtv = pmt.dict_add(pmtv, pmt.intern("out"+self.neurons[c]), pmt.from_double(o))
-                    c=c+1
-            """
-            self.message_port_pub(pmt.intern("classification"),pmtv)  
 
-        
-        return len(input_items[0]) 
+            self.message_port_pub(pmt.intern("classification"), pmtv)
 
+        return len(input_items[0])
