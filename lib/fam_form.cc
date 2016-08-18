@@ -62,7 +62,7 @@ namespace Qwt3D
         }
         setRotation(15,0,15);
         setScale(1.0,1.0,1.0);
-        setZoom(0.5);
+        setZoom(1.0);
 
 
         updateData();
@@ -195,7 +195,7 @@ namespace gr
             if (event->getCustomData1() == true) {
                 plot->setRotation(15,0,15);
                 plot->setScale(1.0,1.0,1.0);
-                plot->setZoom(0.5);
+                plot->setZoom(1.0);
                 
                 /*plot->enableLighting(true);
 
