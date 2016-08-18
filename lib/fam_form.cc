@@ -79,11 +79,11 @@ namespace gr
 {
     namespace inspector
     {
-        fam_form::fam_form(QWidget *parent) : QMainWindow(parent) // QWidget(parent)
+        fam_form::fam_form(QWidget *parent, int width, int height) : QMainWindow(parent) // QWidget(parent)
         {
             plot = new Qwt3D::Plot() ;
-
-
+            this->width = width;
+            this->height = height;
             setCentralWidget(plot);
 
         }
@@ -102,8 +102,8 @@ namespace gr
             int P = 256  ;// number of new items needed to calculate estimate
             int L = 2   ;
 
-            unsigned int rows = 2 * Np;
-            unsigned int columns = 2*P*L;
+            unsigned int rows =  height; // 2 * Np;
+            unsigned int columns = width;//2*P*L;
             double minx=0.0,maxx=10,miny=0,maxy=10;
 
             plot->minx = minx;
