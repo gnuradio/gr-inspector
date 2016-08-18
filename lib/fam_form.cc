@@ -55,7 +55,6 @@ namespace Qwt3D
 
     Plot::Plot()
     {
-        setTitle("A Simple SurfacePlot Demonstration");
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
             coordinates()->axes[i].setMajors(7);
@@ -79,14 +78,42 @@ namespace gr
 {
     namespace inspector
     {
-        fam_form::fam_form(QWidget *parent, int width, int height) : QMainWindow(parent) // QWidget(parent)
+        fam_form::fam_form(QWidget *parent, int width, int height,int gwidth,int gheight) : QMainWindow(parent) // QWidget(parent)
         {
             plot = new Qwt3D::Plot() ;
             this->width = width;
             this->height = height;
-            setCentralWidget(plot);
+            this->gwidth =gwidth;
+            this->gheight = gheight;
 
+            QPushButton *button_3d = new QPushButton("3D", this);
+            QPushButton *button_2d = new QPushButton("2D", this);
+
+            connect(button_3d, SIGNAL (released()), this, SLOT (btn3d()));
+            connect(button_2d, SIGNAL (released()), this, SLOT (btn2d()));
+
+            QGridLayout *gridLayout = new QGridLayout;
+            gridLayout->addWidget(plot,0,0,2,2);
+            gridLayout->addWidget(button_2d,1,0,1,1);
+            gridLayout->addWidget(button_3d,1,1,1,1);
+
+
+            QWidget *window = new QWidget();
+            window->setLayout(gridLayout);
+
+            setCentralWidget(window);
         }
+
+        void fam_form::btn3d()
+        {
+            QCoreApplication::postEvent(this,new RotEvent(true));
+        }
+
+        void fam_form::btn2d()
+        {
+            QCoreApplication::postEvent(this,new RotEvent(false));
+        }
+
 
         fam_form::~fam_form()
         {
@@ -98,13 +125,9 @@ namespace gr
 
         void fam_form::update( double * *d)
         {
-            int Np = 64  ;// 2xNp is the number of columns
-            int P = 256  ;// number of new items needed to calculate estimate
-            int L = 2   ;
-
-            unsigned int rows =  height; // 2 * Np;
-            unsigned int columns = width;//2*P*L;
-            double minx=0.0,maxx=10,miny=0,maxy=10;
+            unsigned int rows =  height;
+            unsigned int columns = width;
+            double minx=0.0,maxx=gwidth,miny=0,maxy=gheight;
 
             plot->minx = minx;
             plot->maxx = maxx;
@@ -148,7 +171,13 @@ namespace gr
             if(event->type() == MY_CUSTOM_EVENT)
             {
                 handleMyCustomEvent(static_cast<MyCustomEvent *>(event));
+            } else if(event->type() == ROT_EVENT)
+            {
+                handleRotEvent(static_cast<RotEvent *>(event));
             }
+
+
+            
         }
 
 
@@ -157,6 +186,37 @@ namespace gr
             // Now you can safely do something with your Qt objects.
             // Access your custom data using event->getCustomData1() etc.
             update(event->getCustomData1());
+        }
+
+        void fam_form::handleRotEvent(const RotEvent *event)
+        {
+            // Now you can safely do something with your Qt objects.
+            // Access your custom data using event->getCustomData1() etc.
+            if (event->getCustomData1() == true) {
+                plot->setRotation(15,0,15);
+                plot->setScale(1.0,1.0,1.0);
+                plot->setZoom(0.5);
+                
+                /*plot->enableLighting(true);
+
+                for (int i=0;i<7;i++)
+                    plot->illuminate(i);*/
+                /*plot->setLightComponent(GL_LIGHT0,1.0,1);
+
+                plot->setLightShift(0.5,0.5,0.5);
+                plot->setLightRotation(90,0,0);*/
+
+
+            } else {
+                plot->setRotation(85,0,0);
+                plot->setScale(1.0,1.0,1.0);
+                plot->setZoom(2.0);
+                //plot->setMeshColor(Qwt3D::RGBA(255,255,255,122));
+                /*plot->setLightRotation(70,0,0);
+                plot->setLightShift(0.4,0.4,0.4);
+                plot->setShininess(100.0);*/
+
+            }
         }
 
     }

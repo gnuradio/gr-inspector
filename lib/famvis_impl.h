@@ -39,7 +39,7 @@ namespace gr
             int width, height;
 
         public:
-            famvis_impl(int,int,int,QWidget*);
+            famvis_impl(int,int,int,int,int,QWidget*);
             ~famvis_impl();
             fam_form *d_main_gui;
             // Where all the action really happens

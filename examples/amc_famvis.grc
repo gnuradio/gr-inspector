@@ -880,6 +880,14 @@
       <value>0</value>
     </param>
     <param>
+      <key>gheight</key>
+      <value>10</value>
+    </param>
+    <param>
+      <key>gwidth</key>
+      <value>10</value>
+    </param>
+    <param>
       <key>height</key>
       <value>2 * Np</value>
     </param>

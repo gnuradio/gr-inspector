@@ -58,6 +58,7 @@ namespace gr
 
 
         const QEvent::Type MY_CUSTOM_EVENT = static_cast<QEvent::Type>(QEvent::User + 1);
+        const QEvent::Type ROT_EVENT = static_cast<QEvent::Type>(QEvent::User + 2);
 
         class MyCustomEvent : public QEvent
         {
@@ -85,6 +86,25 @@ namespace gr
         };
 
 
+        class RotEvent : public QEvent
+        {
+        public:
+            RotEvent(bool customData1):
+                QEvent(ROT_EVENT),
+                m_customData1(customData1)
+            {
+            }
+
+            bool getCustomData1() const
+            {
+                return m_customData1;
+            }
+
+       private:
+            bool m_customData1;
+        };
+
+
         class fam_form : public QMainWindow // public QWidget
         {
             Q_OBJECT
@@ -97,12 +117,12 @@ namespace gr
             void add_msg_queue(float cfreq, float bandwidth);
             float freq_to_x(float freq);
             float x_to_freq(float x);
-
+        
 
             Qwt3D::Plot * plot;
 
             void drawOverlay();
-            fam_form(QWidget *parent,int,int);
+            fam_form(QWidget *parent,int,int,int , int);
             ~fam_form();
 
             bool updated=false;
@@ -119,6 +139,9 @@ namespace gr
 
             int width;  
             int height;
+
+            int gwidth;  
+            int gheight;
 
             int d_interval, d_fft_len, d_marker_count;
             int *d_rf_unit;
@@ -142,6 +165,8 @@ namespace gr
 
         public slots:
 
+            void btn3d();
+            void btn2d();
             void update(double * *d);
         public:
             void postMyCustomEvent(double* * customData1, const int customData2);
@@ -149,6 +174,7 @@ namespace gr
             void customEvent(QEvent *event); // This overrides QObject::customEvent()
         private:
             void handleMyCustomEvent(const MyCustomEvent *event);
+            void handleRotEvent(const RotEvent *event);
 
 
 

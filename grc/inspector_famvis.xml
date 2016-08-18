@@ -7,7 +7,7 @@
   <import>from gnuradio import qtgui</import> 
   <import>import sip</import>
   <make>#set $win = 'self._%s_win'%$id
-inspector.famvis($vlen,$width,$height)
+inspector.famvis($vlen,$width,$height,$gwidth,$gheight)
 $(win) = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget) 
 $(gui_hint()($win))</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
@@ -35,6 +35,17 @@ $(gui_hint()($win))</make>
     <type>int</type>
   </param>
 
+  <param>
+    <name>Graph Width</name>
+    <key>gwidth</key>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Graph Height</name>
+    <key>gheight</key>
+    <type>int</type>
+  </param>
 
   <param>
     <name>GUI Hint</name>
