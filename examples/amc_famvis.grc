@@ -869,7 +869,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1616, 736)</value>
+      <value>(1624, 700)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -893,7 +893,7 @@
     </param>
     <param>
       <key>width</key>
-      <value>2*P*L   </value>
+      <value>2 * P * L   </value>
     </param>
   </block>
   <block>

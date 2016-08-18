@@ -102,7 +102,7 @@ namespace gr
             Qwt3D::Plot * plot;
 
             void drawOverlay();
-            fam_form(QWidget *parent);
+            fam_form(QWidget *parent,int,int);
             ~fam_form();
 
             bool updated=false;
@@ -116,6 +116,9 @@ namespace gr
                 CENTER,
                 RIGHT
             };
+
+            int width;  
+            int height;
 
             int d_interval, d_fft_len, d_marker_count;
             int *d_rf_unit;

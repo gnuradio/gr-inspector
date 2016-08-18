@@ -80,7 +80,7 @@ namespace gr
 
             }
 
-            d_main_gui = new fam_form(parent);
+            d_main_gui = new fam_form(parent,width,height);
             d_main_gui->show();
 
         }
