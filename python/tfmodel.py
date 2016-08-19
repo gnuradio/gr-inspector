@@ -1,7 +1,12 @@
 #!/usr/bin/env python2
+
+## @file
+#  tfmodel - load tensor flow graphs for use in GNU Radio
+
+
 # -*- coding: utf-8 -*-
 # 
-# Copyright 2016 <+YOU OR YOUR COMPANY+>.
+# Copyright 2016 Christopher Richardson
 # 
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,6 +40,7 @@ Np = 64  # 2xNp is the number of columns
 P = 256  # number of new items needed to calculate estimate
 L = 2
 
+## tfmodel is a sync block to produce PMT output from a TensorFlow graph
 class tfmodel(gr.sync_block):
 
 
@@ -82,7 +88,6 @@ class tfmodel(gr.sync_block):
             classes = sess.run(sess.graph.get_tensor_by_name(classes))
             return (sess, input_name, output_name,classes)
 
-    #def msg_handler(self,msg):
     ## Work function to accept input fam data, to reshape and pass to model
     def work(self, input_items, output_items):
 
