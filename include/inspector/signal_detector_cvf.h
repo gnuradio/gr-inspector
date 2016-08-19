@@ -34,8 +34,9 @@ namespace gr {
      *
      * \details
      * Takes input spectrum as complex float and performs an energy detection
-     * to find potential signals and build a RF map. The RF map gets passed as
-     * a message with center frequency and bandwidth information for each detected
+     * to find potential continuous signals and build a RF map (tuple
+     * of center frequency and bandwidth). The RF map gets passed as a
+     * message with center frequency and bandwidth information for each detected
      * signal.
      *
      * Threshold for energy detection can either be set in dB or an automatic

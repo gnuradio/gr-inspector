@@ -8,7 +8,7 @@
 
 ## Introduction
 This GNU Radio module is developed to realize signal analysis abilities in typical block-structure. The module is capable of the following:
-- Energy detection of signals
+- Energy detection of continuous signals
 - Filtering of detected signals
 - OFDM parameter estimation (carrier spacing, symbol time)
 - Blind OFDM synchronization
@@ -41,8 +41,11 @@ Get inspired by the examples. There are flowgraphs for each block that should ex
 For detailed information about each block, visit the Doxygen HTML pages.
 ## Brief block description
 
+A typical inspector flowgraph could look like this:
+![A typical inspector flowgraph](https://grinspector.files.wordpress.com/2016/05/decentral.png)
+
 #### Signal Detector
-Performs an energy detection on the input signal. A threshold in dB can be set or an autmatic threshold calculation can be used.
+Performs an energy detection of continuous input signals. A threshold in dB can be set or an autmatic threshold calculation can be used.
 
 #### Inspector GUI
 GUI where the spectrum is displayed along with signal markers for the detected signals. Also, signal can be selected manually in this block.
