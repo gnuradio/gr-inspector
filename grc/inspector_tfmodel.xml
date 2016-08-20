@@ -4,7 +4,7 @@
 	<key>inspector_tfmodel</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
-	<make>inspector.tfmodel($typev.typ,$vlen,$graphfile)</make>
+	<make>inspector.tfmodel($typev.typ,$vlen,$graphfile,$reshape)</make>
 
 	<param>
 		<name>Input Type</name>
@@ -59,6 +59,14 @@
                 <value></value>
                 <type>string</type>
 	</param>
+
+	<param>
+                <name>Reshape</name>
+                <key>reshape</key>
+                <value>()</value>
+		<type>raw</type>
+	</param>
+
 
 
 	<sink>
