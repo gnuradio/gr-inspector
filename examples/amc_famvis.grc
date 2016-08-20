@@ -907,6 +907,10 @@
       <key>width</key>
       <value>2 * P * L   </value>
     </param>
+    <param>
+      <key>fps</key>
+      <value>3</value>
+    </param>
   </block>
   <block>
     <key>rational_resampler_xxx</key>

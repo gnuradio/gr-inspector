@@ -52,7 +52,7 @@ namespace gr {
        * class. inspector::FAMVis::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int,int,int,int,int,double,QWidget*parent=NULL);
+      static sptr make(int,int,int,int,int,double,int,QWidget*parent=NULL);
 #ifdef ENABLE_PYTHON
       virtual PyObject* pyqwidget() = 0;
 #else

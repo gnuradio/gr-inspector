@@ -22,6 +22,7 @@
 #include "config.h"
 #endif
 
+#include <chrono>
 #include <gnuradio/io_signature.h>
 #include "qtgui_inspector_sink_vf_impl.h"
 #include <gnuradio/prefs.h>
@@ -33,23 +34,25 @@
 #include <gnuradio/io_signature.h>
 #include "famvis_impl.h"
 
+using namespace std::chrono;
+
 namespace gr
 {
     namespace inspector
     {
 
         famvis::sptr
-        famvis::make(int vlen,int width, int height,int gwidth,int gheight,double maxz, QWidget *parent)
+        famvis::make(int vlen,int width, int height,int gwidth,int gheight,double maxz,int fps, QWidget *parent)
         {
             return gnuradio::get_initial_sptr
-                   (new famvis_impl(vlen,width,height,gwidth,gheight,maxz,parent));
+                   (new famvis_impl(vlen,width,height,gwidth,gheight,maxz,fps,parent));
 
         }
 
         /*
          * The private constructor
          */
-        famvis_impl::famvis_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, QWidget *parent)
+        famvis_impl::famvis_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps, QWidget *parent)
             : gr::sync_block("famvis",
                              gr::io_signature::make(1,1, sizeof(float)*vlen),
                              gr::io_signature::make(0, 0, 0))
@@ -57,6 +60,7 @@ namespace gr
             this->width = width;
             this->height = height;
             this->maxz = maxz;
+            this->fps = fps;
     
             if(qApp != NULL)
             {
@@ -136,9 +140,20 @@ namespace gr
                 }
             }
 
-            usleep(1000*300);
+            milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 
-            QCoreApplication::postEvent(d_main_gui,new UpdateEvent(dat, this->maxz));
+            if (ms > oldms+std::chrono::milliseconds(1000)){
+                fcount = 0;
+                oldms = ms;
+            
+                printf("Reset\n");fflush(stdout);
+            }
+
+            if (fcount < fps){
+                QCoreApplication::postEvent(d_main_gui,new UpdateEvent(dat, this->maxz));
+            }
+
+            fcount++;
 
             return noutput_items;
         }
