@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2016 Christopher Richardson
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ namespace gr
 
             usleep(1000*300);
 
-            QCoreApplication::postEvent(d_main_gui,new MyCustomEvent(dat, this->maxz));
+            QCoreApplication::postEvent(d_main_gui,new UpdateEvent(dat, this->maxz));
 
             return noutput_items;
         }

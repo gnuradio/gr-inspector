@@ -37,7 +37,6 @@ namespace gr
         class famvis_impl : public famvis
         {
         private:
-            // Nothing to declare in this block.
             QApplication *d_qApplication;
             int width, height;
 
