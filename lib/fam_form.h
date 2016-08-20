@@ -63,7 +63,7 @@ namespace gr
         class MyCustomEvent : public QEvent
         {
         public:
-            MyCustomEvent( double ** customData1, const int customData2):
+            MyCustomEvent( double ** customData1, const double customData2):
                 QEvent(MY_CUSTOM_EVENT),
                 m_customData1(customData1),
                 m_customData2(customData2)
@@ -75,14 +75,14 @@ namespace gr
                 return m_customData1;
             }
 
-            int getCustomData2() const
+            double getCustomData2() const
             {
                 return m_customData2;
             }
 
         private:
             double ** m_customData1;
-            int m_customData2;
+            double m_customData2;
         };
 
 
@@ -167,7 +167,7 @@ namespace gr
 
             void btn3d();
             void btn2d();
-            void update(double * *d);
+            void update(double * *d,double maxz);
         public:
             void postMyCustomEvent(double* * customData1, const int customData2);
         protected:

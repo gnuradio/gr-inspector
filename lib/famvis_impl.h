@@ -37,9 +37,10 @@ namespace gr
             // Nothing to declare in this block.
             QApplication *d_qApplication;
             int width, height;
+            double maxz;
 
         public:
-            famvis_impl(int,int,int,int,int,QWidget*);
+            famvis_impl(int,int,int,int,int,double maxz,QWidget*);
             ~famvis_impl();
             fam_form *d_main_gui;
             // Where all the action really happens
