@@ -10,18 +10,12 @@
 inspector.famvis($vlen,$width,$height,$gwidth,$gheight,$maxz)
 $(win) = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget) 
 $(gui_hint()($win))</make>
-  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
-       Sub-nodes:
-       * name
-       * key (makes the value accessible as $keyname, e.g. in the make node)
-       * type -->
+  
   <param>
     <name>Vec Length</name>
     <key>vlen</key>
     <type>int</type>
   </param>
-
-
 
   <param>
     <name>Width</name>
@@ -54,8 +48,6 @@ $(gui_hint()($win))</make>
     <type>float</type>
   </param>
 
-
-
   <param>
     <name>GUI Hint</name>
     <key>gui_hint</key>
@@ -64,29 +56,10 @@ $(gui_hint()($win))</make>
     <hide>part</hide>
   </param>
 
-
-
-
-  <!-- Make one 'sink' node per input. Sub-nodes:
-       * name (an identifier for the GUI)
-       * type
-       * vlen
-       * optional (set to 1 for optional inputs) -->
   <sink>
     <name>in</name>
     <type>float</type>
     <vlen>$vlen</vlen>
   </sink>
-
-
-
-  <!-- Make one 'source' node per output. Sub-nodes:
-       * name (an identifier for the GUI)
-       * type
-       * vlen
-       * optional (set to 1 for optional inputs) -->
-  <!--<source>
-    <name>out</name>
-    <type></type>-->
 
 </block>

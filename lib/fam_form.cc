@@ -120,10 +120,6 @@ namespace gr
 
         fam_form::~fam_form()
         {
-            delete d_timer;
-            delete[] d_freq;
-            delete d_symbol;
-            delete d_manual_cb;
         }
 
         void fam_form::update( double **d,double maxz)
@@ -172,17 +168,6 @@ namespace gr
 
             plot->repaint();
             repaint();
-        }
-
-        void
-        fam_form::spawn_signal_selector()
-        {
-        }
-
-
-        void
-        fam_form::resizeEvent( QResizeEvent * event )
-        {
         }
 
         void fam_form::customEvent(QEvent * event)

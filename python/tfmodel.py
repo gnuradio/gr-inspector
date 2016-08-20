@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 ## @file
 #  tfmodel - load tensor flow graphs for use in GNU Radio
+
 # -*- coding: utf-8 -*-
 # 
 # Copyright 2016 Christopher Richardson
@@ -20,6 +21,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
+
 from __future__ import division, print_function, absolute_import
 import tensorflow as tf    
 from tensorflow.contrib.session_bundle import manifest_pb2
@@ -33,15 +35,11 @@ import tensorflow as tf
 from numpy import zeros, newaxis
 import collections
 
-Np = 64  # 2xNp is the number of columns
-P = 256  # number of new items needed to calculate estimate
-L = 2
-
 ## tfmodel is a sync block to produce PMT output from a TensorFlow graph
 class tfmodel(gr.sync_block):
 
 
-    # Create our block
+    ## Create our block
     def __init__(self, dtype, vlen, graphfile,reshape):
 
         print(reshape)
