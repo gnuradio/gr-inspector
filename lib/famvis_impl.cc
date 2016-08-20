@@ -145,8 +145,6 @@ namespace gr
             if (ms > oldms+std::chrono::milliseconds(1000)){
                 fcount = 0;
                 oldms = ms;
-            
-                printf("Reset\n");fflush(stdout);
             }
 
             if (fcount < fps){

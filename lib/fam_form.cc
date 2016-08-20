@@ -162,11 +162,7 @@ namespace gr
                 }
             }
 
-
             plot->maxz = maxz;
-
-
-
             plot->loadFromData 	(   d,
                                     rows,
                                     columns,
@@ -175,9 +171,6 @@ namespace gr
                                     miny,
                                     maxy
                                 );
-
-        
-            
 
             plot-> updateData();
             plot->updateGL();
