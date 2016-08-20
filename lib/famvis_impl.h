@@ -23,6 +23,10 @@
 
 #include <inspector/famvis.h>
 #include "fam_form.h"
+#include <chrono>
+
+using namespace std::chrono;
+
 
 namespace gr
 {
@@ -45,11 +49,28 @@ namespace gr
              */
             double maxz;
 
+            /**
+             * Number of frames in second
+             */
+            int fcount;
+
+            /**
+             * Frames per second to decide whether to drop frames
+             */
+            int fps;
+
+            /**
+             * Frame rate millisecond logger
+             */
+            milliseconds oldms; 
+
+           
+
         public:
             /**
              * Implement the block
              */
-            famvis_impl(int,int,int,int,int,double maxz,QWidget*);
+            famvis_impl(int,int,int,int,int,double,int, QWidget*);
             ~famvis_impl();
             /**
              * Pointer to our GUI
