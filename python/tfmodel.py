@@ -42,7 +42,6 @@ class tfmodel(gr.sync_block):
     ## Create our block
     def __init__(self, dtype, vlen, graphfile,reshape):
 
-        print(reshape)
         self.reshape = reshape
         
         inputs = []
@@ -92,30 +91,32 @@ class tfmodel(gr.sync_block):
         tensordata = []
         input_i = []
         shapev = np.array(input_items[0]).shape
-        inp = np.array(input_items[0][0])
 
-        if self.dtype == np.complex64:
+        for item in range(shapev[0]):
 
-            inp = np.array(input_items[0])
+            inp = np.array(input_items[0][item])
 
-            # iterate through all 128 blocks, passed to us
-            for i in range(inp.shape[0]):
-                tensordata.append(np.array([[inp[i].real,inp[i].imag]]))
+            if self.dtype == np.complex64:
 
-        elif self.dtype == np.float32:
+                # complex data must be split into real 
+                # and imaginary floats for the ANN
+                tensordata.append(np.array([[inp.real,inp.imag]]))
 
-            if np.mean(inp) == 0.0:
-                return len(input_items[0])
+            elif self.dtype == np.float32:
 
-            ## Normalise data
-            inp = (inp - np.mean(inp)) / np.std(inp)
+                if np.mean(inp) == 0.0:
+                    return len(input_items[0])
 
-            if not self.reshape == ():
-                floats = np.reshape(inp,self.reshape)# (2 * P * L, (2 * Np) - 0))
-            else:
-                floats = inp
+                ## Normalise data
+                inp = (inp - np.mean(inp)) / np.std(inp)
 
-            tensordata.append(np.array([floats]))
+                ## Reshape data as specified
+                if not self.reshape == ():
+                    floats = np.reshape(inp,self.reshape)
+                else:
+                    floats = inp
+
+                tensordata.append(np.array([floats]))
 
         ne = []
         for v in tensordata:
