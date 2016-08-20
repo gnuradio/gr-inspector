@@ -559,6 +559,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>reshape</key>
+      <value>()</value>
+    </param>
+    <param>
       <key>vlen</key>
       <value>128</value>
     </param>
