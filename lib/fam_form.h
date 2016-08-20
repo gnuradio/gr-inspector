@@ -1,5 +1,7 @@
 /* -*- c++ -*- */
 /*
+ * Copyright 2016 Christopher Richardson
+ * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
@@ -31,21 +33,20 @@
 
 namespace Qwt3D
 {
+    /** 
+     * Extend the plot, so that we can alter the size
+     */    
     class Plot : public SurfacePlot
     {
     public:
         void adjustScales();
         void calculateHull();
         Plot();
-
         int minx;
         int miny;
-
         int maxx;
         int maxy;
-
         int maxz;
-
     };
 
 }
@@ -56,127 +57,128 @@ namespace gr
     namespace inspector
     {
 
+    
+        /**
+         * Update event - used for updating plot
+         */
+        const QEvent::Type UPDATE_EVENT = static_cast<QEvent::Type>(QEvent::User + 1);
 
-        const QEvent::Type MY_CUSTOM_EVENT = static_cast<QEvent::Type>(QEvent::User + 1);
+        /**
+         * Rotation event - used for rotating the plot
+         */
         const QEvent::Type ROT_EVENT = static_cast<QEvent::Type>(QEvent::User + 2);
 
-        class MyCustomEvent : public QEvent
+
+        /**
+         * Update event 
+         */
+        class UpdateEvent : public QEvent
         {
         public:
-            MyCustomEvent( double ** customData1, const double customData2):
-                QEvent(MY_CUSTOM_EVENT),
-                m_customData1(customData1),
-                m_customData2(customData2)
+            UpdateEvent( double **data, const double zaxis):
+                QEvent(UPDATE_EVENT),
+                m_data(data),
+                m_zaxis(zaxis)
             {
             }
 
-            double ** getCustomData1() const
+            /**
+             *  Get data used for the graph
+             */
+            double ** getData() const
             {
-                return m_customData1;
+                return m_data;
             }
 
-            double getCustomData2() const
+
+            /**
+             * Get max z axis value
+             */
+            double getZaxis() const
             {
-                return m_customData2;
+                return m_zaxis;
             }
 
         private:
-            double ** m_customData1;
-            double m_customData2;
+            double ** m_data;
+            double m_zaxis;
         };
 
-
+        
+        /**
+         * Rotation event
+         */
         class RotEvent : public QEvent
         {
         public:
-            RotEvent(bool customData1):
+            RotEvent(bool rotation):
                 QEvent(ROT_EVENT),
-                m_customData1(customData1)
+                m_rotation(rotation)
             {
             }
 
-            bool getCustomData1() const
+            /**
+             * Decide whether to perform 2D or 3D rotation
+             */
+            bool getRotation() const
             {
-                return m_customData1;
+                return m_rotation;
             }
 
        private:
-            bool m_customData1;
+            bool m_rotation;
         };
 
-
-        class fam_form : public QMainWindow // public QWidget
+        /**
+         * Window containing plot
+         */
+        class fam_form : public QMainWindow
         {
             Q_OBJECT
 
         public:
-            //void set_axis_x(float start, float stop);
-            //void msg_received();
-            //void set_cfreq(float freq);
-            //void spawn_signal_selector();
-            //void add_msg_queue(float cfreq, float bandwidth);
-            //float freq_to_x(float freq);
-            //float x_to_freq(float x);
-        
-
             Qwt3D::Plot * plot;
-
-            //void drawOverlay();
-            fam_form(QWidget *parent,int,int,int , int);
+            fam_form(QWidget *parent,int,int,int,int);
             ~fam_form();
-
-            bool updated=false;
-
+        
         private:
-
-            /*enum markerType
-            {
-                NONE,
-                LEFT,
-                CENTER,
-                RIGHT
-            };*/
-
+            /// Width of data
             int width;  
+            /// Height of data
             int height;
-
+            /// Graph width
             int gwidth;  
+            /// Graph height
             int gheight;
-
-            //int d_interval, d_fft_len, d_marker_count;
-            // int *d_rf_unit;
-            bool *d_manual;
-            //std::vector<float> d_axis_x, d_axis_y;
-            //std::vector<double> *d_buffer;
-            //float d_max, d_min, d_cfreq, d_mouse_offset;
-            //double* d_freq;
-            //std::vector<std::vector<float> >* d_rf_map;
-            //markerType d_clicked_marker;
-
-            //QwtSymbol *d_symbol;
-            //QTimer *d_timer;
-            //QCheckBox* d_manual_cb;
-            //gr::msg_queue* d_msg_queue;
-
-            //gr::thread::mutex d_mutex;
-
-        protected:
-            //void resizeEvent(QResizeEvent * event);
-
+             
         public slots:
-
+            /** 
+             * 3D button press 
+             */
             void btn3d();
+            /** 
+             * 2D button press
+             */
             void btn2d();
+            /** 
+             * Update the plot
+             */
             void update(double * *d,double maxz);
-        public:
-            void postMyCustomEvent(double* * customData1, const int customData2);
         protected:
-            void customEvent(QEvent *event); // This overrides QObject::customEvent()
+            /**
+             * Handle custom QT events
+             */
+            void customEvent(QEvent *event); 
         private:
-            void handleMyCustomEvent(const MyCustomEvent *event);
+            /**
+             * Handle updating of plot
+             */
+            void handleUpdateEvent(const UpdateEvent *event);
+
+            /**
+             * Handle rotation of plot
+             */ 
             void handleRotEvent(const RotEvent *event);
-
-
 
         };
 
