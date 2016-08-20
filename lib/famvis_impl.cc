@@ -102,14 +102,16 @@ namespace gr
         }
 #endif
 
-        /*
+        /**
          * Our virtual destructor.
          */
         famvis_impl::~famvis_impl()
         {
         }
 
-
+        /** 
+         * Work function process data for graph
+         */
         int
         famvis_impl::work(int noutput_items,
                           gr_vector_const_void_star &input_items,
@@ -117,27 +119,19 @@ namespace gr
         {
             const float *in = (const float *) input_items[0];
 
-            /*int Np = 64  ;// 2xNp is the number of columns
-            int P = 256  ;// number of new items needed to calculate estimate
-            int L = 2   ;*/
-
-            unsigned int rows = height; // 2 * Np;
-            unsigned int columns = width; //2*P*L;
+            unsigned int rows = height; 
+            unsigned int columns = width;
 
             double** dat = new double*[rows];
             for(int i = 0; i < rows; ++i)
                 dat[i] = new double[columns];
 
             int z = 0.0;
-            //double maxz = 0.0;
             for(int y=0; y<columns; y++)
             {
                 for(int x=0; x<rows; x++)
                 {
                     dat[x][y] = in[z];
-                    if (in[z] > maxz) {
-                       // maxz = in[z];
-                    }
                     z++;
                 }
             }
