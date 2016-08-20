@@ -711,6 +711,8 @@ EXCLUDE_PATTERNS       = */.deps/* \
                          */.svn/* \
                          */CVS/* \
                          */__init__.py \
+                         */build_utils.py \
+                         */build_utils_codes.py \
                          */qa_*.cc \
                          */qa_*.h \
                          */qa_*.py

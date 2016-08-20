@@ -1,9 +1,6 @@
 #!/usr/bin/env python2
-
 ## @file
 #  tfmodel - load tensor flow graphs for use in GNU Radio
-
-
 # -*- coding: utf-8 -*-
 # 
 # Copyright 2016 Christopher Richardson
@@ -45,8 +42,11 @@ class tfmodel(gr.sync_block):
 
 
     # Create our block
-    def __init__(self, dtype, vlen, graphfile):
+    def __init__(self, dtype, vlen, graphfile,reshape):
 
+        print(reshape)
+        self.reshape = reshape
+        
         inputs = []
         inputs.append((np.dtype(dtype), vlen))
 
@@ -112,8 +112,10 @@ class tfmodel(gr.sync_block):
             ## Normalise data
             inp = (inp - np.mean(inp)) / np.std(inp)
 
-            ## Reshape to 2D
-            floats = np.reshape(inp, (2 * P * L, (2 * Np) - 0))
+            if not self.reshape == ():
+                floats = np.reshape(inp,self.reshape)# (2 * P * L, (2 * Np) - 0))
+            else:
+                floats = inp
 
             tensordata.append(np.array([floats]))
 

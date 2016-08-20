@@ -1045,6 +1045,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>reshape</key>
+      <value>(2*P*L,2*Np)</value>
+    </param>
+    <param>
       <key>vlen</key>
       <value>2 * P * L * 2 * Np</value>
     </param>
