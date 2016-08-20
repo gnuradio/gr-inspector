@@ -39,24 +39,25 @@ namespace gr
     {
 
         famvis::sptr
-        famvis::make(int vlen,int width, int height,int gwidth,int gheight, QWidget *parent)
+        famvis::make(int vlen,int width, int height,int gwidth,int gheight,double maxz, QWidget *parent)
         {
             return gnuradio::get_initial_sptr
-                   (new famvis_impl(vlen,width,height,gwidth,gheight,parent));
+                   (new famvis_impl(vlen,width,height,gwidth,gheight,maxz,parent));
 
         }
 
         /*
          * The private constructor
          */
-        famvis_impl::famvis_impl(int vlen,int width, int height,int gwidth,int gheight, QWidget *parent)
+        famvis_impl::famvis_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, QWidget *parent)
             : gr::sync_block("famvis",
                              gr::io_signature::make(1,1, sizeof(float)*vlen),
                              gr::io_signature::make(0, 0, 0))
         {
             this->width = width;
             this->height = height;
-
+            this->maxz = maxz;
+    
             if(qApp != NULL)
             {
                 d_qApplication = qApp;
@@ -128,19 +129,22 @@ namespace gr
                 dat[i] = new double[columns];
 
             int z = 0.0;
-            double maxz = 0.0;
+            //double maxz = 0.0;
             for(int y=0; y<columns; y++)
             {
                 for(int x=0; x<rows; x++)
                 {
                     dat[x][y] = in[z];
+                    if (in[z] > maxz) {
+                       // maxz = in[z];
+                    }
                     z++;
                 }
             }
 
             usleep(1000*300);
 
-            QCoreApplication::postEvent(d_main_gui,new MyCustomEvent(dat, 0));
+            QCoreApplication::postEvent(d_main_gui,new MyCustomEvent(dat, this->maxz));
 
             return noutput_items;
         }

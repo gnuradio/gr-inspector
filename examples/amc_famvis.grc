@@ -881,11 +881,11 @@
     </param>
     <param>
       <key>gheight</key>
-      <value>10</value>
+      <value>20</value>
     </param>
     <param>
       <key>gwidth</key>
-      <value>10</value>
+      <value>20</value>
     </param>
     <param>
       <key>height</key>
@@ -894,6 +894,10 @@
     <param>
       <key>id</key>
       <value>inspector_famvis_0</value>
+    </param>
+    <param>
+      <key>maxz</key>
+      <value>0</value>
     </param>
     <param>
       <key>vlen</key>
@@ -932,7 +936,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1096, 496)</value>
+      <value>(1160, 496)</value>
     </param>
     <param>
       <key>_rotation</key>

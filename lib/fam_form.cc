@@ -48,7 +48,7 @@ namespace Qwt3D
         hull.maxVertex.y = maxy;
 
         hull.minVertex.z = 0;
-        hull.maxVertex.z = 10 ; //maxz;
+        hull.maxVertex.z = maxz;
 
         setHull(hull);
     }
@@ -57,9 +57,12 @@ namespace Qwt3D
     {
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
-            coordinates()->axes[i].setMajors(7);
-            coordinates()->axes[i].setMinors(4);
+            coordinates()->axes[i].setMajors(0);
+            coordinates()->axes[i].setMinors(0);
         }
+        
+        //setCoordinateStyle(NOCOORD);
+        setCoordinateStyle(FRAME);
         setRotation(15,0,15);
         setScale(1.0,1.0,1.0);
         setZoom(1.0);
@@ -123,7 +126,7 @@ namespace gr
             delete d_manual_cb;
         }
 
-        void fam_form::update( double * *d)
+        void fam_form::update( double **d,double maxz)
         {
             unsigned int rows =  height;
             unsigned int columns = width;
@@ -135,7 +138,23 @@ namespace gr
             plot->miny = miny;
             plot->maxy = maxy;
 
-            plot->maxz = 20;
+
+            if (maxz == 0) {
+                for (int y = 0; y < rows ; y++) {
+                    for (int x = 0; x < columns ; x++) {
+                        if (d[y][x] > maxz) {
+                            maxz = d[y][x];
+                        } 
+        
+                    }
+                }
+            }
+
+
+            plot->maxz = maxz;
+
+
+
             plot->loadFromData 	(   d,
                                     rows,
                                     columns,
@@ -144,6 +163,9 @@ namespace gr
                                     miny,
                                     maxy
                                 );
+
+        
+            
 
             plot-> updateData();
             plot->updateGL();
@@ -185,7 +207,7 @@ namespace gr
         {
             // Now you can safely do something with your Qt objects.
             // Access your custom data using event->getCustomData1() etc.
-            update(event->getCustomData1());
+            update(event->getCustomData1(),event->getCustomData2());
         }
 
         void fam_form::handleRotEvent(const RotEvent *event)
