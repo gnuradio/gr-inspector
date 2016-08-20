@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2016 Christopher Richardson
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,21 +29,36 @@ namespace gr
     namespace inspector
     {
 
-
-
+        /*!
+         * \brief 3D visualisation block
+         * \ingroup inspector
+         *
+         */
         class famvis_impl : public famvis
         {
         private:
             // Nothing to declare in this block.
             QApplication *d_qApplication;
             int width, height;
+
+            /**
+             * Z axis height
+             */
             double maxz;
 
         public:
+            /**
+             * Implement the block
+             */
             famvis_impl(int,int,int,int,int,double maxz,QWidget*);
             ~famvis_impl();
+            /**
+             * Pointer to our GUI
+             */
             fam_form *d_main_gui;
-            // Where all the action really happens
+            /**
+             * Work function, to handle processing of data
+             */
             int work(int noutput_items,
                      gr_vector_const_void_star &input_items,
                      gr_vector_void_star &output_items);

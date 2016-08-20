@@ -110,18 +110,18 @@ namespace gr
             Q_OBJECT
 
         public:
-            void set_axis_x(float start, float stop);
-            void msg_received();
-            void set_cfreq(float freq);
-            void spawn_signal_selector();
-            void add_msg_queue(float cfreq, float bandwidth);
-            float freq_to_x(float freq);
-            float x_to_freq(float x);
+            //void set_axis_x(float start, float stop);
+            //void msg_received();
+            //void set_cfreq(float freq);
+            //void spawn_signal_selector();
+            //void add_msg_queue(float cfreq, float bandwidth);
+            //float freq_to_x(float freq);
+            //float x_to_freq(float x);
         
 
             Qwt3D::Plot * plot;
 
-            void drawOverlay();
+            //void drawOverlay();
             fam_form(QWidget *parent,int,int,int , int);
             ~fam_form();
 
@@ -129,13 +129,13 @@ namespace gr
 
         private:
 
-            enum markerType
+            /*enum markerType
             {
                 NONE,
                 LEFT,
                 CENTER,
                 RIGHT
-            };
+            };*/
 
             int width;  
             int height;
@@ -143,25 +143,25 @@ namespace gr
             int gwidth;  
             int gheight;
 
-            int d_interval, d_fft_len, d_marker_count;
-            int *d_rf_unit;
+            //int d_interval, d_fft_len, d_marker_count;
+            // int *d_rf_unit;
             bool *d_manual;
-            std::vector<float> d_axis_x, d_axis_y;
-            std::vector<double> *d_buffer;
-            float d_max, d_min, d_cfreq, d_mouse_offset;
-            double* d_freq;
-            std::vector<std::vector<float> >* d_rf_map;
-            markerType d_clicked_marker;
+            //std::vector<float> d_axis_x, d_axis_y;
+            //std::vector<double> *d_buffer;
+            //float d_max, d_min, d_cfreq, d_mouse_offset;
+            //double* d_freq;
+            //std::vector<std::vector<float> >* d_rf_map;
+            //markerType d_clicked_marker;
 
-            QwtSymbol *d_symbol;
-            QTimer *d_timer;
-            QCheckBox* d_manual_cb;
-            gr::msg_queue* d_msg_queue;
+            //QwtSymbol *d_symbol;
+            //QTimer *d_timer;
+            //QCheckBox* d_manual_cb;
+            //gr::msg_queue* d_msg_queue;
 
-            gr::thread::mutex d_mutex;
+            //gr::thread::mutex d_mutex;
 
         protected:
-            void resizeEvent(QResizeEvent * event);
+            //void resizeEvent(QResizeEvent * event);
 
         public slots:
 
