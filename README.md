@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/gnuradio/gr-inspector/raw/dev/docs/doxygen/images/logo_body_big.png" />
+<img src="https://github.com/gnuradio/gr-inspector/blob/master/docs/doxygen/images/logo_body_big.png" />
 
 </div>
 
