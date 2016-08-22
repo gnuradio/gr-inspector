@@ -897,7 +897,7 @@
     </param>
     <param>
       <key>maxz</key>
-      <value>0</value>
+      <value>10</value>
     </param>
     <param>
       <key>vlen</key>
@@ -909,7 +909,7 @@
     </param>
     <param>
       <key>fps</key>
-      <value>3</value>
+      <value>6</value>
     </param>
   </block>
   <block>
