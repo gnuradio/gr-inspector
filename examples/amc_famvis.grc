@@ -850,7 +850,7 @@
     </param>
   </block>
   <block>
-    <key>inspector_famvis</key>
+    <key>inspector_vis3d</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -869,7 +869,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1624, 700)</value>
+      <value>(1712, 740)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -893,7 +893,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>inspector_famvis_0</value>
+      <value>inspector_vis3d_0</value>
     </param>
     <param>
       <key>maxz</key>
@@ -906,6 +906,18 @@
     <param>
       <key>width</key>
       <value>2 * P * L   </value>
+    </param>
+    <param>
+      <key>xaxis</key>
+      <value>X axis</value>
+    </param>
+    <param>
+      <key>yaxis</key>
+      <value>Y axis</value>
+    </param>
+    <param>
+      <key>zaxis</key>
+      <value>Z axis</value>
     </param>
     <param>
       <key>fps</key>
@@ -1054,7 +1066,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
-    <sink_block_id>inspector_famvis_0</sink_block_id>
+    <sink_block_id>inspector_vis3d_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

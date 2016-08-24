@@ -29,5 +29,5 @@ install(FILES
     ofdm_bouzegzi_c.h
     ofdm_zkf_c.h
     ofdm_synchronizer_cc.h
-    famvis.h DESTINATION include/inspector
+    vis3d.h DESTINATION include/inspector
 )

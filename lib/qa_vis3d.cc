@@ -21,14 +21,14 @@
 
 #include <gnuradio/attributes.h>
 #include <cppunit/TestAssert.h>
-#include "qa_famvis.h"
-#include <inspector/famvis.h>
+#include "qa_vis3d.h"
+#include <inspector/vis3d.h>
 
 namespace gr {
   namespace inspector {
 
     void
-    qa_famvis::t1()
+    qa_vis3d::t1()
     {
       // Put test here
     }

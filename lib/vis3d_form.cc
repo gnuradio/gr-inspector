@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "fam_form.h"
+#include "vis3d_form.h"
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -88,7 +88,7 @@ namespace gr
         /**
          * Create GUI with the plot
          */
-        fam_form::fam_form(QWidget *parent, int width, int height,int gwidth,int gheight,char *xaxis, char *yaxis, char *zaxis) : QMainWindow(parent) // QWidget(parent)
+        vis3d_form::vis3d_form(QWidget *parent, int width, int height,int gwidth,int gheight,char *xaxis, char *yaxis, char *zaxis) : QMainWindow(parent) // QWidget(parent)
         {
             plot = new Qwt3D::Plot() ;
             this->width = width;
@@ -122,7 +122,7 @@ namespace gr
          * Show 3D style version of graph
          */
 
-        void fam_form::btn3d()
+        void vis3d_form::btn3d()
         {
             QCoreApplication::postEvent(this,new RotEvent(true));
         }
@@ -130,19 +130,19 @@ namespace gr
         /**
          * Show 2D style version of graph
          */
-        void fam_form::btn2d()
+        void vis3d_form::btn2d()
         {
             QCoreApplication::postEvent(this,new RotEvent(false));
         }
 
-        fam_form::~fam_form()
+        vis3d_form::~vis3d_form()
         {
         }
 
         /**
          * Update our plot
          */
-        void fam_form::update( double **d,double maxz)
+        void vis3d_form::update( double **d,double maxz)
         {
             unsigned int rows =  height;
             unsigned int columns = width;
@@ -196,7 +196,7 @@ namespace gr
         /**
          * Handle our custom QT events
          */
-        void fam_form::customEvent(QEvent * event)
+        void vis3d_form::customEvent(QEvent * event)
         {
             // When we get here, we've crossed the thread boundary and are now
             // executing in the Qt object's thread
@@ -212,7 +212,7 @@ namespace gr
         /**
          * Pass on the updating of the plot
          */
-        void fam_form::handleUpdateEvent(const UpdateEvent *event)
+        void vis3d_form::handleUpdateEvent(const UpdateEvent *event)
         {
             update(event->getData(),event->getZaxis());
         }
@@ -220,7 +220,7 @@ namespace gr
         /**
          * Rotate the plot appropriately 
          */
-        void fam_form::handleRotEvent(const RotEvent *event)
+        void vis3d_form::handleRotEvent(const RotEvent *event)
         {
             if (event->getRotation() == true) {
                 plot->setRotation(15,0,15);

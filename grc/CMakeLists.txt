@@ -26,5 +26,5 @@ install(FILES
     inspector_sync_prototype_cc.xml 
     inspector_ofdm_synchronizer_cc.xml
     inspector_tfmodel.xml
-    inspector_famvis.xml DESTINATION share/gnuradio/grc/blocks
+    inspector_vis3d.xml DESTINATION share/gnuradio/grc/blocks
 )

@@ -132,14 +132,14 @@ namespace gr
         /**
          * Window containing plot
          */
-        class fam_form : public QMainWindow
+        class vis3d_form : public QMainWindow
         {
             Q_OBJECT
 
         public:
             Qwt3D::Plot * plot;
-            fam_form(QWidget *parent,int,int,int,int,char*,char*,char*);
-            ~fam_form();
+            vis3d_form(QWidget *parent,int,int,int,int,char*,char*,char*);
+            ~vis3d_form();
         
         private:
             /// Width of data

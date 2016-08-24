@@ -19,8 +19,8 @@
  */
 
 
-#ifndef INCLUDED_INSPECTOR_FAMVIS_H
-#define INCLUDED_INSPECTOR_FAMVIS_H
+#ifndef INCLUDED_INSPECTOR_VIS3D_H
+#define INCLUDED_INSPECTOR_VIS3D_H
 
 
 #ifdef ENABLE_PYTHON
@@ -39,10 +39,10 @@ namespace gr {
      * \ingroup inspector
      *
      */
-    class INSPECTOR_API famvis : virtual public gr::sync_block
+    class INSPECTOR_API vis3d : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<famvis> sptr;
+      typedef boost::shared_ptr<vis3d> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of inspector::FAMVis.
@@ -63,5 +63,5 @@ namespace gr {
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_FAMVIS_H */
+#endif /* INCLUDED_INSPECTOR_VIS3D_H */
 

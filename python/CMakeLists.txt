@@ -48,4 +48,4 @@ GR_ADD_TEST(qa_signal_extractor_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DI
 GR_ADD_TEST(qa_qtgui_inspector_sink_vf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_qtgui_inspector_sink_vf.py)
 GR_ADD_TEST(qa_ofdm_zkf_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_ofdm_zkf_c.py)
 GR_ADD_TEST(qa_ofdm_synchronizer_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_ofdm_synchronizer_cc.py)
-GR_ADD_TEST(qa_famvis ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_famvis.py)
+GR_ADD_TEST(qa_vis3d ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_vis3d.py)

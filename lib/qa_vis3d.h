@@ -19,8 +19,8 @@
  */
 
 
-#ifndef _QA_FAMVIS_H_
-#define _QA_FAMVIS_H_
+#ifndef _QA_VIS3D_H_
+#define _QA_VIS3D_H_
 
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestCase.h>
@@ -28,10 +28,10 @@
 namespace gr {
   namespace inspector {
 
-    class qa_famvis : public CppUnit::TestCase
+    class qa_vis3d : public CppUnit::TestCase
     {
     public:
-      CPPUNIT_TEST_SUITE(qa_famvis);
+      CPPUNIT_TEST_SUITE(qa_vis3d);
       CPPUNIT_TEST(t1);
       CPPUNIT_TEST_SUITE_END();
 
@@ -42,5 +42,5 @@ namespace gr {
   } /* namespace inspector */
 } /* namespace gr */
 
-#endif /* _QA_FAMVIS_H_ */
+#endif /* _QA_VIS3D_H_ */
 

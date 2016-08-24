@@ -48,7 +48,7 @@ class tfmodel(gr.sync_block):
         inputs.append((np.dtype(dtype), vlen))
 
         gr.sync_block.__init__(self,
-                               name="fam",
+                               name="tfmodel",
                                in_sig=inputs,
                                out_sig=[])
 

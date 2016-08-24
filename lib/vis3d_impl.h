@@ -18,11 +18,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_INSPECTOR_FAMVIS_IMPL_H
-#define INCLUDED_INSPECTOR_FAMVIS_IMPL_H
+#ifndef INCLUDED_INSPECTOR_VIS3D_IMPL_H
+#define INCLUDED_INSPECTOR_VIS3D_IMPL_H
 
-#include <inspector/famvis.h>
-#include "fam_form.h"
+#include <inspector/vis3d.h>
+#include "vis3d_form.h"
 #include <chrono>
 
 using namespace std::chrono;
@@ -38,7 +38,7 @@ namespace gr
          * \ingroup inspector
          *
          */
-        class famvis_impl : public famvis
+        class vis3d_impl : public vis3d
         {
         private:
             QApplication *d_qApplication;
@@ -70,12 +70,12 @@ namespace gr
             /**
              * Implement the block
              */
-            famvis_impl(int,int,int,int,int,double,int,char*,char*,char*, QWidget*);
-            ~famvis_impl();
+            vis3d_impl(int,int,int,int,int,double,int,char*,char*,char*, QWidget*);
+            ~vis3d_impl();
             /**
              * Pointer to our GUI
              */
-            fam_form *d_main_gui;
+            vis3d_form *d_main_gui;
             /**
              * Work function, to handle processing of data
              */
@@ -92,5 +92,5 @@ namespace gr
     } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_FAMVIS_IMPL_H */
+#endif /* INCLUDED_INSPECTOR_VIS3D_IMPL_H */
 

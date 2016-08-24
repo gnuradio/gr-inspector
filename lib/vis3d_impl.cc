@@ -32,7 +32,7 @@
 #include <qwtplot3d/qwt3d_surfaceplot.h>
 #include <qwtplot3d/qwt3d_function.h>
 #include <gnuradio/io_signature.h>
-#include "famvis_impl.h"
+#include "vis3d_impl.h"
 
 using namespace std::chrono;
 
@@ -41,19 +41,19 @@ namespace gr
     namespace inspector
     {
 
-        famvis::sptr
-        famvis::make(int vlen,int width, int height,int gwidth,int gheight,double maxz,int fps,char*xaxis, char*yaxis, char *zaxis, QWidget *parent)
+        vis3d::sptr
+        vis3d::make(int vlen,int width, int height,int gwidth,int gheight,double maxz,int fps,char*xaxis, char*yaxis, char *zaxis, QWidget *parent)
         {
             return gnuradio::get_initial_sptr
-                   (new famvis_impl(vlen,width,height,gwidth,gheight,maxz,fps,xaxis,yaxis,zaxis,parent));
+                   (new vis3d_impl(vlen,width,height,gwidth,gheight,maxz,fps,xaxis,yaxis,zaxis,parent));
 
         }
 
         /*
          * The private constructor
          */
-        famvis_impl::famvis_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps,char *xaxis,char* yaxis, char *zaxis,QWidget *parent)
-            : gr::sync_block("famvis",
+        vis3d_impl::vis3d_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps,char *xaxis,char* yaxis, char *zaxis,QWidget *parent)
+            : gr::sync_block("vis3d",
                              gr::io_signature::make(1,1, sizeof(float)*vlen),
                              gr::io_signature::make(0, 0, 0))
         {
@@ -85,14 +85,14 @@ namespace gr
 
             }
 
-            d_main_gui = new fam_form(parent,width,height,gwidth,gheight,xaxis,yaxis,zaxis);
+            d_main_gui = new vis3d_form(parent,width,height,gwidth,gheight,xaxis,yaxis,zaxis);
             d_main_gui->show();
 
         }
 
 #ifdef ENABLE_PYTHON
         PyObject*
-        famvis_impl::pyqwidget()
+        vis3d_impl::pyqwidget()
         {
             PyObject *w = PyLong_FromVoidPtr((void*)d_main_gui);
             PyObject *retarg = Py_BuildValue("N", w);
@@ -100,7 +100,7 @@ namespace gr
         }
 #else
         void *
-        famvis_impl::pyqwidget()
+        vis3d_impl::pyqwidget()
         {
             return NULL;
         }
@@ -109,7 +109,7 @@ namespace gr
         /**
          * Our virtual destructor.
          */
-        famvis_impl::~famvis_impl()
+        vis3d_impl::~vis3d_impl()
         {
         }
 
@@ -117,7 +117,7 @@ namespace gr
          * Work function process data for graph
          */
         int
-        famvis_impl::work(int noutput_items,
+        vis3d_impl::work(int noutput_items,
                           gr_vector_const_void_star &input_items,
                           gr_vector_void_star &output_items)
         {
