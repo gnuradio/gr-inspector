@@ -24,7 +24,7 @@ cmake_minimum_required(VERSION 2.6)
 project(gr-inspector CXX C)
 enable_testing()
 
-
+cmake_policy(SET CMP0015 NEW)
 
 #install to PyBOMBS target prefix if defined
 if(DEFINED ENV{PYBOMBS_PREFIX})
