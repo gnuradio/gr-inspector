@@ -68,6 +68,12 @@ Estimates the parameters subcarrier spacing, symbol time, FFT size and cyclic pr
 #### OFDM Synchronizer
 After OFDM parameter estimation, the signal is frequency synced and symbol beginnings are marked with stream tags.
 
+#### Vis3d
+Visualisation of FAM data from gr-specest
+
+#### Tfmodel
+Loading of TensorFlow models for AMC etc.
+
 ## Google Summer of Code
 This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:
 
