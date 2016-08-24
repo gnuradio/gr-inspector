@@ -22,6 +22,8 @@ To install the Inspector, the following dependencies are required:
 - gr-analog, gr-blocks, gr-channel, gr-filter
 - QT4
 - QWT 6.1.0
+- QwtPlot3D
+- TensorFlow 0.10 (https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation - you need the version for Python 2.7)
 
 Install by the following shell commands:
 
