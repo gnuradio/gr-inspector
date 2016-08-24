@@ -42,17 +42,17 @@ namespace gr
     {
 
         famvis::sptr
-        famvis::make(int vlen,int width, int height,int gwidth,int gheight,double maxz,int fps, QWidget *parent)
+        famvis::make(int vlen,int width, int height,int gwidth,int gheight,double maxz,int fps,char*xaxis, char*yaxis, char *zaxis, QWidget *parent)
         {
             return gnuradio::get_initial_sptr
-                   (new famvis_impl(vlen,width,height,gwidth,gheight,maxz,fps,parent));
+                   (new famvis_impl(vlen,width,height,gwidth,gheight,maxz,fps,xaxis,yaxis,zaxis,parent));
 
         }
 
         /*
          * The private constructor
          */
-        famvis_impl::famvis_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps, QWidget *parent)
+        famvis_impl::famvis_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps,char *xaxis,char* yaxis, char *zaxis,QWidget *parent)
             : gr::sync_block("famvis",
                              gr::io_signature::make(1,1, sizeof(float)*vlen),
                              gr::io_signature::make(0, 0, 0))
@@ -85,7 +85,7 @@ namespace gr
 
             }
 
-            d_main_gui = new fam_form(parent,width,height,gwidth,gheight);
+            d_main_gui = new fam_form(parent,width,height,gwidth,gheight,xaxis,yaxis,zaxis);
             d_main_gui->show();
 
         }

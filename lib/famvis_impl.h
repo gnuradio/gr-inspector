@@ -70,7 +70,7 @@ namespace gr
             /**
              * Implement the block
              */
-            famvis_impl(int,int,int,int,int,double,int, QWidget*);
+            famvis_impl(int,int,int,int,int,double,int,char*,char*,char*, QWidget*);
             ~famvis_impl();
             /**
              * Pointer to our GUI

@@ -138,7 +138,7 @@ namespace gr
 
         public:
             Qwt3D::Plot * plot;
-            fam_form(QWidget *parent,int,int,int,int);
+            fam_form(QWidget *parent,int,int,int,int,char*,char*,char*);
             ~fam_form();
         
         private:
@@ -150,7 +150,12 @@ namespace gr
             int gwidth;  
             /// Graph height
             int gheight;
-             
+            /// X axis 
+            char *xaxis;
+            /// Y axis
+            char *yaxis;
+            /// Z axis
+            char *zaxis;             
         public slots:
             /** 
              * 3D button press 

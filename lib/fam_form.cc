@@ -64,12 +64,29 @@ namespace Qwt3D
     {
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
-            coordinates()->axes[i].setMajors(0);
-            coordinates()->axes[i].setMinors(0);
+           // coordinates()->axes[i].setMajors(0);
+           // coordinates()->axes[i].setMinors(0);
+
+    coordinates()->axes[i].setMajors(5);
+    coordinates()->axes[i].setMinors(4);
         }
-        
+       
+
+/*
+
+        coordinates()->axes[X1].setLabelColor(RGBA(0,0,0.4));
+
+        coordinates()->axes[X1].setLabelString(QString("x-axis"));
+        coordinates()->axes[Y1].setLabelString(QString("y-axis"));
+
+        coordinates()->setLabelFont(QFont("Times", 12, QFont::Bold));
+
+*/
+        //coordinates()->axes[Z1].setLabelString(QChar (0x38f)); // Omega - see http://www.unicode.org/charts/
+
+ 
         //setCoordinateStyle(NOCOORD);
-        setCoordinateStyle(FRAME);
+        //setCoordinateStyle(FRAME);
         setRotation(15,0,15);
         setScale(1.0,1.0,1.0);
         setZoom(1.0);
@@ -88,7 +105,7 @@ namespace gr
         /**
          * Create GUI with the plot
          */
-        fam_form::fam_form(QWidget *parent, int width, int height,int gwidth,int gheight) : QMainWindow(parent) // QWidget(parent)
+        fam_form::fam_form(QWidget *parent, int width, int height,int gwidth,int gheight,char *xaxis, char *yaxis, char *zaxis) : QMainWindow(parent) // QWidget(parent)
         {
             plot = new Qwt3D::Plot() ;
             this->width = width;
@@ -96,6 +113,10 @@ namespace gr
             this->gwidth =gwidth;
             this->gheight = gheight;
 
+            this->xaxis = xaxis;
+            this->yaxis = yaxis;    
+            this->zaxis = zaxis;
+            
             QPushButton *button_3d = new QPushButton("3D", this);
             QPushButton *button_2d = new QPushButton("2D", this);
 
@@ -172,7 +193,20 @@ namespace gr
                                     maxy
                                 );
 
-            plot-> updateData();
+
+
+
+            plot->coordinates()->axes[Qwt3D::X1].setLabel(true);
+            plot->coordinates()->axes[Qwt3D::X1].setLabelString(QString(xaxis));
+
+            plot->coordinates()->axes[Qwt3D::Y1].setLabel(true);
+            plot->coordinates()->axes[Qwt3D::Y1].setLabelString(QString(yaxis));
+
+            plot->coordinates()->axes[Qwt3D::Z1].setLabel(true);
+            plot->coordinates()->axes[Qwt3D::Z1].setLabelString(QString(zaxis));
+
+
+            plot->updateData();
             plot->updateGL();
 
             plot->repaint();

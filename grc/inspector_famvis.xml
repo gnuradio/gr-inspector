@@ -7,7 +7,7 @@
   <import>from gnuradio import qtgui</import> 
   <import>import sip</import>
   <make>#set $win = 'self._%s_win'%$id
-inspector.famvis($vlen,$width,$height,$gwidth,$gheight,$maxz,$fps)
+inspector.famvis($vlen,$width,$height,$gwidth,$gheight,$maxz,$fps,$xaxis,$yaxis,$zaxis)
 $(win) = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget) 
 $(gui_hint()($win))</make>
   
@@ -54,6 +54,31 @@ $(gui_hint()($win))</make>
     <value>3</value>
     <type>int</type>
   </param>
+
+
+  <param>
+    <name>X axis</name>
+    <key>xaxis</key>
+    <value>X axis</value>
+    <type>string</type>
+  </param>
+
+  <param>
+    <name>Y axis</name>
+    <key>yaxis</key>
+    <value>Y axis</value>
+    <type>string</type>
+  </param>
+
+  <param>
+    <name>Z axis</name>
+    <key>zaxis</key>
+    <value>Z axis</value>
+    <type>string</type>
+  </param>
+
+
+
 
   <param>
     <name>GUI Hint</name>
