@@ -23,7 +23,6 @@ install(FILES
     inspector_qtgui_sink_vf.xml
     inspector_block_tree.xml
     inspector_ofdm_zkf_c.xml
-    inspector_sync_prototype_cc.xml 
     inspector_ofdm_synchronizer_cc.xml
     inspector_tfmodel.xml
     inspector_vis3d.xml DESTINATION share/gnuradio/grc/blocks
