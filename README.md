@@ -99,7 +99,7 @@ Sebastian Müller<br/>
 gsenpo[at]gmail.com
 
 Christopher Richardson<br/>
-chrisrichardsonuk@gmail.com
+chrisrichardsonuk[at]gmail.com
 
 If you want to know more about the development process, please visit the [blog](https://grinspector.wordpress.com/).
 
