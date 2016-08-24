@@ -22,7 +22,7 @@
 # QT GUI file generation stuff (Q_OBJECT)
 ########################################################################
 set(QTGUI_MOC_HEADERS
-		inspector_form.h vis3d_form.h)
+		inspector_form.h vis3d_vf_form.h)
 QT4_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
 
 ########################################################################
@@ -39,13 +39,13 @@ list(APPEND inspector_sources
     signal_detector_cvf_impl.cc
     signal_extractor_c_impl.cc
     qtgui_inspector_sink_vf_impl.cc
-		     vis3d_form.cc
+		     vis3d_vf_form.cc
 		inspector_form.cc
 		signal_marker.cc
 		ofdm_bouzegzi_c_impl.cc
     ofdm_zkf_c_impl.cc
     ofdm_synchronizer_cc_impl.cc
-    vis3d_impl.cc )
+    vis3d_vf_impl.cc )
 
 include(GrPython)
 if(ENABLE_PYTHON)
@@ -91,7 +91,7 @@ include_directories(${CPPUNIT_INCLUDE_DIRS})
 list(APPEND test_inspector_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/test_inspector.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/qa_inspector.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/qa_vis3d.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/qa_vis3d_vf.cc
 )
 
 add_executable(test-inspector ${test_inspector_sources})

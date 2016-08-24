@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-	<name>tfmodel</name>
+	<name>TensorFlow AMC Model</name>
 	<key>inspector_tfmodel</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
