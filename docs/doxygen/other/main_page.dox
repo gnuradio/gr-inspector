@@ -40,6 +40,8 @@ It is necessary to first install TensorFlow version 0.10+, which you can do easi
 
 It is also necessary to install our fork of gr-specest from [here](https://github.com/chrisruk/gr-specest).
 
+Then it is necessary to install keras, which can easily be done through pip.
+
 It is important that your .keras/keras.json, has the backend set to 'tensorflow'.  Please note the models are currently being updated.
 
 
