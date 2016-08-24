@@ -23,4 +23,3 @@ else( QWTPLOT3D_FOUND )
     message(FATAL_ERROR "Could not find QwtPlot3D-qt4 ") 
   endif ( QWTPLOT3D_FIND_REQUIRED ) 
 endif ( QWTPLOT3D_FOUND ) 
-
