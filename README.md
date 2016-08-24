@@ -68,10 +68,10 @@ Estimates the parameters subcarrier spacing, symbol time, FFT size and cyclic pr
 #### OFDM Synchronizer
 After OFDM parameter estimation, the signal is frequency synced and symbol beginnings are marked with stream tags.
 
-#### Vis3d
+#### 3D Data Visualisation
 Visualisation of FAM data from gr-specest.
 
-#### Tfmodel
+#### TensorFlow AMC Model
 Loading of TensorFlow models for AMC.
 
 ## Google Summer of Code
@@ -97,6 +97,9 @@ Maintainer of this module:
 
 Sebastian Müller<br/>
 gsenpo[at]gmail.com
+
+Christopher Richardson<br/>
+chrisrichardsonuk@gmail.com
 
 If you want to know more about the development process, please visit the [blog](https://grinspector.wordpress.com/).
 
