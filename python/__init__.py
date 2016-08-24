@@ -31,4 +31,4 @@ except ImportError:
 	pass
 
 # import any pure python here
-from tfmodel import tfmodel
+from tfmodel_vcf import tfmodel_vcf

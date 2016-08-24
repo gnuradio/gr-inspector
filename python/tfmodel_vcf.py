@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 ## @file
-#  tfmodel - load tensor flow graphs for use in GNU Radio
+#  tfmodel_vcf - load tensor flow graphs for use in GNU Radio
 
 # -*- coding: utf-8 -*-
 # 
@@ -35,8 +35,8 @@ import tensorflow as tf
 from numpy import zeros, newaxis
 import collections
 
-## tfmodel is a sync block to produce PMT output from a TensorFlow graph
-class tfmodel(gr.sync_block):
+## tfmodel_vcf is a sync block to produce PMT output from a TensorFlow graph
+class tfmodel_vcf(gr.sync_block):
 
 
     ## Create our block
@@ -48,7 +48,7 @@ class tfmodel(gr.sync_block):
         inputs.append((np.dtype(dtype), vlen))
 
         gr.sync_block.__init__(self,
-                               name="tfmodel",
+                               name="tfmodel_vcf",
                                in_sig=inputs,
                                out_sig=[])
 

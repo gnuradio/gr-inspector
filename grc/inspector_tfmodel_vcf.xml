@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
 	<name>TensorFlow AMC Model</name>
-	<key>inspector_tfmodel</key>
+	<key>inspector_tfmodel_vcf</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
-	<make>inspector.tfmodel($typev.typ,$vlen,$graphfile,$reshape)</make>
+	<make>inspector.tfmodel_vcf($typev.typ,$vlen,$graphfile,$reshape)</make>
 
 	<param>
 		<name>Input Type</name>

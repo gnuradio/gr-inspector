@@ -21,9 +21,9 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-from tfmodel import tfmodel
+from tfmodel_vcf import tfmodel_vcf
 
-class qa_tfmodel (gr_unittest.TestCase):
+class qa_tfmodel_vcf (gr_unittest.TestCase):
 
     def setUp (self):
         self.tb = gr.top_block ()
@@ -38,4 +38,4 @@ class qa_tfmodel (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_tfmodel, "qa_tfmodel.xml")
+    gr_unittest.run(qa_tfmodel_vcf, "qa_tfmodel_vcf.xml")

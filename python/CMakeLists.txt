@@ -31,7 +31,7 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    tfmodel.py
+    tfmodel_vcf.py
     DESTINATION ${GR_PYTHON_DIR}/inspector
 )
 
@@ -49,5 +49,5 @@ GR_ADD_TEST(qa_qtgui_inspector_sink_vf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOUR
 GR_ADD_TEST(qa_ofdm_zkf_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_ofdm_zkf_c.py)
 GR_ADD_TEST(qa_ofdm_synchronizer_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_ofdm_synchronizer_cc.py)
 GR_ADD_TEST(qa_vis3d_vf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_vis3d_vf.py)
-GR_ADD_TEST(qa_tfmodel ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tfmodel.py)
+GR_ADD_TEST(qa_tfmodel_vcf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tfmodel_vcf.py)
 
