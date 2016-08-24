@@ -57,7 +57,7 @@
                 <name>Graph file</name>
                 <key>graphfile</key>
                 <value></value>
-                <type>string</type>
+                <type>file_open</type>
 	</param>
 
 	<param>
