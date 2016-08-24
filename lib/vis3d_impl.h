@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_INSPECTOR_VIS3D_IMPL_H
-#define INCLUDED_INSPECTOR_VIS3D_IMPL_H
+#ifndef INCLUDED_INSPECTOR_VIS3D_IMPL_H 
+#define INCLUDED_INSPECTOR_VIS3D_IMPL_H 
 
 #include <inspector/vis3d.h>
 #include "vis3d_form.h"
@@ -33,52 +33,23 @@ namespace gr
     namespace inspector
     {
 
-        /*!
-         * \brief 3D visualisation block
-         * \ingroup inspector
-         *
-         */
         class vis3d_impl : public vis3d
         {
         private:
             QApplication *d_qApplication;
             int width, height;
 
-            /**
-             * Z axis height
-             */
             double maxz;
 
-            /**
-             * Number of frames in second
-             */
             int fcount;
 
-            /**
-             * Frames per second to decide whether to drop frames
-             */
             int fps;
 
-            /**
-             * Frame rate millisecond logger
-             */
             milliseconds oldms; 
-
-           
-
         public:
-            /**
-             * Implement the block
-             */
             vis3d_impl(int,int,int,int,int,double,int,char*,char*,char*, QWidget*);
             ~vis3d_impl();
-            /**
-             * Pointer to our GUI
-             */
             vis3d_form *d_main_gui;
-            /**
-             * Work function, to handle processing of data
-             */
             int work(int noutput_items,
                      gr_vector_const_void_star &input_items,
                      gr_vector_void_star &output_items);

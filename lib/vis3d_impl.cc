@@ -24,15 +24,13 @@
 
 #include <chrono>
 #include <gnuradio/io_signature.h>
-#include "qtgui_inspector_sink_vf_impl.h"
+#include "vis3d_impl.h"
 #include <gnuradio/prefs.h>
 #include <QFile>
 #include <iostream>
 #include <QApplication>
 #include <qwtplot3d/qwt3d_surfaceplot.h>
 #include <qwtplot3d/qwt3d_function.h>
-#include <gnuradio/io_signature.h>
-#include "vis3d_impl.h"
 
 using namespace std::chrono;
 
@@ -49,9 +47,6 @@ namespace gr
 
         }
 
-        /*
-         * The private constructor
-         */
         vis3d_impl::vis3d_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps,char *xaxis,char* yaxis, char *zaxis,QWidget *parent)
             : gr::sync_block("vis3d",
                              gr::io_signature::make(1,1, sizeof(float)*vlen),
@@ -106,16 +101,10 @@ namespace gr
         }
 #endif
 
-        /**
-         * Our virtual destructor.
-         */
         vis3d_impl::~vis3d_impl()
         {
         }
 
-        /** 
-         * Work function process data for graph
-         */
         int
         vis3d_impl::work(int noutput_items,
                           gr_vector_const_void_star &input_items,

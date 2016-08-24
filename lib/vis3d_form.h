@@ -33,9 +33,6 @@
 
 namespace Qwt3D
 {
-    /** 
-     * Extend the plot, so that we can alter the size
-     */    
     class Plot : public SurfacePlot
     {
     public:
@@ -58,20 +55,11 @@ namespace gr
     {
 
     
-        /**
-         * Update event - used for updating plot
-         */
         const QEvent::Type UPDATE_EVENT = static_cast<QEvent::Type>(QEvent::User + 1);
 
-        /**
-         * Rotation event - used for rotating the plot
-         */
         const QEvent::Type ROT_EVENT = static_cast<QEvent::Type>(QEvent::User + 2);
 
 
-        /**
-         * Update event 
-         */
         class UpdateEvent : public QEvent
         {
         public:
@@ -82,18 +70,12 @@ namespace gr
             {
             }
 
-            /**
-             *  Get data used for the graph
-             */
             double ** getData() const
             {
                 return m_data;
             }
 
 
-            /**
-             * Get max z axis value
-             */
             double getZaxis() const
             {
                 return m_zaxis;
@@ -104,10 +86,6 @@ namespace gr
             double m_zaxis;
         };
 
-        
-        /**
-         * Rotation event
-         */
         class RotEvent : public QEvent
         {
         public:
@@ -117,9 +95,6 @@ namespace gr
             {
             }
 
-            /**
-             * Decide whether to perform 2D or 3D rotation
-             */
             bool getRotation() const
             {
                 return m_rotation;
@@ -129,9 +104,6 @@ namespace gr
             bool m_rotation;
         };
 
-        /**
-         * Window containing plot
-         */
         class vis3d_form : public QMainWindow
         {
             Q_OBJECT
@@ -142,47 +114,36 @@ namespace gr
             ~vis3d_form();
         
         private:
-            /// Width of data
+            // Width of data
             int width;  
-            /// Height of data
+            // Height of data
             int height;
-            /// Graph width
+            // Graph width
             int gwidth;  
-            /// Graph height
+            // Graph height
             int gheight;
-            /// X axis 
+            // X axis 
             char *xaxis;
-            /// Y axis
+            // Y axis
             char *yaxis;
-            /// Z axis
+            // Z axis
             char *zaxis;             
         public slots:
-            /** 
-             * 3D button press 
-             */
+            // 3D button press 
             void btn3d();
-            /** 
-             * 2D button press
-             */
+            // 2D button press
             void btn2d();
-            /** 
-             * Update the plot
-             */
+            // Update the plot
             void update(double * *d,double maxz);
         protected:
-            /**
-             * Handle custom QT events
-             */
+            // Handle custom QT events
             void customEvent(QEvent *event); 
         private:
-            /**
-             * Handle updating of plot
-             */
+        
+            // Handle updating of plot
             void handleUpdateEvent(const UpdateEvent *event);
 
-            /**
-             * Handle rotation of plot
-             */ 
+            // Handle rotation of plot
             void handleRotEvent(const RotEvent *event);
 
         };

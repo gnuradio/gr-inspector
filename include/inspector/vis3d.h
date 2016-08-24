@@ -33,25 +33,11 @@
 #include <QtGui>
 namespace gr {
   namespace inspector {
-
-    /*!
-     * \brief 3D visualisation block
-     * \ingroup inspector
-     *
-     */
     class INSPECTOR_API vis3d : virtual public gr::sync_block
     {
      public:
       typedef boost::shared_ptr<vis3d> sptr;
 
-      /*!
-       * \brief Return a shared_ptr to a new instance of inspector::FAMVis.
-       *
-       * To avoid accidental use of raw pointers, inspector::FAMVis's
-       * constructor is in a private implementation
-       * class. inspector::FAMVis::make is the public interface for
-       * creating new instances.
-       */
       static sptr make(int,int,int,int,int,double,int,char*,char*,char*,QWidget*parent=NULL);
 #ifdef ENABLE_PYTHON
       virtual PyObject* pyqwidget() = 0;

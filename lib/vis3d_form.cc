@@ -35,9 +35,6 @@
 namespace Qwt3D
 {
 
-    /**
-     * Alter the graph hull
-     */
     void Plot::calculateHull()
     {
         if (actualData_p->empty())
@@ -57,9 +54,6 @@ namespace Qwt3D
         setHull(hull);
     }
 
-    /**
-     * Set intial plot parameters
-     */
     Plot::Plot()
     {
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
@@ -85,9 +79,6 @@ namespace gr
     namespace inspector
     {
 
-        /**
-         * Create GUI with the plot
-         */
         vis3d_form::vis3d_form(QWidget *parent, int width, int height,int gwidth,int gheight,char *xaxis, char *yaxis, char *zaxis) : QMainWindow(parent) // QWidget(parent)
         {
             plot = new Qwt3D::Plot() ;
@@ -118,18 +109,11 @@ namespace gr
             setCentralWidget(window);
         }
 
-        /**
-         * Show 3D style version of graph
-         */
-
         void vis3d_form::btn3d()
         {
             QCoreApplication::postEvent(this,new RotEvent(true));
         }
 
-        /**
-         * Show 2D style version of graph
-         */
         void vis3d_form::btn2d()
         {
             QCoreApplication::postEvent(this,new RotEvent(false));
@@ -139,9 +123,6 @@ namespace gr
         {
         }
 
-        /**
-         * Update our plot
-         */
         void vis3d_form::update( double **d,double maxz)
         {
             unsigned int rows =  height;
@@ -193,9 +174,6 @@ namespace gr
         }
 
 
-        /**
-         * Handle our custom QT events
-         */
         void vis3d_form::customEvent(QEvent * event)
         {
             // When we get here, we've crossed the thread boundary and are now
@@ -209,17 +187,11 @@ namespace gr
 
         }
 
-        /**
-         * Pass on the updating of the plot
-         */
         void vis3d_form::handleUpdateEvent(const UpdateEvent *event)
         {
             update(event->getData(),event->getZaxis());
         }
 
-        /**
-         * Rotate the plot appropriately 
-         */
         void vis3d_form::handleRotEvent(const RotEvent *event)
         {
             if (event->getRotation() == true) {
