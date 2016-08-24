@@ -64,29 +64,10 @@ namespace Qwt3D
     {
         for (unsigned i=0; i!=coordinates()->axes.size(); ++i)
         {
-           // coordinates()->axes[i].setMajors(0);
-           // coordinates()->axes[i].setMinors(0);
-
-    coordinates()->axes[i].setMajors(5);
-    coordinates()->axes[i].setMinors(4);
+            coordinates()->axes[i].setMajors(0);
+            coordinates()->axes[i].setMinors(0);
         }
-       
-
-/*
-
-        coordinates()->axes[X1].setLabelColor(RGBA(0,0,0.4));
-
-        coordinates()->axes[X1].setLabelString(QString("x-axis"));
-        coordinates()->axes[Y1].setLabelString(QString("y-axis"));
-
-        coordinates()->setLabelFont(QFont("Times", 12, QFont::Bold));
-
-*/
-        //coordinates()->axes[Z1].setLabelString(QChar (0x38f)); // Omega - see http://www.unicode.org/charts/
-
- 
-        //setCoordinateStyle(NOCOORD);
-        //setCoordinateStyle(FRAME);
+        
         setRotation(15,0,15);
         setScale(1.0,1.0,1.0);
         setZoom(1.0);
@@ -193,9 +174,6 @@ namespace gr
                                     maxy
                                 );
 
-
-
-
             plot->coordinates()->axes[Qwt3D::X1].setLabel(true);
             plot->coordinates()->axes[Qwt3D::X1].setLabelString(QString(xaxis));
 
@@ -204,7 +182,6 @@ namespace gr
 
             plot->coordinates()->axes[Qwt3D::Z1].setLabel(true);
             plot->coordinates()->axes[Qwt3D::Z1].setLabelString(QString(zaxis));
-
 
             plot->updateData();
             plot->updateGL();
