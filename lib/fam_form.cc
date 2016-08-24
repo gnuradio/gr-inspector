@@ -68,6 +68,8 @@ namespace Qwt3D
             coordinates()->axes[i].setMinors(0);
         }
         
+        setCoordinateStyle(FRAME); 
+ 
         setRotation(15,0,15);
         setScale(1.0,1.0,1.0);
         setZoom(1.0);
