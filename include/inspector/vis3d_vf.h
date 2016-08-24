@@ -33,12 +33,40 @@
 #include <QtGui>
 namespace gr {
   namespace inspector {
+    /*!
+     * \brief 3D visualisation for the inspector toolkit
+     * \ingroup inspector
+     *
+     * \details
+     * This GUI uses QwtPlot3D to visualise data in 3D, for instance data
+     * from the gr-specest FAM block.
+     * 
+     * Controls: Hold left mouse button and move cursor to rotate.
+     * Dragging using two fingers, zooms in or out
+     *
+     */
     class INSPECTOR_API vis3d_vf : virtual public gr::sync_block
     {
      public:
       typedef boost::shared_ptr<vis3d_vf> sptr;
 
-      static sptr make(int,int,int,int,int,double,int,char*,char*,char*,QWidget*parent=NULL);
+      /*!
+       * \brief Build a 3D visualisation 
+       *
+       * \param vlen The size of the input vector containing the data to be displayed
+       * \param width The 1D vector will be reshaped with this width
+       * \param height The 1D vector will be reshaped with this height
+       * \param gwidth The graph will be stretched to this width
+       * \param gheight The graph will be stretched to this height
+       * \param maxz You can set the graph to have a maximum Z value, so that the graph boundaries remain fixed, or if you set to 0, the Z axis of the graph, will grow according to the data.
+       * \param fps You can set the framerate of the graph, so that if a higher number vectors are received than the frame rate, they can be discarded.
+       * \param xaxis Label for X axis
+       * \param yaxis Label for Y axis
+       * \param zaxis Label for Z axis
+       * \param parent QWidget parent
+       */
+      static sptr make(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps,char *xaxis,char* yaxis, char *zaxis,QWidget *parent=NULL);
+
 #ifdef ENABLE_PYTHON
       virtual PyObject* pyqwidget() = 0;
 #else

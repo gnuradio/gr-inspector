@@ -47,7 +47,7 @@ namespace gr
 
             milliseconds oldms; 
         public:
-            vis3d_vf_impl(int,int,int,int,int,double,int,char*,char*,char*, QWidget*);
+            vis3d_vf_impl(int vlen,int width, int height,int gwidth,int gheight,double maxz, int fps,char *xaxis,char* yaxis, char *zaxis,QWidget *parent);
             ~vis3d_vf_impl();
             vis3d_vf_form *d_main_gui;
             int work(int noutput_items,
