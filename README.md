@@ -13,6 +13,8 @@ This GNU Radio module is developed to realize signal analysis abilities in typic
 - OFDM parameter estimation (carrier spacing, symbol time)
 - Blind OFDM synchronization
 - Resampling of signals to constant rate
+- 3D Visualisation of FAM data, from gr-specest
+- Using TensorFlow models for AMC 
 
 ## Installation
 
