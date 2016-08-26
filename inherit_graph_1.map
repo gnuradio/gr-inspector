@@ -1,0 +1,12 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$classgr_1_1inspector_1_1ofdm__bouzegzi__c.html" title="OFDM parameter estimator (Bouzegzi algorithm) " alt="" coords="144,5,275,47"/>
+<area shape="rect" id="node4" href="$classgr_1_1inspector_1_1ofdm__synchronizer__cc.html" title="OFDM frequency synchronizer and timing estimator. " alt="" coords="144,71,275,112"/>
+<area shape="rect" id="node6" href="$classgr_1_1inspector_1_1ofdm__zkf__c.html" title="Parameter estimation block for OFDM signals. " alt="" coords="144,136,275,177"/>
+<area shape="rect" id="node8" href="$classgr_1_1inspector_1_1qtgui__inspector__sink__vf.html" title="GUI for the inspector toolkit. " alt="" coords="144,201,275,243"/>
+<area shape="rect" id="node10" href="$classgr_1_1inspector_1_1signal__extractor__c.html" title="Extractor block to extract signal samples out of bundled message passed from Signal Separator block..." alt="" coords="141,267,277,308"/>
+<area shape="rect" id="node3" href="$classgr_1_1inspector_1_1ofdm__bouzegzi__c__impl.html" title="gr::inspector::ofdm\l_bouzegzi_c_impl" alt="" coords="341,5,472,47"/>
+<area shape="rect" id="node5" href="$classgr_1_1inspector_1_1ofdm__synchronizer__cc__impl.html" title="gr::inspector::ofdm\l_synchronizer_cc_impl" alt="" coords="329,71,484,112"/>
+<area shape="rect" id="node7" href="$classgr_1_1inspector_1_1ofdm__zkf__c__impl.html" title="gr::inspector::ofdm\l_zkf_c_impl" alt="" coords="341,136,472,177"/>
+<area shape="rect" id="node9" href="$classgr_1_1inspector_1_1qtgui__inspector__sink__vf__impl.html" title="gr::inspector::qtgui\l_inspector_sink_vf_impl" alt="" coords="325,201,488,243"/>
+<area shape="rect" id="node11" href="$classgr_1_1inspector_1_1signal__extractor__c__impl.html" title="gr::inspector::signal\l_extractor_c_impl" alt="" coords="339,267,475,308"/>
+</map>
