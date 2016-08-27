@@ -1,3 +1,5 @@
+# Based on https://github.com/w0land/thesis-app/blob/master/cmake/modules/FindQwtPlot3D.cmake
+
 # - try to find QwtPlot3D library and include files
 #  QWTPLOT3D_INCLUDE_DIR, where to find GL/glut.h, etc.
 #  QWTPLOT3D_LIBRARIES, the libraries to link against

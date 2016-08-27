@@ -142,7 +142,7 @@ endif(APPLE)
 ########################################################################
 # Find gnuradio build dependencies
 ########################################################################
-
+include (cmake/Modules/FindOpenGL.cmake)
 include (cmake/Modules/FindQwtPlot3D.cmake)
 
 find_package(CppUnit)
