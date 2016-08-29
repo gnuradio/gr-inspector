@@ -674,6 +674,7 @@ INPUT_ENCODING         = UTF-8
 # *.f90 *.f *.for *.vhd *.vhdl
 
 FILE_PATTERNS          = *.h \
+                         @abs_top_srcdir@/python/*.py \
                          *.dox
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories
@@ -711,6 +712,8 @@ EXCLUDE_PATTERNS       = */.deps/* \
                          */.svn/* \
                          */CVS/* \
                          */__init__.py \
+                         */build_utils.py \
+                         */build_utils_codes.py \
                          */qa_*.cc \
                          */qa_*.h \
                          */qa_*.py 
@@ -790,7 +793,7 @@ INPUT_FILTER           =
 # info on how filters are used. If FILTER_PATTERNS is empty or if
 # non of the patterns match the file name, INPUT_FILTER is applied.
 
-FILTER_PATTERNS        = *.py=@top_srcdir@/doc/doxygen/other/doxypy.py
+#FILTER_PATTERNS        = *.py=@top_srcdir@/doc/doxygen/other/doxypy.py
 
 # If the FILTER_SOURCE_FILES tag is set to YES, the input filter (if set using
 # INPUT_FILTER) will be used to filter the input files when producing source

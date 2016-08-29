@@ -37,11 +37,15 @@ import tensorflow as tf
 from numpy import zeros, newaxis
 import collections
 
-## tfmodel_vcf is a sync block to produce PMT output from a TensorFlow graph
+## \brief tfmodel_vcf is a sync block to produce PMT output from a TensorFlow graph
 class tfmodel_vcf(gr.sync_block):
 
 
-    ## Create our block
+    ## \brief Create our block
+    ## \param dtype Type of input
+    ## \param vlen Length of input
+    ## \param graphfile TensorFlow graph file
+    ## \param reshape How to reshape the input data
     def __init__(self, dtype, vlen, graphfile,reshape):
 
         self.reshape = reshape
@@ -66,7 +70,8 @@ class tfmodel_vcf(gr.sync_block):
         self.message_port_register_out(pmt.intern('classification'))
 
 
-    ## Load graph from file through TensorFlow serving
+    ## \brief Load graph from file through TensorFlow serving
+    ## \param output_graph_path Path of graph file
     def load_graph(self, output_graph_path):
 
         sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath(
@@ -87,7 +92,9 @@ class tfmodel_vcf(gr.sync_block):
             classes = sess.run(sess.graph.get_tensor_by_name(classes))
             return (sess, input_name, output_name,classes)
 
-    ## Work function to accept input fam data, to reshape and pass to model
+    ## \brief Work function to accept input fam data, to reshape and pass to model
+    ## \param input_items Input data
+    ## \param output_items Ignored
     def work(self, input_items, output_items):
 
         tensordata = []
