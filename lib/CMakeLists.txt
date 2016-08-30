@@ -32,7 +32,6 @@ include(GrPlatform) #define LIB_SUFFIX
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS} ${GNURADIO_ALL_LIBRARIES})
-
 list(APPEND inspector_sources
 		${QTGUI_MOC_OUTFILES}
     signal_separator_c_impl.cc
@@ -45,7 +44,8 @@ list(APPEND inspector_sources
 		ofdm_bouzegzi_c_impl.cc
     ofdm_zkf_c_impl.cc
     ofdm_synchronizer_cc_impl.cc
-    vis3d_vf_impl.cc )
+    vis3d_vf_impl.cc
+    )
 
 include(GrPython)
 if(ENABLE_PYTHON)

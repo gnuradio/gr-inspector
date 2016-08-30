@@ -104,11 +104,10 @@ namespace gr
             gridLayout->addWidget(button_2d,1,0,1,1);
             gridLayout->addWidget(button_3d,1,1,1,1);
 
-
             QWidget *window = new QWidget();
             window->setLayout(gridLayout);
 
-            setCentralWidget(window);
+            setCentralWidget(window); 
         }
 
         void vis3d_vf_form::btn3d()

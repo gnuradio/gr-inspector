@@ -32,7 +32,9 @@
 
 #include <inspector/api.h>
 #include <gnuradio/sync_block.h>
+#include <qapplication.h>
 #include <QtGui>
+
 namespace gr {
   namespace inspector {
     /*!

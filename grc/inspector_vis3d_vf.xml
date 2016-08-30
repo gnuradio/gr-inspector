@@ -10,6 +10,8 @@
 inspector.vis3d_vf($vlen,$width,$height,$gwidth,$gheight,$maxz,$fps,$xaxis,$yaxis,$zaxis)
 $(win) = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget) 
 $(gui_hint()($win))</make>
+
+  <!--<make>inspector.vis3d_vf($vlen,$width,$height,$gwidth,$gheight,$maxz,$fps,$xaxis,$yaxis,$zaxis)</make>-->
   
   <param>
     <name>Vec Length</name>

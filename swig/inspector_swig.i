@@ -36,3 +36,4 @@ GR_SWIG_BLOCK_MAGIC2(inspector, ofdm_zkf_c);
 GR_SWIG_BLOCK_MAGIC2(inspector, ofdm_synchronizer_cc);
 %include "inspector/vis3d_vf.h"
 GR_SWIG_BLOCK_MAGIC2(inspector, vis3d_vf);
+
