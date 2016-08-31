@@ -142,12 +142,14 @@ endif(APPLE)
 ########################################################################
 # Find gnuradio build dependencies
 ########################################################################
+
+#include (cmake/Modules/GrSetupQt4.cmake)
 include (cmake/Modules/FindOpenGL.cmake)
 include (cmake/Modules/FindQwtPlot3D.cmake)
 
 find_package(CppUnit)
 find_package(Doxygen)
-find_package(Qt4 4.2.0 COMPONENTS QwtPlot3D QtCore QtGui REQUIRED)
+find_package(Qt4 4.2.0 COMPONENTS QwtPlot3D QtCore QtGui QtOpenGL REQUIRED)
 find_package(Qwt 6.1.0 REQUIRED)
 
 # Search for GNU Radio and its components and versions. Add any

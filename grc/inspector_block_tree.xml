@@ -15,8 +15,8 @@
   </cat>
   <cat>
     <name>AMC</name>
-    <block>tfmodel</block>
-    <block>vis3d</block>
+    <block>tfmodel_vcf</block>
+    <block>vis3d_vf</block>
   </cat>
   <cat>
     <name>Analysis</name>

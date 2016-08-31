@@ -30,7 +30,7 @@ QT4_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIR} ${QT_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS} ${GNURADIO_ALL_LIBRARIES})
 list(APPEND inspector_sources
 		${QTGUI_MOC_OUTFILES}
@@ -91,7 +91,6 @@ include_directories(${CPPUNIT_INCLUDE_DIRS})
 list(APPEND test_inspector_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/test_inspector.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/qa_inspector.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/qa_vis3d_vf.cc
 )
 
 add_executable(test-inspector ${test_inspector_sources})

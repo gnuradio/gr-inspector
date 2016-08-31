@@ -26,13 +26,11 @@
  */
 
 #include "qa_inspector.h"
-#include "qa_vis3d_vf.h"
 
 CppUnit::TestSuite *
 qa_inspector::suite()
 {
   CppUnit::TestSuite *s = new CppUnit::TestSuite("inspector");
-  s->addTest(gr::inspector::qa_vis3d_vf::suite());
 
   return s;
 }
