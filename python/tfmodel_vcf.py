@@ -138,9 +138,7 @@ class tfmodel_vcf(gr.sync_block):
 
         pmtv = pmt.make_dict()
         for outp in ne:
-            pmtv = pmt.dict_add(pmtv, pmt.intern(
-                "Mod"), pmt.to_pmt(self.classes[np.argmax(outp)]))
-            pmtv = pmt.dict_add(pmtv, pmt.intern("Prob"), pmt.to_pmt(outp))
+            pmtv = pmt.make_tuple(pmt.to_pmt(("signal",0)),pmt.to_pmt((self.classes[np.argmax(outp)],outp[np.argmax(outp)].item())))
 
             self.message_port_pub(pmt.intern("classification"), pmtv)
 

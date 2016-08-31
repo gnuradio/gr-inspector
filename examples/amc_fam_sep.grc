@@ -251,7 +251,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>-82</value>
+      <value>-90</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -503,7 +503,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1288, 1312)</value>
+      <value>(1520, 1304)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1121,7 +1121,7 @@ FAM</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1304, 192)</value>
+      <value>(1376, 192)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1602,6 +1602,12 @@ FAM</value>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>classification</source_key>
     <sink_key>print</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>inspector_tfmodel_vcf_0</source_block_id>
+    <sink_block_id>inspector_qtgui_sink_vf_0</sink_block_id>
+    <source_key>classification</source_key>
+    <sink_key>analysis_in</sink_key>
   </connection>
   <connection>
     <source_block_id>specest_cyclo_fam_0</source_block_id>
