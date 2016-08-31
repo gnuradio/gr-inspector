@@ -4,7 +4,7 @@
 	<key>inspector_tfmodel_vcf</key>
 	<category>[Inspector]/AMC</category>
 	<import>import inspector</import>
-	<make>inspector.tfmodel_vcf($typev.typ,$vlen,$graphfile,$reshape)</make>
+	<make>inspector.tfmodel_vcf($typev.typ,$vlen,$graphfile,$reshape,$signum)</make>
 
 	<param>
 		<name>Input Type</name>
@@ -67,7 +67,12 @@
 		<type>raw</type>
 	</param>
 
-
+	<param>
+		<name>Signal Number</name>
+		<key>signum</key>
+		<value>0</value>
+		<type>int</type>
+	</param>
 
 	<sink>
     		<name>in</name>

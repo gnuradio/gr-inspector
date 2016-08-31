@@ -533,7 +533,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(808, 732)</value>
+      <value>(800, 712)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -562,6 +562,10 @@
     <param>
       <key>reshape</key>
       <value>()</value>
+    </param>
+    <param>
+      <key>signum</key>
+      <value>0</value>
     </param>
     <param>
       <key>vlen</key>

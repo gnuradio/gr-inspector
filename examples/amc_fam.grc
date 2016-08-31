@@ -1023,7 +1023,7 @@ FAM</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(928, 1076)</value>
+      <value>(928, 1048)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1052,6 +1052,10 @@ FAM</value>
     <param>
       <key>reshape</key>
       <value>(2*P*L,2*Np)</value>
+    </param>
+    <param>
+      <key>signum</key>
+      <value>0</value>
     </param>
     <param>
       <key>vlen</key>

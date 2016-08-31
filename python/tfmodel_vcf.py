@@ -46,7 +46,8 @@ class tfmodel_vcf(gr.sync_block):
     ## \param vlen Length of input
     ## \param graphfile TensorFlow graph file
     ## \param reshape How to reshape the input data
-    def __init__(self, dtype, vlen, graphfile,reshape):
+    ## \param signum Signal number
+    def __init__(self, dtype, vlen, graphfile, reshape, signum):
 
         self.reshape = reshape
         
@@ -66,6 +67,7 @@ class tfmodel_vcf(gr.sync_block):
         self.inp = inp
         self.out = out
         self.classes = classes
+        self.signum = signum
 
         self.message_port_register_out(pmt.intern('classification'))
 
@@ -138,7 +140,7 @@ class tfmodel_vcf(gr.sync_block):
 
         pmtv = pmt.make_dict()
         for outp in ne:
-            pmtv = pmt.make_tuple(pmt.to_pmt(("signal",0)),pmt.to_pmt((self.classes[np.argmax(outp)],outp[np.argmax(outp)].item())))
+            pmtv = pmt.make_tuple(pmt.to_pmt(("signal",self.signum)),pmt.to_pmt((self.classes[np.argmax(outp)],outp[np.argmax(outp)].item())))
 
             self.message_port_pub(pmt.intern("classification"), pmtv)
 
