@@ -432,7 +432,12 @@
     </param>
     <param>
       <key>comment</key>
-      <value></value>
+      <value>We need to pass a 1D
+vector to the 3D visualiser, 
+the FAM block outputs a number 
+of 1D vectors, which together, 
+make up a 2D represention of
+FAM</value>
     </param>
     <param>
       <key>affinity</key>

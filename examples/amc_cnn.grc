@@ -233,7 +233,8 @@
     </param>
     <param>
       <key>comment</key>
-      <value></value>
+      <value>The CNN model takes 
+128 samples at a time.</value>
     </param>
     <param>
       <key>affinity</key>
