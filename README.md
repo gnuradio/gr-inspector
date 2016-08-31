@@ -13,6 +13,8 @@ This GNU Radio module is developed to realize signal analysis abilities in typic
 - OFDM parameter estimation (carrier spacing, symbol time)
 - Blind OFDM synchronization
 - Resampling of signals to constant rate
+- 3D Visualisation of FAM data, from gr-specest
+- Using TensorFlow models for AMC 
 
 ## Installation
 
@@ -22,6 +24,8 @@ To install the Inspector, the following dependencies are required:
 - gr-analog, gr-blocks, gr-channel, gr-filter
 - QT4
 - QWT 6.1.0
+- QwtPlot3D
+- TensorFlow 0.10 ([pip installation](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation) - you need the version for Python 2.7)
 
 Install by the following shell commands:
 
@@ -64,6 +68,12 @@ Estimates the parameters subcarrier spacing, symbol time, FFT size and cyclic pr
 #### OFDM Synchronizer
 After OFDM parameter estimation, the signal is frequency synced and symbol beginnings are marked with stream tags.
 
+#### 3D Data Visualisation
+Visualisation of FAM data from gr-specest.
+
+#### TensorFlow AMC Model
+Loading of TensorFlow models for AMC.
+
 ## Google Summer of Code
 This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:
 
@@ -87,6 +97,9 @@ Maintainer of this module:
 
 Sebastian Müller<br/>
 gsenpo[at]gmail.com
+
+Christopher Richardson<br/>
+chrisrichardsonuk[at]gmail.com
 
 If you want to know more about the development process, please visit the [blog](https://grinspector.wordpress.com/).
 

@@ -24,6 +24,7 @@ cmake_minimum_required(VERSION 2.6)
 project(gr-inspector CXX C)
 enable_testing()
 
+cmake_policy(SET CMP0015 NEW)
 
 #install to PyBOMBS target prefix if defined
 if(DEFINED ENV{PYBOMBS_PREFIX})
@@ -90,6 +91,7 @@ set(Boost_ADDITIONAL_VERSIONS
     "1.60.0" "1.60" "1.61.0" "1.61" "1.62.0" "1.62" "1.63.0" "1.63" "1.64.0" "1.64"
     "1.65.0" "1.65" "1.66.0" "1.66" "1.67.0" "1.67" "1.68.0" "1.68" "1.69.0" "1.69"
 )
+
 find_package(Boost "1.35" COMPONENTS filesystem system)
 
 find_package(PythonLibs 2)
@@ -140,9 +142,14 @@ endif(APPLE)
 ########################################################################
 # Find gnuradio build dependencies
 ########################################################################
+
+#include (cmake/Modules/GrSetupQt4.cmake)
+include (cmake/Modules/FindOpenGL.cmake)
+include (cmake/Modules/FindQwtPlot3D.cmake)
+
 find_package(CppUnit)
 find_package(Doxygen)
-find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui)
+find_package(Qt4 4.2.0 COMPONENTS QwtPlot3D QtCore QtGui QtOpenGL REQUIRED)
 find_package(Qwt 6.1.0 REQUIRED)
 
 # Search for GNU Radio and its components and versions. Add any
@@ -190,8 +197,10 @@ link_directories(
     ${CPPUNIT_LIBRARY_DIRS}
     ${GNURADIO_RUNTIME_LIBRARY_DIRS}
     ${GNURADIO_FILTER_LIBRARY_DIRS}
+    ${QT_QWTPLOT3D_LIBRARY_DIRS}
     ${QT_LIBRARY_DIRS}
     ${QWT_LIBRARY_DIRS}
+    
 )
 
 # Set component parameters

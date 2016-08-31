@@ -14,6 +14,11 @@
     <block>ofdm_synchronizer_cc</block>
   </cat>
   <cat>
+    <name>AMC</name>
+    <block>tfmodel_vcf</block>
+    <block>vis3d_vf</block>
+  </cat>
+  <cat>
     <name>Analysis</name>
     <block>ofdm_zkf_c</block>
   </cat>

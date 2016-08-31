@@ -28,7 +28,7 @@ DOXYFILE_ENCODING      = UTF-8
 # identify the project. Note that if you do not use Doxywizard you need
 # to put quotes around the project name if it contains spaces.
 
-PROJECT_NAME           = "The Inspector"
+PROJECT_NAME           = "The Inspector (GNU Radio module gr-inspector)"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or
@@ -40,7 +40,7 @@ PROJECT_NUMBER         =
 # for a project that appears at the top of each page and should give viewer
 # a quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = "GNU Radio Signal Analysis Toolbox gr-inspector"
+PROJECT_BRIEF          =
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is
 # included in the documentation. The maximum height of the logo should not
@@ -674,6 +674,7 @@ INPUT_ENCODING         = UTF-8
 # *.f90 *.f *.for *.vhd *.vhdl
 
 FILE_PATTERNS          = *.h \
+                         @abs_top_srcdir@/python/*.py \
                          *.dox
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories
@@ -711,9 +712,11 @@ EXCLUDE_PATTERNS       = */.deps/* \
                          */.svn/* \
                          */CVS/* \
                          */__init__.py \
+                         */build_utils.py \
+                         */build_utils_codes.py \
                          */qa_*.cc \
                          */qa_*.h \
-                         */qa_*.py
+                         */qa_*.py 
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -790,7 +793,7 @@ INPUT_FILTER           =
 # info on how filters are used. If FILTER_PATTERNS is empty or if
 # non of the patterns match the file name, INPUT_FILTER is applied.
 
-FILTER_PATTERNS        = *.py=@top_srcdir@/doc/doxygen/other/doxypy.py
+#FILTER_PATTERNS        = *.py=@top_srcdir@/doc/doxygen/other/doxypy.py
 
 # If the FILTER_SOURCE_FILES tag is set to YES, the input filter (if set using
 # INPUT_FILTER) will be used to filter the input files when producing source
@@ -1507,13 +1510,13 @@ XML_OUTPUT             = xml
 # which can be used by a validating XML parser to check the
 # syntax of the XML files.
 
-#XML_SCHEMA             =
+XML_SCHEMA             =
 
 # The XML_DTD tag can be used to specify an XML DTD,
 # which can be used by a validating XML parser to check the
 # syntax of the XML files.
 
-#XML_DTD                =
+XML_DTD                =
 
 # If the XML_PROGRAMLISTING tag is set to YES Doxygen will
 # dump the program listings (including syntax highlighting

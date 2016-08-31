@@ -19,6 +19,8 @@ To install the Inspector, the following dependencies are required:
 - gr-analog, gr-blocks, gr-channel, gr-filter
 - QT4
 - QWT 6.1.0
+- QwtPlot3D
+- TensorFlow 0.10 ([pip installation](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation) - you need the version for Python 2.7)
 
 Install by the following shell commands:
 
@@ -29,6 +31,19 @@ cd build<br />
 cmake ..<br />
 make -j4<br />
 sudo make install</code>
+
+\section models Model Generation
+
+You can obtain the code to generate AMC models [here](https://github.com/chrisruk/models).
+
+It is necessary to first install TensorFlow version 0.10+, which you can do easily through the TensorFlow [pip install](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation).
+
+It is also necessary to install our fork of gr-specest from [here](https://github.com/chrisruk/gr-specest).
+
+Then it is necessary to install keras, which can easily be done through pip.
+
+It is important that your .keras/keras.json, has the backend set to 'tensorflow'.  Please note the models are currently being updated.
+
 
 This module is still under development. Please let me know if you run into any issues on the master branch.
 
@@ -56,6 +71,12 @@ Estimates the parameters subcarrier spacing, symbol time, FFT size and cyclic pr
 \subsection ofdmsync OFDM Synchronizer
 After OFDM parameter estimation, the signal is frequency synced and symbol beginnings are marked with stream tags.
 
+\subsection vis3d 3D Data Visualisation
+Visualisation of FAM data from gr-specest.
+
+\subsection tfmodel TensorFlow AMC Model
+Loading of TensorFlow models for AMC.
+
 \section gsoc Google Summer of Code
 This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:
 
@@ -74,6 +95,9 @@ Maintainer of this module:
 
 Sebastian Müller<br/>
 gsenpo[at]gmail.com
+
+Christopher Richardson<br/>
+chrisrichardsonuk[at]gmail.com
 
 If you want to know more about the development process, please visit the [blog](https://grinspector.wordpress.com/).
 
