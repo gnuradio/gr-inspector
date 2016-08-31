@@ -14,7 +14,7 @@ This GNU Radio module is developed to realize signal analysis abilities in typic
 - Blind OFDM synchronization
 - Resampling of signals to constant rate
 - 3D Visualisation of FAM data, from gr-specest
-- Using TensorFlow models for AMC 
+- Using TensorFlow models for AMC
 
 ## Installation
 
@@ -90,7 +90,7 @@ This project was developed in cooperation with the [Communications Engineering L
 The modulation classification is developed by @chrisruk during ESA Summer of Code in Space program.
 
 ## License
-This software is Copyright © 2016 Sebastian Müller. It is free software, and is released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) License.
+This software is Copyright © 2016 Free Software Foundation, Inc. and part of GNU Radio. It is free software, and is released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) License.
 
 ## Contact
 Maintainer of this module:
