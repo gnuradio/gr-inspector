@@ -222,7 +222,9 @@ namespace gr {
         for(unsigned j = 0; j < d_result_vector[i].size(); j++) {
           pmt::c32vector_set(curr_signal, j, d_result_vector[i][j]);
         }
-        pmt::pmt_t tupel = pmt::make_tuple(pmt::from_uint64(i), curr_signal);
+        pmt::pmt_t tupel = pmt::make_tuple(pmt::from_uint64(i), pmt::from_float(d_rf_map[i][0]),
+                                           pmt::from_float(d_rf_map[i][1]), curr_signal);
+
         pmt::vector_set(msg, i, tupel);
       }
       return msg;

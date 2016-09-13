@@ -42,11 +42,6 @@
     <name>sig_in</name>
     <type>message</type>
   </sink>
-  <sink>
-    <name>map_in</name>
-    <type>message</type>
-    <optional>1</optional>
-  </sink>
   <source>
     <name>out</name>
     <type>complex</type>

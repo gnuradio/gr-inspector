@@ -48,6 +48,10 @@ namespace gr {
      * To save CPU load, generic taps can be precalculated with the tool in the apps/
      * folder. This tool outputs a JSON file, which path can be specified in the block
      * parameter <code>file_path</code>.
+     *
+     * Output of this block is a pmt vector of tuples in the format
+     *
+     * <code>#[#(SigNo, cfreq, bandwidth, #[vector of samples]), #(...)]</code>
      */
     class INSPECTOR_API signal_separator_c : virtual public gr::block
     {

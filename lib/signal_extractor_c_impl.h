@@ -46,7 +46,6 @@ namespace gr {
 
       // write samples from message in buffer
       void handle_msg(pmt::pmt_t msg);
-      void handle_map(pmt::pmt_t msg);
 
       // Where all the action really happens
       int work(int noutput_items,

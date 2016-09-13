@@ -54,9 +54,6 @@ namespace gr {
       message_port_register_in(pmt::intern("sig_in"));
       set_msg_handler(pmt::intern("sig_in"), boost::bind(
               &signal_extractor_c_impl::handle_msg, this, _1));
-      message_port_register_in(pmt::intern("map_in"));
-      set_msg_handler(pmt::intern("map_in"), boost::bind(
-              &signal_extractor_c_impl::handle_map, this, _1));
 
       d_signal = signal;
       d_oversampling = osf;
@@ -83,29 +80,21 @@ namespace gr {
         return;
       }
       else {
-        pmt::pmt_t pmt_samples = pmt::tuple_ref(pmt::vector_ref(msg, d_signal), 1);
+        pmt::pmt_t pmt_samples = pmt::tuple_ref(
+                pmt::vector_ref(msg, d_signal), 3);
         d_length = pmt::length(pmt_samples);
-        for(int i = 0; i < d_length; i++) {
+        for (int i = 0; i < d_length; i++) {
           d_samples.push_back(pmt::c32vector_ref(pmt_samples, i));
         }
         d_msg_buffer = &d_samples[0];
         d_ready = true; // buffer filled, ready to emit samples
-      }
-    }
-
-    void
-    signal_extractor_c_impl::handle_map(pmt::pmt_t msg) {
-      if(d_signal+1 > pmt::length(msg)) {
-        GR_LOG_WARN(d_logger, "Specified signal does not exist.");
-        return;
-      }
-      else if (d_resample){
-        float bw = pmt::f32vector_ref(pmt::vector_ref(msg, d_signal), 1);
-        // TODO: calculate resampler parameters
-        d_rate = d_out_rate/(d_oversampling*bw);
-        d_resampler->set_rate(d_rate);
-        GR_LOG_INFO(d_logger, "Actual output sample rate: "+std::to_string(
-                bw*d_resampler->interpolation_rate()/d_resampler->decimation_rate()));
+        if (d_resample) {
+          float bw = pmt::to_float(pmt::tuple_ref(pmt::vector_ref(msg, d_signal), 2));
+          d_rate = d_out_rate/(d_oversampling*bw);
+          d_resampler->set_rate(d_rate);
+          GR_LOG_INFO(d_logger, "Actual output sample rate: "+std::to_string(
+                  bw*d_oversampling*d_resampler->interpolation_rate()/d_resampler->decimation_rate()));
+        }
       }
     }
 
