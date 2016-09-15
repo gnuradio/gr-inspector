@@ -189,6 +189,7 @@ include_directories(
     ${GNURADIO_ALL_INCLUDE_DIRS}
     ${QWT_INCLUDE_DIRS}
     ${QT_INCLUDE_DIRS}
+    ${QT_QWTPLOT3D_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
 )
 
@@ -200,7 +201,7 @@ link_directories(
     ${QT_QWTPLOT3D_LIBRARY_DIRS}
     ${QT_LIBRARY_DIRS}
     ${QWT_LIBRARY_DIRS}
-    
+
 )
 
 # Set component parameters
