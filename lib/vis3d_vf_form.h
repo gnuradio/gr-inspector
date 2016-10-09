@@ -28,8 +28,8 @@
 #include <QWidget>
 #include <QtGui/QtGui>
 #include <gnuradio/msg_queue.h>
-#include <qwtplot3d/qwt3d_surfaceplot.h>
-#include <qwtplot3d/qwt3d_function.h>
+#include <qwt3d_surfaceplot.h>
+#include <qwt3d_function.h>
 #include <gnuradio/io_signature.h>
 #include "signal_marker.h"
 

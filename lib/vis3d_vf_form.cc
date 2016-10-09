@@ -28,8 +28,6 @@
 #include <qwt_transform.h>
 #include <pmt/pmt.h>
 #include <QApplication>
-#include <qwt3d_surfaceplot.h>
-#include <qwt3d_function.h>
 #include <gnuradio/io_signature.h>
 #include <qwt_plot_canvas.h>
 

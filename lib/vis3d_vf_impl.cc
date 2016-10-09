@@ -31,8 +31,6 @@
 #include <QFile>
 #include <iostream>
 #include <QApplication>
-#include <qwtplot3d/qwt3d_surfaceplot.h>
-#include <qwtplot3d/qwt3d_function.h>
 
 using namespace std::chrono;
 
