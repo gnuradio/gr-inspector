@@ -36,13 +36,14 @@ namespace gr {
     signal_detector_cvf::make(double samp_rate, int fft_len,
                              int window_type, float threshold,
                              float sensitivity, bool auto_threshold,
-                             float average, float quantization, float min_bw) {
+                             float average, float quantization, float min_bw,
+                             const char *filename) {
       return gnuradio::get_initial_sptr
               (new signal_detector_cvf_impl(samp_rate, fft_len,
                                            window_type,
                                            threshold, sensitivity,
                                            auto_threshold, average,
-                                           quantization, min_bw));
+                                           quantization, min_bw, filename));
     }
 
     //<editor-fold desc="Initalization">
@@ -58,7 +59,8 @@ namespace gr {
                                                      bool auto_threshold,
                                                      float average,
                                                      float quantization,
-                                                     float min_bw)
+                                                     float min_bw,
+                                                     const char *filename)
             : sync_decimator("signal_detector_cvf",
                         gr::io_signature::make(1, 1,
                                                sizeof(gr_complex)),
@@ -76,6 +78,7 @@ namespace gr {
       d_average = average;
       d_quantization = quantization;
       d_min_bw = min_bw;
+      d_filename = filename;
 
       // allocate buffers
       d_tmpbuf = static_cast<float *>(volk_malloc(
@@ -95,12 +98,15 @@ namespace gr {
       }
       message_port_register_out(pmt::intern("map_out"));
 
+      write_logfile_header();
+
     }
 
     /*
      * Our virtual destructor.
      */
     signal_detector_cvf_impl::~signal_detector_cvf_impl() {
+      logfile.close();
       delete d_fft;
       volk_free(d_tmpbuf);
       volk_free(d_tmp_pxx);
@@ -143,6 +149,34 @@ namespace gr {
 
     //<editor-fold desc="Helpers">
 
+    void
+    signal_detector_cvf_impl::write_logfile_header() {
+      if(d_filename != "") {
+        logfile.open(d_filename);
+        time_t now = time(0);
+        char timestring[80];
+        strftime(timestring, 80, "%Y-%m-%d %X", localtime(&now));
+        logfile << "# gr-inspector logfile\n";
+        logfile << "# date: " << timestring << "\n";
+        logfile << "# bandwidth: " << d_samp_rate << " Hz\n";
+        logfile << "\n";
+        logfile.close();
+      }
+    }
+
+    void
+    signal_detector_cvf_impl::write_logfile_entry() {
+      if(d_filename != "") {
+        logfile.open(d_filename, std::ios::app);
+        time_t now = time(0);
+        char timestring[80];
+        strftime(timestring, 80, "%Y-%m-%d %X", localtime(&now));
+        for(int i = 0; i < d_signal_edges.size(); i++) {
+          logfile << timestring << " [" << i << "]" << " f=" << d_signal_edges[i][0] << " B=" << d_signal_edges[i][1] << "\n";
+        }
+        logfile.close();
+      }
+    }
     // calculate periodogram and save in specified array
     void
     signal_detector_cvf_impl::periodogram(float *pxx,
@@ -364,6 +398,7 @@ namespace gr {
         d_signal_edges = rf_map;
         message_port_pub(pmt::intern("map_out"),
                          pack_message());
+        write_logfile_entry();
       }
 
       return 1; // one vector has been processed
