@@ -45,7 +45,7 @@ list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 # Set the version information here
 set(VERSION_INFO_MAJOR_VERSION 1)
 set(VERSION_INFO_API_COMPAT    1)
-set(VERSION_INFO_MINOR_VERSION 1)
+set(VERSION_INFO_MINOR_VERSION 2)
 set(VERSION_INFO_MAINT_VERSION git)
 
 # Set cmake policies.

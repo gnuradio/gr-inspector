@@ -27,6 +27,7 @@
 #include <gnuradio/filter/firdes.h>
 #include <gnuradio/fft/fft.h>
 #include <gnuradio/filter/single_pole_iir.h>
+#include <fstream>
 
 namespace gr {
   namespace inspector {
@@ -39,6 +40,7 @@ namespace gr {
       float d_threshold, d_sensitivity, d_average, d_quantization, d_min_bw;
       float *d_pxx, *d_tmp_pxx, *d_pxx_out, *d_tmpbuf;
       double d_samp_rate;
+      std::ofstream logfile;
 
       std::vector<filter::single_pole_iir<float,float,double> > d_avg_filter;
       filter::firdes::win_type d_window_type;
@@ -46,13 +48,17 @@ namespace gr {
       std::vector<std::vector<float> > d_signal_edges;
       fft::fft_complex *d_fft;
       std::vector<float> d_freq;
+      const char* d_filename;
+
+      void write_logfile_header();
+      void write_logfile_entry();
 
     public:
       signal_detector_cvf_impl(double samp_rate, int fft_len,
                               int window_type, float threshold,
                               float sensitivity, bool auto_threshold,
                               float average, float quantization,
-                              float min_bw);
+                              float min_bw, const char *filename);
 
       ~signal_detector_cvf_impl();
 

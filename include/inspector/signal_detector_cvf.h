@@ -79,11 +79,13 @@ namespace gr {
        * \param average Averaging factor in (0,1] (equal to alpha in IIR equation)
        * \param quantization Bandwidth quantization yields quantization*samp_rate [Hz]
        * \param min_bw Minimum signal bandwidth. Don't pass any narrower signals.
+       * \param filename Path to a file where the detections are logged. Leave empty for no log.
        */
       static sptr make(double samp_rate, int fft_len = 1024, int window_type = 0,
                        float threshold = 0.7, float sensitivity = 0.2,
                        bool auto_threshold = true, float average = 0.8,
-                       float quantization = 0.01, float min_bw = 0.0);
+                       float quantization = 0.01, float min_bw = 0.0,
+                       const char *filename = "");
 
       virtual void set_samp_rate(double d_samp_rate) = 0;
       virtual void set_fft_len(int fft_len) = 0;
