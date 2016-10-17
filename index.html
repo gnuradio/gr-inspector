@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>The Inspector: Main Page</title>
+<title>The Inspector (GNU Radio module gr-inspector): Main Page</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,9 +26,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="logo_body.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">The Inspector
+   <div id="projectname">The Inspector (GNU Radio module gr-inspector)
    </div>
-   <div id="projectbrief">GNU Radio Signal Analysis Toolbox gr-inspector</div>
   </td>
  </tr>
  </tbody>
@@ -53,7 +52,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div id="doc-content">
 <div class="header">
   <div class="headertitle">
-<div class="title">The Inspector Documentation</div>  </div>
+<div class="title">The Inspector (GNU Radio module gr-inspector) Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>The Inspector (gr-inspector)</p>
@@ -75,6 +74,8 @@ Installation</h1>
 <li>gr-analog, gr-blocks, gr-channel, gr-filter</li>
 <li>QT4</li>
 <li>QWT 6.1.0</li>
+<li>QwtPlot3D</li>
+<li>TensorFlow 0.10 (<a href="https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation">pip installation</a> - you need the version for Python 2.7)</li>
 </ul>
 <p>Install by the following shell commands:</p>
 <p><code>git clone <a href="#" onclick="location.href='mai'+'lto:'+'git'+'@g'+'ith'+'ub'+'.co'+'m'; return false;">git@g<span style="display: none;">.nosp@m.</span>ithu<span style="display: none;">.nosp@m.</span>b.com</a>:gnuradio/gr-inspector.git<br />
@@ -84,6 +85,13 @@ Installation</h1>
  cmake ..<br />
  make -j4<br />
  sudo make install</code></p>
+<h1><a class="anchor" id="models"></a>
+Model Generation</h1>
+<p>You can obtain the code to generate AMC models <a href="https://github.com/chrisruk/models">here</a>.</p>
+<p>It is necessary to first install TensorFlow version 0.10+, which you can do easily through the TensorFlow <a href="https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation">pip install</a>.</p>
+<p>It is also necessary to install our fork of gr-specest from <a href="https://github.com/chrisruk/gr-specest">here</a>.</p>
+<p>Then it is necessary to install keras, which can easily be done through pip.</p>
+<p>It is important that your .keras/keras.json, has the backend set to 'tensorflow'. Please note the models are currently being updated.</p>
 <p>This module is still under development. Please let me know if you run into any issues on the master branch.</p>
 <h1><a class="anchor" id="usage"></a>
 Usage</h1>
@@ -108,6 +116,12 @@ OFDM Estimator</h2>
 <h2><a class="anchor" id="ofdmsync"></a>
 OFDM Synchronizer</h2>
 <p>After OFDM parameter estimation, the signal is frequency synced and symbol beginnings are marked with stream tags.</p>
+<h2><a class="anchor" id="vis3d"></a>
+3D Data Visualisation</h2>
+<p>Visualisation of FAM data from gr-specest.</p>
+<h2><a class="anchor" id="tfmodel"></a>
+TensorFlow AMC Model</h2>
+<p>Loading of TensorFlow models for AMC.</p>
 <h1><a class="anchor" id="gsoc"></a>
 Google Summer of Code</h1>
 <p>This GNU Radio module is part of the Google Summer of Code (GSoC) program 2016. The target is to develop a signal analysis / signal intelligence toolbox with the following capabilities:</p>
@@ -125,6 +139,8 @@ Contact</h1>
 <p>Maintainer of this module:</p>
 <p>Sebastian Müller<br />
  gsenpo[at]gmail.com</p>
+<p>Christopher Richardson<br />
+ chrisrichardsonuk[at]gmail.com</p>
 <p>If you want to know more about the development process, please visit the <a href="https://grinspector.wordpress.com/">blog</a>.</p>
 <p>If you have any questions or problems, the GNU Radio <a href="http://gnuradio.org/redmine/projects/gnuradio/wiki/MailingLists">mailing list</a> is the right place to get help. There are many people who will provide assistance. </p>
 </div></div><!-- contents -->
@@ -132,7 +148,7 @@ Contact</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Aug 25 2016 14:16:38 for The Inspector by
+    <li class="footer">Generated on Mon Oct 17 2016 09:16:02 for The Inspector (GNU Radio module gr-inspector) by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>
