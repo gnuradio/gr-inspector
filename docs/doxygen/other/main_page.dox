@@ -20,7 +20,7 @@ To install the Inspector, the following dependencies are required:
 - QT4
 - QWT 6.1.0
 - QwtPlot3D
-- TensorFlow 0.10 ([pip installation](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation) - you need the version for Python 2.7)
+- TensorFlow 0.12 ([pip installation](https://www.tensorflow.org/get_started/os_setup#pip_installation) - you need the version for Python 2.7)
 
 Install by the following shell commands:
 
@@ -36,7 +36,7 @@ sudo make install</code>
 
 You can obtain the code to generate AMC models [here](https://github.com/chrisruk/models).
 
-It is necessary to first install TensorFlow version 0.10+, which you can do easily through the TensorFlow [pip install](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#pip-installation).
+It is necessary to first install TensorFlow version 0.12+, which you can do easily through the TensorFlow [pip install](https://www.tensorflow.org/get_started/os_setup#pip_installation).
 
 It is also necessary to install our fork of gr-specest from [here](https://github.com/chrisruk/gr-specest).
 

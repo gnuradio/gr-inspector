@@ -76,7 +76,7 @@ class tfmodel_vcf(gr.sync_block):
     ## \param output_graph_path Path of graph file
     def load_graph(self, output_graph_path):
 
-        sess, meta_graph_def = session_bundle.LoadSessionBundleFromPath(
+        sess, meta_graph_def = session_bundle.load_session_bundle_from_path(
             output_graph_path)
 
         with sess.as_default():
