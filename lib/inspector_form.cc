@@ -260,7 +260,7 @@ namespace gr {
         if (d_clicked_marker == CENTER) {
           d_markers[0]->set_marker(0, xVal * *d_rf_unit, bandwidth, *d_rf_unit);
         }
-        else if (d_clicked_marker == LEFT or
+        else if (d_clicked_marker == LEFT ||
                  d_clicked_marker == RIGHT) {
           d_markers[0]->set_marker(0, cfreq, 2 * std::abs(
                   cfreq - xVal * *d_rf_unit), *d_rf_unit);
@@ -287,7 +287,7 @@ namespace gr {
         if(d_clicked_marker == CENTER) {
           d_markers[0]->set_marker(0, xVal**d_rf_unit, bandwidth, *d_rf_unit);
         }
-        else if (d_clicked_marker == LEFT or d_clicked_marker == RIGHT) {
+        else if (d_clicked_marker == LEFT || d_clicked_marker == RIGHT) {
           d_markers[0]->set_marker(0, cfreq, 2*std::abs(cfreq-xVal* *d_rf_unit), *d_rf_unit);
         }
         d_clicked_marker = NONE;
