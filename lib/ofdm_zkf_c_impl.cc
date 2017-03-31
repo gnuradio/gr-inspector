@@ -77,7 +77,7 @@ namespace gr {
       if(len == 0) {
         return akf;
       }
-      gr_complex Rxx[len];
+      __GR_VLA(gr_complex, Rxx, len);
       gr_complex akf_temp;
       for(unsigned int k = 0; k < d_typ_len.back(); k++) {
         akf_temp = 0;
@@ -99,7 +99,7 @@ namespace gr {
     gr_complex*
     ofdm_zkf_c_impl::tv_autocorr(const gr_complex *in, int len,
                                  int shift) {
-      gr_complex corr_temp[len];
+      __GR_VLA(gr_complex, corr_temp, len);
       gr_complex *Rxx = (gr_complex*)volk_malloc(len*sizeof(gr_complex), volk_get_alignment());
       gr_complex R = gr_complex(0,0);
       volk_32fc_x2_multiply_conjugate_32fc(corr_temp, in, &in[shift], len);
@@ -179,12 +179,12 @@ namespace gr {
       memcpy(d_fft->get_inbuf(), Rxx, sizeof(gr_complex)*fft_len);
       d_fft->execute();
       volk_free(Rxx);
-      float result[fft_len]; // magnitude of CCF
+      __GR_VLA(float, result, fft_len); // magnitude of CCF
       volk_32fc_magnitude_32f(result, d_fft->get_outbuf(), fft_len);
 
       // fftshift
       d_tmpbuflen = static_cast<unsigned int>(std::floor((fft_len) / 2.0));
-      float d_tmpbuf[fft_len/2];
+      __GR_VLA(float, d_tmpbuf, fft_len / 2);
       memcpy(d_tmpbuf, &result[0], sizeof(float) * (d_tmpbuflen + 1));
       memcpy(&result[0], &result[fft_len - d_tmpbuflen],
              sizeof(float) * (d_tmpbuflen));

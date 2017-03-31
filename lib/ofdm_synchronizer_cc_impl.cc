@@ -116,7 +116,7 @@ namespace gr {
       }
 
       std::vector<gr_complex> r = autocorr(in, noutput_items);
-      float r_mag[noutput_items-d_fft_len-d_cp_len];
+      __GR_VLA(float, r_mag, noutput_items - d_fft_len - d_cp_len);
       volk_32fc_magnitude_32f(r_mag, &r[0], noutput_items-d_fft_len-d_cp_len);
       std::vector<float> r_vec(r_mag, r_mag+noutput_items-d_fft_len-d_cp_len);
       // calculate argmax

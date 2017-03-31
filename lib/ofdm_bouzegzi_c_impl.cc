@@ -143,7 +143,7 @@ namespace gr {
       gr_complex R = gr_complex(0,0);
 
       // TODO: make this cooler
-      float m_vec[M];
+      __GR_VLA(float, m_vec, M);
       for(unsigned int i = 0; i < M; i++){
         m_vec[i] = i;
       }
@@ -165,7 +165,7 @@ namespace gr {
       volk_32f_x2_subtract_32f(d_imag_pre, d_tmp1, d_tmp2, M); // final imag part
 
 
-      gr_complex pre[M];
+      __GR_VLA(gr_complex, pre, M);
       for(unsigned int i = 0; i < M; i++) {
         pre[i] = d_real_pre[i]+gr_complex(0,1)*d_imag_pre[i];
       }
@@ -208,8 +208,8 @@ namespace gr {
     ofdm_bouzegzi_c_impl::cost_func(const gr_complex *sig, int a,
                                      int b) {
       float J = 0;
-      float power[2*d_Nb+1];
-      float R[2*d_Nb+1];
+      __GR_VLA(float, power, 2 * d_Nb + 1);
+      __GR_VLA(float, R, 2 * d_Nb + 1);
       for(int p = -d_Nb; p <= d_Nb; p++) {
         R[p + d_Nb] = autocorr(sig, a, b, p);
       }
