@@ -290,8 +290,8 @@ namespace gr {
       }
       else {
         for (unsigned int i = 1; i < pos.size(); i++) {
-          if (i == pos.size() - 1 and curr_edges.size() == 1
-                  and pos[i-1]+1 == pos[i]) {
+          if (i == pos.size() - 1 && curr_edges.size() == 1
+                  && pos[i-1]+1 == pos[i]) {
             // write last flank
             curr_edges.push_back(pos[i]);
             flanks.push_back(curr_edges);

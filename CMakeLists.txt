@@ -156,7 +156,7 @@ find_package(Qwt 6.1.0 REQUIRED)
 # components required to the list of GR_REQUIRED_COMPONENTS (in all
 # caps such as FILTER or FFT) and change the version to the minimum
 # API compatible version required.
-set(GR_REQUIRED_COMPONENTS RUNTIME FILTER CHANNEL ANALOG BLOCKS)
+set(GR_REQUIRED_COMPONENTS RUNTIME FILTER CHANNEL ANALOG BLOCKS FFT PMT VOLK)
 find_package(Gnuradio "3.7.9" REQUIRED)
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 include(GrVersion)
