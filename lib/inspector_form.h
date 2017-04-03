@@ -107,6 +107,7 @@ namespace gr {
         RIGHT
       };
 
+      bool change_flag;
       int d_interval, d_fft_len, d_marker_count;
       int *d_rf_unit;
       bool *d_manual;
