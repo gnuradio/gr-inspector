@@ -41,6 +41,7 @@ namespace gr {
                                    int* rf_unit,
                                    QWidget *parent) : QWidget(parent)
     {
+      change_flag = false;
       d_fft_len = fft_len;
       // Setup GUI
       d_buffer = buffer;
@@ -139,6 +140,7 @@ namespace gr {
     void
     inspector_form::manual_cb_clicked(int state) {
       // slot to enable manual signal selection
+      gr::thread::scoped_lock guard(d_mutex);
       *d_manual = static_cast<bool>(state);
       if(*d_manual) {
         spawn_signal_selector();
@@ -320,10 +322,7 @@ namespace gr {
 
     void
     inspector_form::msg_received() {
-      if(!*d_manual) {
-        drawOverlay();
-      }
-      draw_analysis_text();
+      change_flag = true;
     }
 
     void
@@ -351,9 +350,8 @@ namespace gr {
 
     void
     inspector_form::drawOverlay() {
-      gr::thread::scoped_lock guard(d_mutex);
-
       detach_markers();
+    
       if(d_rf_map->size() <= d_marker_count) {
         for (int i = 0; i < d_rf_map->size(); i++) {
           d_markers[i]->set_marker(i, d_cfreq + d_rf_map->at(i)[0],
@@ -371,6 +369,13 @@ namespace gr {
     void
     inspector_form::refresh(){
       gr::thread::scoped_lock guard(d_mutex);
+      if (change_flag) {
+         if (!*d_manual) {
+             drawOverlay();
+         }
+         draw_analysis_text();
+         change_flag = false;
+      }
       // adjust text position to zoom rect
       for(int i = 0; i < d_markers.size(); i++) {
         d_markers[i]->set_label_y(
