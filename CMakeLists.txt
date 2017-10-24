@@ -149,7 +149,8 @@ include (cmake/Modules/FindQwtPlot3D.cmake)
 
 find_package(CppUnit)
 find_package(Doxygen)
-find_package(Qt4 4.2.0 COMPONENTS QwtPlot3D QtCore QtGui QtOpenGL REQUIRED)
+find_package(Qt4 4.2.0 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
+find_package(Qt4 4.2.0 COMPONENTS QwtPlot3D)
 find_package(Qwt 6.1.0 REQUIRED)
 
 # Search for GNU Radio and its components and versions. Add any
@@ -189,7 +190,6 @@ include_directories(
     ${GNURADIO_ALL_INCLUDE_DIRS}
     ${QWT_INCLUDE_DIRS}
     ${QT_INCLUDE_DIRS}
-    ${QT_QWTPLOT3D_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
 )
 
@@ -198,16 +198,15 @@ link_directories(
     ${CPPUNIT_LIBRARY_DIRS}
     ${GNURADIO_RUNTIME_LIBRARY_DIRS}
     ${GNURADIO_FILTER_LIBRARY_DIRS}
-    ${QT_QWTPLOT3D_LIBRARY_DIRS}
     ${QT_LIBRARY_DIRS}
     ${QWT_LIBRARY_DIRS}
-
 )
 
 # Set component parameters
 set(GR_INSPECTOR_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "" FORCE)
 set(GR_INSPECTOR_SWIG_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/swig CACHE INTERNAL "" FORCE)
 
+include(GrComponent)
 ########################################################################
 # Create uninstall target
 ########################################################################
@@ -230,6 +229,8 @@ add_subdirectory(python)
 add_subdirectory(grc)
 add_subdirectory(apps)
 add_subdirectory(docs)
+
+GR_PRINT_COMPONENT_SUMMARY()
 
 ########################################################################
 # Install cmake search helper for this library

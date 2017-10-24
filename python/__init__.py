@@ -22,7 +22,7 @@
 This is the GNU Radio INSPECTOR module. Place your Python package
 description here (python/__init__.py).
 '''
-
+import sys
 # import swig generated symbols into the inspector namespace
 try:
 	# this might fail if the module is python-only
@@ -31,4 +31,6 @@ except ImportError:
 	pass
 
 # import any pure python here
-from tfmodel_vcf import tfmodel_vcf
+# this will prevent the whole module from crashing if tensorflow is not installed
+if 'tensorflow' in sys.modules:
+	from tfmodel_vcf import tfmodel_vcf

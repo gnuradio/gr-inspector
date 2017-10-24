@@ -17,34 +17,41 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-#set (CMAKE_CXX_FLAGS "-lqwtplot3d -lGLU") 
+#set (CMAKE_CXX_FLAGS "-lqwtplot3d -lGLU")
 ########################################################################
 # QT GUI file generation stuff (Q_OBJECT)
 ########################################################################
-set(QTGUI_MOC_HEADERS
-		inspector_form.h vis3d_vf_form.h)
-QT4_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
+#set (CMAKE_AUTOMOC ON)
+list(APPEND QTGUI_MOC_HEADERS inspector_form.h)
 
 ########################################################################
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
+include(GrComponent)
+include(GrMiscUtils)
+
+GR_REGISTER_COMPONENT("3D plotting functionality" ENABLE_3D QWTPLOT3D_FOUND)
+if(ENABLE_3D)
+GR_INCLUDE_SUBDIRECTORY(amc)
+endif(ENABLE_3D)
+
+# QT GUI file generation
+QT4_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
 
 include_directories(${Boost_INCLUDE_DIR} ${QT_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS} ${GNURADIO_ALL_LIBRARIES})
 list(APPEND inspector_sources
-		${QTGUI_MOC_OUTFILES}
+	${QTGUI_MOC_OUTFILES}
     signal_separator_c_impl.cc
     signal_detector_cvf_impl.cc
     signal_extractor_c_impl.cc
     qtgui_inspector_sink_vf_impl.cc
-		     vis3d_vf_form.cc
 		inspector_form.cc
 		signal_marker.cc
 		ofdm_bouzegzi_c_impl.cc
     ofdm_zkf_c_impl.cc
     ofdm_synchronizer_cc_impl.cc
-    vis3d_vf_impl.cc
     )
 
 include(GrPython)
@@ -61,9 +68,8 @@ if(NOT inspector_sources)
 	return()
 endif(NOT inspector_sources)
 
-
 add_library(gnuradio-inspector SHARED ${inspector_sources})
-target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${PYTHON_LIBRARIES} ${QWTPLOT3D_LIBRARIES} ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+target_link_libraries(gnuradio-inspector ${Boost_LIBRARIES} ${QWT_LIBRARIES} ${PYTHON_LIBRARIES} ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 set_target_properties(gnuradio-inspector PROPERTIES DEFINE_SYMBOL "gnuradio_inspector_EXPORTS")
 
 if(APPLE)
@@ -102,7 +108,7 @@ target_link_libraries(
   ${CPPUNIT_LIBRARIES}
   ${QWT_LIBRARIES}
   ${QT_LIBRARIES}
-  ${QWTPLOT3D_LIBRARIES}
+	${gr_inspector_libs}
   gnuradio-inspector
 )
 

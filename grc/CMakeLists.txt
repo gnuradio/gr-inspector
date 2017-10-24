@@ -16,15 +16,20 @@
 # along with GNU Radio; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-install(FILES
-    inspector_signal_separator_c.xml
-    inspector_signal_detector_cvf.xml
-    inspector_signal_extractor_c.xml
-    inspector_qtgui_sink_vf.xml
-    inspector_block_tree.xml
-    inspector_ofdm_zkf_c.xml
-    inspector_ofdm_synchronizer_cc.xml
-    inspector_tfmodel_vcf.xml
-    inspector_vis3d_vf.xml
-    DESTINATION share/gnuradio/grc/blocks
-)
+
+list(APPEND xml_blocks
+  inspector_signal_separator_c.xml
+  inspector_signal_detector_cvf.xml
+  inspector_signal_extractor_c.xml
+  inspector_qtgui_sink_vf.xml
+  inspector_block_tree.xml
+  inspector_ofdm_zkf_c.xml
+  inspector_ofdm_synchronizer_cc.xml
+  inspector_tfmodel_vcf.xml
+  )
+
+if(ENABLE_3D)
+  list(APPEND xml_blocks inspector_vis3d_vf.xml)
+endif(ENABLE_3D)
+
+install(FILES ${xml_blocks} DESTINATION share/gnuradio/grc/blocks)
