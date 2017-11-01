@@ -93,12 +93,14 @@ The modulation classification is developed by @chrisruk during ESA Summer of Cod
 This software is Copyright © 2016 Free Software Foundation, Inc. and part of GNU Radio. It is free software, and is released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) License.
 
 ## Contact/Help
-If you run into problems installing or using gr-inspector, the GNU Radio [mailing list](http://gnuradio.org/redmine/projects/gnuradio/wiki/MailingLists) is the right place to get help. There are many people who will provide assistance. **Please do provide a complete problem description containing**
+If you run into problems installing or using gr-inspector, the GNU Radio [mailing list](https://wiki.gnuradio.org/index.php/MailingLists) is the right place to get help. There are many people who will provide assistance. **Please do provide a complete problem description containing**
 
 1. What exactly where you trying to do?
 2. What steps did you perform to achieve this?
 3. What happend (with complete verbose output)?
 4. Why do you think something went wrong? What should have happend instead?
+
+Visit [How to report errors](https://wiki.gnuradio.org/index.php/ReportingErrors) for more detailed instructions.
 
 **Please only use GitHub issues for actual bugs and improvements!** "This command is not working on my machine" is not a bug.
 
