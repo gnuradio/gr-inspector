@@ -132,8 +132,7 @@ namespace gr {
       d_main_gui = new inspector_form(d_fft_len, &d_buffer, &d_rf_map,
                                       &d_manual, d_msg_queue, &d_rf_unit, d_parent);
       d_main_gui->show();
-      d_main_gui->set_cfreq(d_cfreq);
-      d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
+      d_main_gui->set_cfreq(d_cfreq, d_samp_rate);
     }
 
     void

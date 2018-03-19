@@ -212,8 +212,9 @@ namespace gr {
     }
 
     void
-    inspector_form::set_cfreq(float freq) {
+    inspector_form::set_cfreq(float freq, double samp_rate) {
       d_cfreq = freq;
+      set_axis_x(-samp_rate/2, samp_rate/2-1);
     }
 
     void

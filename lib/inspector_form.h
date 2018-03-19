@@ -81,7 +81,7 @@ namespace gr {
     public:
       void set_axis_x(float start, float stop);
       void msg_received();
-      void set_cfreq(float freq);
+      void set_cfreq(float freq, double samp_rate);
       void detach_markers();
       void mousePressEvent (QMouseEvent * eventPress);
       void mouseReleaseEvent(QMouseEvent *eventRelease);
