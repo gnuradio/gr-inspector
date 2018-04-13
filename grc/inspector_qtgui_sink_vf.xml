@@ -9,7 +9,7 @@
   <make>#set $win = 'self._%s_win'%$id
 inspector.qtgui_inspector_sink_vf($samp_rate, $fft_len, $cfreq, $rf_unit, $msgports, $manual)
 self._$(id)_win = sip.wrapinstance(self.$(id).pyqwidget(), Qt.QWidget)
-$(gui_hint()($win))</make>
+$(gui_hint() % $win)</make>
   <callback>set_rf_unit($rf_unit)</callback>
   <callback>set_cfreq($cfreq)</callback>
   <callback>set_samp_rate($samp_rate)</callback>
