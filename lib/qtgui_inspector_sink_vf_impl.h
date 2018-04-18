@@ -76,7 +76,8 @@ namespace gr {
 
       void set_cfreq(float cfreq) {
         d_cfreq = cfreq;
-        d_main_gui->set_cfreq(cfreq, d_samp_rate);
+        d_main_gui->set_cfreq(cfreq);
+        d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
       }
 
     };
