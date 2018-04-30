@@ -24,9 +24,9 @@
 #include "config.h"
 #endif
 
+#include "vis3d_vf_impl.h"
 #include <chrono>
 #include <gnuradio/io_signature.h>
-#include "vis3d_vf_impl.h"
 #include <gnuradio/prefs.h>
 #include <QFile>
 #include <iostream>

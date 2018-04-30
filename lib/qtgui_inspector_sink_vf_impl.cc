@@ -24,8 +24,8 @@
 #include "config.h"
 #endif
 
-#include <gnuradio/io_signature.h>
 #include "qtgui_inspector_sink_vf_impl.h"
+#include <gnuradio/io_signature.h>
 #include <gnuradio/prefs.h>
 #include <QFile>
 #include <iostream>
