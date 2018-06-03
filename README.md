@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 <img src="https://github.com/gnuradio/gr-inspector/blob/master/docs/doxygen/images/logo_body_big.png" />
 
@@ -37,6 +37,7 @@ cd build
 cmake ..
 make -j4
 sudo make install
+sudo ldconfig
 ```
 
 ## Usage
