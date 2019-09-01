@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,25 +38,26 @@ namespace gr {
       fft::fft_complex *d_fft;
 
      public:
-      ofdm_bouzegzi_c_impl(double samp_rate, int Nb,
-                            const std::vector<int> &alpha,
-                            const std::vector<int> &beta);
+      ofdm_bouzegzi_c_impl(double samp_rate, int Nb, const std::vector<int> &alpha,
+                           const std::vector<int> &beta);
       ~ofdm_bouzegzi_c_impl();
 
-      void rescale_fft(bool forward);
+      oid rescale_fft(bool forward);
       void do_fft(const gr_complex *in, gr_complex *out);
 
       float autocorr(const gr_complex *sig, int a, int b, int p);
       gr_complex autocorr_orig(const gr_complex *sig, int a, int b, int p);
-      float cost_func(const gr_complex *sig, int a, int b);
 
       // Where all the action really happens
-      int work(int noutput_items,
-         gr_vector_const_void_star &input_items,
-         gr_vector_void_star &output_items);
+      int work(
+              int noutput_items,
+              gr_vector_const_void_star &input_items,
+              gr_vector_void_star &output_items
+      );
     };
 
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_ofdm_bouzegzi_C_IMPL_H */
+#endif /* INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_IMPL_H */
+

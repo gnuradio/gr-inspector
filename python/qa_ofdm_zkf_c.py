@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 Free Software Foundation, Inc.
-#
-# This file is part of GNU Radio
+# Copyright 2019 Free Software Foundation, Inc..
 #
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +18,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
+
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks, analog
 import inspector_swig as inspector
@@ -27,7 +26,7 @@ import numpy as np
 import time
 import pmt
 
-class qa_ofdm_zkf_c (gr_unittest.TestCase):
+class qa_ofdm_zkf_c(gr_unittest.TestCase):
 
     def setUp (self):
         self.tb = gr.top_block ()
@@ -72,5 +71,6 @@ class qa_ofdm_zkf_c (gr_unittest.TestCase):
         self.assertAlmostEqual(fft_len, fft_result)
         self.assertAlmostEqual(cp_len, cp_result)
 
+
 if __name__ == '__main__':
-    gr_unittest.run(qa_ofdm_zkf_c, "qa_ofdm_zkf_c.xml")
+    gr_unittest.run(qa_ofdm_zkf_c)

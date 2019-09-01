@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_H
 #define INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_H
 
@@ -30,7 +27,7 @@
 namespace gr {
   namespace inspector {
 
-    /*!
+   /*!
      * \brief OFDM parameter estimator (Bouzegzi algorithm)
      * \ingroup inspector
      *
@@ -51,12 +48,12 @@ namespace gr {
        * class. inspector::ofdm_bouzegzi_c::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double samp_rate, int Nb,
-                       const std::vector<int> &alpha,
+      static sptr make(double samp_rate, int Nb, const std::vector<int> &alpha, 
                        const std::vector<int> &beta);
     };
 
   } // namespace inspector
 } // namespace gr
 
-#endif /* INCLUDED_INSPECTOR_ofdm_bouzegzi_C_H */
+#endif /* INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_H */
+

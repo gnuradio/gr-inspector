@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,12 +31,12 @@ namespace gr {
   namespace inspector {
 
     signal_extractor_c::sptr
-    signal_extractor_c::make(int signal, bool resample, float rate,
-                            float osf)
+    signal_extractor_c::make(int signal, bool resample, float rate, float osf)
     {
       return gnuradio::get_initial_sptr
         (new signal_extractor_c_impl(signal, resample, rate, osf));
     }
+
 
     /*
      * The private constructor
@@ -131,6 +129,6 @@ namespace gr {
       }
     }
 
-
   } /* namespace inspector */
 } /* namespace gr */
+

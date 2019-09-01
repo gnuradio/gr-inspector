@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +30,8 @@
 namespace gr {
   namespace inspector {
 
-    class signal_detector_cvf_impl : public signal_detector_cvf {
+    class signal_detector_cvf_impl : public signal_detector_cvf
+    {
     private:
       bool d_auto_threshold;
       int d_fft_len;
@@ -81,8 +80,6 @@ namespace gr {
                gr_vector_const_void_star &input_items,
                gr_vector_void_star &output_items);
 
-      //<editor-fold desc="Setter">
-
       void set_samp_rate(double d_samp_rate) {
         signal_detector_cvf_impl::d_samp_rate = d_samp_rate;
       }
@@ -113,11 +110,10 @@ namespace gr {
         signal_detector_cvf_impl::d_quantization = d_quantization;
       }
 
-      //</editor-fold>
-
     };
 
   } // namespace inspector
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_IMPL_H */
+

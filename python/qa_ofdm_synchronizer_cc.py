@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 Free Software Foundation, Inc.
-#
-# This file is part of GNU Radio
+# Copyright 2019 Free Software Foundation, Inc..
 #
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,9 +26,9 @@ import numpy as np
 import time
 import pmt
 
-class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
+class qa_ofdm_synchronizer_cc(gr_unittest.TestCase):
 
-    def setUp (self):
+ def setUp (self):
         self.tb = gr.top_block ()
 
     def tearDown (self):
@@ -50,7 +48,7 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
 
         # msg (only 4th and 5th tuples are needed)
         id1 = pmt.make_tuple(pmt.intern("Signal"), pmt.from_uint64(0))
-        name = pmt.make_tuple(pmt.intern("OFDM"), pmt.from_float(1.0));
+        name = pmt.make_tuple(pmt.intern("OFDM"), pmt.from_float(1.0))
         id2 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(0.0))
         id3 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(0.0))
         id4 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(256))
@@ -96,5 +94,6 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
 
         self.assertComplexTuplesAlmostEqual2(expect, output, abs_eps = 0.001, rel_eps=10)
 
+
 if __name__ == '__main__':
-    gr_unittest.run(qa_ofdm_synchronizer_cc, "qa_ofdm_synchronizer_cc.xml")
+    gr_unittest.run(qa_ofdm_synchronizer_cc)

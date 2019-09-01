@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +22,8 @@
 #include "config.h"
 #endif
 
-#include "qtgui_inspector_sink_vf_impl.h"
 #include <gnuradio/io_signature.h>
+#include "qtgui_inspector_sink_vf_impl.h"
 #include <gnuradio/prefs.h>
 #include <QFile>
 #include <iostream>
@@ -43,6 +41,7 @@ namespace gr {
                                                 cfreq, rf_unit, msgports,
                                                 manual, parent));
     }
+
 
     /*
      * The private constructor
@@ -237,6 +236,6 @@ namespace gr {
       return 1;
     }
 
-
   } /* namespace inspector */
 } /* namespace gr */
+

@@ -1,28 +1,16 @@
-title: gr-inspector
-brief: A signal analysis toolbox for GNU Radio
-tags:
-  - SDR
-  - Signal Analysis
-  - Spectrum Analysis
-  - Signal Intelligence
-  - AMC
-  - OFDM
+title: The INSPECTOR OOT Module
+brief: Short description of gr-inspector
+tags: # Tags are arbitrary, but look at CGRAN what other authors are using
+  - sdr
 author:
-  - Sebastian Müller <gsenpo@gmail.com>
+  - Author Name <authors@email.address>
 copyright_owner:
-  - Sebastian Müller
-dependencies:
-  - gnuradio, Qt4, Qwt 6.1.0
-license: GPLv3
-repo: https://github.com/gnuradio/gr-inspector
-website: https://grinspector.wordpress.com/
-icon: https://raw.githubusercontent.com/gnuradio/gr-inspector/dev/docs/doxygen/images/logo_body_big.png
+  - Copyright Owner 1
+license:
+#repo: # Put the URL of the repository here, or leave blank for default
+#website: <module_website> # If you have a separate project website, put it here
+#icon: <icon_url> # Put a URL to a square image here that will be used as an icon on CGRAN
 ---
-*Signal Analysis Toolbox for GNU Radio*
-
-This toolbox provides algorithms, blocks and tools for signal analysis and
-spectrum monitoring. Detailed functionality includes signal detection and
-signal filtering/mixing/decimating/resampling. Further, it is possible
-to estimate OFDM signal parameters and synchronize to a given OFDM signal.
-
-This project was initiated as a Google Summer of Code project and developed in cooperation with the *Communication Engineering Lab (CEL)* at the *Karlsruhe Institute of Technology (KIT)*, Germany, <http://www.cel.kit.edu>.
+A longer, multi-line description of gr-inspector.
+You may use some *basic* Markdown here.
+If left empty, it will try to find a README file instead.
