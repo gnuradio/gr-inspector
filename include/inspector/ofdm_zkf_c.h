@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef INCLUDED_INSPECTOR_OFDM_ZKF_C_H
 #define INCLUDED_INSPECTOR_OFDM_ZKF_C_H
 
@@ -30,7 +27,7 @@
 namespace gr {
   namespace inspector {
 
-    /*!
+   /*!
      * \brief Parameter estimation block for OFDM signals
      * \ingroup inspector
      *
@@ -65,3 +62,4 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_OFDM_ZKF_C_H */
+

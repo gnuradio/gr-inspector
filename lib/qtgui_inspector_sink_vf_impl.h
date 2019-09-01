@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,10 +77,10 @@ namespace gr {
         d_main_gui->set_cfreq(cfreq);
         d_main_gui->set_axis_x(-d_samp_rate/2, d_samp_rate/2-1);
       }
-
     };
 
   } // namespace inspector
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_IMPL_H */
+

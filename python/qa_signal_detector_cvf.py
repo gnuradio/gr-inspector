@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 Free Software Foundation, Inc.
-#
-# This file is part of GNU Radio
+# Copyright 2019 Free Software Foundation Inc..
 #
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
-
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks, analog
 from gnuradio.filter import firdes
@@ -29,28 +26,30 @@ import numpy
 import pmt
 import inspector_swig as inspector
 
+
 class qa_signal_detector_cvf (gr_unittest.TestCase):
 
-    def setUp (self):
-        self.tb = gr.top_block ()
+    def setUp(self):
+        self.tb = gr.top_block()
 
-    def tearDown (self):
+    def tearDown(self):
         self.tb = None
 
-    def test_001_t (self):
+    def test_001_t(self):
         src1 = analog.sig_source_c(32000, analog.GR_COS_WAVE,
-                                  12500, 3)
+                                   12500, 3)
 
         src2 = analog.sig_source_c(32000, analog.GR_COS_WAVE,
                                    9800, 3)
 
         add = blocks.add_cc()
         detector = inspector.signal_detector_cvf(32000,  4096,
-                    firdes.WIN_BLACKMAN_hARRIS, -80, 0.6, False, 0.5, 0.001)
+                                                 firdes.WIN_BLACKMAN_hARRIS,
+                                                 -80, 0.6, False, 0.5, 0.001)
         dst1 = blocks.null_sink(gr.sizeof_float*4096)
         msg_dst = blocks.message_debug()
 
-        #connections
+        # connections
         self.tb.connect(src1, (add, 0))
         self.tb.connect(src2, (add, 1))
         self.tb.connect(add, detector)
@@ -61,7 +60,7 @@ class qa_signal_detector_cvf (gr_unittest.TestCase):
         self.tb.stop()
         self.tb.wait()
 
-        #take most recent message
+        # take most recent message
         msg = msg_dst.get_message(msg_dst.num_messages()-1)
         res_vector = numpy.empty([0, 2])
         for i in range(pmt.length(msg)):
@@ -76,6 +75,5 @@ class qa_signal_detector_cvf (gr_unittest.TestCase):
         self.assertAlmostEqual(0.0, res_vector[1][1], delta=100)
 
 
-
 if __name__ == '__main__':
-    gr_unittest.run(qa_signal_detector_cvf, "qa_signal_detector_cvf.xml")
+    gr_unittest.run(qa_signal_detector_cvf)

@@ -1,0 +1,97 @@
+id: inspector_signal_detector_cvf
+label: Signal Detector
+category: '[Inspector]/Conditioning'
+
+templates:
+  imports: import inspector
+  make: inspector.signal_detector_cvf(${samp_rate}, ${fft_len}, ${window}, ${threshold}, ${sensitivity}, ${auto}, ${avg}, ${quant}, ${min_bw}, ${logfile})
+  callbacks:
+  - set_fft_len(${fft_len})
+  - set_window_type(${window})
+  - set_samp_rate(${samp_rate})
+  - set_sensitivity(${sensitivity})
+  - set_auto_threshold({$auto})
+  - set_average({$avg})
+  - set_quantization({$quant})
+  - set_threshold(${threshold})
+
+#  Make one 'parameters' list entry for every Parameter you want settable from the GUI.
+#     Sub-entries of dictionary:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label
+#     * dtype
+parameters:
+- id: samp_rate
+  label: Samp rate
+  dtype: real
+- id: fft_len
+  label: FFT length
+  dtype: int
+  default: 1024
+- id: window
+  label: Window
+  dtype: enum
+  options: [firdes.WIN_BLACKMAN_hARRIS, firdes.WIN_HAMMING, firdes.WIN_HANN, firdes.WIN_BLACKMAN, firdes.WIN_RECTANGULAR, firdes.WIN_KAISER, firdes.WIN_FLATTOP]
+  option_labels: ['Blackman-Harris', 'Hamming', 'Hann', 'Blackman', 'Rectangular', 'Kaiser', 'Flat-top']
+  default: firdes.WIN_BLACKMAN_hARRIS
+- id: auto
+  label: Auto threshold
+  dtype: bool
+  default: True
+- id: threshold
+  label: Threshold (dB)
+  dtype: float
+  default: 0.7
+  hide: ${('all' if auto else 'none')}
+- id: sensitivity
+  label: Sensitivity (0-1)
+  dtype: float
+  default: 0.2
+  hide: ${('none' if auto else 'all')}
+- id: avg
+  label: Average IIR alpha
+  dtype: real
+  default: 0.8
+- id: quant
+  label: Rel. quantization
+  dtype: real
+  value: 0.0001
+  hide: 'part'
+- id: min_bw
+  label: Min Sig BW
+  dtype: real
+  default: 0
+  hide: 'part'
+- id: logfile
+  label: Logfile
+  dtype: file_save
+  default: ''
+  hide: 'part'
+
+#  Make one 'inputs' list entry per input. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * domain
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+
+#  Make one 'outputs' list entry per output. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+outputs:
+- label: out
+  domain: stream
+  dtype: float
+  vlen: ${fft_len}
+  optional: true
+- label: map_out
+  domain: message
+  optional: true
+
+file_format: 1

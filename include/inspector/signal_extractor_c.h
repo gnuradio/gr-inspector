@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
-
 
 #ifndef INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_H
 #define INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_H
@@ -60,8 +57,7 @@ namespace gr {
        * \param rate Desired output sample rate if resample is enabled
        * \param osf Oversampling factor of the input signal (relative to map input)
        */
-      static sptr make(int signal, bool resample = false,
-                       float rate = 1.0, float osf = 1.0);
+      static sptr make(int signal, bool resample = false, float rate = 1.0, float osf = 1.0);
       virtual void set_signal(int signal) = 0;
     };
 
@@ -69,3 +65,4 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_H */
+

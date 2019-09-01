@@ -1,0 +1,57 @@
+id: inspector_signal_extractor_c
+label: Signal Extractor
+category: '[Inspector]/Conditioning'
+
+templates:
+  imports: import inspector
+  make: inspector.signal_extractor_c(${signal}, ${resample}, ${rate}, ${osf})
+  callbacks:
+  - set_signal(${signal})
+
+#  Make one 'parameters' list entry for every Parameter you want settable from the GUI.
+#     Sub-entries of dictionary:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label
+#     * dtype
+parameters:
+- id: signal
+  label: Signal
+  dtype: int
+- id: resample
+  label: Resample signal
+  dtype: bool
+  default: False
+  options: [True, False]
+  option_labels: ['On', 'Off']
+- id: rate
+  label: Output samp rate
+  dtype: real
+  default: 48000
+  hide: ${('none' if resample else 'all')}
+- id: osf
+  label: Oversampling
+  dtype: real
+  default: 1
+  hide: ${('none' if resample else 'all')}
+
+#  Make one 'inputs' list entry per input. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * domain
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+inputs:
+- label: sig_in
+  domain: message
+
+#  Make one 'outputs' list entry per output. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+
+file_format: 1

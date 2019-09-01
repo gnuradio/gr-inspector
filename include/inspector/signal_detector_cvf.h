@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
-
 
 #ifndef INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_H
 #define INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_H
@@ -60,12 +57,10 @@ namespace gr {
      * block. There, a filter must be recalculated, when the bandwidth of a signal
      * changed.
      */
-    class INSPECTOR_API signal_detector_cvf : virtual public sync_decimator
+    class INSPECTOR_API signal_detector_cvf : virtual public gr::sync_decimator
     {
      public:
       typedef boost::shared_ptr<signal_detector_cvf> sptr;
-
-
 
       /*!
        * \brief Return a signal detector block instance.
@@ -105,3 +100,4 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_H */
+

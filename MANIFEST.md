@@ -5,14 +5,13 @@ tags:
   - Signal Analysis
   - Spectrum Analysis
   - Signal Intelligence
-  - AMC
   - OFDM
 author:
   - Sebastian Müller <gsenpo@gmail.com>
 copyright_owner:
   - Sebastian Müller
 dependencies:
-  - gnuradio, Qt4, Qwt 6.1.0
+  - gnuradio, Qt5, Qwt 6.1.0
 license: GPLv3
 repo: https://github.com/gnuradio/gr-inspector
 website: https://grinspector.wordpress.com/
