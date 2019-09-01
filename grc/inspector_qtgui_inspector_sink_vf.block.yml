@@ -1,0 +1,113 @@
+id: inspector_qtgui_sink_vf
+label: QT GUI Inspector Sink
+category: '[Inspector]/GUI'
+
+templates:
+  imports: |-
+    import inspector
+    from PyQt5 import Qt
+    from gnuradio import qtgui
+    import sip
+
+  callbacks:
+    - set_rf_unit(${rf_unit})
+    - set_cfreq(${cfreq})
+    - set_samp_rate(${samp_rate})
+
+  make: |-
+    <%
+        win = 'self._%s_win'%id
+    %>\
+    inspector.qtgui_inspector_sink_vf(
+      ${samp_rate},
+      ${fft_len},
+      ${cfreq},
+      ${rf_unit},
+      ${msgports},
+      ${manual}
+    )
+    ${win} = sip.wrapinstance(self.${id}.pyqwidget(), Qt.QWidget)
+
+    ${gui_hint() % win}
+
+#  Make one 'parameters' list entry for every Parameter you want settable from the GUI.
+#     Sub-entries of dictionary:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label
+#     * dtype
+parameters:
+- id: samp_rate
+  label: Samp Rate
+  dtype: real
+- id: fft_len
+  label: FFT len
+  dtype: int
+- id: cfreq
+  label: Center freq
+  dtype: real
+  default: 0
+- id: rf_unit
+  label: Rf Unit
+  dtype: enum
+  default: 1000000
+  options: [1, 1000, 1000000, 1000000000]
+  option_labels: ['Hz', 'kHz', 'MHz', 'GHz']
+- id: msgports
+  label: No. of MSG ports
+  dtype: int
+  default: 1
+- id: manual
+  label: Manual selection
+  dtype: bool
+  default: True
+- id: gui_hint
+  label: GUI Hint
+  dtype: gui_hint
+  default: ''
+
+#  Make one 'inputs' list entry per input. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * domain
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+inputs:
+- label: in
+  domain: stream
+  dtype: float
+  vlen: ${fft_len}
+- label: map_in
+  domain: message
+- label: analysis_in
+  domain: message
+  multiplicity: ${msgports}
+  optional: True
+
+#  Make one 'outputs' list entry per output. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+outputs:
+- label: map_out
+  domain: message
+  optional: True
+
+documentation: |-
+  This GUI uses QT and QWT to create a graphical interface to control the inspector and get feedback about the detected and analyzed signals.
+
+  The PSD estimation of the Signal Detector block gets displayed here along with signal markers and informations. Manual signal selection can be done within the GUI created by this block.
+
+  Analysis blocks can pass information to the GUI block by providing messages in the tuple format
+
+  ((pmt::intern("signal"), signal_no), (pmt::intern("description1"), pmt::from_float(value1)), ...)
+
+  Controls: Use CTRL+LeftMouse to zoom, RightMouse to zoom out. This prevents confusion when in manual selection mode, where the signals are selected with LeftMouse.
+
+  Message ports:
+  - map in: takes RF map from Signal Detector block and visualizes the included information in the plot
+  - analysis_in: takes messages of analysis blocks and displays their content in the GUI plot.
+  - map out: passes either the input message when manual selection is deactivated or passes RF map according to the user's settings.
+
+
+file_format: 1

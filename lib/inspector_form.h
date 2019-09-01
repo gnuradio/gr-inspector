@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +24,8 @@
 #include <gnuradio/thread/thread.h>
 
 #include <QTimer>
-#include <QWidget>
-#include <QtGui/QtGui>
+#include <QtWidgets>
+#include <QtGui>
 #include <gnuradio/msg_queue.h>
 
 #include <qwt_plot.h>

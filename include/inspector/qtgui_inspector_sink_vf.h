@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_H
 #define INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_H
 
@@ -36,7 +33,7 @@ namespace gr {
   namespace inspector {
 
     /*!
-     * \brief GUI for the inspector toolkit
+    * \brief GUI for the inspector toolkit
      * \ingroup inspector
      *
      * \details
@@ -80,10 +77,7 @@ namespace gr {
        * \param manual Enable manual signal selection
        * \param parent QWidget parent
        */
-      static sptr make(double samp_rate, int fft_len, float cfreq = 0,
-                       int rf_unit = 1000000, int msgports = 1,
-                       bool manual = false, QWidget *parent = NULL);
-
+      static sptr make(double samp_rate, int fft_len, float cfreq = 0, int rf_unit = 1000000, int msgports = 1, bool manual = false, QWidget *parent = nullptr);
       virtual void set_rf_unit(int unit) = 0;
       virtual void set_samp_rate(double d_samp_rate) = 0;
       virtual void set_cfreq(float cfreq) = 0;
@@ -98,3 +92,4 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_H */
+

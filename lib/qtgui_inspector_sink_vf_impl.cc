@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +22,8 @@
 #include "config.h"
 #endif
 
-#include "qtgui_inspector_sink_vf_impl.h"
 #include <gnuradio/io_signature.h>
+#include "qtgui_inspector_sink_vf_impl.h"
 #include <gnuradio/prefs.h>
 #include <QFile>
 #include <iostream>
@@ -43,6 +41,7 @@ namespace gr {
                                                 cfreq, rf_unit, msgports,
                                                 manual, parent));
     }
+
 
     /*
      * The private constructor
@@ -123,7 +122,7 @@ namespace gr {
         d_qApplication = qApp;
       }
       else {
-#if QT_VERSION >= 0x040500
+#if QT_VERSION >= 0x040500 && QT_VERSION < 0x050000
         std::string style = prefs::singleton()->get_string("qtgui", "style", "raster");
         QApplication::setGraphicsSystem(QString(style.c_str()));
 #endif
@@ -199,8 +198,7 @@ namespace gr {
     qtgui_inspector_sink_vf_impl::pyqwidget()
     {
       PyObject *w = PyLong_FromVoidPtr((void*)d_main_gui);
-      PyObject *retarg = Py_BuildValue("N", w);
-      return retarg;
+      return w;
     }
 #else
     void *
@@ -237,6 +235,6 @@ namespace gr {
       return 1;
     }
 
-
   } /* namespace inspector */
 } /* namespace gr */
+

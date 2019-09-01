@@ -1,0 +1,55 @@
+id: inspector_ofdm_zkf_c
+label: OFDM Estimator
+category: '[Inspector]/Analysis'
+
+templates:
+  imports: import inspector
+  make: inspector.ofdm_zkf_c(${samp_rate}, ${signal}, ${min_items}, ${alpha}, ${beta})
+
+#  Make one 'parameters' list entry for every Parameter you want settable from the GUI.
+#     Sub-entries of dictionary:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label
+#     * dtype
+parameters:
+- id: samp_rate
+  label: Sample rate
+  dtype: real
+- id: signal
+  label: Signal No
+  dtype: int
+  default: 0
+- id: min_items
+  label: Min input items
+  dtype: int
+  default: 7000
+- id: alpha
+  label: FFT lengths
+  dtype: int_vector
+  default: [16, 32, 64, 128, 256, 512, 1024]
+- id: beta
+  label: CP lengths
+  dtype: int_vector
+  default: [4, 8, 16, 32]
+
+#  Make one 'inputs' list entry per input. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * domain
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+
+#  Make one 'outputs' list entry per output. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+outputs:
+- label: ofdm_out
+  domain: message
+
+file_format: 1

@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +44,6 @@ namespace gr {
                                            quantization, min_bw, filename));
     }
 
-    //<editor-fold desc="Initalization">
 
     /*
      * The private constructor
@@ -404,7 +401,6 @@ namespace gr {
       return 1; // one vector has been processed
     }
 
-    //</editor-fold>
-
   } /* namespace inspector */
 } /* namespace gr */
+

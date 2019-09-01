@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 Free Software Foundation, Inc.
-#
-# This file is part of GNU Radio
+# Copyright 2019 Free Software Foundation, Inc..
 #
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,21 +20,22 @@
 #
 
 from gnuradio import gr, gr_unittest
-from gnuradio import blocks, channels, analog
+from gnuradio import blocks, analog
 import inspector_swig as inspector
 import numpy as np
 import time
 import pmt
 
-class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
 
-    def setUp (self):
-        self.tb = gr.top_block ()
+class qa_ofdm_synchronizer_cc(gr_unittest.TestCase):
 
-    def tearDown (self):
+    def setUp(self):
+        self.tb = gr.top_block()
+
+    def tearDown(self):
         self.tb = None
 
-    def test_001_t (self):
+    def test_001_t(self):
         #  set up fg
         fft_len = 256
         cp_len = 32
@@ -45,12 +44,12 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
 
         timefreq = np.fft.ifft(data, axis=0)
 
-        #add cp
+        # add cp
         timefreq = np.hstack((timefreq[:, -cp_len:], timefreq))
 
         # msg (only 4th and 5th tuples are needed)
         id1 = pmt.make_tuple(pmt.intern("Signal"), pmt.from_uint64(0))
-        name = pmt.make_tuple(pmt.intern("OFDM"), pmt.from_float(1.0));
+        name = pmt.make_tuple(pmt.intern("OFDM"), pmt.from_float(1.0))
         id2 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(0.0))
         id3 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(0.0))
         id4 = pmt.make_tuple(pmt.intern("xxx"), pmt.from_float(256))
@@ -87,14 +86,16 @@ class qa_ofdm_synchronizer_cc (gr_unittest.TestCase):
         expect = dst2.data()
 
         # block outputs 0j until it has enough OFDM symbols to perform estimations
-        k = (k for k in range(len(output)) if output[k] != 0j).next()
+        k = next((k for k in range(len(output)) if output[k] != 0j))
 
         # use 10,000 samples for comparison since block fails sometimes
         # for one work function
         output = output[k:k+10000]
         expect = expect[k:k+10000]
 
-        self.assertComplexTuplesAlmostEqual2(expect, output, abs_eps = 0.001, rel_eps=10)
+        self.assertComplexTuplesAlmostEqual2(
+            expect, output, abs_eps=0.001, rel_eps=10)
+
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_ofdm_synchronizer_cc, "qa_ofdm_synchronizer_cc.xml")
+    gr_unittest.run(qa_ofdm_synchronizer_cc)

@@ -1,0 +1,41 @@
+id: inspector_ofdm_synchronizer_cc
+label: OFDM Synchronizer
+category: '[Inspector]/Conditioning'
+
+templates:
+  imports: import inspector
+  make: inspector.ofdm_synchronizer_cc(${min_items})
+
+#  Make one 'parameters' list entry for every Parameter you want settable from the GUI.
+#     Sub-entries of dictionary:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label
+#     * dtype
+parameters:
+- id: min_items
+  label: Min input items
+  default: 4096
+  dtype: int
+
+#  Make one 'inputs' list entry per input. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * domain
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+inputs:
+- domain: stream
+  dtype: complex
+- label: ofdm_in
+  domain: message
+
+#  Make one 'outputs' list entry per output. Sub-entries of dictionary:
+#      * label (an identifier for the GUI)
+#      * dtype
+#      * vlen
+#      * optional (set to 1 for optional inputs)
+outputs:
+- domain: stream
+  dtype: complex
+
+file_format: 1

@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +24,6 @@
 
 #include <gnuradio/io_signature.h>
 #include "ofdm_synchronizer_cc_impl.h"
-#include <volk/volk.h>
-#include <complex>
 
 namespace gr {
   namespace inspector {
@@ -38,6 +34,7 @@ namespace gr {
       return gnuradio::get_initial_sptr
         (new ofdm_synchronizer_cc_impl(min_items));
     }
+
 
     /*
      * The private constructor
@@ -145,3 +142,4 @@ namespace gr {
 
   } /* namespace inspector */
 } /* namespace gr */
+

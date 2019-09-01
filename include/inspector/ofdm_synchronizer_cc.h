@@ -1,8 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2016 Free Software Foundation, Inc.
- *
- * This file is part of GNU Radio
+ * Copyright 2019 Free Software Foundation, Inc..
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
-
 
 #ifndef INCLUDED_INSPECTOR_OFDM_SYNCHRONIZER_CC_H
 #define INCLUDED_INSPECTOR_OFDM_SYNCHRONIZER_CC_H
@@ -58,6 +55,11 @@ namespace gr {
       /*!
        * \brief Return a shared_ptr to a new instance of inspector::ofdm_synchronizer_cc.
        *
+       * To avoid accidental use of raw pointers, inspector::ofdm_synchronizer_cc's
+       * constructor is in a private implementation
+       * class. inspector::ofdm_synchronizer_cc::make is the public interface for
+       * creating new instances.
+       *
        * \param min_items Set minimum items required for each work call. Should be several FFT lengths.
        */
       static sptr make(int min_items);
@@ -67,3 +69,4 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_OFDM_SYNCHRONIZER_CC_H */
+

@@ -22,9 +22,10 @@ FIND_LIBRARY(
           /usr/local/lib64
           /usr/lib
           /usr/lib64
-)
+          )
+
+include("${CMAKE_CURRENT_LIST_DIR}/inspectorTarget.cmake")
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(INSPECTOR DEFAULT_MSG INSPECTOR_LIBRARIES INSPECTOR_INCLUDE_DIRS)
 MARK_AS_ADVANCED(INSPECTOR_LIBRARIES INSPECTOR_INCLUDE_DIRS)
-
