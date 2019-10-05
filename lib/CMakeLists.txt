@@ -19,18 +19,41 @@
 # Boston, MA 02110-1301, USA.
 
 ########################################################################
+# QT GUI file generation stuff (Q_OBJECT)
+########################################################################
+set(QTGUI_MOC_HEADERS inspector_form.h vis3d_vf_form.h)
+QT5_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
+
+########################################################################
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
+include_directories(${Boost_INCLUDE_DIR} ${QT_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS} ${GNURADIO_ALL_LIBRARIES})
 list(APPEND inspector_sources
-    ofdm_synchronizer_cc_impl.cc
-    ofdm_bouzegzi_c_impl.cc
-    ofdm_zkf_c_impl.cc
-    qtgui_inspector_sink_vf_impl.cc
+    ${QTGUI_MOC_OUTFILES}
+    signal_separator_c_impl.cc
     signal_detector_cvf_impl.cc
     signal_extractor_c_impl.cc
+    qtgui_inspector_sink_vf_impl.cc
+    vis3d_vf_form.cc
+    inspector_form.cc
+    signal_marker.cc
+    ofdm_bouzegzi_c_impl.cc
+    ofdm_zkf_c_impl.cc
+    ofdm_synchronizer_cc_impl.cc
+    vis3d_vf_impl.cc
 )
+
+include(GrPython)
+if(ENABLE_PYTHON)
+    add_definitions(-DENABLE_PYTHON)
+    list(APPEND qtgui_libs
+            ${PYTHON_LIBRARIES}
+            )
+endif(ENABLE_PYTHON)
+
 
 set(inspector_sources "${inspector_sources}" PARENT_SCOPE)
 if(NOT inspector_sources)

@@ -23,5 +23,7 @@ install(FILES
     inspector_ofdm_zkf_c.block.yml
     inspector_qtgui_inspector_sink_vf.block.yml
     inspector_signal_detector_cvf.block.yml
-    inspector_signal_extractor_c.block.yml DESTINATION share/gnuradio/grc/blocks
+    inspector_signal_extractor_c.block.yml
+    inspector_signal_separator_c.block.yml
+    inspector_vis3d_vf.block.yml DESTINATION share/gnuradio/grc/blocks
 )
