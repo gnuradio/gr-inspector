@@ -1,6 +1,6 @@
 id: inspector_ofdm_synchronizer_cc
 label: OFDM Synchronizer
-category: '[Inspector]'
+category: '[Inspector]/Conditioning'
 
 templates:
   imports: import inspector
@@ -26,6 +26,8 @@ parameters:
 inputs:
 - domain: stream
   dtype: complex
+- label: ofdm_in
+  domain: message
 
 #  Make one 'outputs' list entry per output. Sub-entries of dictionary:
 #      * label (an identifier for the GUI)

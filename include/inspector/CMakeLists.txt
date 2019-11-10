@@ -29,6 +29,5 @@ install(FILES
     qtgui_inspector_sink_vf.h
     signal_detector_cvf.h
     signal_extractor_c.h
-    signal_separator_c.h
-    vis3d_vf.h DESTINATION include/inspector
+    signal_separator_c.h DESTINATION include/inspector
 )

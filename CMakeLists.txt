@@ -125,6 +125,8 @@ endif(APPLE)
 # Find gnuradio build dependencies
 ########################################################################
 find_package(Doxygen)
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qwt REQUIRED)
 
 ########################################################################
 # Setup doxygen option
