@@ -127,6 +127,7 @@ endif(APPLE)
 find_package(Doxygen)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(Qwt REQUIRED)
+GR_PYTHON_CHECK_MODULE("PyQt5" PyQt5 True PYQT5_FOUND)
 
 ########################################################################
 # Setup doxygen option
