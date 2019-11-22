@@ -22,7 +22,7 @@
 #include "config.h"
 #endif
 
-#include <signal_marker.h>
+#include "signal_marker.h"
 
 namespace gr {
   namespace inspector {

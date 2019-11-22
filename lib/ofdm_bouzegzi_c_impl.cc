@@ -32,8 +32,8 @@ namespace gr {
 
     ofdm_bouzegzi_c::sptr
     ofdm_bouzegzi_c::make(double samp_rate, int Nb,
-                           const std::vector<int> &alpha,
-                           const std::vector<int> &beta)
+                          const std::vector<int> &alpha,
+                          const std::vector<int> &beta)
     {
       return gnuradio::get_initial_sptr
         (new ofdm_bouzegzi_c_impl(samp_rate, Nb, alpha, beta));
@@ -262,4 +262,3 @@ namespace gr {
 
   } /* namespace inspector */
 } /* namespace gr */
-

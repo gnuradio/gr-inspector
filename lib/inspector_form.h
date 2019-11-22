@@ -24,8 +24,8 @@
 #include <gnuradio/thread/thread.h>
 
 #include <QTimer>
-#include <QWidget>
-#include <QtGui/QtGui>
+#include <QtWidgets>
+#include <QtGui>
 #include <gnuradio/msg_queue.h>
 
 #include <qwt_plot.h>

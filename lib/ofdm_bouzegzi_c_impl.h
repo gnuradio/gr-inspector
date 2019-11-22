@@ -38,22 +38,24 @@ namespace gr {
       fft::fft_complex *d_fft;
 
      public:
-      ofdm_bouzegzi_c_impl(double samp_rate, int Nb, const std::vector<int> &alpha,
+
+      ofdm_bouzegzi_c_impl(double samp_rate, int Nb,
+                           const std::vector<int> &alpha,
                            const std::vector<int> &beta);
+
       ~ofdm_bouzegzi_c_impl();
 
-      oid rescale_fft(bool forward);
+      void rescale_fft(bool forward);
       void do_fft(const gr_complex *in, gr_complex *out);
 
       float autocorr(const gr_complex *sig, int a, int b, int p);
       gr_complex autocorr_orig(const gr_complex *sig, int a, int b, int p);
+      float cost_func(const gr_complex *sig, int a, int b);
 
       // Where all the action really happens
-      int work(
-              int noutput_items,
-              gr_vector_const_void_star &input_items,
-              gr_vector_void_star &output_items
-      );
+      int work(int noutput_items,
+               gr_vector_const_void_star &input_items,
+               gr_vector_void_star &output_items);
     };
 
   } // namespace inspector

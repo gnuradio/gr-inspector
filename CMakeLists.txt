@@ -90,6 +90,13 @@ include(GrVersion)
 
 include(GrPlatform) #define LIB_SUFFIX
 
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+
+include(GrPython)
+GR_PYTHON_CHECK_MODULE("PyQt5" PyQt5 True PYQT5_FOUND)
+
+find_package(Qwt REQUIRED)
+
 if(NOT CMAKE_MODULES_DIR)
   set(CMAKE_MODULES_DIR lib${LIB_SUFFIX}/cmake)
 endif(NOT CMAKE_MODULES_DIR)
@@ -125,9 +132,6 @@ endif(APPLE)
 # Find gnuradio build dependencies
 ########################################################################
 find_package(Doxygen)
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
-find_package(Qwt REQUIRED)
-GR_PYTHON_CHECK_MODULE("PyQt5" PyQt5 True PYQT5_FOUND)
 
 ########################################################################
 # Setup doxygen option

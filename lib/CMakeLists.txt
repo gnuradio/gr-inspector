@@ -21,15 +21,17 @@
 ########################################################################
 # QT GUI file generation stuff (Q_OBJECT)
 ########################################################################
-set(QTGUI_MOC_HEADERS inspector_form.h)
+set(QTGUI_MOC_HEADERS
+  signal_marker.h
+  inspector_form.h
+)
 QT5_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
 
 ########################################################################
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
-include_directories(${Boost_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS}
-    ${QWT_INCLUDE_DIRS})
+
 link_directories(${Boost_LIBRARY_DIRS} ${GNURADIO_ALL_LIBRARIES})
 list(APPEND inspector_sources
     ${QTGUI_MOC_OUTFILES}
@@ -45,13 +47,6 @@ list(APPEND inspector_sources
 )
 
 include(GrPython)
-if(ENABLE_PYTHON)
-    add_definitions(-DENABLE_PYTHON)
-    list(APPEND qtgui_libs
-            ${PYTHON_LIBRARIES}
-            )
-        include_directories(${PYTHON_INCLUDE_DIRS})
-endif(ENABLE_PYTHON)
 
 
 set(inspector_sources "${inspector_sources}" PARENT_SCOPE)
@@ -61,7 +56,8 @@ if(NOT inspector_sources)
 endif(NOT inspector_sources)
 
 add_library(gnuradio-inspector SHARED ${inspector_sources})
-target_link_libraries(gnuradio-inspector gnuradio::gnuradio-runtime)
+target_link_libraries(gnuradio-inspector PUBLIC
+                      gnuradio::gnuradio-runtime qwt::qwt Qt5::Widgets Python::Python)
 target_include_directories(gnuradio-inspector
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<INSTALL_INTERFACE:include>
