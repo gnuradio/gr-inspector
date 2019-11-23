@@ -57,7 +57,12 @@ endif(NOT inspector_sources)
 
 add_library(gnuradio-inspector SHARED ${inspector_sources})
 target_link_libraries(gnuradio-inspector PUBLIC
-                      gnuradio::gnuradio-runtime qwt::qwt Qt5::Widgets Python::Python)
+                      gnuradio::gnuradio-runtime
+                      gnuradio::gnuradio-fft
+                      gnuradio::gnuradio-filter
+                      qwt::qwt
+                      Qt5::Widgets
+                      Python::Python)
 target_include_directories(gnuradio-inspector
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<INSTALL_INTERFACE:include>
