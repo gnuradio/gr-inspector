@@ -28,7 +28,7 @@ import pmt
 
 class qa_ofdm_synchronizer_cc(gr_unittest.TestCase):
 
- def setUp (self):
+    def setUp (self):
         self.tb = gr.top_block ()
 
     def tearDown (self):
@@ -85,7 +85,7 @@ class qa_ofdm_synchronizer_cc(gr_unittest.TestCase):
         expect = dst2.data()
 
         # block outputs 0j until it has enough OFDM symbols to perform estimations
-        k = (k for k in range(len(output)) if output[k] != 0j).next()
+        k = next((k for k in range(len(output)) if output[k] != 0j))
 
         # use 10,000 samples for comparison since block fails sometimes
         # for one work function
