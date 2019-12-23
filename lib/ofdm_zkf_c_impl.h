@@ -21,45 +21,46 @@
 #ifndef INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H
 #define INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H
 
-#include <inspector/ofdm_zkf_c.h>
 #include <gnuradio/fft/fft.h>
+#include <inspector/ofdm_zkf_c.h>
 
 namespace gr {
-  namespace inspector {
+namespace inspector {
 
-    class ofdm_zkf_c_impl : public ofdm_zkf_c
-    {
-     private:
-      double d_samp_rate;
-      unsigned int d_signal;
-      std::vector<int> d_typ_len, d_typ_cp;
-      gr_complex *d_Rxx;
-      fft::fft_complex *d_fft;
-      unsigned int d_tmpbuflen;
-      int d_min_items;
+class ofdm_zkf_c_impl : public ofdm_zkf_c
+{
+private:
+    double d_samp_rate;
+    unsigned int d_signal;
+    std::vector<int> d_typ_len, d_typ_cp;
+    gr_complex* d_Rxx;
+    fft::fft_complex* d_fft;
+    unsigned int d_tmpbuflen;
+    int d_min_items;
 
-     public:
-      ofdm_zkf_c_impl(double samp_rate, int signal, int min_items, const std::vector<int> &typ_len, const std::vector<int> &typ_cp);
-      ~ofdm_zkf_c_impl();
-      std::vector<float> autocorr(const gr_complex *in, int len);
-      gr_complex* tv_autocorr(const gr_complex *in, int len, int shift);
-      int round_to_list(int val, std::vector<int> *list);
-      void resize_fft(int size);
+public:
+    ofdm_zkf_c_impl(double samp_rate,
+                    int signal,
+                    int min_items,
+                    const std::vector<int>& typ_len,
+                    const std::vector<int>& typ_cp);
+    ~ofdm_zkf_c_impl();
+    std::vector<float> autocorr(const gr_complex* in, int len);
+    gr_complex* tv_autocorr(const gr_complex* in, int len, int shift);
+    int round_to_list(int val, std::vector<int>* list);
+    void resize_fft(int size);
 
-      void set_samp_rate(double d_samp_rate);
+    void set_samp_rate(double d_samp_rate);
 
-      pmt::pmt_t pack_message(float subc, float time, int fft, int cp);
+    pmt::pmt_t pack_message(float subc, float time, int fft, int cp);
 
-      // Where all the action really happens
-      int work(
-              int noutput_items,
-              gr_vector_const_void_star &input_items,
-              gr_vector_void_star &output_items
-      );
-    };
+    // Where all the action really happens
+    int work(int noutput_items,
+             gr_vector_const_void_star& input_items,
+             gr_vector_void_star& output_items);
+};
 
-  } // namespace inspector
+} // namespace inspector
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H */
-

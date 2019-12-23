@@ -21,9 +21,10 @@
 ########################################################################
 # QT GUI file generation stuff (Q_OBJECT)
 ########################################################################
+set(inspector_mod_includedir ${CMAKE_CURRENT_SOURCE_DIR}/../include/inspector)
 set(QTGUI_MOC_HEADERS
-  signal_marker.h
-  inspector_form.h
+  ${inspector_mod_includedir}/signal_marker.h
+  ${inspector_mod_includedir}/inspector_form.h
 )
 QT5_WRAP_CPP(QTGUI_MOC_OUTFILES ${QTGUI_MOC_HEADERS})
 

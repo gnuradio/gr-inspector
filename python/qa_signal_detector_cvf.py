@@ -43,10 +43,10 @@ class qa_signal_detector_cvf (gr_unittest.TestCase):
                                    9800, 3)
 
         add = blocks.add_cc()
-        detector = inspector.signal_detector_cvf(32000,  4096,
+        detector = inspector.signal_detector_cvf(32000, 4096,
                                                  firdes.WIN_BLACKMAN_hARRIS,
                                                  -80, 0.6, False, 0.5, 0.001)
-        dst1 = blocks.null_sink(gr.sizeof_float*4096)
+        dst1 = blocks.null_sink(gr.sizeof_float * 4096)
         msg_dst = blocks.message_debug()
 
         # connections
@@ -61,7 +61,7 @@ class qa_signal_detector_cvf (gr_unittest.TestCase):
         self.tb.wait()
 
         # take most recent message
-        msg = msg_dst.get_message(msg_dst.num_messages()-1)
+        msg = msg_dst.get_message(msg_dst.num_messages() - 1)
         res_vector = numpy.empty([0, 2])
         for i in range(pmt.length(msg)):
             row = pmt.vector_ref(msg, i)

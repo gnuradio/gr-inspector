@@ -21,45 +21,45 @@
 #ifndef INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_IMPL_H
 #define INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_IMPL_H
 
-#include <inspector/ofdm_bouzegzi_c.h>
 #include <gnuradio/fft/fft.h>
+#include <inspector/ofdm_bouzegzi_c.h>
 
 namespace gr {
-  namespace inspector {
+namespace inspector {
 
-    class ofdm_bouzegzi_c_impl : public ofdm_bouzegzi_c
-    {
-     private:
-      int d_Nb, d_len;
-      double d_samp_rate;
-      float *d_x1, *d_y1, *d_x2, *d_y2, *d_tmp1, *d_tmp2, *d_real_pre, *d_imag_pre, *d_osc_vec;
-      gr_complex *d_sig_shift, *d_res;
-      std::vector<int> d_alpha, d_beta;
-      fft::fft_complex *d_fft;
+class ofdm_bouzegzi_c_impl : public ofdm_bouzegzi_c
+{
+private:
+    int d_Nb, d_len;
+    double d_samp_rate;
+    float *d_x1, *d_y1, *d_x2, *d_y2, *d_tmp1, *d_tmp2, *d_real_pre, *d_imag_pre,
+        *d_osc_vec;
+    gr_complex *d_sig_shift, *d_res;
+    std::vector<int> d_alpha, d_beta;
+    fft::fft_complex* d_fft;
 
-     public:
+public:
+    ofdm_bouzegzi_c_impl(double samp_rate,
+                         int Nb,
+                         const std::vector<int>& alpha,
+                         const std::vector<int>& beta);
 
-      ofdm_bouzegzi_c_impl(double samp_rate, int Nb,
-                           const std::vector<int> &alpha,
-                           const std::vector<int> &beta);
+    ~ofdm_bouzegzi_c_impl();
 
-      ~ofdm_bouzegzi_c_impl();
+    void rescale_fft(bool forward);
+    void do_fft(const gr_complex* in, gr_complex* out);
 
-      void rescale_fft(bool forward);
-      void do_fft(const gr_complex *in, gr_complex *out);
+    float autocorr(const gr_complex* sig, int a, int b, int p);
+    gr_complex autocorr_orig(const gr_complex* sig, int a, int b, int p);
+    float cost_func(const gr_complex* sig, int a, int b);
 
-      float autocorr(const gr_complex *sig, int a, int b, int p);
-      gr_complex autocorr_orig(const gr_complex *sig, int a, int b, int p);
-      float cost_func(const gr_complex *sig, int a, int b);
+    // Where all the action really happens
+    int work(int noutput_items,
+             gr_vector_const_void_star& input_items,
+             gr_vector_void_star& output_items);
+};
 
-      // Where all the action really happens
-      int work(int noutput_items,
-               gr_vector_const_void_star &input_items,
-               gr_vector_void_star &output_items);
-    };
-
-  } // namespace inspector
+} // namespace inspector
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_IMPL_H */
-

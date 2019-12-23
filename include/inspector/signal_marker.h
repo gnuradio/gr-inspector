@@ -26,33 +26,32 @@
 #include <qwt_plot_zoneitem.h>
 
 namespace gr {
-  namespace inspector {
+namespace inspector {
 
-    class signal_marker
-    {
-    private:
+class signal_marker
+{
+private:
+public:
+    QwtPlotMarker* d_center;
+    QwtPlotMarker* d_label;
+    QwtPlotZoneItem* d_zone;
+    QwtPlot* d_plot;
+    float d_freq, d_bw;
+    int d_number, d_unit;
+    QString d_unittxt;
 
-    public:
-      QwtPlotMarker* d_center;
-      QwtPlotMarker* d_label;
-      QwtPlotZoneItem* d_zone;
-      QwtPlot* d_plot;
-      float d_freq, d_bw;
-      int d_number, d_unit;
-      QString d_unittxt;
+    signal_marker(int i, QwtPlot* plot);
 
-      signal_marker(int i, QwtPlot *plot);
+    ~signal_marker();
 
-      ~signal_marker();
+    void add_text(std::string text);
+    void set_label_y(qreal yval);
+    void set_marker(int i, float center, float bw, int unit);
+    QString basic_text();
+    void set_label_text(QString qstring);
+};
 
-      void add_text(std::string text);
-      void set_label_y(qreal yval);
-      void set_marker(int i, float center, float bw, int unit);
-      QString basic_text();
-      void set_label_text(QString qstring);
-    };
+} // namespace inspector
+} // namespace gr
 
-  }
-}
-
-#endif //GR_INSPECTOR_SIGNAL_MARKER_H
+#endif // GR_INSPECTOR_SIGNAL_MARKER_H

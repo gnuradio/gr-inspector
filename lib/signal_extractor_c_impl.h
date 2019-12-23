@@ -21,43 +21,39 @@
 #ifndef INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_IMPL_H
 #define INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_IMPL_H
 
-#include <inspector/signal_extractor_c.h>
 #include <gnuradio/filter/pfb_arb_resampler.h>
+#include <inspector/signal_extractor_c.h>
 
 namespace gr {
-  namespace inspector {
+namespace inspector {
 
-    class signal_extractor_c_impl : public signal_extractor_c
-    {
-     private:
-      int d_signal, d_length;
-      bool d_ready, d_resample;
-      float d_out_rate, d_oversampling, d_rate;
-      std::vector<gr_complex> d_samples;
-      gr_complex* d_msg_buffer;
-      filter::kernel::pfb_arb_resampler_ccf *d_resampler;
+class signal_extractor_c_impl : public signal_extractor_c
+{
+private:
+    int d_signal, d_length;
+    bool d_ready, d_resample;
+    float d_out_rate, d_oversampling, d_rate;
+    std::vector<gr_complex> d_samples;
+    gr_complex* d_msg_buffer;
+    filter::kernel::pfb_arb_resampler_ccf* d_resampler;
 
-     public:
-      signal_extractor_c_impl(int signal, bool resample, float rate,
-      float osf);
-      ~signal_extractor_c_impl();
+public:
+    signal_extractor_c_impl(int signal, bool resample, float rate, float osf);
+    ~signal_extractor_c_impl();
 
-      // write samples from message in buffer
-      void handle_msg(pmt::pmt_t msg);
+    // write samples from message in buffer
+    void handle_msg(pmt::pmt_t msg);
 
-      // Where all the action really happens
-      int work(int noutput_items,
-                       gr_vector_const_void_star &input_items,
-                       gr_vector_void_star &output_items);
+    // Where all the action really happens
+    int work(int noutput_items,
+             gr_vector_const_void_star& input_items,
+             gr_vector_void_star& output_items);
 
-      // callback
-      void set_signal(int d_signal) {
-        signal_extractor_c_impl::d_signal = d_signal;
-      }
-    };
+    // callback
+    void set_signal(int d_signal) { signal_extractor_c_impl::d_signal = d_signal; }
+};
 
-  } // namespace inspector
+} // namespace inspector
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_IMPL_H */
-

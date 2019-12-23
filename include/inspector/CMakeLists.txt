@@ -23,6 +23,8 @@
 ########################################################################
 install(FILES
     api.h
+    inspector_form.h
+    signal_marker.h
     ofdm_synchronizer_cc.h
     ofdm_bouzegzi_c.h
     ofdm_zkf_c.h
