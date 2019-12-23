@@ -70,7 +70,7 @@ class qa_signal_separator_c (gr_unittest.TestCase):
 
         sig = numpy.zeros(len(vec_sink.data()), dtype=complex)
         for i in range(len(vec_sink.data())):
-            sig[i] = data[i]*numpy.exp(-1j*2*numpy.pi*12500*i*1/32000)
+            sig[i] = data[i] * numpy.exp(-1j * 2 * numpy.pi * 12500 * i * 1 / 32000)
 
         taps = filter.firdes.low_pass(
             1, 32000, 900, 90, firdes.WIN_HAMMING, 6.76)

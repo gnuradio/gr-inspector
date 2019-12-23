@@ -61,7 +61,7 @@ class qa_ofdm_synchronizer_cc(gr_unittest.TestCase):
         # GR time!
         src = blocks.vector_source_c(tx[0].tolist(), True, 1, [])
         freq_offset = analog.sig_source_c(1, analog.GR_SIN_WAVE,
-                                          50.0/samp_rate, 1.0, 0.0)
+                                          50.0 / samp_rate, 1.0, 0.0)
         mixer = blocks.multiply_cc()
         sync = inspector.ofdm_synchronizer_cc(4096)
         dst = blocks.vector_sink_c()
@@ -90,8 +90,8 @@ class qa_ofdm_synchronizer_cc(gr_unittest.TestCase):
 
         # use 10,000 samples for comparison since block fails sometimes
         # for one work function
-        output = output[k:k+10000]
-        expect = expect[k:k+10000]
+        output = output[k:k + 10000]
+        expect = expect[k:k + 10000]
 
         self.assertComplexTuplesAlmostEqual2(
             expect, output, abs_eps=0.001, rel_eps=10)

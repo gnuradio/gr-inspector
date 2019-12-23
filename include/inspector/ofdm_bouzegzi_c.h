@@ -21,39 +21,40 @@
 #ifndef INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_H
 #define INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_H
 
-#include <inspector/api.h>
 #include <gnuradio/sync_block.h>
+#include <inspector/api.h>
 
 namespace gr {
-  namespace inspector {
+namespace inspector {
 
-   /*!
-     * \brief OFDM parameter estimator (Bouzegzi algorithm)
-     * \ingroup inspector
+/*!
+ * \brief OFDM parameter estimator (Bouzegzi algorithm)
+ * \ingroup inspector
+ *
+ * \details
+ * This block was not further developed during GSoC since
+ * real-time estimation was not possible.
+ */
+class INSPECTOR_API ofdm_bouzegzi_c : virtual public gr::sync_block
+{
+public:
+    typedef boost::shared_ptr<ofdm_bouzegzi_c> sptr;
+
+    /*!
+     * \brief Return a shared_ptr to a new instance of inspector::ofdm_bouzegzi_c.
      *
-     * \details
-     * This block was not further developed during GSoC since
-     * real-time estimation was not possible.
+     * To avoid accidental use of raw pointers, inspector::ofdm_bouzegzi_c's
+     * constructor is in a private implementation
+     * class. inspector::ofdm_bouzegzi_c::make is the public interface for
+     * creating new instances.
      */
-    class INSPECTOR_API ofdm_bouzegzi_c : virtual public gr::sync_block
-    {
-     public:
-      typedef boost::shared_ptr<ofdm_bouzegzi_c> sptr;
+    static sptr make(double samp_rate,
+                     int Nb,
+                     const std::vector<int>& alpha,
+                     const std::vector<int>& beta);
+};
 
-      /*!
-       * \brief Return a shared_ptr to a new instance of inspector::ofdm_bouzegzi_c.
-       *
-       * To avoid accidental use of raw pointers, inspector::ofdm_bouzegzi_c's
-       * constructor is in a private implementation
-       * class. inspector::ofdm_bouzegzi_c::make is the public interface for
-       * creating new instances.
-       */
-      static sptr make(double samp_rate, int Nb, const std::vector<int> &alpha, 
-                       const std::vector<int> &beta);
-    };
-
-  } // namespace inspector
+} // namespace inspector
 } // namespace gr
 
 #endif /* INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_H */
-
