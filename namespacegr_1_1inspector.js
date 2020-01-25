@@ -9,7 +9,6 @@ var namespacegr_1_1inspector =
     [ "ofdm_zkf_c_impl", "classgr_1_1inspector_1_1ofdm__zkf__c__impl.html", "classgr_1_1inspector_1_1ofdm__zkf__c__impl" ],
     [ "qtgui_inspector_sink_vf", "classgr_1_1inspector_1_1qtgui__inspector__sink__vf.html", "classgr_1_1inspector_1_1qtgui__inspector__sink__vf" ],
     [ "qtgui_inspector_sink_vf_impl", "classgr_1_1inspector_1_1qtgui__inspector__sink__vf__impl.html", "classgr_1_1inspector_1_1qtgui__inspector__sink__vf__impl" ],
-    [ "RotEvent", "classgr_1_1inspector_1_1RotEvent.html", "classgr_1_1inspector_1_1RotEvent" ],
     [ "signal_detector_cvf", "classgr_1_1inspector_1_1signal__detector__cvf.html", "classgr_1_1inspector_1_1signal__detector__cvf" ],
     [ "signal_detector_cvf_impl", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html", "classgr_1_1inspector_1_1signal__detector__cvf__impl" ],
     [ "signal_extractor_c", "classgr_1_1inspector_1_1signal__extractor__c.html", "classgr_1_1inspector_1_1signal__extractor__c" ],
@@ -17,9 +16,5 @@ var namespacegr_1_1inspector =
     [ "signal_marker", "classgr_1_1inspector_1_1signal__marker.html", "classgr_1_1inspector_1_1signal__marker" ],
     [ "signal_separator_c", "classgr_1_1inspector_1_1signal__separator__c.html", "classgr_1_1inspector_1_1signal__separator__c" ],
     [ "signal_separator_c_impl", "classgr_1_1inspector_1_1signal__separator__c__impl.html", "classgr_1_1inspector_1_1signal__separator__c__impl" ],
-    [ "UpdateEvent", "classgr_1_1inspector_1_1UpdateEvent.html", "classgr_1_1inspector_1_1UpdateEvent" ],
-    [ "vis3d_vf", "classgr_1_1inspector_1_1vis3d__vf.html", "classgr_1_1inspector_1_1vis3d__vf" ],
-    [ "vis3d_vf_form", "classgr_1_1inspector_1_1vis3d__vf__form.html", "classgr_1_1inspector_1_1vis3d__vf__form" ],
-    [ "vis3d_vf_impl", "classgr_1_1inspector_1_1vis3d__vf__impl.html", "classgr_1_1inspector_1_1vis3d__vf__impl" ],
     [ "Zoomer", "classgr_1_1inspector_1_1Zoomer.html", "classgr_1_1inspector_1_1Zoomer" ]
 ];

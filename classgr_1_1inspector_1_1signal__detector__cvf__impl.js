@@ -1,11 +1,11 @@
 var classgr_1_1inspector_1_1signal__detector__cvf__impl =
 [
-    [ "signal_detector_cvf_impl", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#aeb1df61dffc2b6710758d16b027245fc", null ],
+    [ "signal_detector_cvf_impl", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#a227750d7000266f68714932e137e5dcd", null ],
     [ "~signal_detector_cvf_impl", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#a794142a2557863e59a0e8ea7409c57e2", null ],
     [ "build_freq", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#ab2ac6381ad40fa20c65081b607bc5dcd", null ],
     [ "build_threshold", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#acdb1f5654d0949a6c6900c893ab556d5", null ],
     [ "build_window", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#aeae17af3cc962d87651598b5e8ed79a0", null ],
-    [ "compare_signal_edges", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#a20d109c2c533a92271bfa8481af02f9f", null ],
+    [ "compare_signal_edges", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#a145c8b765e449cbfad3d1c9024d9d5ee", null ],
     [ "find_signal_edges", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#a91d4f4c1802d2a9b824d17e2e441ead8", null ],
     [ "pack_message", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#ad0a1425a9337cde59c98473929a7de35", null ],
     [ "periodogram", "classgr_1_1inspector_1_1signal__detector__cvf__impl.html#a7fe957ea8dafbd5b4be8f0a39a1f141a", null ],

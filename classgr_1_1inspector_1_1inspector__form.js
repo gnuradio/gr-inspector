@@ -1,6 +1,6 @@
 var classgr_1_1inspector_1_1inspector__form =
 [
-    [ "inspector_form", "classgr_1_1inspector_1_1inspector__form.html#a8b7d662862535aaf1f2d0dd1313c5801", null ],
+    [ "inspector_form", "classgr_1_1inspector_1_1inspector__form.html#ab2bad601d8ad94ebaaa9d87a64706f69", null ],
     [ "~inspector_form", "classgr_1_1inspector_1_1inspector__form.html#a3fa0cc6232da3df86cfa374648ab7abc", null ],
     [ "add_analysis_text", "classgr_1_1inspector_1_1inspector__form.html#adc9d26622c45401eceeaa76efe4a68de", null ],
     [ "add_msg_queue", "classgr_1_1inspector_1_1inspector__form.html#a928b98d5dd31619eb75b45014b558627", null ],

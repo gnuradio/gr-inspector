@@ -1,7 +1,7 @@
 var classgr_1_1inspector_1_1signal__detector__cvf =
 [
     [ "sptr", "classgr_1_1inspector_1_1signal__detector__cvf.html#ac40ca2d231daf32fbf05bef138f4fbdd", null ],
-    [ "make", "classgr_1_1inspector_1_1signal__detector__cvf.html#a9b2f1a93bdc61bd02a2ed2c51775069a", null ],
+    [ "make", "classgr_1_1inspector_1_1signal__detector__cvf.html#af1f174e9aaa17c7282d76374a4f7c703", null ],
     [ "set_auto_threshold", "classgr_1_1inspector_1_1signal__detector__cvf.html#add6587a2bbb6119e000f77300d7703dd", null ],
     [ "set_average", "classgr_1_1inspector_1_1signal__detector__cvf.html#a3d75266af8ecdb9333976066b979f5f7", null ],
     [ "set_fft_len", "classgr_1_1inspector_1_1signal__detector__cvf.html#aa1ccad7b923bdfd3ef80c7419c67dd41", null ],

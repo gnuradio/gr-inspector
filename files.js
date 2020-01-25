@@ -49,15 +49,5 @@ var files =
     ] ],
     [ "signal_separator_c_impl.h", "signal__separator__c__impl_8h.html", [
       [ "signal_separator_c_impl", "classgr_1_1inspector_1_1signal__separator__c__impl.html", "classgr_1_1inspector_1_1signal__separator__c__impl" ]
-    ] ],
-    [ "tfmodel_vcf.py", "tfmodel__vcf_8py.html", [
-      [ "tfmodel_vcf", "classpython_1_1tfmodel__vcf_1_1tfmodel__vcf.html", "classpython_1_1tfmodel__vcf_1_1tfmodel__vcf" ]
-    ] ],
-    [ "vis3d_vf.h", "vis3d__vf_8h.html", [
-      [ "vis3d_vf", "classgr_1_1inspector_1_1vis3d__vf.html", "classgr_1_1inspector_1_1vis3d__vf" ]
-    ] ],
-    [ "vis3d_vf_form.h", "vis3d__vf__form_8h.html", "vis3d__vf__form_8h" ],
-    [ "vis3d_vf_impl.h", "vis3d__vf__impl_8h.html", [
-      [ "vis3d_vf_impl", "classgr_1_1inspector_1_1vis3d__vf__impl.html", "classgr_1_1inspector_1_1vis3d__vf__impl" ]
     ] ]
 ];
