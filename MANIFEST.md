@@ -18,7 +18,7 @@ gr_supported_version:
 license: GPLv3
 repo: https://github.com/gnuradio/gr-inspector
 website: https://grinspector.wordpress.com/
-icon: https://github.com/gnuradio/gr-inspector/blob/master/docs/doxygen/images/logo_body_big.png
+icon: https://raw.githubusercontent.com/gnuradio/gr-inspector/master/docs/doxygen/images/logo_body_big.png
 ---
 *Signal Analysis Toolbox for GNU Radio*
 
