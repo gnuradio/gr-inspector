@@ -12,10 +12,13 @@ copyright_owner:
   - Sebastian Müller
 dependencies:
   - gnuradio, Qt5, Qwt 6.1.0
+gr_supported_version:
+  - v3.7
+  - v3.8
 license: GPLv3
 repo: https://github.com/gnuradio/gr-inspector
 website: https://grinspector.wordpress.com/
-icon: https://raw.githubusercontent.com/gnuradio/gr-inspector/dev/docs/doxygen/images/logo_body_big.png
+icon: https://github.com/gnuradio/gr-inspector/blob/master/docs/doxygen/images/logo_body_big.png
 ---
 *Signal Analysis Toolbox for GNU Radio*
 
@@ -24,4 +27,6 @@ spectrum monitoring. Detailed functionality includes signal detection and
 signal filtering/mixing/decimating/resampling. Further, it is possible
 to estimate OFDM signal parameters and synchronize to a given OFDM signal.
 
-This project was initiated as a Google Summer of Code project and developed in cooperation with the *Communication Engineering Lab (CEL)* at the *Karlsruhe Institute of Technology (KIT)*, Germany, <http://www.cel.kit.edu>.
+This project was initiated as a Google Summer of Code project and developed in
+cooperation with the *Communication Engineering Lab (CEL)* at the *Karlsruhe
+Institute of Technology (KIT)*, Germany, <http://www.cel.kit.edu>.
