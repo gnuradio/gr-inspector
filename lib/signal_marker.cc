@@ -22,7 +22,7 @@
 #include <config.h>
 #endif
 
-#include <inspector/signal_marker.h>
+#include <gnuradio/inspector/signal_marker.h>
 
 namespace gr {
 namespace inspector {

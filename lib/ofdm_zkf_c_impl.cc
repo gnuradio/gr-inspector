@@ -57,7 +57,7 @@ ofdm_zkf_c_impl::ofdm_zkf_c_impl(double samp_rate,
     d_typ_cp = typ_cp;
     d_signal = signal;
     d_min_items = min_items;
-    d_fft = new fft::fft_complex(1024, true);
+    d_fft = new fft::fft_complex_fwd(1024, true);
     message_port_register_out(pmt::intern("ofdm_out"));
 }
 
@@ -128,7 +128,7 @@ int ofdm_zkf_c_impl::round_to_list(int val, std::vector<int>* list)
 void ofdm_zkf_c_impl::resize_fft(int size)
 {
     delete d_fft;
-    d_fft = new fft::fft_complex(size, true);
+    d_fft = new fft::fft_complex_fwd(size, true);
 }
 
 // GUI message

@@ -22,7 +22,7 @@
 #define INCLUDED_INSPECTOR_OFDM_SYNCHRONIZER_CC_IMPL_H
 
 #include <gnuradio/blocks/rotator.h>
-#include <inspector/ofdm_synchronizer_cc.h>
+#include <gnuradio/inspector/ofdm_synchronizer_cc.h>
 
 namespace gr {
 namespace inspector {

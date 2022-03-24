@@ -22,7 +22,7 @@
 #define INCLUDED_INSPECTOR_OFDM_BOUZEGZI_C_IMPL_H
 
 #include <gnuradio/fft/fft.h>
-#include <inspector/ofdm_bouzegzi_c.h>
+#include <gnuradio/inspector/ofdm_bouzegzi_c.h>
 
 namespace gr {
 namespace inspector {
@@ -36,7 +36,7 @@ private:
         *d_osc_vec;
     gr_complex *d_sig_shift, *d_res;
     std::vector<int> d_alpha, d_beta;
-    fft::fft_complex* d_fft;
+    fft::fft_complex_fwd* d_fft;
 
 public:
     ofdm_bouzegzi_c_impl(double samp_rate,

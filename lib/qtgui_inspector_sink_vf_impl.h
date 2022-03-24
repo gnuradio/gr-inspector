@@ -21,9 +21,9 @@
 #ifndef INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_IMPL_H
 #define INCLUDED_INSPECTOR_QTGUI_INSPECTOR_SINK_VF_IMPL_H
 
-#include <inspector/qtgui_inspector_sink_vf.h>
-#include <inspector/inspector_form.h>
-
+#include <gnuradio/inspector/qtgui_inspector_sink_vf.h>
+#include <gnuradio/inspector/inspector_form.h>
+#include <QtWidgets>
 namespace gr {
 namespace inspector {
 
@@ -52,6 +52,8 @@ public:
                                  bool manual,
                                  QWidget* parent);
     ~qtgui_inspector_sink_vf_impl();
+
+    QWidget* qwidget();
 
 #ifdef ENABLE_PYTHON
     PyObject* pyqwidget();

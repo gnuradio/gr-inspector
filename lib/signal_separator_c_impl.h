@@ -21,12 +21,15 @@
 #ifndef INCLUDED_INSPECTOR_SIGNAL_SEPARATOR_C_IMPL_H
 #define INCLUDED_INSPECTOR_SIGNAL_SEPARATOR_C_IMPL_H
 
+#include <gnuradio/fft/window.h>
 #include <gnuradio/blocks/rotator.h>
 #include <gnuradio/filter/fir_filter.h>
+#include <gnuradio/filter/fft_filter_ccf.h>
 #include <gnuradio/filter/firdes.h>
 #include <gnuradio/messages/msg_queue.h>
 #include <gnuradio/thread/thread.h>
-#include <inspector/signal_separator_c.h>
+#include <gnuradio/inspector/signal_separator_c.h>
+
 
 namespace gr {
 namespace inspector {
@@ -41,7 +44,7 @@ private:
     double d_samp_rate;
     gr_complex* d_temp_buffer;
 
-    filter::firdes::win_type d_window;
+    fft::window::win_type d_window;
 
     std::vector<filter::kernel::fir_filter_ccf*> d_filterbank;
     std::vector<std::vector<float>> d_rf_map;
@@ -102,12 +105,12 @@ public:
         rebuild_all_filters();
     }
 
-    filter::firdes::win_type window() const { return d_window; }
+    fft::window::win_type window() const { return d_window; }
 
     void set_window(int d_window)
     {
         signal_separator_c_impl::d_window =
-            static_cast<filter::firdes::win_type>(d_window);
+            static_cast<fft::window::win_type>(d_window);
         rebuild_all_filters();
     }
 

@@ -228,7 +228,7 @@ blocks:
     samp_rate: samp_rate
     sensitivity: '0.9'
     threshold: '-20'
-    window: firdes.WIN_BLACKMAN_hARRIS
+    window: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false

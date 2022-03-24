@@ -4,13 +4,13 @@ category: '[Inspector]/Conditioning'
 
 templates:
   imports: |-
-    import inspector
+    import gnuradio.inspector as inspector
     from gnuradio.filter import firdes
     import json
   make: |-
-    inspector.signal_separator_c(${samp_rate}, ${window}, ${trans_width}, ${oversample}, ${file}, inspector.map_float_vector({float(k):v for k,v in json.loads(open(${taps_file}).read())})) \
+    inspector.signal_separator_c(${samp_rate}, ${window}, ${trans_width}, ${oversample}, ${file}, {int(k):v for k,v in json.loads(open(${taps_file}).read())}) \
     if ${file} else \
-    inspector.signal_separator_c(${samp_rate}, ${window}, ${trans_width}, ${oversample}, ${file}, inspector.map_float_vector({0.0:[0.0]}))
+    inspector.signal_separator_c(${samp_rate}, ${window}, ${trans_width}, ${oversample}, ${file}, {0:[0]})
   callbacks:
   - set_samp_rate(${samp_rate})
   - set_window(${window})
@@ -32,9 +32,9 @@ parameters:
 - id: window
   label: Window
   dtype: enum
-  options: [firdes.WIN_BLACKMAN_hARRIS, firdes.WIN_HAMMING, firdes.WIN_HANN, firdes.WIN_BLACKMAN, firdes.WIN_RECTANGULAR, firdes.WIN_KAISER, firdes.WIN_FLATTOP]
+  options: [window.WIN_BLACKMAN_hARRIS, window.WIN_HAMMING, window.WIN_HANN, window.WIN_BLACKMAN, window.WIN_RECTANGULAR, window.WIN_KAISER, window.WIN_FLATTOP]
   option_labels: ['Blackman-Harris', 'Hamming', 'Hann', 'Blackman', 'Rectangular', 'Kaiser', 'Flat-top']
-  default: firdes.WIN_BLACKMAN_hARRIS
+  default: window.WIN_BLACKMAN_hARRIS
 - id: oversample
   label: Oversampling
   dtype: real

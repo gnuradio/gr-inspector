@@ -22,7 +22,7 @@
 #define INCLUDED_INSPECTOR_SIGNAL_EXTRACTOR_C_IMPL_H
 
 #include <gnuradio/filter/pfb_arb_resampler.h>
-#include <inspector/signal_extractor_c.h>
+#include <gnuradio/inspector/signal_extractor_c.h>
 
 namespace gr {
 namespace inspector {

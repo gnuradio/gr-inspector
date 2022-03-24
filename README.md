@@ -87,6 +87,16 @@ This project was developed in cooperation with the [Communications Engineering L
 
 The modulation classification is developed by @chrisruk during ESA Summer of Code in Space program.
 
+## Pybind11 QT binding issues
+Trying to generate the qt_gui_inspector_sink_vf module python bindings, you may get an error that the "qapplication.h" include cannot be found. Use this
+command and modify the include directory according to your system:
+```
+gr_modtool bind qtgui_inspector_sink_vf --addl_includes /usr/include/x86_64-linux-gnu/qt5/,/usr/include/x86_64-linux-gnu/qt5/QtWidgets -D"__PIC__ 2"
+```
+Add to the qtgui_inspector_sink_vf_python.cc :
+```
+#include <QtWidgets/qwidget.h>
+```
 ## License
 This software is Copyright © 2016 Free Software Foundation, Inc. and part of GNU Radio. It is free software, and is released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) License.
 

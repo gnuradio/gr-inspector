@@ -1,6 +1,7 @@
 options:
   parameters:
     author: ''
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -63,7 +64,7 @@ blocks:
     gui_hint: ''
     label: Threshold
     min_len: '200'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '-120'
     step: '1'
@@ -212,7 +213,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
-    taps: firdes.low_pass(1, samp_rate, 1440, 144, firdes.WIN_HAMMING, 6.76)
+    taps: firdes.low_pass(1, samp_rate, 1440, 144, window.WIN_HAMMING, 6.76)
     type: ccc
   states:
     bus_sink: false
@@ -260,7 +261,7 @@ blocks:
     samp_rate: samp_rate
     sensitivity: '0.8'
     threshold: thres
-    window: firdes.WIN_BLACKMAN_hARRIS
+    window: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
@@ -300,7 +301,7 @@ blocks:
     samp_rate: samp_rate
     taps_file: /home/senpo/src/gr-inspector/apps/taps.json
     trans_width: '0.1'
-    window: firdes.WIN_HAMMING
+    window: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
@@ -360,6 +361,7 @@ blocks:
     minoutbuf: '0'
     name: '"Extracted Signal " + str(sig+1)'
     nconnections: '2'
+    norm_window: 'False'
     showports: 'True'
     tr_chan: '0'
     tr_level: '0.0'
@@ -378,7 +380,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: firdes.WIN_BLACKMAN_hARRIS
+    wintype: window.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -407,3 +409,4 @@ connections:
 
 metadata:
   file_format: 1
+  grc_version: v3.11.0.0git-73-ga44ffb7b

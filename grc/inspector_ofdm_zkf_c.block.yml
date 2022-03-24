@@ -3,7 +3,7 @@ label: OFDM Estimator
 category: '[Inspector]/Analysis'
 
 templates:
-  imports: import inspector
+  imports: import gnuradio.inspector as inspector
   make: inspector.ofdm_zkf_c(${samp_rate}, ${signal}, ${min_items}, ${alpha}, ${beta})
 
 #  Make one 'parameters' list entry for every Parameter you want settable from the GUI.

@@ -57,7 +57,7 @@ signal_separator_c_impl::signal_separator_c_impl(
                 gr::io_signature::make(0, 0, 0))
 {
     // fill properties
-    d_window = (filter::firdes::win_type)window;
+    d_window = (fft::window::win_type)window;
     d_samp_rate = samp_rate;
     d_trans_width = trans_width;
     d_oversampling = oversampling;
@@ -69,8 +69,11 @@ signal_separator_c_impl::signal_separator_c_impl(
     // message port
     message_port_register_out(pmt::intern("sig_out"));
     message_port_register_in(pmt::intern("map_in"));
-    set_msg_handler(pmt::intern("map_in"),
-                    boost::bind(&signal_separator_c_impl::handle_msg, this, _1));
+    set_msg_handler(pmt::intern("map_in"), [this](pmt::pmt_t msg)
+                    {
+                        this->handle_msg(msg);
+                    });
+
 }
 
 /*
@@ -139,9 +142,9 @@ void signal_separator_c_impl::build_filter(unsigned int signal)
     if (bandwidth > d_samp_rate) {
         bandwidth = d_samp_rate;
     }
-    int decim = static_cast<int>(d_samp_rate / bandwidth);
+    // int decim = static_cast<int>(d_samp_rate / bandwidth);
     // save decimation for later
-    d_decimations[signal] = decim;
+    d_decimations[signal] = 1;
 
     // let stopband begin at nyquist border
     d_taps = build_taps((1 - d_trans_width) * bandwidth / 2);
@@ -156,7 +159,7 @@ void signal_separator_c_impl::build_filter(unsigned int signal)
 
     // build filter here
     filter::kernel::fir_filter_ccf* filter =
-        new filter::kernel::fir_filter_ccf(decim, d_taps);
+        new filter::kernel::fir_filter_ccf(d_taps);
 
     d_filterbank[signal] = filter;
 }

@@ -54,7 +54,7 @@ ofdm_bouzegzi_c_impl::ofdm_bouzegzi_c_impl(double samp_rate,
     d_Nb = Nb;
     d_alpha = alpha;
     d_beta = beta;
-    d_fft = new fft::fft_complex(1024, true);
+    d_fft = new fft::fft_complex_fwd(1024, true);
     message_port_register_out(pmt::intern("ofdm_out"));
     d_len = 10000;
 
@@ -195,7 +195,7 @@ float ofdm_bouzegzi_c_impl::autocorr(const gr_complex* sig, int a, int b, int p)
 void ofdm_bouzegzi_c_impl::rescale_fft(bool forward)
 {
     delete d_fft;
-    d_fft = new fft::fft_complex(d_len, forward);
+    d_fft = new fft::fft_complex_fwd(d_len, forward);
     d_fft->set_nthreads(4);
 }
 

@@ -21,10 +21,11 @@
 #ifndef INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_IMPL_H
 #define INCLUDED_INSPECTOR_SIGNAL_DETECTOR_CVF_IMPL_H
 
+#include <gnuradio/fft/window.h>
 #include <gnuradio/fft/fft.h>
 #include <gnuradio/filter/firdes.h>
 #include <gnuradio/filter/single_pole_iir.h>
-#include <inspector/signal_detector_cvf.h>
+#include <gnuradio/inspector/signal_detector_cvf.h>
 #include <fstream>
 
 namespace gr {
@@ -42,10 +43,10 @@ private:
     std::ofstream logfile;
 
     std::vector<filter::single_pole_iir<float, float, double>> d_avg_filter;
-    filter::firdes::win_type d_window_type;
+    fft::window::win_type d_window_type;
     std::vector<float> d_window;
     std::vector<std::vector<float>> d_signal_edges;
-    fft::fft_complex* d_fft;
+    fft::fft_complex_fwd* d_fft;
     std::vector<float> d_freq;
     const char* d_filename;
 

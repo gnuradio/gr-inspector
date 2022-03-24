@@ -22,7 +22,7 @@
 #define INCLUDED_INSPECTOR_OFDM_ZKF_C_IMPL_H
 
 #include <gnuradio/fft/fft.h>
-#include <inspector/ofdm_zkf_c.h>
+#include <gnuradio/inspector/ofdm_zkf_c.h>
 
 namespace gr {
 namespace inspector {
@@ -34,7 +34,7 @@ private:
     unsigned int d_signal;
     std::vector<int> d_typ_len, d_typ_cp;
     gr_complex* d_Rxx;
-    fft::fft_complex* d_fft;
+    fft::fft_complex_fwd* d_fft;
     unsigned int d_tmpbuflen;
     int d_min_items;
 

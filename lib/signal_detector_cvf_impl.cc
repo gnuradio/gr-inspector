@@ -76,7 +76,7 @@ signal_detector_cvf_impl::signal_detector_cvf_impl(double samp_rate,
     // set properties
     d_samp_rate = samp_rate;
     d_fft_len = fft_len;
-    d_window_type = (filter::firdes::win_type)window_type;
+    d_window_type = (fft::window::win_type)window_type;
     d_threshold = threshold;
     d_sensitivity = sensitivity;
     d_auto_threshold = auto_threshold;
@@ -93,7 +93,7 @@ signal_detector_cvf_impl::signal_detector_cvf_impl(double samp_rate,
     d_pxx =
         static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
     d_pxx_out = (float*)volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment());
-    d_fft = new fft::fft_complex(fft_len, true);
+    d_fft = new fft::fft_complex_fwd(fft_len, true);
 
     d_avg_filter.resize(d_fft_len);
     build_window();
@@ -126,7 +126,7 @@ void signal_detector_cvf_impl::set_fft_len(int fft_len)
     volk_free(d_tmp_pxx);
     volk_free(d_pxx);
     volk_free(d_pxx_out);
-    d_fft = new fft::fft_complex(fft_len, true);
+    d_fft = new fft::fft_complex_fwd(fft_len, true);
     d_tmpbuf =
         static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
     d_tmp_pxx =
@@ -145,7 +145,7 @@ void signal_detector_cvf_impl::set_fft_len(int fft_len)
 void signal_detector_cvf_impl::set_window_type(int window)
 {
     signal_detector_cvf_impl::d_window_type =
-        static_cast<filter::firdes::win_type>(window);
+        static_cast<fft::window::win_type>(window);
     build_window();
 }
 
@@ -224,7 +224,7 @@ std::vector<float> signal_detector_cvf_impl::build_freq()
 void signal_detector_cvf_impl::build_window()
 {
     d_window.clear();
-    if (d_window_type != filter::firdes::WIN_NONE) {
+    if (d_window_type != fft::window::win_type::WIN_NONE) {
         d_window = filter::firdes::window(d_window_type, d_fft_len, 6.76);
     }
 }

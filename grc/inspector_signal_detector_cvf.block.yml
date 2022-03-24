@@ -3,7 +3,7 @@ label: Signal Detector
 category: '[Inspector]/Conditioning'
 
 templates:
-  imports: import inspector
+  imports: import gnuradio.inspector as inspector
   make: inspector.signal_detector_cvf(${samp_rate}, ${fft_len}, ${window}, ${threshold}, ${sensitivity}, ${auto}, ${avg}, ${quant}, ${min_bw}, ${logfile})
   callbacks:
   - set_fft_len(${fft_len})
@@ -31,9 +31,9 @@ parameters:
 - id: window
   label: Window
   dtype: enum
-  options: [firdes.WIN_BLACKMAN_hARRIS, firdes.WIN_HAMMING, firdes.WIN_HANN, firdes.WIN_BLACKMAN, firdes.WIN_RECTANGULAR, firdes.WIN_KAISER, firdes.WIN_FLATTOP]
+  options: [window.WIN_BLACKMAN_hARRIS, window.WIN_HAMMING, window.WIN_HANN, window.WIN_BLACKMAN, window.WIN_RECTANGULAR, window.WIN_KAISER, window.WIN_FLATTOP]
   option_labels: ['Blackman-Harris', 'Hamming', 'Hann', 'Blackman', 'Rectangular', 'Kaiser', 'Flat-top']
-  default: firdes.WIN_BLACKMAN_hARRIS
+  default: window.WIN_BLACKMAN_hARRIS
 - id: auto
   label: Auto threshold
   dtype: bool

@@ -4,7 +4,7 @@ category: '[Inspector]/GUI'
 
 templates:
   imports: |-
-    import inspector
+    import gnuradio.inspector as inspector
     from PyQt5 import Qt
     from gnuradio import qtgui
     import sip

@@ -48,8 +48,7 @@ ofdm_synchronizer_cc_impl::ofdm_synchronizer_cc_impl(int min_items)
     d_min_items = min_items;
     // message port for parameter estimations
     message_port_register_in(pmt::intern("ofdm_in"));
-    set_msg_handler(pmt::intern("ofdm_in"),
-                    boost::bind(&ofdm_synchronizer_cc_impl::handle_msg, this, _1));
+    set_msg_handler(pmt::intern("ofdm_in"), [this](pmt::pmt_t msg) { this->handle_msg(msg); });
 }
 
 /*

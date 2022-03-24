@@ -3,7 +3,7 @@ label: OFDM Synchronizer
 category: '[Inspector]/Conditioning'
 
 templates:
-  imports: import inspector
+  imports: import gnuradio.inspector as inspector
   make: inspector.ofdm_synchronizer_cc(${min_items})
 
 #  Make one 'parameters' list entry for every Parameter you want settable from the GUI.

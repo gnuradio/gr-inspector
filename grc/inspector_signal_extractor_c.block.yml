@@ -3,7 +3,7 @@ label: Signal Extractor
 category: '[Inspector]/Conditioning'
 
 templates:
-  imports: import inspector
+  imports: import gnuradio.inspector as inspector
   make: inspector.signal_extractor_c(${signal}, ${resample}, ${rate}, ${osf})
   callbacks:
   - set_signal(${signal})

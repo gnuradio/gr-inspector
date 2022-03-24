@@ -22,6 +22,10 @@
 #include <config.h>
 #endif
 
+#ifdef ENABLE_PYTHON
+# include <Python.h>
+#endif
+
 #include "qtgui_inspector_sink_vf_impl.h"
 #include <gnuradio/io_signature.h>
 #include <gnuradio/prefs.h>
@@ -61,21 +65,26 @@ qtgui_inspector_sink_vf_impl::qtgui_inspector_sink_vf_impl(double samp_rate,
 
     message_port_register_out(pmt::intern("map_out"));
     message_port_register_in(pmt::intern("map_in"));
-    set_msg_handler(pmt::intern("map_in"),
-                    boost::bind(&qtgui_inspector_sink_vf_impl::handle_msg, this, _1));
+    set_msg_handler(pmt::intern("map_in"), [this](pmt::pmt_t msg)
+                    {
+                        this->handle_msg(msg);
+                    });
 
     // analysis port logic
     if (msgports == 1) {
         message_port_register_in(pmt::intern("analysis_in"));
-        set_msg_handler(
-            pmt::intern("analysis_in"),
-            boost::bind(&qtgui_inspector_sink_vf_impl::handle_analysis, this, _1));
+        set_msg_handler(pmt::intern("analysis_in"), [this](pmt::pmt_t msg)
+                        {
+                            this->handle_analysis(msg);
+                        });
     } else {
         for (int i = 0; i < msgports; i++) {
             message_port_register_in(pmt::intern("analysis_in" + std::to_string(i)));
-            set_msg_handler(
-                pmt::intern("analysis_in" + std::to_string(i)),
-                boost::bind(&qtgui_inspector_sink_vf_impl::handle_analysis, this, _1));
+            set_msg_handler(pmt::intern("analysis_in" + std::to_string(i)),
+                            [this](pmt::pmt_t msg)
+                            {
+                                this->handle_analysis(msg);
+                            });
         }
     }
 
@@ -192,12 +201,18 @@ void qtgui_inspector_sink_vf_impl::unpack_message(pmt::pmt_t msg)
     }
 }
 
+QWidget* qtgui_inspector_sink_vf_impl::qwidget()
+{
+    return dynamic_cast<QWidget*>(d_main_gui);
+}
+
 // copied from gr-qtgui
 #ifdef ENABLE_PYTHON
 PyObject* qtgui_inspector_sink_vf_impl::pyqwidget()
 {
-    PyObject* w = PyLong_FromVoidPtr((void*)d_main_gui);
-    return w;
+    PyObject* w = PyLong_FromVoidPtr((void*)dynamic_cast<QWidget*>(this->d_main_gui));
+    PyObject *retarg = Py_BuildValue("N", w);
+    return retarg;
 }
 #else
 void* qtgui_inspector_sink_vf_impl::pyqwidget() { return NULL; }

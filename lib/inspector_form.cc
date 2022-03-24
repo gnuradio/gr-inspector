@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <inspector/inspector_form.h>
+#include <gnuradio/inspector/inspector_form.h>
 #include <pmt/pmt.h>
 #include <qwt_plot_canvas.h>
 #include <qwt_transform.h>

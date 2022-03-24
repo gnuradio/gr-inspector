@@ -50,8 +50,11 @@ signal_extractor_c_impl::signal_extractor_c_impl(int signal,
                      gr::io_signature::make(1, 1, sizeof(gr_complex)))
 {
     message_port_register_in(pmt::intern("sig_in"));
-    set_msg_handler(pmt::intern("sig_in"),
-                    boost::bind(&signal_extractor_c_impl::handle_msg, this, _1));
+    set_msg_handler(pmt::intern("sig_in"), [this](pmt::pmt_t msg)
+                    {
+                        this->handle_msg(msg);
+                    });
+
 
     d_signal = signal;
     d_oversampling = osf;
