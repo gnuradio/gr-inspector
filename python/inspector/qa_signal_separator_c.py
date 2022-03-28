@@ -25,6 +25,7 @@ import inspector_python as inspector_test
 import pmt
 import numpy
 import time
+from gnuradio.fft import window
 from gnuradio.filter import firdes
 
 
@@ -38,7 +39,7 @@ class qa_signal_separator_c (gr_unittest.TestCase):
 
     def test_001_t(self):
         src = blocks.vector_source_c(range(10000), False, 1, [])
-        separator = inspector_test.signal_separator_c(32000, firdes.WIN_HAMMING, 0.1, 100, False,
+        separator = inspector_test.signal_separator_c(32000, window.WIN_HAMMING, 0.1, 100, False,
                                                       {0.0: [0.0]})
         vec_sink = blocks.vector_sink_c(1)
         ext = inspector_test.signal_extractor_c(0)
@@ -53,7 +54,7 @@ class qa_signal_separator_c (gr_unittest.TestCase):
         msg_src = blocks.message_strobe(msg, 100)
 
         taps = filter.firdes.low_pass(
-            1, 32000, 500, 50, firdes.WIN_HAMMING, 6.76)
+            1, 32000, 500, 50, window.WIN_HAMMING, 6.76)
 
         self.tb.connect(src, separator)
         self.tb.connect(src, vec_sink)
@@ -73,7 +74,7 @@ class qa_signal_separator_c (gr_unittest.TestCase):
             sig[i] = data[i] * numpy.exp(-1j * 2 * numpy.pi * 12500 * i * 1 / 32000)
 
         taps = filter.firdes.low_pass(
-            1, 32000, 900, 90, firdes.WIN_HAMMING, 6.76)
+            1, 32000, 900, 90, window.WIN_HAMMING, 6.76)
         sig = numpy.convolve(sig, taps, 'full')
         out = numpy.empty([0])
         decim = int(32000 / 20 / 100)
