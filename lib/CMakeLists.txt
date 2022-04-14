@@ -42,7 +42,7 @@ if(NOT inspector_sources)
 endif(NOT inspector_sources)
 
 add_library(gnuradio-inspector SHARED ${inspector_sources})
-target_link_libraries(gnuradio-inspector
+target_link_libraries(gnuradio-inspector PUBLIC
         gnuradio::gnuradio-runtime
         gnuradio::gnuradio-fft
         gnuradio::gnuradio-filter
@@ -50,10 +50,13 @@ target_link_libraries(gnuradio-inspector
         Qt5::Widgets
         )
 
+include(GrPython)
 if(ENABLE_PYTHON)
-    add_definitions(-DENABLE_PYTHON)
-    #target_include_directories(gnuradio-inspector ${PYTHON_INCLUDE_DIRS})
-    target_link_libraries(gnuradio-inspector ${PYTHON_LIBRARY})
+    target_compile_definitions(gnuradio-inspector PUBLIC -DENABLE_PYTHON)
+    # INTERFACE/PRIVATE split so users of the library can choose how to link to Python
+    # (importantly, extension modules can avoid linking against Python and resolve
+    #  their own Python symbols at runtime through the Python interpreter's linking)
+    target_link_libraries(gnuradio-inspector INTERFACE Python::Module PRIVATE Python::Python)
 endif(ENABLE_PYTHON)
 
 target_include_directories(gnuradio-inspector
