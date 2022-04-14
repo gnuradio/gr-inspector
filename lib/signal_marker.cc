@@ -23,6 +23,7 @@
 #endif
 
 #include <gnuradio/inspector/signal_marker.h>
+#include <qwt_text.h>
 
 namespace gr {
 namespace inspector {

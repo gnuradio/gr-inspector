@@ -20,7 +20,9 @@
 
 #include <gnuradio/inspector/inspector_form.h>
 #include <pmt/pmt.h>
+#include <qwt_legend_data.h>
 #include <qwt_plot_canvas.h>
+#include <qwt_text.h>
 #include <qwt_transform.h>
 #include <cmath>
 #include <iostream>
