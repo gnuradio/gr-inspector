@@ -1,0 +1,34 @@
+migrator_ts: 1634137107
+__migrator:
+    migration_number: 1
+    operation: key_add
+    primary_key: python
+    ordering:
+        python:
+            - 3.6.* *_cpython
+            - 3.7.* *_cpython
+            - 3.8.* *_cpython
+            - 3.9.* *_cpython
+            - 3.10.* *_cpython  # new entry
+            - 3.6.* *_73_pypy
+            - 3.7.* *_73_pypy
+    paused: false
+    longterm: True
+    pr_limit: 40
+    max_solver_attempts: 10  # this will make the bot retry "not solvable" stuff 10 times
+    exclude:
+      # this shouldn't attempt to modify the python feedstocks
+      - python
+      - pypy3.6
+      - pypy-meta
+      - cross-python
+      - python_abi
+    exclude_pinned_pkgs: false
+
+python:
+  - 3.10.* *_cpython
+# additional entries to add for zip_keys
+numpy:
+  - 1.21
+python_impl:
+  - cpython
