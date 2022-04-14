@@ -43,12 +43,10 @@ GR_PYBIND_MAKE_OOT(inspector
    gr::inspector
    "${inspector_python_files}")
 
-# copy in bindings .so file for use in QA test module
-add_custom_target(
-  copy_bindings_for_tests ALL
-  COMMAND
-    ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/*.so"
+# copy bindings extension for use in QA test module
+add_custom_command(TARGET inspector_python POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:inspector_python>
     ${CMAKE_BINARY_DIR}/test_modules/gnuradio/inspector/
-  DEPENDS inspector_python)
+)
 
 install(TARGETS inspector_python DESTINATION ${GR_PYTHON_DIR}/gnuradio/inspector COMPONENT pythonapi)
