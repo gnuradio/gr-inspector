@@ -1,0 +1,33 @@
+c_compiler:
+- vs2017
+channel_sources:
+- conda-forge
+channel_targets:
+- ryanvolz main
+cxx_compiler:
+- vs2017
+gnuradio_core:
+- 3.10.2
+gnuradio_extra_pin:
+- ''
+numpy:
+- '1.19'
+pin_run_as_build:
+  python:
+    min_pin: x.x
+    max_pin: x.x
+  qt:
+    max_pin: x.x
+python:
+- 3.8.* *_cpython
+qt:
+- '5.12'
+spdlog:
+- '1.10'
+target_platform:
+- win-64
+volk:
+- '2.5'
+zip_keys:
+- - python
+  - numpy
