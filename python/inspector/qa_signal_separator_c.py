@@ -21,12 +21,18 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks, filter
-import inspector_python as inspector_test
+from gnuradio.fft import window
+try:
+    from gnuradio import inspector
+except ImportError:
+    import os
+    import sys
+    dirname, filename = os.path.split(os.path.abspath(__file__))
+    sys.path.append(os.path.join(dirname, "bindings"))
+    from gnuradio import inspector
 import pmt
 import numpy
 import time
-from gnuradio.fft import window
-from gnuradio.filter import firdes
 
 
 class qa_signal_separator_c (gr_unittest.TestCase):
@@ -39,10 +45,10 @@ class qa_signal_separator_c (gr_unittest.TestCase):
 
     def test_001_t(self):
         src = blocks.vector_source_c(range(10000), False, 1, [])
-        separator = inspector_test.signal_separator_c(32000, window.WIN_HAMMING, 0.1, 100, False,
+        separator = inspector.signal_separator_c(32000, window.WIN_HAMMING, 0.1, 100, False,
                                                       {0.0: [0.0]})
         vec_sink = blocks.vector_sink_c(1)
-        ext = inspector_test.signal_extractor_c(0)
+        ext = inspector.signal_extractor_c(0)
         snk = blocks.vector_sink_c(1)
         # pack message
         msg = pmt.make_vector(1, pmt.PMT_NIL)

@@ -20,11 +20,18 @@
 #
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks, analog
-from gnuradio.filter import firdes
+from gnuradio.fft import window
 import time
 import numpy
 import pmt
-import inspector_python as inspector
+try:
+    from gnuradio import inspector
+except ImportError:
+    import os
+    import sys
+    dirname, filename = os.path.split(os.path.abspath(__file__))
+    sys.path.append(os.path.join(dirname, "bindings"))
+    from gnuradio import inspector
 
 
 class qa_signal_detector_cvf (gr_unittest.TestCase):

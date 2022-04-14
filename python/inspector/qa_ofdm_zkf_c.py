@@ -21,7 +21,14 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-import inspector_python as inspector
+try:
+    from gnuradio import inspector
+except ImportError:
+    import os
+    import sys
+    dirname, filename = os.path.split(os.path.abspath(__file__))
+    sys.path.append(os.path.join(dirname, "bindings"))
+    from gnuradio import inspector
 import numpy as np
 import time
 import pmt
@@ -59,7 +66,7 @@ class qa_ofdm_zkf_c(gr_unittest.TestCase):
         self.tb.msg_connect((analyzer, 'ofdm_out'), (snk, 'store'))
 
         self.tb.start()
-        time.sleep(0.25)
+        time.sleep(1.0)
         self.tb.stop()
         self.tb.wait()
 

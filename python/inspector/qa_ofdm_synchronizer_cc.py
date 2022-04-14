@@ -21,7 +21,14 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks, analog
-import inspector_python as inspector
+try:
+    from gnuradio import inspector
+except ImportError:
+    import os
+    import sys
+    dirname, filename = os.path.split(os.path.abspath(__file__))
+    sys.path.append(os.path.join(dirname, "bindings"))
+    from gnuradio import inspector
 import numpy as np
 import time
 import pmt
