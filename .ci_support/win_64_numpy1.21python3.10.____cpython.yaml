@@ -16,12 +16,10 @@ pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
-  qt:
-    max_pin: x.x
 python:
 - 3.10.* *_cpython
-qt:
-- '5.12'
+qt_main:
+- '5.15'
 spdlog:
 - '1.10'
 target_platform:
