@@ -7,7 +7,8 @@ version: 2
 jobs:
   build:
     working_directory: ~/test
-    machine: true
+    machine:
+      image: ubuntu-2004:current
     steps:
       - run:
           # The Circle-CI build should not be active, but if this is not true for some reason, do a fast finish.

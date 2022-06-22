@@ -61,6 +61,10 @@ if [[ "${HOST_PLATFORM}" != "${BUILD_PLATFORM}" ]]; then
 fi
 
 
+if [[ -f LICENSE.txt ]]; then
+  cp LICENSE.txt ".conda/recipe/recipe-scripts-license.txt"
+fi
+
 if [[ "${BUILD_WITH_CONDA_DEBUG:-0}" == 1 ]]; then
     if [[ "x${BUILD_OUTPUT_ID:-}" != "x" ]]; then
         EXTRA_CB_OPTIONS="${EXTRA_CB_OPTIONS:-} --output-id ${BUILD_OUTPUT_ID}"

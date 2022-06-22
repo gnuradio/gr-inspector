@@ -85,6 +85,18 @@ jobs:
             SHORT_CONFIG: osx_64_numpy1.21python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+          - CONFIG: osx_arm64_numpy1.19python3.8.____cpython
+            SHORT_CONFIG: osx_arm64_numpy1.19python3.8.____cpython
+            UPLOAD_PACKAGES: True
+            os: macos
+          - CONFIG: osx_arm64_numpy1.19python3.9.____cpython
+            SHORT_CONFIG: osx_arm64_numpy1.19python3.9.____cpython
+            UPLOAD_PACKAGES: True
+            os: macos
+          - CONFIG: osx_arm64_numpy1.21python3.10.____cpython
+            SHORT_CONFIG: osx_arm64_numpy1.21python3.10.____cpython
+            UPLOAD_PACKAGES: True
+            os: macos
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -148,6 +160,10 @@ jobs:
         setup_conda_rc .\ ".\.conda/recipe" .\.ci_support\%CONFIG%.yaml
         if errorlevel 1 exit 1
         
+
+        if EXIST LICENSE.txt (
+          copy LICENSE.txt ".conda/recipe\\recipe-scripts-license.txt"
+        )
         conda.exe mambabuild ".conda/recipe" -m .ci_support\%CONFIG%.yaml
         if errorlevel 1 exit 1
         set "FEEDSTOCK_NAME=%GITHUB_REPOSITORY:*/=%"

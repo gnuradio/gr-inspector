@@ -17,7 +17,7 @@ docker_image:
 gmp:
 - '6'
 gnuradio_core:
-- 3.10.2
+- 3.10.3
 gnuradio_extra_pin:
 - ''
 numpy:
