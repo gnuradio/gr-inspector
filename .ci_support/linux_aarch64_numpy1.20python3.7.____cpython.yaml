@@ -21,11 +21,11 @@ docker_image:
 gmp:
 - '6'
 gnuradio_core:
-- 3.10.3
+- 3.10.4
 gnuradio_extra_pin:
 - ''
 numpy:
-- '1.19'
+- '1.20'
 pin_run_as_build:
   gmp:
     max_pin: x
@@ -33,7 +33,7 @@ pin_run_as_build:
     min_pin: x.x
     max_pin: x.x
 python:
-- 3.9.* *_cpython
+- 3.7.* *_cpython
 qt_main:
 - '5.15'
 spdlog:

@@ -1,13 +1,13 @@
 c_compiler:
-- vs2017
+- vs2019
 channel_sources:
 - conda-forge
 channel_targets:
 - ryanvolz main
 cxx_compiler:
-- vs2017
+- vs2019
 gnuradio_core:
-- 3.10.3
+- 3.10.4
 gnuradio_extra_pin:
 - ''
 numpy:
