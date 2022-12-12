@@ -46,6 +46,7 @@ requirements:
     - {{ cdt('mesa-libgl-devel') }}  # [linux]
 
   host:
+    - fmt
     - gmp  # [linux]
     # the following two entries are for generating builds against specific GR versions
     - gnuradio-core  # [not gnuradio_extra_pin]
