@@ -13,11 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - CONFIG: linux_64_numpy1.20python3.7.____cpython
-            SHORT_CONFIG: linux_64_numpy1.20python3.7.____cpython
-            UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-            os: ubuntu
           - CONFIG: linux_64_numpy1.20python3.8.____cpython
             SHORT_CONFIG: linux_64_numpy1.20python3.8.____cpython
             UPLOAD_PACKAGES: True
@@ -32,11 +27,6 @@ jobs:
             SHORT_CONFIG: linux_64_numpy1.21python3.10.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-            os: ubuntu
-          - CONFIG: linux_aarch64_numpy1.20python3.7.____cpython
-            SHORT_CONFIG: linux_aarch64_numpy1.20python3.7.____cpython
-            UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
           - CONFIG: linux_aarch64_numpy1.20python3.8.____cpython
             SHORT_CONFIG: linux_aarch64_numpy1.20python3.8.____cpython
@@ -53,10 +43,6 @@ jobs:
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
-          - CONFIG: win_64_numpy1.20python3.7.____cpython
-            SHORT_CONFIG: win_64_numpy1.20python3.7.____cpython
-            UPLOAD_PACKAGES: True
-            os: windows
           - CONFIG: win_64_numpy1.20python3.8.____cpython
             SHORT_CONFIG: win_64_numpy1.20python3.8.____cpython
             UPLOAD_PACKAGES: True
@@ -69,10 +55,6 @@ jobs:
             SHORT_CONFIG: win_64_numpy1.21python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: windows
-          - CONFIG: osx_64_numpy1.20python3.7.____cpython
-            SHORT_CONFIG: osx_64_numpy1.20python3.7.____cpython
-            UPLOAD_PACKAGES: True
-            os: macos
           - CONFIG: osx_64_numpy1.20python3.8.____cpython
             SHORT_CONFIG: osx_64_numpy1.20python3.8.____cpython
             UPLOAD_PACKAGES: True
@@ -99,7 +81,7 @@ jobs:
             os: macos
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -155,7 +137,7 @@ jobs:
       shell: cmd
       run: |
         call activate base
-        mamba.exe install -c conda-forge 'python=3.9' conda-build conda pip boa conda-forge-ci-setup=3
+        mamba.exe install -c conda-forge 'python=3.9' conda-build conda pip boa conda-forge-ci-setup=3 "py-lief<0.12"
         if errorlevel 1 exit 1
         setup_conda_rc .\ ".\.conda/recipe" .\.ci_support\%CONFIG%.yaml
         if errorlevel 1 exit 1
@@ -221,7 +203,7 @@ jobs:
       continue-on-error: true
 
     - name: Store conda build artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: ${{ always() && steps.prepare-artifacts.outcome == 'success' }}
       with:
         name: ${{ steps.prepare-artifacts.outputs.BLD_ARTIFACT_NAME }}
@@ -230,7 +212,7 @@ jobs:
       continue-on-error: true
 
     - name: Store conda build environment artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: ${{ failure() && steps.prepare-artifacts.outcome == 'success' }}
       with:
         name: ${{ steps.prepare-artifacts.outputs.ENV_ARTIFACT_NAME }}

@@ -12,6 +12,8 @@ cxx_compiler:
 - clangxx
 cxx_compiler_version:
 - '14'
+fmt:
+- '9'
 gnuradio_core:
 - 3.10.4
 gnuradio_extra_pin:
@@ -24,12 +26,14 @@ pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
+pyqt:
+- '5.15'
 python:
 - 3.9.* *_cpython
 qt_main:
 - '5.15'
 spdlog:
-- '1.10'
+- '1.11'
 target_platform:
 - osx-64
 volk:

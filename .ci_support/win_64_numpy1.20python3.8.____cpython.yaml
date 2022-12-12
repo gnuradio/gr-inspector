@@ -1,11 +1,13 @@
 c_compiler:
-- vs2017
+- vs2019
 channel_sources:
 - conda-forge
 channel_targets:
 - ryanvolz main
 cxx_compiler:
-- vs2017
+- vs2019
+fmt:
+- '9'
 gnuradio_core:
 - 3.10.4
 gnuradio_extra_pin:
@@ -16,12 +18,14 @@ pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
+pyqt:
+- '5.15'
 python:
 - 3.8.* *_cpython
 qt_main:
 - '5.15'
 spdlog:
-- '1.10'
+- '1.11'
 target_platform:
 - win-64
 volk:
