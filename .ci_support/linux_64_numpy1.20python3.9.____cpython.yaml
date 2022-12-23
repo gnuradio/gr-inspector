@@ -19,7 +19,7 @@ fmt:
 gmp:
 - '6'
 gnuradio_core:
-- 3.10.4
+- 3.10.5
 gnuradio_extra_pin:
 - ''
 numpy:
