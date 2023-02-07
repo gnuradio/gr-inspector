@@ -29,7 +29,7 @@ spdlog:
 target_platform:
 - win-64
 volk:
-- '2.5'
+- '3.0'
 zip_keys:
 - - python
   - numpy

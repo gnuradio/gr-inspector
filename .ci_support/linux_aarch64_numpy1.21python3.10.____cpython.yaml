@@ -43,7 +43,7 @@ spdlog:
 target_platform:
 - linux-aarch64
 volk:
-- '2.5'
+- '3.0'
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
