@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
       - name: automerge-action
         id: automerge-action
-        uses: conda-forge/automerge-action@master
+        uses: conda-forge/automerge-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           rerendering_github_token: ${{ secrets.RERENDERING_GITHUB_TOKEN }}

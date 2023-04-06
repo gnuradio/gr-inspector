@@ -1,19 +1,27 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '11.0'
 c_compiler:
-- vs2019
+- clang
+c_compiler_version:
+- '14'
 channel_sources:
 - conda-forge
 channel_targets:
 - ryanvolz main
 cxx_compiler:
-- vs2019
+- clangxx
+cxx_compiler_version:
+- '14'
 fmt:
 - '9'
 gnuradio_core:
-- 3.10.5
+- 3.10.6
 gnuradio_extra_pin:
 - ''
+macos_machine:
+- arm64-apple-darwin20.0.0
 numpy:
-- '1.20'
+- '1.21'
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -21,15 +29,17 @@ pin_run_as_build:
 pyqt:
 - '5.15'
 python:
-- 3.9.* *_cpython
+- 3.10.* *_cpython
 qt_main:
 - '5.15'
 spdlog:
 - '1.11'
 target_platform:
-- win-64
+- osx-arm64
 volk:
 - '3.0'
 zip_keys:
+- - c_compiler_version
+  - cxx_compiler_version
 - - python
   - numpy
