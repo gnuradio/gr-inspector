@@ -43,6 +43,21 @@ jobs:
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
+          - CONFIG: linux_ppc64le_python3.10.____cpython
+            SHORT_CONFIG: linux_ppc64le_python3.10.____cpython
+            UPLOAD_PACKAGES: True
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
+            os: ubuntu
+          - CONFIG: linux_ppc64le_python3.8.____cpython
+            SHORT_CONFIG: linux_ppc64le_python3.8.____cpython
+            UPLOAD_PACKAGES: True
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
+            os: ubuntu
+          - CONFIG: linux_ppc64le_python3.9.____cpython
+            SHORT_CONFIG: linux_ppc64le_python3.9.____cpython
+            UPLOAD_PACKAGES: True
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
+            os: ubuntu
           - CONFIG: win_64_python3.10.____cpython
             SHORT_CONFIG: win_64_python3.10.____cpython
             UPLOAD_PACKAGES: True
