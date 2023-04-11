@@ -13,7 +13,6 @@ source:
 
 build:
   number: 0
-  skip: true  # [ppc64le]
 
 requirements:
   build:
@@ -28,20 +27,6 @@ requirements:
     - cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - numpy                               # [build_platform != target_platform]
     - pybind11                            # [build_platform != target_platform]
-    # Add extra build tool dependencies here
-    # below are needed to link with Qt
-    - {{ cdt('libice') }}  # [linux]
-    - {{ cdt('libselinux') }}  # [linux]
-    - {{ cdt('libsm') }}  # [linux]
-    - {{ cdt('libx11') }}  # [linux]
-    - {{ cdt('libxau') }}  # [linux]
-    - {{ cdt('libxcb') }}  # [linux]
-    - {{ cdt('libxdamage') }}  # [linux]
-    - {{ cdt('libxext') }}  # [linux]
-    - {{ cdt('libxfixes') }}  # [linux]
-    - {{ cdt('libxrender') }}  # [linux]
-    - {{ cdt('libxxf86vm') }}  # [linux]
-    - {{ cdt('libuuid') }}  # [linux]
     - {{ cdt('mesa-dri-drivers') }}  # [linux]
     - {{ cdt('mesa-libgl-devel') }}  # [linux]
 
