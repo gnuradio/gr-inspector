@@ -9,7 +9,7 @@ cxx_compiler:
 fmt:
 - '9'
 gnuradio_core:
-- 3.10.6
+- 3.10.7
 gnuradio_extra_pin:
 - ''
 numpy:
