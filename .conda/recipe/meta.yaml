@@ -37,6 +37,7 @@ requirements:
     - gnuradio-core  # [not gnuradio_extra_pin]
     - gnuradio-core {{ gnuradio_extra_pin }}.*  # [gnuradio_extra_pin]
     - gnuradio-qtgui
+    - libboost-headers
     - pip  # [win]
     - pybind11
     - python
