@@ -3,7 +3,7 @@ MACOSX_DEPLOYMENT_TARGET:
 c_compiler:
 - clang
 c_compiler_version:
-- '15'
+- '16'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -11,17 +11,17 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '15'
+- '16'
 fmt:
-- '9'
+- '10'
 gnuradio_core:
-- 3.10.7
+- 3.10.8
 gnuradio_extra_pin:
 - ''
 macos_machine:
 - x86_64-apple-darwin13.4.0
 numpy:
-- '1.21'
+- '1.23'
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -29,11 +29,11 @@ pin_run_as_build:
 pyqt:
 - '5.15'
 python:
-- 3.8.* *_cpython
+- 3.11.* *_cpython
 qt_main:
 - '5.15'
 spdlog:
-- '1.11'
+- '1.12'
 target_platform:
 - osx-64
 volk:

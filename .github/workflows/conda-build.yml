@@ -13,88 +13,116 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - CONFIG: linux_64_python3.10.____cpython
-            SHORT_CONFIG: linux_64_python3.10.____cpython
+          - CONFIG: linux_64_numpy1.22python3.10.____cpython
+            SHORT_CONFIG: linux_64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
             os: ubuntu
-          - CONFIG: linux_64_python3.8.____cpython
-            SHORT_CONFIG: linux_64_python3.8.____cpython
+          - CONFIG: linux_64_numpy1.22python3.8.____cpython
+            SHORT_CONFIG: linux_64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
             os: ubuntu
-          - CONFIG: linux_64_python3.9.____cpython
-            SHORT_CONFIG: linux_64_python3.9.____cpython
+          - CONFIG: linux_64_numpy1.22python3.9.____cpython
+            SHORT_CONFIG: linux_64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
             os: ubuntu
-          - CONFIG: linux_aarch64_python3.10.____cpython
-            SHORT_CONFIG: linux_aarch64_python3.10.____cpython
+          - CONFIG: linux_64_numpy1.23python3.11.____cpython
+            SHORT_CONFIG: linux_64_numpy1.23python3.11.____cpython
+            UPLOAD_PACKAGES: True
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
+            os: ubuntu
+          - CONFIG: linux_aarch64_numpy1.22python3.10.____cpython
+            SHORT_CONFIG: linux_aarch64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
-          - CONFIG: linux_aarch64_python3.8.____cpython
-            SHORT_CONFIG: linux_aarch64_python3.8.____cpython
+          - CONFIG: linux_aarch64_numpy1.22python3.8.____cpython
+            SHORT_CONFIG: linux_aarch64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
-          - CONFIG: linux_aarch64_python3.9.____cpython
-            SHORT_CONFIG: linux_aarch64_python3.9.____cpython
+          - CONFIG: linux_aarch64_numpy1.22python3.9.____cpython
+            SHORT_CONFIG: linux_aarch64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
-          - CONFIG: linux_ppc64le_python3.10.____cpython
-            SHORT_CONFIG: linux_ppc64le_python3.10.____cpython
+          - CONFIG: linux_aarch64_numpy1.23python3.11.____cpython
+            SHORT_CONFIG: linux_aarch64_numpy1.23python3.11.____cpython
+            UPLOAD_PACKAGES: True
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
+            os: ubuntu
+          - CONFIG: linux_ppc64le_numpy1.22python3.10.____cpython
+            SHORT_CONFIG: linux_ppc64le_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
             os: ubuntu
-          - CONFIG: linux_ppc64le_python3.8.____cpython
-            SHORT_CONFIG: linux_ppc64le_python3.8.____cpython
+          - CONFIG: linux_ppc64le_numpy1.22python3.8.____cpython
+            SHORT_CONFIG: linux_ppc64le_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
             os: ubuntu
-          - CONFIG: linux_ppc64le_python3.9.____cpython
-            SHORT_CONFIG: linux_ppc64le_python3.9.____cpython
+          - CONFIG: linux_ppc64le_numpy1.22python3.9.____cpython
+            SHORT_CONFIG: linux_ppc64le_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
             os: ubuntu
-          - CONFIG: win_64_python3.10.____cpython
-            SHORT_CONFIG: win_64_python3.10.____cpython
+          - CONFIG: linux_ppc64le_numpy1.23python3.11.____cpython
+            SHORT_CONFIG: linux_ppc64le_numpy1.23python3.11.____cpython
+            UPLOAD_PACKAGES: True
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
+            os: ubuntu
+          - CONFIG: win_64_numpy1.22python3.10.____cpython
+            SHORT_CONFIG: win_64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: windows
-          - CONFIG: win_64_python3.8.____cpython
-            SHORT_CONFIG: win_64_python3.8.____cpython
+          - CONFIG: win_64_numpy1.22python3.8.____cpython
+            SHORT_CONFIG: win_64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             os: windows
-          - CONFIG: win_64_python3.9.____cpython
-            SHORT_CONFIG: win_64_python3.9.____cpython
+          - CONFIG: win_64_numpy1.22python3.9.____cpython
+            SHORT_CONFIG: win_64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             os: windows
-          - CONFIG: osx_64_python3.10.____cpython
-            SHORT_CONFIG: osx_64_python3.10.____cpython
+          - CONFIG: win_64_numpy1.23python3.11.____cpython
+            SHORT_CONFIG: win_64_numpy1.23python3.11.____cpython
+            UPLOAD_PACKAGES: True
+            os: windows
+          - CONFIG: osx_64_numpy1.22python3.10.____cpython
+            SHORT_CONFIG: osx_64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: macos
-          - CONFIG: osx_64_python3.8.____cpython
-            SHORT_CONFIG: osx_64_python3.8.____cpython
+          - CONFIG: osx_64_numpy1.22python3.8.____cpython
+            SHORT_CONFIG: osx_64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             os: macos
-          - CONFIG: osx_64_python3.9.____cpython
-            SHORT_CONFIG: osx_64_python3.9.____cpython
+          - CONFIG: osx_64_numpy1.22python3.9.____cpython
+            SHORT_CONFIG: osx_64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             os: macos
-          - CONFIG: osx_arm64_python3.10.____cpython
-            SHORT_CONFIG: osx_arm64_python3.10.____cpython
+          - CONFIG: osx_64_numpy1.23python3.11.____cpython
+            SHORT_CONFIG: osx_64_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
             os: macos
-          - CONFIG: osx_arm64_python3.8.____cpython
-            SHORT_CONFIG: osx_arm64_python3.8.____cpython
+          - CONFIG: osx_arm64_numpy1.22python3.10.____cpython
+            SHORT_CONFIG: osx_arm64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: macos
-          - CONFIG: osx_arm64_python3.9.____cpython
-            SHORT_CONFIG: osx_arm64_python3.9.____cpython
+          - CONFIG: osx_arm64_numpy1.22python3.8.____cpython
+            SHORT_CONFIG: osx_arm64_numpy1.22python3.8.____cpython
+            UPLOAD_PACKAGES: True
+            os: macos
+          - CONFIG: osx_arm64_numpy1.22python3.9.____cpython
+            SHORT_CONFIG: osx_arm64_numpy1.22python3.9.____cpython
+            UPLOAD_PACKAGES: True
+            os: macos
+          - CONFIG: osx_arm64_numpy1.23python3.11.____cpython
+            SHORT_CONFIG: osx_arm64_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
             os: macos
     steps:
+
     - name: Checkout code
       uses: actions/checkout@v3
       with:
@@ -148,33 +176,11 @@ jobs:
         miniforge-version: latest
         miniforge-variant: Mambaforge
       if: matrix.os == 'windows'
+
     - name: Build on windows
       shell: cmd
       run: |
-        call activate base
-        mamba.exe install -c conda-forge 'python=3.9' conda-build conda pip boa conda-forge-ci-setup=3
-        if errorlevel 1 exit 1
-        setup_conda_rc .\ ".\.conda/recipe" .\.ci_support\%CONFIG%.yaml
-        if errorlevel 1 exit 1
-        
-
-        if EXIST LICENSE.txt (
-          copy LICENSE.txt ".conda/recipe\\recipe-scripts-license.txt"
-        )
-        conda.exe mambabuild ".conda/recipe" -m .ci_support\%CONFIG%.yaml
-        if errorlevel 1 exit 1
-        set "FEEDSTOCK_NAME=%GITHUB_REPOSITORY:*/=%"
-        set "GIT_BRANCH=%GITHUB_REF:refs/heads/=%"
-        if /i "%GITHUB_EVENT_NAME%" == "pull_request" (
-          set "IS_PR_BUILD=True"
-        ) else (
-          set "IS_PR_BUILD=False"
-        )
-        if /i "%UPLOAD_PACKAGES%" == "true" (
-          if /i "%IS_PR_BUILD%" == "false" (
-            upload_package  .\ ".\.conda/recipe" .ci_support\%CONFIG%.yaml
-          )
-        )
+        call ".scripts\run_win_build.bat"
       env:
         PYTHONUNBUFFERED: 1
         CONFIG: ${{ matrix.CONFIG }}

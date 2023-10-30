@@ -23,10 +23,10 @@ bash $MINIFORGE_FILE -b -p ${MINIFORGE_HOME}
 source ${MINIFORGE_HOME}/etc/profile.d/conda.sh
 conda activate base
 
-mamba install --update-specs --quiet --yes --channel conda-forge \
-    conda-build pip boa conda-forge-ci-setup=3
-mamba update --update-specs --yes --quiet --channel conda-forge \
-    conda-build pip boa conda-forge-ci-setup=3
+mamba install --update-specs --quiet --yes --channel conda-forge --strict-channel-priority \
+    pip mamba conda-build boa conda-forge-ci-setup=3
+mamba update --update-specs --yes --quiet --channel conda-forge --strict-channel-priority \
+    pip mamba conda-build boa conda-forge-ci-setup=3
 
 
 
