@@ -24,6 +24,7 @@
 
 #include "ofdm_synchronizer_cc_impl.h"
 #include <gnuradio/io_signature.h>
+#include <volk/volk_alloc.hh>
 
 namespace gr {
 namespace inspector {
@@ -70,9 +71,9 @@ void ofdm_synchronizer_cc_impl::handle_msg(pmt::pmt_t msg)
     }
 }
 
-std::vector<gr_complex> ofdm_synchronizer_cc_impl::autocorr(const gr_complex* in, int len)
+volk::vector<gr_complex> ofdm_synchronizer_cc_impl::autocorr(const gr_complex* in, int len)
 {
-    std::vector<gr_complex> result;
+    volk::vector<gr_complex> result(len - d_fft_len - d_cp_len);
     gr_complex* temp = (gr_complex*)volk_malloc((len - d_fft_len) * sizeof(gr_complex),
                                                 volk_get_alignment());
     gr_complex Rxx;
@@ -85,7 +86,7 @@ std::vector<gr_complex> ofdm_synchronizer_cc_impl::autocorr(const gr_complex* in
         for (int k = 0; k < d_cp_len; k++) {
             Rxx += temp[i + k];
         }
-        result.push_back(Rxx);
+        result[i] = Rxx;
     }
     volk_free(temp);
     return result;
@@ -106,14 +107,13 @@ int ofdm_synchronizer_cc_impl::work(int noutput_items,
         return 0;
     }
 
-    std::vector<gr_complex> r = autocorr(in, noutput_items);
-    __GR_VLA(float, r_mag, noutput_items - d_fft_len - d_cp_len);
-    volk_32fc_magnitude_32f(r_mag, &r[0], noutput_items - d_fft_len - d_cp_len);
-    std::vector<float> r_vec(r_mag, r_mag + noutput_items - d_fft_len - d_cp_len);
+    volk::vector<gr_complex> r = autocorr(in, noutput_items);
+    volk::vector<float> r_mag(noutput_items - d_fft_len - d_cp_len);
+    volk_32fc_magnitude_32f(r_mag.data(), r.data(), noutput_items - d_fft_len - d_cp_len);
     // calculate argmax
     int k = std::distance(
-        r_vec.begin(),
-        std::max_element(r_vec.begin(), r_vec.begin() + d_fft_len + d_cp_len));
+        r_mag.begin(),
+        std::max_element(r_mag.begin(), r_mag.begin() + d_fft_len + d_cp_len));
     float n = std::arg(r[k]); // phase at argmax
     // set frequency offset compensation
     d_rotator.set_phase_incr(std::exp(gr_complex(0, -n / d_fft_len)));

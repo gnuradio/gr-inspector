@@ -25,6 +25,7 @@
 #include "ofdm_bouzegzi_c_impl.h"
 #include <gnuradio/io_signature.h>
 #include <volk/volk.h>
+#include <volk/volk_alloc.hh>
 #include <complex>
 
 namespace gr {
@@ -145,12 +146,12 @@ float ofdm_bouzegzi_c_impl::autocorr(const gr_complex* sig, int a, int b, int p)
     gr_complex R = gr_complex(0, 0);
 
     // TODO: make this cooler
-    __GR_VLA(float, m_vec, M);
+    volk::vector<float> m_vec(M);
     for (unsigned int i = 0; i < M; i++) {
         m_vec[i] = i;
     }
     // create oscillation argument
-    volk_32f_s32f_multiply_32f(d_osc_vec, m_vec, -2 * M_PI * p / (a / b + a), M);
+    volk_32f_s32f_multiply_32f(d_osc_vec, m_vec.data(), -2 * M_PI * p / (a / b + a), M);
 
     volk_32fc_deinterleave_real_32f(d_x1, sig, M);
     volk_32fc_deinterleave_imag_32f(d_y1, sig, M);
@@ -167,13 +168,13 @@ float ofdm_bouzegzi_c_impl::autocorr(const gr_complex* sig, int a, int b, int p)
     volk_32f_x2_subtract_32f(d_imag_pre, d_tmp1, d_tmp2, M); // final imag part
 
 
-    __GR_VLA(gr_complex, pre, M);
+    volk::vector<gr_complex> pre(M);
     for (unsigned int i = 0; i < M; i++) {
         pre[i] = d_real_pre[i] + gr_complex(0, 1) * d_imag_pre[i];
     }
 
     memcpy(d_sig_shift, &sig[a], (M - a) * sizeof(gr_complex));
-    volk_32fc_x2_multiply_32fc(d_res, d_sig_shift, pre, M - a);
+    volk_32fc_x2_multiply_32fc(d_res, d_sig_shift, pre.data(), M - a);
 
     for (unsigned int i = 0; i < M - a; i++) {
         R += d_res[i];
@@ -209,12 +210,12 @@ void ofdm_bouzegzi_c_impl::do_fft(const gr_complex* in, gr_complex* out)
 float ofdm_bouzegzi_c_impl::cost_func(const gr_complex* sig, int a, int b)
 {
     float J = 0;
-    __GR_VLA(float, power, 2 * d_Nb + 1);
-    __GR_VLA(float, R, 2 * d_Nb + 1);
+    volk::vector<float> power(2 * d_Nb + 1);
+    volk::vector<float> R(2 * d_Nb + 1);
     for (int p = -d_Nb; p <= d_Nb; p++) {
         R[p + d_Nb] = autocorr(sig, a, b, p);
     }
-    volk_32f_s32f_power_32f(power, R, 2.0, 2 * d_Nb + 1);
+    volk_32f_s32f_power_32f(power.data(), R.data(), 2.0, 2 * d_Nb + 1);
     for (int i = 0; i < 2 * d_Nb + 1; i++) {
         J += power[i];
     }

@@ -23,6 +23,7 @@
 
 #include <gnuradio/blocks/rotator.h>
 #include <gnuradio/inspector/ofdm_synchronizer_cc.h>
+#include <volk/volk_alloc.hh>
 
 namespace gr {
 namespace inspector {
@@ -40,7 +41,7 @@ public:
     ~ofdm_synchronizer_cc_impl();
 
     void handle_msg(pmt::pmt_t msg);
-    std::vector<gr_complex> autocorr(const gr_complex* in, int len);
+    volk::vector<gr_complex> autocorr(const gr_complex* in, int len);
 
     // Where all the action really happens
     int work(int noutput_items,
