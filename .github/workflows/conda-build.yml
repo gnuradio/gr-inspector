@@ -3,12 +3,22 @@
 # -*- mode: yaml -*-
 
 name: Build conda package
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - conda
+
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
 
 jobs:
   build:
     name: ${{ matrix.CONFIG }}
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.runs_on }}
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
@@ -16,111 +26,135 @@ jobs:
           - CONFIG: linux_64_numpy1.22python3.10.____cpython
             SHORT_CONFIG: linux_64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
           - CONFIG: linux_64_numpy1.22python3.8.____cpython
             SHORT_CONFIG: linux_64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
           - CONFIG: linux_64_numpy1.22python3.9.____cpython
             SHORT_CONFIG: linux_64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
           - CONFIG: linux_64_numpy1.23python3.11.____cpython
             SHORT_CONFIG: linux_64_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
           - CONFIG: linux_aarch64_numpy1.22python3.10.____cpython
             SHORT_CONFIG: linux_aarch64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
           - CONFIG: linux_aarch64_numpy1.22python3.8.____cpython
             SHORT_CONFIG: linux_aarch64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
           - CONFIG: linux_aarch64_numpy1.22python3.9.____cpython
             SHORT_CONFIG: linux_aarch64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
           - CONFIG: linux_aarch64_numpy1.23python3.11.____cpython
             SHORT_CONFIG: linux_aarch64_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64
           - CONFIG: linux_ppc64le_numpy1.22python3.10.____cpython
             SHORT_CONFIG: linux_ppc64le_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
           - CONFIG: linux_ppc64le_numpy1.22python3.8.____cpython
             SHORT_CONFIG: linux_ppc64le_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
           - CONFIG: linux_ppc64le_numpy1.22python3.9.____cpython
             SHORT_CONFIG: linux_ppc64le_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
           - CONFIG: linux_ppc64le_numpy1.23python3.11.____cpython
             SHORT_CONFIG: linux_ppc64le_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
             os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le
           - CONFIG: win_64_numpy1.22python3.10.____cpython
             SHORT_CONFIG: win_64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: windows
+            runs_on: ['windows-latest']
           - CONFIG: win_64_numpy1.22python3.8.____cpython
             SHORT_CONFIG: win_64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             os: windows
+            runs_on: ['windows-latest']
           - CONFIG: win_64_numpy1.22python3.9.____cpython
             SHORT_CONFIG: win_64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             os: windows
+            runs_on: ['windows-latest']
           - CONFIG: win_64_numpy1.23python3.11.____cpython
             SHORT_CONFIG: win_64_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
             os: windows
+            runs_on: ['windows-latest']
           - CONFIG: osx_64_numpy1.22python3.10.____cpython
             SHORT_CONFIG: osx_64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
           - CONFIG: osx_64_numpy1.22python3.8.____cpython
             SHORT_CONFIG: osx_64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
           - CONFIG: osx_64_numpy1.22python3.9.____cpython
             SHORT_CONFIG: osx_64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
           - CONFIG: osx_64_numpy1.23python3.11.____cpython
             SHORT_CONFIG: osx_64_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
           - CONFIG: osx_arm64_numpy1.22python3.10.____cpython
             SHORT_CONFIG: osx_arm64_numpy1.22python3.10.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
           - CONFIG: osx_arm64_numpy1.22python3.8.____cpython
             SHORT_CONFIG: osx_arm64_numpy1.22python3.8.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
           - CONFIG: osx_arm64_numpy1.22python3.9.____cpython
             SHORT_CONFIG: osx_arm64_numpy1.22python3.9.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
           - CONFIG: osx_arm64_numpy1.23python3.11.____cpython
             SHORT_CONFIG: osx_arm64_numpy1.23python3.11.____cpython
             UPLOAD_PACKAGES: True
             os: macos
+            runs_on: ['macos-latest']
     steps:
 
     - name: Checkout code
@@ -136,11 +170,15 @@ jobs:
         DOCKER_IMAGE: ${{ matrix.DOCKER_IMAGE }}
         CI: github_actions
         UPLOAD_ON_BRANCH: conda
+        CONDA_FORGE_DOCKER_RUN_ARGS: "${{ matrix.CONDA_FORGE_DOCKER_RUN_ARGS }}"
         BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
       shell: bash
       run: |
         echo "::group::Configure binfmt_misc"
         docker run --rm --privileged multiarch/qemu-user-static:register --reset --credential yes
+        export flow_run_id="github_$GITHUB_RUN_ID"
+        export remote_url="https://github.com/$GITHUB_REPOSITORY"
+        export sha="$GITHUB_SHA"
         export FEEDSTOCK_NAME="$(basename $GITHUB_REPOSITORY)"
         export GIT_BRANCH="$(basename $GITHUB_REF)"
         if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
@@ -161,6 +199,9 @@ jobs:
         BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
       shell: bash
       run: |
+        export flow_run_id="github_$GITHUB_RUN_ID"
+        export remote_url="https://github.com/$GITHUB_REPOSITORY"
+        export sha="$GITHUB_SHA"
         export FEEDSTOCK_NAME="$(basename $GITHUB_REPOSITORY)"
         export GIT_BRANCH="$(basename $GITHUB_REF)"
         if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
@@ -180,6 +221,9 @@ jobs:
     - name: Build on windows
       shell: cmd
       run: |
+        set "flow_run_id=github_%GITHUB_RUN_ID%"
+        set "remote_url=https://github.com/%GITHUB_REPOSITORY%"
+        set "sha=%GITHUB_SHA%"
         call ".scripts\run_win_build.bat"
       env:
         PYTHONUNBUFFERED: 1
