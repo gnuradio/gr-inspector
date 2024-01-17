@@ -23,7 +23,7 @@ fmt:
 gmp:
 - '6'
 gnuradio_core:
-- 3.10.8
+- 3.10.9
 gnuradio_extra_pin:
 - ''
 numpy:
@@ -43,7 +43,7 @@ spdlog:
 target_platform:
 - linux-aarch64
 volk:
-- '3.0'
+- '3.1'
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version

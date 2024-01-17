@@ -21,6 +21,12 @@ if [ -z ${FEEDSTOCK_NAME} ]; then
     export FEEDSTOCK_NAME=$(basename ${FEEDSTOCK_ROOT})
 fi
 
+if [[ "${sha:-}" == "" ]]; then
+  pushd "${FEEDSTOCK_ROOT}"
+  sha=$(git rev-parse HEAD)
+  popd
+fi
+
 docker info
 
 # In order for the conda-build process in the container to write to the mounted
@@ -91,6 +97,9 @@ docker run ${DOCKER_RUN_ARGS} \
            -e CPU_COUNT \
            -e BUILD_WITH_CONDA_DEBUG \
            -e BUILD_OUTPUT_ID \
+           -e flow_run_id \
+           -e remote_url \
+           -e sha \
            -e BINSTAR_TOKEN \
            "${DOCKER_IMAGE}" \
            bash \
