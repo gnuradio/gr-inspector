@@ -15,7 +15,7 @@ cxx_compiler_version:
 fmt:
 - '10'
 gnuradio_core:
-- 3.10.9
+- 3.10.10
 gnuradio_extra_pin:
 - ''
 macos_machine:
