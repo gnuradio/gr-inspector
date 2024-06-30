@@ -38,7 +38,6 @@ public:
 
 private:
     int d_Nb;
-    unsigned int d_len = DEFAULT_LEN;
     volk::vector<float> d_x1;
     volk::vector<float> d_y1;
     volk::vector<float> d_x2;
@@ -55,7 +54,6 @@ private:
     void rescale_fft(unsigned int length);
 
     float autocorr(const gr_complex* sig, int a, int b, int p, unsigned int length);
-    gr_complex autocorr_orig(const gr_complex* sig, int a, int b, int p);
     float cost_func(const gr_complex* sig, int a, int b, unsigned int length);
 
 public:

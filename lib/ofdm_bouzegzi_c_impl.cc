@@ -58,7 +58,6 @@ ofdm_bouzegzi_c_impl::ofdm_bouzegzi_c_impl(double samp_rate,
       /* TODO: 2024-06-30b: Almost certain most of these buffers are redundant, and
        * DEFAULT_LEN makes no sense, whatsoever. Fix. See Fixme comment in work.
        */
-      d_len(DEFAULT_LEN),
       d_x1(DEFAULT_LEN),
       d_y1(DEFAULT_LEN),
       d_x2(DEFAULT_LEN),
@@ -83,29 +82,6 @@ ofdm_bouzegzi_c_impl::ofdm_bouzegzi_c_impl(double samp_rate,
  */
 ofdm_bouzegzi_c_impl::~ofdm_bouzegzi_c_impl() {}
 
-gr_complex ofdm_bouzegzi_c_impl::autocorr_orig(const gr_complex* sig, int a, int b, int p)
-{
-    constexpr unsigned int POINTS = 100;
-    int M = d_len;
-    gr_complex R = gr_complex(0, 0);
-    std::vector<std::string> trace_Rs;
-    if (d_logger->get_level() == gr::log_level::trace) {
-        trace_Rs.resize(POINTS);
-    }
-    for (unsigned int m = 0; m < POINTS; m++) {
-        const gr_complex tmp =
-            sig[m + a] * std::conj(sig[m]) *
-            std::exp(gr_complex(0, -1) * gr_complex(2 * M_PI * p * m / (a / b + a), 0));
-        R += tmp;
-        if (d_logger->get_level() == gr::log_level::trace) {
-            trace_Rs[m] = fmt::format("{}+j·{}", R.real(), R.imag());
-        }
-    }
-
-    R = R / gr_complex(M - a, 0); // normalize
-    d_logger->trace("----------- ORIG ------------\nR = {}", fmt::join(trace_Rs, " "));
-    return R;
-}
 float ofdm_bouzegzi_c_impl::autocorr(
     const gr_complex* sig, int a, int b, int p, unsigned int length)
 {
@@ -194,7 +170,6 @@ int ofdm_bouzegzi_c_impl::work(int noutput_items,
                                gr_vector_void_star& output_items)
 {
     const gr_complex* in = (const gr_complex*)input_items[0];
-    d_len = noutput_items;
     /*
      * FIXME: 2024-06-30 This a terrible idea and will lead to inconsistent results
      * instead of choosing a different FFT size every time, the author should have
@@ -212,7 +187,7 @@ int ofdm_bouzegzi_c_impl::work(int noutput_items,
                    noutput_items,
                    __FILE__);
     // we need a max number of items for analysis
-    if (d_len < MIN_NOUTPUT_ITEMS) {
+    if (noutput_items < static_cast<int>(MIN_NOUTPUT_ITEMS)) {
         return 0;
     }
 #warning This block has consistency issues. See the FIXME 2024-06-30 comment above. DO NOT USE IN PRODUCTION.
