@@ -69,11 +69,8 @@ signal_separator_c_impl::signal_separator_c_impl(
     // message port
     message_port_register_out(pmt::intern("sig_out"));
     message_port_register_in(pmt::intern("map_in"));
-    set_msg_handler(pmt::intern("map_in"), [this](pmt::pmt_t msg)
-                    {
-                        this->handle_msg(msg);
-                    });
-
+    set_msg_handler(pmt::intern("map_in"),
+                    [this](pmt::pmt_t msg) { this->handle_msg(msg); });
 }
 
 /*
@@ -158,8 +155,7 @@ void signal_separator_c_impl::build_filter(unsigned int signal)
     d_rotators[signal] = rotator;
 
     // build filter here
-    filter::kernel::fir_filter_ccf* filter =
-        new filter::kernel::fir_filter_ccf(d_taps);
+    filter::kernel::fir_filter_ccf* filter = new filter::kernel::fir_filter_ccf(d_taps);
 
     d_filterbank[signal] = filter;
 }
@@ -279,7 +275,7 @@ int signal_separator_c_impl::general_work(int noutput_items,
     // message received, so let's allocate all the needed memory
     else if (d_buffer_stage == 1) {
         // allocate history buffer for each signal with length d_ntaps + d_buffer_len
-        for (int i = 0; i < d_history_buffer.size(); i++) {
+        for (unsigned int i = 0; i < d_history_buffer.size(); i++) {
             d_history_buffer[i] = (gr_complex*)volk_malloc(
                 (d_ntaps[i] + d_buffer_len - 1) * sizeof(gr_complex),
                 volk_get_alignment());
@@ -305,7 +301,7 @@ int signal_separator_c_impl::general_work(int noutput_items,
         copy_len = ninput_items[0];
 
     // rotate and buffer input samples
-    for (int i = 0; i < d_history_buffer.size(); i++) {
+    for (unsigned int i = 0; i < d_history_buffer.size(); i++) {
         for (int j = 0; j < copy_len; j++) {
             d_history_buffer[i][j + d_ntaps[i] - 2] = d_rotators[i].rotate(in[j]);
         }
@@ -319,7 +315,7 @@ int signal_separator_c_impl::general_work(int noutput_items,
 
 
     // put current items in history
-    for (int i = 0; i < d_history_buffer.size(); i++) {
+    for (unsigned int i = 0; i < d_history_buffer.size(); i++) {
         memcpy(d_history_buffer[i],
                &d_history_buffer[i][d_buffer_len],
                (d_ntaps[i] - 1) * sizeof(gr_complex));
@@ -327,8 +323,8 @@ int signal_separator_c_impl::general_work(int noutput_items,
 
     // pack message
     pmt::pmt_t msg = pack_message();
-
-    message_port_pub(pmt::intern("sig_out"), msg);
+    static auto outport = pmt::intern("sig_out");
+    message_port_pub(outport, msg);
     // Tell runtime system how many output items we produced.
     consume_each(d_buffer_len);
     return noutput_items;

@@ -25,6 +25,7 @@
 #include "ofdm_zkf_c_impl.h"
 #include <gnuradio/io_signature.h>
 #include <volk/volk.h>
+#include <volk/volk_alloc.hh>
 #include <complex>
 
 namespace gr {
@@ -72,13 +73,13 @@ std::vector<float> ofdm_zkf_c_impl::autocorr(const gr_complex* in, int len)
     if (len == 0) {
         return akf;
     }
-    __GR_VLA(gr_complex, Rxx, len);
+    volk::vector<gr_complex> Rxx(len);
     gr_complex akf_temp;
-    for (unsigned int k = 0; k < d_typ_len.back(); k++) {
+    for (int k = 0; k < d_typ_len.back(); k++) {
         akf_temp = 0;
-        volk_32fc_x2_multiply_conjugate_32fc(Rxx, in, &in[k], len - k);
+        volk_32fc_x2_multiply_conjugate_32fc(Rxx.data(), in, &in[k], len - k);
         // sum
-        for (unsigned int i = 0; i < len - k; i++) {
+        for (int i = 0; i < len - k; i++) {
             akf_temp += Rxx[i];
         }
         akf.push_back(std::abs(akf_temp / gr_complex((len - k), 0)));
@@ -94,11 +95,11 @@ void ofdm_zkf_c_impl::set_samp_rate(double d_samp_rate)
 // calculate time variant autocorrelation for fixed shift
 gr_complex* ofdm_zkf_c_impl::tv_autocorr(const gr_complex* in, int len, int shift)
 {
-    __GR_VLA(gr_complex, corr_temp, len);
+    volk::vector<gr_complex> corr_temp(len);
     gr_complex* Rxx =
         (gr_complex*)volk_malloc(len * sizeof(gr_complex), volk_get_alignment());
     gr_complex R = gr_complex(0, 0);
-    volk_32fc_x2_multiply_conjugate_32fc(corr_temp, in, &in[shift], len);
+    volk_32fc_x2_multiply_conjugate_32fc(corr_temp.data(), in, &in[shift], len);
     int k = 0;
     // begin at back and summarize up to front
     for (int i = len - 1; i >= 0; i--) {
@@ -179,18 +180,18 @@ int ofdm_zkf_c_impl::work(int noutput_items,
     memcpy(d_fft->get_inbuf(), Rxx, sizeof(gr_complex) * fft_len);
     d_fft->execute();
     volk_free(Rxx);
-    __GR_VLA(float, result, fft_len); // magnitude of CCF
-    volk_32fc_magnitude_32f(result, d_fft->get_outbuf(), fft_len);
+    volk::vector<float> result(fft_len); // magnitude of CCF
+    volk_32fc_magnitude_32f(result.data(), d_fft->get_outbuf(), fft_len);
 
     // fftshift
-    d_tmpbuflen = static_cast<unsigned int>(std::floor((fft_len) / 2.0));
-    __GR_VLA(float, d_tmpbuf, fft_len / 2);
-    memcpy(d_tmpbuf, &result[0], sizeof(float) * (d_tmpbuflen + 1));
-    memcpy(&result[0], &result[fft_len - d_tmpbuflen], sizeof(float) * (d_tmpbuflen));
-    memcpy(&result[d_tmpbuflen], d_tmpbuf, sizeof(float) * (d_tmpbuflen + 1));
+    const auto tmpbuflen = static_cast<unsigned int>(std::floor((fft_len) / 2.0));
+    volk::vector<float> tmpbuf(fft_len / 2);
+    memcpy(tmpbuf.data(), result.data(), sizeof(float) * (tmpbuflen + 1));
+    memcpy(result.data(), &result[fft_len - tmpbuflen], sizeof(float) * (tmpbuflen));
+    memcpy(&result[tmpbuflen], tmpbuf.data(), sizeof(float) * (tmpbuflen + 1));
 
     // only use positive frequencies
-    std::vector<float> Cxx(result + (fft_len) / 2, result + fft_len);
+    std::vector<float> Cxx(result.begin() + (fft_len) / 2, result.begin() + fft_len);
     // search for peak in possible area
     long b = std::distance(
         Cxx.begin(),

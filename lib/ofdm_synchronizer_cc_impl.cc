@@ -24,6 +24,9 @@
 
 #include "ofdm_synchronizer_cc_impl.h"
 #include <gnuradio/io_signature.h>
+#include <volk/volk.h>
+#include <volk/volk_alloc.hh>
+#include <cstdint>
 
 namespace gr {
 namespace inspector {
@@ -48,7 +51,8 @@ ofdm_synchronizer_cc_impl::ofdm_synchronizer_cc_impl(int min_items)
     d_min_items = min_items;
     // message port for parameter estimations
     message_port_register_in(pmt::intern("ofdm_in"));
-    set_msg_handler(pmt::intern("ofdm_in"), [this](pmt::pmt_t msg) { this->handle_msg(msg); });
+    set_msg_handler(pmt::intern("ofdm_in"),
+                    [this](pmt::pmt_t msg) { this->handle_msg(msg); });
 }
 
 /*
@@ -60,13 +64,15 @@ void ofdm_synchronizer_cc_impl::handle_msg(pmt::pmt_t msg)
 {
     // get FFT and CP length out of parameter estmation msg
     gr::thread::scoped_lock guard(d_mutex);
-    int fftlen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1));
-    int cplen = (int)pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 5), 1));
+    auto fftlen = static_cast<unsigned int>(
+        pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 4), 1)));
+    auto cplen = static_cast<unsigned int>(
+        pmt::to_float(pmt::tuple_ref(pmt::tuple_ref(msg, 5), 1)));
     if (fftlen < 10000 && fftlen > 0 && cplen < 1000 && cplen > 0) {
         d_fft_len = fftlen;
         d_cp_len = cplen;
         d_msg_received = true;
-        d_tag_pos = -1;
+        d_tag_pos = std::optional<std::uint64_t>{};
     }
 }
 
@@ -80,9 +86,9 @@ std::vector<gr_complex> ofdm_synchronizer_cc_impl::autocorr(const gr_complex* in
     // shift equal to fft length
     volk_32fc_x2_multiply_conjugate_32fc(temp, &in[d_fft_len], in, len - d_fft_len);
     // sum up over cyclic prefix length
-    for (int i = 0; i < len - d_fft_len - d_cp_len; i++) {
+    for (unsigned int i = 0; i < len - d_fft_len - d_cp_len; i++) {
         Rxx = gr_complex(0, 0);
-        for (int k = 0; k < d_cp_len; k++) {
+        for (unsigned int k = 0; k < d_cp_len; k++) {
             Rxx += temp[i + k];
         }
         result.push_back(Rxx);
@@ -102,14 +108,15 @@ int ofdm_synchronizer_cc_impl::work(int noutput_items,
     }
 
     // skip work function if too freq items provided
-    if (noutput_items < d_min_items) {
+    if (static_cast<unsigned int>(noutput_items) < d_min_items) {
         return 0;
     }
 
     std::vector<gr_complex> r = autocorr(in, noutput_items);
-    __GR_VLA(float, r_mag, noutput_items - d_fft_len - d_cp_len);
-    volk_32fc_magnitude_32f(r_mag, &r[0], noutput_items - d_fft_len - d_cp_len);
-    std::vector<float> r_vec(r_mag, r_mag + noutput_items - d_fft_len - d_cp_len);
+    volk::vector<float> r_mag(noutput_items - d_fft_len - d_cp_len);
+    volk_32fc_magnitude_32f(r_mag.data(), r.data(), noutput_items - d_fft_len - d_cp_len);
+    std::vector<float> r_vec(r_mag.begin(),
+                             r_mag.begin() + noutput_items - d_fft_len - d_cp_len);
     // calculate argmax
     int k = std::distance(
         r_vec.begin(),
@@ -122,14 +129,16 @@ int ofdm_synchronizer_cc_impl::work(int noutput_items,
     for (int i = 0; i < noutput_items; i++) {
         out[i] = d_rotator.rotate(in[i]);
     }
-    if (d_tag_pos == -1) {
+    if (!d_tag_pos) {
         d_tag_pos = k;
     }
     // add stream tags
     while (d_tag_pos < nitems_written(0) + noutput_items) {
-        add_item_tag(
-            0, d_tag_pos, pmt::intern("symbol"), pmt::from_long(d_fft_len + d_cp_len));
-        d_tag_pos += d_fft_len + d_cp_len;
+        add_item_tag(0,
+                     d_tag_pos.value(),
+                     pmt::intern("symbol"),
+                     pmt::from_long(d_fft_len + d_cp_len));
+        d_tag_pos.value() += d_fft_len + d_cp_len;
     }
 
     // Tell runtime system how many output items we produced.
