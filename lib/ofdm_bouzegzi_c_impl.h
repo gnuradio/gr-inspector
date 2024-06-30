@@ -23,20 +23,40 @@
 
 #include <gnuradio/fft/fft.h>
 #include <gnuradio/inspector/ofdm_bouzegzi_c.h>
+#include <volk/volk_alloc.hh>
+#include <memory>
 
 namespace gr {
 namespace inspector {
 
 class ofdm_bouzegzi_c_impl : public ofdm_bouzegzi_c
 {
+public:
+    static constexpr unsigned int DEFAULT_FFT_LEN = 1024;
+    static constexpr unsigned int MIN_NOUTPUT_ITEMS = 7000;
+    static constexpr unsigned int DEFAULT_LEN = 10000;
+
 private:
-    int d_Nb, d_len;
-    double d_samp_rate;
-    float *d_x1, *d_y1, *d_x2, *d_y2, *d_tmp1, *d_tmp2, *d_real_pre, *d_imag_pre,
-        *d_osc_vec;
-    gr_complex *d_sig_shift, *d_res;
+    int d_Nb;
+    unsigned int d_len = DEFAULT_LEN;
+    volk::vector<float> d_x1;
+    volk::vector<float> d_y1;
+    volk::vector<float> d_x2;
+    volk::vector<float> d_y2;
+    volk::vector<float> d_tmp1;
+    volk::vector<float> d_tmp2;
+    volk::vector<float> d_real_pre;
+    volk::vector<float> d_imag_pre;
+    volk::vector<float> d_osc_vec;
+    volk::vector<gr_complex> d_sig_shift, d_res;
     std::vector<int> d_alpha, d_beta;
-    fft::fft_complex_fwd* d_fft;
+    std::unique_ptr<fft::fft_complex_fwd> d_fft;
+
+    void rescale_fft(unsigned int length);
+
+    float autocorr(const gr_complex* sig, int a, int b, int p, unsigned int length);
+    gr_complex autocorr_orig(const gr_complex* sig, int a, int b, int p);
+    float cost_func(const gr_complex* sig, int a, int b, unsigned int length);
 
 public:
     ofdm_bouzegzi_c_impl(double samp_rate,
@@ -44,19 +64,13 @@ public:
                          const std::vector<int>& alpha,
                          const std::vector<int>& beta);
 
-    ~ofdm_bouzegzi_c_impl();
+    ~ofdm_bouzegzi_c_impl() override;
 
-    void rescale_fft(bool forward);
-    void do_fft(const gr_complex* in, gr_complex* out);
-
-    float autocorr(const gr_complex* sig, int a, int b, int p);
-    gr_complex autocorr_orig(const gr_complex* sig, int a, int b, int p);
-    float cost_func(const gr_complex* sig, int a, int b);
 
     // Where all the action really happens
     int work(int noutput_items,
              gr_vector_const_void_star& input_items,
-             gr_vector_void_star& output_items);
+             gr_vector_void_star& output_items) override;
 };
 
 } // namespace inspector

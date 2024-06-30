@@ -23,9 +23,12 @@
 #endif
 
 #include "signal_detector_cvf_impl.h"
+#include <gnuradio/fft/fft.h>
+#include <gnuradio/fft/window.h>
 #include <gnuradio/io_signature.h>
 #include <volk/volk.h>
 #include <cmath>
+#include <memory>
 
 namespace gr {
 namespace inspector {
@@ -70,30 +73,23 @@ signal_detector_cvf_impl::signal_detector_cvf_impl(double samp_rate,
     : sync_decimator("signal_detector_cvf",
                      gr::io_signature::make(1, 1, sizeof(gr_complex)),
                      gr::io_signature::make(1, 1, sizeof(float) * fft_len),
-                     fft_len)
+                     fft_len),
+      d_auto_threshold(auto_threshold),
+      d_fft_len(fft_len),
+      d_threshold(threshold),
+      d_sensitivity(sensitivity),
+      d_average(average),
+      d_quantization(quantization),
+      d_min_bw(min_bw),
+      d_tmpbuf(fft_len),
+      d_pxx(fft_len),
+      d_tmp_pxx(fft_len),
+      d_pxx_out(fft_len),
+      d_samp_rate(samp_rate),
+      d_window_type(static_cast<fft::window::win_type>(window_type)),
+      d_fft(std::make_unique<fft::fft_complex_fwd>(fft_len)),
+      d_filename(filename)
 {
-
-    // set properties
-    d_samp_rate = samp_rate;
-    d_fft_len = fft_len;
-    d_window_type = (fft::window::win_type)window_type;
-    d_threshold = threshold;
-    d_sensitivity = sensitivity;
-    d_auto_threshold = auto_threshold;
-    d_average = average;
-    d_quantization = quantization;
-    d_min_bw = min_bw;
-    d_filename = filename;
-
-    // allocate buffers
-    d_tmpbuf =
-        static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
-    d_tmp_pxx =
-        static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
-    d_pxx =
-        static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
-    d_pxx_out = (float*)volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment());
-    d_fft = new fft::fft_complex_fwd(fft_len, true);
 
     d_avg_filter.resize(d_fft_len);
     build_window();
@@ -108,32 +104,15 @@ signal_detector_cvf_impl::signal_detector_cvf_impl(double samp_rate,
 /*
  * Our virtual destructor.
  */
-signal_detector_cvf_impl::~signal_detector_cvf_impl()
-{
-    logfile.close();
-    delete d_fft;
-    volk_free(d_tmpbuf);
-    volk_free(d_tmp_pxx);
-    volk_free(d_pxx);
-    volk_free(d_pxx_out);
-}
+signal_detector_cvf_impl::~signal_detector_cvf_impl() { logfile.close(); }
 
 void signal_detector_cvf_impl::set_fft_len(int fft_len)
 {
     signal_detector_cvf_impl::d_fft_len = fft_len;
-    delete d_fft;
-    volk_free(d_tmpbuf);
-    volk_free(d_tmp_pxx);
-    volk_free(d_pxx);
-    volk_free(d_pxx_out);
-    d_fft = new fft::fft_complex_fwd(fft_len, true);
-    d_tmpbuf =
-        static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
-    d_tmp_pxx =
-        static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
-    d_pxx =
-        static_cast<float*>(volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment()));
-    d_pxx_out = (float*)volk_malloc(sizeof(float) * d_fft_len, volk_get_alignment());
+    for (auto* buffer : { &d_tmpbuf, &d_pxx, &d_tmp_pxx, &d_pxx_out }) {
+        buffer->resize(fft_len);
+    }
+    d_fft = std::make_unique<fft::fft_complex_fwd>(fft_len);
     d_avg_filter.resize(d_fft_len);
     build_window();
     for (unsigned int i = 0; i < d_fft_len; i++) {
@@ -144,8 +123,7 @@ void signal_detector_cvf_impl::set_fft_len(int fft_len)
 
 void signal_detector_cvf_impl::set_window_type(int window)
 {
-    signal_detector_cvf_impl::d_window_type =
-        static_cast<fft::window::win_type>(window);
+    signal_detector_cvf_impl::d_window_type = static_cast<fft::window::win_type>(window);
     build_window();
 }
 
@@ -175,10 +153,9 @@ void signal_detector_cvf_impl::write_logfile_entry()
         time_t now = time(0);
         char timestring[80];
         strftime(timestring, 80, "%Y-%m-%d %X", localtime(&now));
-        for (int i = 0; i < d_signal_edges.size(); i++) {
-            logfile << timestring << " [" << i << "]"
-                    << " f=" << d_signal_edges[i][0] << " B=" << d_signal_edges[i][1]
-                    << "\n";
+        for (unsigned int i = 0; i < d_signal_edges.size(); i++) {
+            logfile << timestring << " [" << i << "]" << " f=" << d_signal_edges[i][0]
+                    << " B=" << d_signal_edges[i][1] << "\n";
         }
         logfile.close();
     }
@@ -203,9 +180,9 @@ void signal_detector_cvf_impl::periodogram(float* pxx, const gr_complex* signal)
 
     // do fftshift
     d_tmpbuflen = static_cast<unsigned int>(floor(d_fft_len / 2.0));
-    memcpy(d_tmpbuf, &pxx[0], sizeof(float) * (d_tmpbuflen + 1));
-    memcpy(&pxx[0], &pxx[d_fft_len - d_tmpbuflen], sizeof(float) * (d_tmpbuflen));
-    memcpy(&pxx[d_tmpbuflen], d_tmpbuf, sizeof(float) * (d_tmpbuflen + 1));
+    memcpy(d_tmpbuf.data(), &pxx[0], sizeof(float) * (d_tmpbuflen + 1));
+    memcpy(pxx, &pxx[d_fft_len - d_tmpbuflen], sizeof(float) * (d_tmpbuflen));
+    memcpy(pxx + d_tmpbuflen, d_tmpbuf.data(), sizeof(float) * (d_tmpbuflen + 1));
 }
 
 // builds the frequency vector for periodogram
@@ -233,10 +210,10 @@ void signal_detector_cvf_impl::build_window()
 void signal_detector_cvf_impl::build_threshold()
 {
     // copy array to work with
-    memcpy(d_tmp_pxx, d_pxx_out, sizeof(float) * d_fft_len);
+    memcpy(d_tmp_pxx.data(), d_pxx_out.data(), sizeof(float) * d_fft_len);
     // sort bins
     d_threshold = 500;
-    std::sort(d_tmp_pxx, d_tmp_pxx + d_fft_len);
+    std::sort(d_tmp_pxx.begin(), d_tmp_pxx.begin() + d_fft_len);
     float range = d_tmp_pxx[d_fft_len - 1] - d_tmp_pxx[0];
     // search specified normized jump
     for (unsigned int i = 0; i < d_fft_len; i++) {
@@ -355,10 +332,10 @@ int signal_detector_cvf_impl::work(int noutput_items,
     float* out = (float*)output_items[0];
 
     d_freq = build_freq();
-    periodogram(d_pxx, in);
+    periodogram(d_pxx.data(), in);
 
     // averaging
-    for (int i = 0; i < d_fft_len; i++) {
+    for (unsigned int i = 0; i < d_fft_len; i++) {
         d_pxx_out[i] = d_avg_filter[i].filter(d_pxx[i]);
     }
 
@@ -385,12 +362,13 @@ int signal_detector_cvf_impl::work(int noutput_items,
         }
     }
 
-    memcpy(out, d_pxx_out, d_fft_len * sizeof(float));
+    memcpy(out, d_pxx_out.data(), d_fft_len * sizeof(float));
 
     // spread the message
     if (compare_signal_edges(&rf_map)) {
         d_signal_edges = rf_map;
-        message_port_pub(pmt::intern("map_out"), pack_message());
+        static auto outport = pmt::intern("map_out");
+        message_port_pub(outport, pack_message());
         write_logfile_entry();
     }
 

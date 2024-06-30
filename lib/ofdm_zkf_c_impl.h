@@ -33,9 +33,7 @@ private:
     double d_samp_rate;
     unsigned int d_signal;
     std::vector<int> d_typ_len, d_typ_cp;
-    gr_complex* d_Rxx;
     fft::fft_complex_fwd* d_fft;
-    unsigned int d_tmpbuflen;
     int d_min_items;
 
 public:

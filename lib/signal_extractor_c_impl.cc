@@ -50,10 +50,8 @@ signal_extractor_c_impl::signal_extractor_c_impl(int signal,
                      gr::io_signature::make(1, 1, sizeof(gr_complex)))
 {
     message_port_register_in(pmt::intern("sig_in"));
-    set_msg_handler(pmt::intern("sig_in"), [this](pmt::pmt_t msg)
-                    {
-                        this->handle_msg(msg);
-                    });
+    set_msg_handler(pmt::intern("sig_in"),
+                    [this](pmt::pmt_t msg) { this->handle_msg(msg); });
 
 
     d_signal = signal;
@@ -62,7 +60,8 @@ signal_extractor_c_impl::signal_extractor_c_impl(int signal,
     d_out_rate = rate;
     d_rate = 1;
     d_resample = resample;
-    std::vector<float> taps = filter::firdes::low_pass(64, 1000, 1000.0 / 64.0, 100 / 64);
+    std::vector<float> taps =
+        filter::firdes::low_pass(64, 1000, 1000.0 / 64.0, 100. / 64);
     d_resampler = new filter::kernel::pfb_arb_resampler_ccf(d_rate, taps, 64);
 }
 
@@ -102,7 +101,7 @@ int signal_extractor_c_impl::work(int noutput_items,
     // if no samples received, skip work
     if (d_samples.size() > 0) {
         int nout;
-        int item_count = noutput_items;
+        unsigned int item_count = noutput_items;
         // resampling
         if (d_resample) {
             item_count *= 1 / d_rate;
