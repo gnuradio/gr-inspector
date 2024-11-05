@@ -26,7 +26,6 @@
 #include <gnuradio/gr_complex.h>
 #include <gnuradio/io_signature.h>
 #include <gnuradio/logger.h>
-#include <spdlog/fmt/ranges.h>
 #include <volk/volk.h>
 #include <volk/volk_alloc.hh>
 #include <complex>
