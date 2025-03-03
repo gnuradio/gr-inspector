@@ -189,7 +189,7 @@ int ofdm_bouzegzi_c_impl::work(int noutput_items,
     if (noutput_items < static_cast<int>(MIN_NOUTPUT_ITEMS)) {
         return 0;
     }
-#warning This block has consistency issues. See the FIXME 2024-06-30 comment above. DO NOT USE IN PRODUCTION.
+#pragma message( "warning: This block has consistency issues. See the FIXME 2024-06-30 comment above. DO NOT USE IN PRODUCTION." )
 
     // Do <+signal processing+>
     float J = 0.0;
