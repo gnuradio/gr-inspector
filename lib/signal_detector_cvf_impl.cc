@@ -208,14 +208,23 @@ void signal_detector_cvf_impl::build_window()
 // set auto threshold by searching for jumps between bins
 void signal_detector_cvf_impl::build_threshold()
 {
-    // copy array to work with
-    memcpy(d_tmp_pxx.data(), d_pxx_out.data(), sizeof(float) * d_fft_len);
-    // sort bins
     d_threshold = 500;
-    std::sort(d_tmp_pxx.begin(), d_tmp_pxx.begin() + d_fft_len);
-    float range = d_tmp_pxx[d_fft_len - 1] - d_tmp_pxx[0];
-    // search specified normized jump
-    for (unsigned int i = 0; i < d_fft_len; i++) {
+
+    // At least two bins are required to calculate adjacent differences.
+    if (d_fft_len < 2) {
+        return;
+    }
+
+    // Copy and sort the bins before searching for normalized jumps.
+    memcpy(d_tmp_pxx.data(), d_pxx_out.data(), sizeof(float) * d_fft_len);
+    std::sort(d_tmp_pxx.begin(), d_tmp_pxx.end());
+
+    const float range = d_tmp_pxx.back() - d_tmp_pxx.front();
+    if (range <= 0.0F) {
+        return;
+    }
+
+    for (unsigned int i = 0; i + 1 < d_fft_len; i++) {
         if ((d_tmp_pxx[i + 1] - d_tmp_pxx[i]) / range > 1 - d_sensitivity) {
             d_threshold = d_tmp_pxx[i];
             break;
