@@ -23,10 +23,12 @@
 #endif
 
 #include "ofdm_zkf_c_impl.h"
+#include <algorithm>
 #include <gnuradio/io_signature.h>
 #include <volk/volk.h>
 #include <volk/volk_alloc.hh>
 #include <complex>
+#include <stdexcept>
 
 namespace gr {
 namespace inspector {
@@ -53,12 +55,33 @@ ofdm_zkf_c_impl::ofdm_zkf_c_impl(double samp_rate,
                      gr::io_signature::make(1, 1, sizeof(gr_complex)),
                      gr::io_signature::make(0, 0, 0))
 {
+    if (typ_len.empty()) {
+        throw std::invalid_argument("typ_len must not be empty");
+    }
+    if (typ_cp.empty()) {
+        throw std::invalid_argument("typ_cp must not be empty");
+    }
+    if (!std::is_sorted(typ_len.begin(), typ_len.end()) || typ_len.front() <= 0) {
+        throw std::invalid_argument("typ_len must contain sorted positive values");
+    }
+    if (!std::is_sorted(typ_cp.begin(), typ_cp.end()) || typ_cp.front() <= 0) {
+        throw std::invalid_argument("typ_cp must contain sorted positive values");
+    }
+    if (min_items < 0) {
+        throw std::invalid_argument("min_items must not be negative");
+    }
+
     d_samp_rate = samp_rate;
     d_typ_len = typ_len;
     d_typ_cp = typ_cp;
     d_signal = signal;
     d_min_items = min_items;
     d_fft = new fft::fft_complex_fwd(1024, true);
+
+    // work() requires enough input for both the configured estimation
+    // minimum and every candidate autocorrelation lag.
+    set_min_noutput_items(std::max(d_min_items, d_typ_len.back()) + 1);
+
     message_port_register_out(pmt::intern("ofdm_out"));
 }
 
@@ -70,20 +93,28 @@ ofdm_zkf_c_impl::~ofdm_zkf_c_impl() { delete d_fft; }
 std::vector<float> ofdm_zkf_c_impl::autocorr(const gr_complex* in, int len)
 {
     std::vector<float> akf;
-    if (len == 0) {
+    if (len <= 0) {
         return akf;
     }
+
     volk::vector<gr_complex> Rxx(len);
-    gr_complex akf_temp;
-    for (int k = 0; k < d_typ_len.back(); k++) {
-        akf_temp = 0;
-        volk_32fc_x2_multiply_conjugate_32fc(Rxx.data(), in, &in[k], len - k);
-        // sum
-        for (int i = 0; i < len - k; i++) {
+    const int max_lag = std::min(len, d_typ_len.back());
+
+    for (int k = 0; k < max_lag; k++) {
+        gr_complex akf_temp = 0;
+        const int correlation_len = len - k;
+
+        volk_32fc_x2_multiply_conjugate_32fc(
+            Rxx.data(), in, &in[k], correlation_len);
+
+        for (int i = 0; i < correlation_len; i++) {
             akf_temp += Rxx[i];
         }
-        akf.push_back(std::abs(akf_temp / gr_complex((len - k), 0)));
+
+        akf.push_back(
+            std::abs(akf_temp / gr_complex(correlation_len, 0)));
     }
+
     return akf;
 }
 
@@ -156,9 +187,11 @@ int ofdm_zkf_c_impl::work(int noutput_items,
                           gr_vector_void_star& output_items)
 {
     const gr_complex* in = (const gr_complex*)input_items[0];
-    if (noutput_items <= d_min_items) {
-        // too few items to make good estimations
-        return 0;
+    if (noutput_items <= d_min_items ||
+        noutput_items <= d_typ_len.back()) {
+        // A finite stream can end with fewer items than requested. Consume
+        // that unusable tail instead of returning zero forever.
+        return noutput_items;
     }
 
     // calculate autocorrelation and estimate FFT length
@@ -183,12 +216,10 @@ int ofdm_zkf_c_impl::work(int noutput_items,
     volk::vector<float> result(fft_len); // magnitude of CCF
     volk_32fc_magnitude_32f(result.data(), d_fft->get_outbuf(), fft_len);
 
-    // fftshift
-    const auto tmpbuflen = static_cast<unsigned int>(std::floor((fft_len) / 2.0));
-    volk::vector<float> tmpbuf(fft_len / 2);
-    memcpy(tmpbuf.data(), result.data(), sizeof(float) * (tmpbuflen + 1));
-    memcpy(result.data(), &result[fft_len - tmpbuflen], sizeof(float) * (tmpbuflen));
-    memcpy(&result[tmpbuflen], tmpbuf.data(), sizeof(float) * (tmpbuflen + 1));
+    // Move the negative-frequency half in front of the positive-frequency
+    // half without temporary buffers or out-of-bounds writes.
+    std::rotate(
+        result.begin(), result.begin() + ((fft_len + 1) / 2), result.end());
 
     // only use positive frequencies
     std::vector<float> Cxx(result.begin() + (fft_len) / 2, result.begin() + fft_len);
