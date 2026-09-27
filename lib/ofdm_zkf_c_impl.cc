@@ -23,6 +23,7 @@
 #endif
 
 #include "ofdm_zkf_c_impl.h"
+#include <algorithm>
 #include <gnuradio/io_signature.h>
 #include <volk/volk.h>
 #include <volk/volk_alloc.hh>
@@ -183,12 +184,10 @@ int ofdm_zkf_c_impl::work(int noutput_items,
     volk::vector<float> result(fft_len); // magnitude of CCF
     volk_32fc_magnitude_32f(result.data(), d_fft->get_outbuf(), fft_len);
 
-    // fftshift
-    const auto tmpbuflen = static_cast<unsigned int>(std::floor((fft_len) / 2.0));
-    volk::vector<float> tmpbuf(fft_len / 2);
-    memcpy(tmpbuf.data(), result.data(), sizeof(float) * (tmpbuflen + 1));
-    memcpy(result.data(), &result[fft_len - tmpbuflen], sizeof(float) * (tmpbuflen));
-    memcpy(&result[tmpbuflen], tmpbuf.data(), sizeof(float) * (tmpbuflen + 1));
+    // Move the negative-frequency half in front of the positive-frequency
+    // half without temporary buffers or out-of-bounds writes.
+    std::rotate(
+        result.begin(), result.begin() + ((fft_len + 1) / 2), result.end());
 
     // only use positive frequencies
     std::vector<float> Cxx(result.begin() + (fft_len) / 2, result.begin() + fft_len);

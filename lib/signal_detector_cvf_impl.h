@@ -37,9 +37,7 @@ class signal_detector_cvf_impl : public signal_detector_cvf
 private:
     bool d_auto_threshold;
     unsigned int d_fft_len;
-    unsigned int d_tmpbuflen;
     float d_threshold, d_sensitivity, d_average, d_quantization, d_min_bw;
-    std::vector<float> d_tmpbuf;
     std::vector<float> d_pxx;
     std::vector<float> d_tmp_pxx;
     std::vector<float> d_pxx_out;

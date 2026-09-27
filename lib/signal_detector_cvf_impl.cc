@@ -23,6 +23,7 @@
 #endif
 
 #include "signal_detector_cvf_impl.h"
+#include <algorithm>
 #include <gnuradio/fft/fft.h>
 #include <gnuradio/fft/window.h>
 #include <gnuradio/io_signature.h>
@@ -81,7 +82,6 @@ signal_detector_cvf_impl::signal_detector_cvf_impl(double samp_rate,
       d_average(average),
       d_quantization(quantization),
       d_min_bw(min_bw),
-      d_tmpbuf(fft_len),
       d_pxx(fft_len),
       d_tmp_pxx(fft_len),
       d_pxx_out(fft_len),
@@ -109,7 +109,7 @@ signal_detector_cvf_impl::~signal_detector_cvf_impl() { logfile.close(); }
 void signal_detector_cvf_impl::set_fft_len(int fft_len)
 {
     signal_detector_cvf_impl::d_fft_len = fft_len;
-    for (auto* buffer : { &d_tmpbuf, &d_pxx, &d_tmp_pxx, &d_pxx_out }) {
+    for (auto* buffer : { &d_pxx, &d_tmp_pxx, &d_pxx_out }) {
         buffer->resize(fft_len);
     }
     d_fft = std::make_unique<fft::fft_complex_fwd>(fft_len);
@@ -178,11 +178,10 @@ void signal_detector_cvf_impl::periodogram(float* pxx, const gr_complex* signal)
     volk_32fc_s32f_x2_power_spectral_density_32f(
         pxx, d_fft->get_outbuf(), d_fft_len, 1.0, d_fft_len);
 
-    // do fftshift
-    d_tmpbuflen = static_cast<unsigned int>(floor(d_fft_len / 2.0));
-    memcpy(d_tmpbuf.data(), &pxx[0], sizeof(float) * (d_tmpbuflen + 1));
-    memcpy(pxx, &pxx[d_fft_len - d_tmpbuflen], sizeof(float) * (d_tmpbuflen));
-    memcpy(pxx + d_tmpbuflen, d_tmpbuf.data(), sizeof(float) * (d_tmpbuflen + 1));
+    // Move the negative-frequency half in front of the positive-frequency
+    // half. For odd lengths, the centre element remains in the second half.
+    std::rotate(
+        pxx, pxx + ((d_fft_len + 1U) / 2U), pxx + d_fft_len);
 }
 
 // builds the frequency vector for periodogram
